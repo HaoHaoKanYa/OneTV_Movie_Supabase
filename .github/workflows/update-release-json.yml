@@ -1,0 +1,152 @@
+name: Update Release JSON
+
+on:
+  release:
+    types: [published]  # 当新的Release被发布时触发
+  workflow_run:
+    workflows: ["Release"]
+    types:
+      - completed
+    branches:
+      - main
+  workflow_dispatch:  # 添加手动触发选项
+
+jobs:
+  update-json:
+    runs-on: ubuntu-latest
+    # 只有当 Release 工作流成功完成时才运行，或者是手动触发或发布触发
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' || github.event_name == 'release' }}
+    permissions:
+      contents: write  # 需要写入权限来更新文件
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: main  # 确保检出main分支
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      
+      - name: Get latest release info
+        id: release
+        run: |
+          # 获取最新的发布版本
+          LATEST_RELEASE=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/releases/latest")
+          
+          TAG_NAME=$(echo "$LATEST_RELEASE" | jq -r '.tag_name')
+          RELEASE_URL=$(echo "$LATEST_RELEASE" | jq -r '.html_url')
+          
+          echo "tag_name=$TAG_NAME" >> $GITHUB_OUTPUT
+          echo "release_url=$RELEASE_URL" >> $GITHUB_OUTPUT
+          
+          # 获取发布日期
+          RELEASE_DATE=$(date +"%Y-%m-%d")
+          echo "release_date=$RELEASE_DATE" >> $GITHUB_OUTPUT
+          
+          # 提取版本号（移除'v'前缀）
+          VERSION=$(echo "$TAG_NAME" | sed 's/^v//')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          
+          echo "获取到的版本: $VERSION"
+          echo "发布URL: $RELEASE_URL"
+      
+      - name: Extract changelog for current version
+        id: extract_changelog
+        run: |
+          # 从CHANGELOG.md提取当前版本的更新日志
+          VERSION="${{ steps.release.outputs.version }}"
+          echo "提取版本: $VERSION 的更新日志"
+          
+          # 使用awk提取CHANGELOG.md中当前版本的内容
+          # 从"## [$VERSION]"开始，到下一个"## ["为止（不包含下一个版本的标题行）
+          awk -v version="$VERSION" '
+            BEGIN { found=0; output=""; }
+            /^## \['"$VERSION"'\]/ { found=1; output = output $0 "\n"; next; }
+            found == 1 && /^## \[/ { found=2; next; }
+            found == 1 { output = output $0 "\n"; }
+            END { print output; }
+          ' CHANGELOG.md > version_changelog.txt
+          
+          # 如果提取失败，使用默认消息
+          if [ ! -s version_changelog.txt ]; then
+            echo "未找到版本 $VERSION 的更新日志，使用默认消息"
+            echo "## [$VERSION] - $(date +"%Y-%m-%d")" > version_changelog.txt
+            echo "### OneTV Supabase Update" >> version_changelog.txt
+            echo "* 发布版本 $VERSION" >> version_changelog.txt
+          else
+            echo "成功提取版本 $VERSION 的更新日志"
+            cat version_changelog.txt
+          fi
+          
+          # 将更新日志保存为输出
+          CHANGELOG_CONTENT=$(cat version_changelog.txt)
+          echo "changelog<<EOF" >> $GITHUB_OUTPUT
+          echo "$CHANGELOG_CONTENT" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+      
+      - name: Get TV APK download URL
+        id: apk_url
+        run: |
+          # 使用GitHub API获取最新发布的资源列表
+          LATEST_RELEASE=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/releases/latest")
+          
+          ASSETS_URL=$(echo "$LATEST_RELEASE" | jq -r '.assets_url')
+          ASSETS_JSON=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "$ASSETS_URL")
+          
+          # 提取TV版本的APK下载链接（包含"android-tv"的APK文件）
+          APK_URL=$(echo "$ASSETS_JSON" | jq -r '.[] | select(.name | contains("android-tv")) | select(.name | endswith(".apk")) | .browser_download_url' | head -n 1)
+          
+          # 如果找不到TV版本，尝试找任何APK文件
+          if [ -z "$APK_URL" ]; then
+            echo "未找到TV版本APK，尝试查找任何APK文件"
+            APK_URL=$(echo "$ASSETS_JSON" | jq -r '.[] | select(.name | endswith(".apk")) | .browser_download_url' | head -n 1)
+          fi
+          
+          # 如果仍然找不到APK，使用默认链接
+          if [ -z "$APK_URL" ]; then
+            APK_URL=$(echo "$LATEST_RELEASE" | jq -r '.html_url')
+          fi
+          
+          echo "apk_url=$APK_URL" >> $GITHUB_OUTPUT
+          echo "获取到的APK下载链接: $APK_URL"
+      
+      - name: Update tv-stable.json
+        run: |
+          # 读取从CHANGELOG.md提取的更新日志
+          DESCRIPTION="${{ steps.extract_changelog.outputs.changelog }}"
+          
+          # 创建新的tv-stable.json文件
+          cat << EOF > tv-stable.json
+          {
+            "version": "${{ steps.release.outputs.version }}",
+            "downloadUrl": "${{ steps.apk_url.outputs.apk_url }}",
+            "description": "$DESCRIPTION"
+          }
+          EOF
+          
+          # 显示更新后的内容
+          echo "更新后的tv-stable.json内容:"
+          cat tv-stable.json
+      
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          
+          git add tv-stable.json
+          
+          # 检查是否有变化
+          if git diff --staged --quiet; then
+            echo "没有需要提交的变更"
+            exit 0
+          fi
+          
+          git commit -m "Update tv-stable.json for ${{ steps.release.outputs.tag_name }}"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 

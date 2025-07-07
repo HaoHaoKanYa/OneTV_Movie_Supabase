@@ -1,0 +1,119 @@
+name: Release
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  build:
+    name: Build On (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    env:
+      TZ: Asia/Shanghai
+      BOOTSTRAP_URL: ${{ secrets.BOOTSTRAP_URL }}
+      BOOTSTRAP_KEY: ${{ secrets.BOOTSTRAP_KEY }}
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+    permissions:
+      contents: write
+      security-events: write
+      pull-requests: write
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ["ubuntu-latest"]
+
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0  # 获取完整历史记录，确保能够访问所有标签
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+        
+      - name: Configure Gradle wrapper for CI
+        run: |
+          echo "配置Gradle包装器为网络下载模式..."
+          sed -i 's|distributionUrl=file\\\:///D\\\:/apk/OneTV_Supabase/gradle-8.7-bin.zip|distributionUrl=https\\\://services.gradle.org/distributions/gradle-8.7-bin.zip|g' gradle/wrapper/gradle-wrapper.properties
+          cat gradle/wrapper/gradle-wrapper.properties
+          echo "Gradle包装器配置完成"
+
+      - name: Set up Supabase configuration
+        run: |
+          echo "BOOTSTRAP_URL=${{ secrets.BOOTSTRAP_URL }}" > supabase_config.properties
+          echo "BOOTSTRAP_KEY=${{ secrets.BOOTSTRAP_KEY }}" >> supabase_config.properties
+          echo "配置文件已创建"
+          
+      - name: Setup Android Keystore
+        run: |
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > keystore.jks
+          echo "storeFile=keystore.jks" > key.properties
+          echo "storePassword=${{ secrets.KEYSTORE_PASSWORD }}" >> key.properties
+          echo "keyAlias=${{ secrets.KEY_ALIAS }}" >> key.properties
+          echo "keyPassword=${{ secrets.KEY_PASSWORD }}" >> key.properties
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Build TV APK with Gradle
+        run: ./gradlew :tv:assembleRelease
+        env:
+          BOOTSTRAP_URL: ${{ secrets.BOOTSTRAP_URL }}
+          BOOTSTRAP_KEY: ${{ secrets.BOOTSTRAP_KEY }}
+          KEYSTORE: keystore.jks
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+
+      - name: Extract version number
+        id: extract_version
+        run: |
+          # 从标签名提取版本号（移除'v'前缀）
+          VERSION=$(echo "${{ github.ref_name }}" | sed 's/^v//')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Extract changelog for current version
+        id: extract_changelog
+        run: |
+          # 提取当前版本的更新日志
+          VERSION="${{ steps.extract_version.outputs.version }}"
+          echo "提取版本: $VERSION 的更新日志"
+          
+          # 使用awk提取CHANGELOG.md中当前版本的内容
+          # 从"## [$VERSION]"开始，到下一个"## ["为止（不包含下一个版本的标题行）
+          awk -v version="$VERSION" '
+            BEGIN { found=0; output=""; }
+            /^## \['"$VERSION"'\]/ { found=1; output = output $0 "\n"; next; }
+            found == 1 && /^## \[/ { found=2; next; }
+            found == 1 { output = output $0 "\n"; }
+            END { print output; }
+          ' CHANGELOG.md > version_changelog.txt
+          
+          # 如果提取失败，使用默认消息
+          if [ ! -s version_changelog.txt ]; then
+            echo "未找到版本 $VERSION 的更新日志，使用默认消息"
+            echo "## [$VERSION] - $(date +"%Y-%m-%d")" > version_changelog.txt
+            echo "### OneTV Supabase Update" >> version_changelog.txt
+            echo "* 发布版本 $VERSION" >> version_changelog.txt
+          else
+            echo "成功提取版本 $VERSION 的更新日志"
+            cat version_changelog.txt
+          fi
+
+      - name: Deploy
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          body_path: version_changelog.txt
+          files: |
+            **/tv/build/outputs/apk/release/*.apk
+            **/tv/build/outputs/bundle/release/*.aab
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
