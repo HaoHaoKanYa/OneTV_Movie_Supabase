@@ -192,3 +192,9 @@ SupabaseWatchHistorySyncServiceGuide.md
 GIT_GUIDE.md
 /supabase/sql/
 /MD/test_vip_permission_fix.md
+
+# 参考项目 - 不进行版本控制
+/OneMoVie/
+
+# 点播功能设计文档 - 不进行版本控制
+/movieMD/
