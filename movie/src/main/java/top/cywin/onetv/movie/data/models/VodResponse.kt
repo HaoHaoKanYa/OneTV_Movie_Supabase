@@ -58,12 +58,7 @@ data class VodResponse(
         }
     }
 
-    /**
-     * 获取播放地址 (解析结果)
-     */
-    fun getPlayUrl(): String {
-        return playUrl ?: url ?: ""
-    }
+
 
     /**
      * 是否需要解析

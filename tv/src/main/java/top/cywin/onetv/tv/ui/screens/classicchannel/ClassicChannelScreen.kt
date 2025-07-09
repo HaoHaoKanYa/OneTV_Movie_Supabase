@@ -339,7 +339,7 @@ fun MovieEntranceButton(
 
             Spacer(modifier = Modifier.width(8.dp))
             Text(
-                text = "点播影视",
+                text = "影视点播",
                 style = MaterialTheme.typography.labelLarge.copy(
                     color = Color.White,
                     fontWeight = FontWeight.Bold,

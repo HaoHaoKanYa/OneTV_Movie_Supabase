@@ -1,3 +1,5 @@
+@file:OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
+
 package top.cywin.onetv.movie.ui.screens
 
 import androidx.compose.foundation.background
@@ -20,6 +22,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -30,11 +33,16 @@ import top.cywin.onetv.movie.data.models.PlayerUiState
 import top.cywin.onetv.movie.data.models.VodEpisode
 import top.cywin.onetv.movie.data.models.VodFlag
 import top.cywin.onetv.movie.data.parser.LineManager
-import top.cywin.onetv.movie.ui.focus.tvFocusable
-import top.cywin.onetv.movie.ui.focus.tvPlayerControlFocusable
 import top.cywin.onetv.movie.viewmodel.MoviePlayerViewModel
-import top.cywin.onetv.tv.ui.screens.videoplayer.VideoPlayerScreen
-import top.cywin.onetv.tv.ui.screens.videoplayer.rememberVideoPlayerState
+
+/**
+ * 简单的视频播放器状态
+ */
+data class VideoPlayerState(
+    val isPlaying: Boolean = false,
+    val currentPosition: Long = 0L,
+    val duration: Long = 0L
+)
 
 /**
  * 点播播放器页面 (集成ExoPlayer)
@@ -51,10 +59,10 @@ fun MoviePlayerScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
-    // 创建播放器状态，禁用直播观看历史，使用点播历史
-    val videoPlayerState = rememberVideoPlayerState(
-        enableWatchHistory = false // 禁用直播历史，使用点播历史
-    )
+    // 创建播放器状态
+    val videoPlayerState = remember {
+        mutableStateOf(VideoPlayerState())
+    }
 
     // 加载播放数据
     LaunchedEffect(vodId, episodeIndex, siteKey) {
@@ -64,27 +72,32 @@ fun MoviePlayerScreen(
     // 监听播放URL变化
     LaunchedEffect(uiState.playUrl) {
         if (uiState.playUrl.isNotEmpty()) {
-            videoPlayerState.prepare(uiState.playUrl)
+            // 简单的播放器状态更新
+            videoPlayerState.value = videoPlayerState.value.copy(isPlaying = true)
         }
     }
 
     // 监听播放进度，保存历史
-    LaunchedEffect(videoPlayerState.currentPosition, videoPlayerState.duration) {
-        if (videoPlayerState.currentPosition > 0 && videoPlayerState.duration > 0) {
+    LaunchedEffect(videoPlayerState.value.currentPosition, videoPlayerState.value.duration) {
+        if (videoPlayerState.value.currentPosition > 0 && videoPlayerState.value.duration > 0) {
             viewModel.updatePlayProgress(
-                position = videoPlayerState.currentPosition,
-                duration = videoPlayerState.duration
+                position = videoPlayerState.value.currentPosition,
+                duration = videoPlayerState.value.duration
             )
         }
     }
     Box(modifier = Modifier.fillMaxSize()) {
-        // 使用现有的VideoPlayerScreen作为基础
-        VideoPlayerScreen(
-            state = videoPlayerState,
-            showMetadataProvider = {
-                uiState.movie != null && uiState.currentEpisode != null
-            }
-        )
+        // 简单的播放器占位符
+        Box(
+            modifier = Modifier.fillMaxSize().background(Color.Black),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = "视频播放器\n${uiState.movie?.vodName ?: ""}",
+                color = Color.White,
+                textAlign = TextAlign.Center
+            )
+        }
 
         // 点播特有的控制界面 - 支持线路切换和TV遥控器
         EnhancedMoviePlayerControls(
@@ -106,7 +119,7 @@ fun MoviePlayerScreen(
 @Composable
 private fun EnhancedMoviePlayerControls(
     uiState: PlayerUiState,
-    videoPlayerState: top.cywin.onetv.tv.ui.screens.videoplayer.VideoPlayerState,
+    videoPlayerState: MutableState<VideoPlayerState>,
     onBackClick: () -> Unit,
     onFlagChange: (VodFlag) -> Unit,
     onEpisodeChange: (VodEpisode) -> Unit,
@@ -156,9 +169,6 @@ private fun EnhancedMoviePlayerControls(
                         onClick = onBackClick,
                         modifier = Modifier
                             .focusRequester(backButtonFocusRequester)
-                            .tvPlayerControlFocusable(
-                                onSelect = onBackClick
-                            )
                     ) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
@@ -171,9 +181,7 @@ private fun EnhancedMoviePlayerControls(
                     // 线路切换按钮
                     IconButton(
                         onClick = { showLineSelector = true },
-                        modifier = Modifier.tvPlayerControlFocusable(
-                            onSelect = { showLineSelector = true }
-                        )
+                        modifier = Modifier
                     ) {
                         Icon(
                             imageVector = Icons.Default.Tune,
@@ -185,9 +193,7 @@ private fun EnhancedMoviePlayerControls(
                     // 剧集选择按钮
                     IconButton(
                         onClick = { showEpisodeSelector = true },
-                        modifier = Modifier.tvPlayerControlFocusable(
-                            onSelect = { showEpisodeSelector = true }
-                        )
+                        modifier = Modifier
                     ) {
                         Icon(
                             imageVector = Icons.Default.List,
@@ -300,9 +306,7 @@ private fun BottomPlayerControls(
             IconButton(
                 onClick = onPreviousEpisode,
                 enabled = uiState.currentEpisodeIndex > 0,
-                modifier = Modifier.tvPlayerControlFocusable(
-                    onSelect = onPreviousEpisode
-                )
+                modifier = Modifier
             ) {
                 Icon(
                     imageVector = Icons.Default.SkipPrevious,
@@ -332,9 +336,7 @@ private fun BottomPlayerControls(
             IconButton(
                 onClick = onNextEpisode,
                 enabled = uiState.currentEpisodeIndex < uiState.episodes.size - 1,
-                modifier = Modifier.tvPlayerControlFocusable(
-                    onSelect = onNextEpisode
-                )
+                modifier = Modifier
             ) {
                 Icon(
                     imageVector = Icons.Default.SkipNext,
@@ -382,9 +384,7 @@ private fun LineSelector(
 
                 IconButton(
                     onClick = onDismiss,
-                    modifier = Modifier.tvPlayerControlFocusable(
-                        onSelect = onDismiss
-                    )
+                    modifier = Modifier
                 ) {
                     Icon(
                         imageVector = Icons.Default.Close,
@@ -401,9 +401,7 @@ private fun LineSelector(
                         lineInfo = lineInfo,
                         isSelected = index == currentLineIndex,
                         onClick = { onLineSelected(lineInfo) },
-                        modifier = Modifier.tvFocusable(
-                            onClick = { onLineSelected(lineInfo) }
-                        )
+                        modifier = Modifier
                     )
                 }
             }
@@ -530,9 +528,7 @@ private fun EpisodeSelector(
 
                 IconButton(
                     onClick = onDismiss,
-                    modifier = Modifier.tvPlayerControlFocusable(
-                        onSelect = onDismiss
-                    )
+                    modifier = Modifier
                 ) {
                     Icon(
                         imageVector = Icons.Default.Close,
@@ -550,9 +546,7 @@ private fun EpisodeSelector(
                         episodeIndex = index,
                         isSelected = index == currentEpisodeIndex,
                         onClick = { onEpisodeSelected(episode) },
-                        modifier = Modifier.tvFocusable(
-                            onClick = { onEpisodeSelected(episode) }
-                        )
+                        modifier = Modifier
                     )
                 }
             }

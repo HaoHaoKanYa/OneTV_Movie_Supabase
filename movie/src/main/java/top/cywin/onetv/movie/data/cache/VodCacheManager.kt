@@ -144,13 +144,18 @@ class VodCacheManager @Inject constructor(
         memoryCache.put(key, CacheEntry(data as Any, System.currentTimeMillis(), expireTime))
         
         // 2. 存储到磁盘缓存
-        putDiskCache(key, data, expireTime)
+        try {
+            val dataJson = json.encodeToString(data)
+            putDiskCache(key, dataJson, expireTime)
+        } catch (e: Exception) {
+            // 序列化失败时忽略磁盘缓存
+        }
     }
 
     /**
      * 磁盘缓存获取
      */
-    private inline fun <reified T> getDiskCache(key: String): T? {
+    private fun <T> getDiskCache(key: String, clazz: Class<T>): T? {
         return try {
             val file = File(diskCacheDir, hashKey(key))
             if (!file.exists()) return null
@@ -163,7 +168,10 @@ class VodCacheManager @Inject constructor(
                 return null
             }
 
-            json.decodeFromString<T>(cacheData.data)
+            when (clazz) {
+                String::class.java -> cacheData.data.removeSurrounding("\"") as T
+                else -> json.decodeFromString<Any>(cacheData.data) as T
+            }
         } catch (e: Exception) {
             e.printStackTrace()
             null
@@ -173,10 +181,9 @@ class VodCacheManager @Inject constructor(
     /**
      * 磁盘缓存存储
      */
-    private fun <T> putDiskCache(key: String, data: T, expireTime: Long) {
+    private fun putDiskCache(key: String, dataJson: String, expireTime: Long) {
         try {
             val file = File(diskCacheDir, hashKey(key))
-            val dataJson = json.encodeToString(kotlinx.serialization.serializer<T>(), data)
             val cacheData = DiskCacheData(dataJson, expireTime)
             val content = json.encodeToString(DiskCacheData.serializer(), cacheData)
             

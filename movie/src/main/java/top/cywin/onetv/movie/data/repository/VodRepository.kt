@@ -3,11 +3,14 @@ package top.cywin.onetv.movie.data.repository
 import android.content.Context
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import top.cywin.onetv.movie.data.VodConfigManager
+import top.cywin.onetv.movie.data.api.VodApiService
 import top.cywin.onetv.movie.data.cache.MovieCacheManager
 import top.cywin.onetv.movie.data.config.AppConfigManager
 import top.cywin.onetv.movie.data.models.*
 import top.cywin.onetv.movie.data.parser.ParseManager
 import top.cywin.onetv.movie.data.parser.ParseResult
+import top.cywin.onetv.movie.di.SiteApiService
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -20,13 +23,14 @@ class VodRepository @Inject constructor(
     private val appConfigManager: AppConfigManager,
     private val cacheManager: MovieCacheManager,
     private val configManager: VodConfigManager,
-    private val parseManager: ParseManager
+    private val parseManager: ParseManager,
+    @SiteApiService private val siteApiService: VodApiService
 ) {
 
     /**
      * 获取配置文件并初始化站点
      */
-    suspend fun loadConfig(): Result<VodConfig> = withContext(Dispatchers.IO) {
+    suspend fun loadConfig(): Result<VodConfigResponse> = withContext(Dispatchers.IO) {
         try {
             // 1. 尝试从缓存获取
             val cachedConfig = configManager.getCurrentConfig()
@@ -57,7 +61,7 @@ class VodRepository @Inject constructor(
      */
     suspend fun getCategories(siteKey: String): Result<List<VodClass>> = withContext(Dispatchers.IO) {
         try {
-            val site = configManager.getCurrentSite(siteKey)
+            val site = configManager.getSite(siteKey)
                 ?: return@withContext Result.failure(Exception("未找到站点: $siteKey"))
 
             // 检查缓存
@@ -73,7 +77,7 @@ class VodRepository @Inject constructor(
             val categories = emptyList<VodClass>() // 临时返回空列表
 
             // 缓存结果
-            cacheManager.putCache(cacheKey, categories.toTypedArray())
+            cacheManager.putCache(cacheKey, categories.toTypedArray(), 24 * 60 * 60 * 1000L)
 
             Result.success(categories)
         } catch (e: Exception) {
@@ -91,7 +95,7 @@ class VodRepository @Inject constructor(
         filters: Map<String, String> = emptyMap()
     ): Result<VodResponse> = withContext(Dispatchers.IO) {
         try {
-            val site = configManager.getCurrentSite(siteKey)
+            val site = configManager.getSite(siteKey)
                 ?: return@withContext Result.failure(Exception("未找到站点"))
 
             // 构建缓存键
@@ -117,7 +121,7 @@ class VodRepository @Inject constructor(
             )
 
             // 缓存结果
-            cacheManager.putCache(cacheKey, response)
+            cacheManager.putCache(cacheKey, response, 24 * 60 * 60 * 1000L)
 
             Result.success(response)
         } catch (e: Exception) {
@@ -134,7 +138,7 @@ class VodRepository @Inject constructor(
         siteKey: String = ""
     ): Result<VodResponse> = withContext(Dispatchers.IO) {
         try {
-            val site = configManager.getCurrentSite(siteKey)
+            val site = configManager.getSite(siteKey)
                 ?: return@withContext Result.failure(Exception("未找到站点"))
 
             if (!site.isSearchable()) {
@@ -145,7 +149,7 @@ class VodRepository @Inject constructor(
             val cacheKey = "search_${siteKey}_${keyword}_$page"
 
             // 检查缓存
-            val cached = cacheManager.getCache<VodResponse>(cacheKey)
+            val cached = cacheManager.getCache(cacheKey, VodResponse::class.java)
             if (cached != null) {
                 return@withContext Result.success(cached)
             }
@@ -174,14 +178,14 @@ class VodRepository @Inject constructor(
         siteKey: String = ""
     ): Result<VodItem> = withContext(Dispatchers.IO) {
         try {
-            val site = configManager.getCurrentSite(siteKey)
+            val site = configManager.getSite(siteKey)
                 ?: return@withContext Result.failure(Exception("未找到站点"))
 
             // 构建缓存键
             val cacheKey = "detail_${siteKey}_$vodId"
 
             // 检查缓存
-            val cached = cacheManager.getCache<VodItem>(cacheKey)
+            val cached = cacheManager.getCache(cacheKey, VodItem::class.java)
             if (cached != null) {
                 return@withContext Result.success(cached)
             }
@@ -212,14 +216,14 @@ class VodRepository @Inject constructor(
      */
     suspend fun getRecommendContent(siteKey: String = ""): Result<List<VodItem>> = withContext(Dispatchers.IO) {
         try {
-            val site = configManager.getCurrentSite(siteKey)
+            val site = configManager.getSite(siteKey)
                 ?: return@withContext Result.failure(Exception("未找到站点"))
 
             // 构建缓存键
             val cacheKey = "recommend_$siteKey"
 
             // 检查缓存
-            val cached = cacheManager.getCache<List<VodItem>>(cacheKey)
+            val cached = cacheManager.getCache(cacheKey, Array<VodItem>::class.java)?.toList()
             if (cached != null) {
                 return@withContext Result.success(cached)
             }
@@ -241,7 +245,7 @@ class VodRepository @Inject constructor(
      * 清除缓存
      */
     suspend fun clearCache() = withContext(Dispatchers.IO) {
-        cacheManager.clearAll()
+        cacheManager.clearAllCache()
     }
 
     /**
@@ -253,19 +257,19 @@ class VodRepository @Inject constructor(
         flag: String = ""
     ): Result<String> = withContext(Dispatchers.IO) {
         try {
-            val site = configManager.getCurrentSite(siteKey)
+            val site = configManager.getSite(siteKey)
                 ?: return@withContext Result.failure(Exception("未找到站点"))
 
             // 获取解析器配置
             val parse = configManager.getParseByFlag(flag)
 
             // 使用解析器管理器解析
-            val parseResult = parserManager.parsePlayUrl(url, site, parse, flag)
+            val parseResult = parseManager.parsePlayUrl(url, parse, flag)
 
-            if (parseResult.success) {
-                Result.success(parseResult.playUrl)
+            if (parseResult.isNotEmpty()) {
+                Result.success(parseResult)
             } else {
-                Result.failure(Exception(parseResult.error ?: "解析失败"))
+                Result.failure(Exception("解析失败"))
             }
 
         } catch (e: Exception) {
@@ -282,12 +286,17 @@ class VodRepository @Inject constructor(
         flag: String = ""
     ): Result<ParseResult> = withContext(Dispatchers.IO) {
         try {
-            val site = configManager.getCurrentSite(siteKey)
+            val site = configManager.getSite(siteKey)
                 ?: return@withContext Result.failure(Exception("未找到站点"))
 
             val parse = configManager.getParseByFlag(flag)
-            val parseResult = parserManager.parsePlayUrl(url, site, parse, flag)
+            val playUrl = parseManager.parsePlayUrl(url, parse, flag)
 
+            val parseResult = ParseResult(
+                success = playUrl.isNotEmpty(),
+                playUrl = playUrl,
+                error = if (playUrl.isEmpty()) "解析失败" else null
+            )
             Result.success(parseResult)
 
         } catch (e: Exception) {
@@ -312,7 +321,7 @@ class VodRepository @Inject constructor(
      */
     suspend fun getSiteParsers(siteKey: String): List<VodParse> = withContext(Dispatchers.IO) {
         try {
-            val site = configManager.getCurrentSite(siteKey)
+            val site = configManager.getSite(siteKey)
             val config = configManager.getCurrentConfig()
 
             if (site != null && config != null) {
@@ -334,8 +343,8 @@ class VodRepository @Inject constructor(
      */
     suspend fun testParser(parse: VodParse, testUrl: String): Result<Boolean> = withContext(Dispatchers.IO) {
         try {
-            val parseResult = parserManager.parsePlayUrl(testUrl, null, parse, "")
-            Result.success(parseResult.success)
+            val playUrl = parseManager.parsePlayUrl(testUrl, parse, "")
+            Result.success(playUrl.isNotEmpty())
         } catch (e: Exception) {
             Result.success(false)
         }

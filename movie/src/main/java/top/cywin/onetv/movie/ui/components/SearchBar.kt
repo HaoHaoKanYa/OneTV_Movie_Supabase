@@ -4,6 +4,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -189,44 +192,18 @@ private fun KeywordTags(
     keywords: List<String>,
     onKeywordClick: (String) -> Unit
 ) {
-    // 简单的流式布局实现
-    var currentRowWidth by remember { mutableStateOf(0.dp) }
-    val maxWidth = 300.dp // 假设的最大宽度
-    
-    Column(
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+    // 简化的网格布局
+    LazyVerticalGrid(
+        columns = GridCells.Adaptive(minSize = 100.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = Modifier.height(200.dp)
     ) {
-        var currentRow = mutableListOf<String>()
-        val rows = mutableListOf<List<String>>()
-        
-        keywords.forEach { keyword ->
-            val keywordWidth = keyword.length * 8.dp + 32.dp // 估算宽度
-            
-            if (currentRowWidth + keywordWidth > maxWidth && currentRow.isNotEmpty()) {
-                rows.add(currentRow.toList())
-                currentRow.clear()
-                currentRowWidth = 0.dp
-            }
-            
-            currentRow.add(keyword)
-            currentRowWidth += keywordWidth + 8.dp
-        }
-        
-        if (currentRow.isNotEmpty()) {
-            rows.add(currentRow.toList())
-        }
-        
-        rows.forEach { row ->
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                row.forEach { keyword ->
-                    KeywordChip(
-                        keyword = keyword,
-                        onClick = { onKeywordClick(keyword) }
-                    )
-                }
-            }
+        items(keywords) { keyword ->
+            KeywordChip(
+                keyword = keyword,
+                onClick = { onKeywordClick(keyword) }
+            )
         }
     }
 }

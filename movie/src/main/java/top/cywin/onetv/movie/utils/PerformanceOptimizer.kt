@@ -176,7 +176,7 @@ class PerformanceOptimizer @Inject constructor(
         val testData = "performance_test_data"
         
         cacheManager.putCache(testKey, testData, 60 * 1000)
-        cacheManager.getCache<String>(testKey)
+        cacheManager.getCache(testKey, String::class.java)
         
         val cacheOperationTime = System.currentTimeMillis() - startTime
         performanceMetrics["cache_operation_time"] = cacheOperationTime
@@ -202,9 +202,6 @@ class PerformanceOptimizer @Inject constructor(
             
             // 清理过期缓存
             cacheManager.clearExpired()
-            
-            // 重置缓存统计
-            cacheManager.resetCacheStats()
             
             println("✅ 缓存性能优化完成")
             
@@ -320,14 +317,14 @@ class PerformanceOptimizer @Inject constructor(
         val currentMemory = runtime.totalMemory() - runtime.freeMemory()
         val maxMemory = runtime.maxMemory()
         
-        return mapOf(
+        return mapOf<String, Any>(
             "current_memory_mb" to (currentMemory / 1024 / 1024),
             "max_memory_mb" to (maxMemory / 1024 / 1024),
             "memory_usage_percent" to ((currentMemory.toFloat() / maxMemory.toFloat()) * 100).toInt(),
             "image_cache_size" to imageCache.size,
-            "cache_hit_rate" to performanceMetrics["cache_hit_rate"],
-            "cache_operation_time" to performanceMetrics["cache_operation_time"],
-            "db_operation_time" to performanceMetrics["db_operation_time"],
+            "cache_hit_rate" to (performanceMetrics["cache_hit_rate"] ?: 0),
+            "cache_operation_time" to (performanceMetrics["cache_operation_time"] ?: 0),
+            "db_operation_time" to (performanceMetrics["db_operation_time"] ?: 0),
             "optimization_enabled" to isMemoryOptimizationEnabled
         )
     }

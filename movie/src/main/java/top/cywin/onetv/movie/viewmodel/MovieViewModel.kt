@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import top.cywin.onetv.movie.data.models.*
 import top.cywin.onetv.movie.data.repository.VodRepository
-import top.cywin.onetv.movie.data.repository.VodConfigManager
+import top.cywin.onetv.movie.data.VodConfigManager
 import javax.inject.Inject
 
 /**
@@ -131,7 +131,10 @@ class MovieViewModel @Inject constructor(
      */
     fun switchSite(siteKey: String) {
         viewModelScope.launch {
-            configManager.setCurrentSite(siteKey)
+            val site = configManager.getSite(siteKey)
+            if (site != null) {
+                configManager.setCurrentSite(site)
+            }
             loadHomeData()
         }
     }
@@ -187,7 +190,7 @@ class MovieViewModel @Inject constructor(
     /**
      * 获取配置统计信息
      */
-    fun getConfigStats(): Map<String, Int> {
+    fun getConfigStats(): Map<String, Any> {
         return configManager.getConfigStats()
     }
 

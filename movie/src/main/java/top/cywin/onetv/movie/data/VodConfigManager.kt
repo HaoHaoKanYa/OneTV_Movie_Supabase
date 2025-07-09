@@ -203,4 +203,44 @@ class VodConfigManager @Inject constructor(
     fun getConfigSummary(): String {
         return "站点: ${sites.size}, 解析器: ${parses.size}"
     }
+
+    /**
+     * 获取当前配置
+     */
+    fun getCurrentConfig(): VodConfigResponse? = config
+
+    /**
+     * 获取当前站点
+     */
+    fun getCurrentSite(): VodSite? = home
+
+    /**
+     * 设置当前站点
+     */
+    fun setCurrentSite(site: VodSite) {
+        home = site
+    }
+
+    /**
+     * 获取所有站点
+     */
+    fun getAllSites(): List<VodSite> = sites
+
+    /**
+     * 根据flag获取解析器
+     */
+    fun getParseByFlag(flag: String): VodParse? {
+        return parses.find { it.name == flag || it.url.contains(flag) }
+    }
+
+    /**
+     * 获取配置统计
+     */
+    fun getConfigStats(): Map<String, Any> {
+        return mapOf(
+            "sites" to sites.size,
+            "parses" to parses.size,
+            "loaded" to isConfigLoaded()
+        )
+    }
 }

@@ -21,10 +21,7 @@ data class VodClass(
      */
     fun isEnabled(): Boolean = typeFlag == "1"
     
-    /**
-     * 获取筛选条件
-     */
-    fun getFilters(): List<VodFilter> = filters
+
     
     /**
      * 是否有筛选条件

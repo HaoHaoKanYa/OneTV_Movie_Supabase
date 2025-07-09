@@ -20,7 +20,7 @@ class ProductionDeploymentPreparer(private val context: Context) {
     fun prepareForProduction(): DeploymentReport = runBlocking {
         println("🚀 开始OneTV点播功能生产环境部署准备")
         println("准备时间: ${SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())}")
-        println("=" * 60)
+        println("=".repeat(60))
         
         // 1. 代码质量检查
         runCodeQualityChecks()
@@ -263,9 +263,9 @@ class ProductionDeploymentPreparer(private val context: Context) {
         
         val isReady = failedCount == 0
         
-        println("\n" + "=" * 60)
+        println("\n" + "=".repeat(60))
         println("🚀 OneTV点播功能生产环境部署报告")
-        println("=" * 60)
+        println("=".repeat(60))
         println("检查总数: ${checkResults.size}")
         println("通过: $passedCount")
         println("失败: $failedCount")

@@ -268,15 +268,15 @@ class AppConfigManager @Inject constructor(
      */
     fun getVodConfigUrl(): String {
         val baseUrl = getSupabaseUrl()
-        return "$baseUrl${Constants.VOD_CONFIG_ENDPOINT}"
+        return "$baseUrl/functions/v1/vod-config"
     }
-    
+
     /**
      * 获取VOD内容API URL
      */
     fun getVodContentUrl(): String {
         val baseUrl = getSupabaseUrl()
-        return "$baseUrl${Constants.VOD_CONTENT_ENDPOINT}"
+        return "$baseUrl/functions/v1/vod-content"
     }
     
     /**

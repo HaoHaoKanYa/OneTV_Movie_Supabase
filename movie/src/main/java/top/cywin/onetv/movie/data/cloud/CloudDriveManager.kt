@@ -10,6 +10,7 @@ import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.MediaType.Companion.toMediaType
 import java.net.URLEncoder
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -165,7 +166,7 @@ class CloudDriveManager @Inject constructor() {
             val request = Request.Builder()
                 .url(url)
                 .post(okhttp3.RequestBody.create(
-                    okhttp3.MediaType.Companion.get("application/json"), 
+                    "application/json".toMediaType(),
                     requestBody
                 ))
                 .header("Authorization", "Bearer ${config.token}")
@@ -196,13 +197,13 @@ class CloudDriveManager @Inject constructor() {
                     )
                 }
                 
-                CloudResult.success(files)
+                return CloudResult.success(files)
             } else {
-                CloudResult.failure("请求失败: ${response.code}")
+                return CloudResult.failure("请求失败: ${response.code}")
             }
             
         } catch (e: Exception) {
-            CloudResult.failure("阿里云盘请求失败: ${e.message}")
+            return CloudResult.failure("阿里云盘请求失败: ${e.message}")
         }
     }
     
@@ -240,13 +241,13 @@ class CloudDriveManager @Inject constructor() {
                     )
                 }
                 
-                CloudResult.success(files)
+                return CloudResult.success(files)
             } else {
-                CloudResult.failure("请求失败: ${response.code}")
+                return CloudResult.failure("请求失败: ${response.code}")
             }
             
         } catch (e: Exception) {
-            CloudResult.failure("百度网盘请求失败: ${e.message}")
+            return CloudResult.failure("百度网盘请求失败: ${e.message}")
         }
     }
     
@@ -286,13 +287,13 @@ class CloudDriveManager @Inject constructor() {
                     )
                 }
                 
-                CloudResult.success(files)
+                return CloudResult.success(files)
             } else {
-                CloudResult.failure("请求失败: ${response.code}")
+                return CloudResult.failure("请求失败: ${response.code}")
             }
             
         } catch (e: Exception) {
-            CloudResult.failure("夸克网盘请求失败: ${e.message}")
+            return CloudResult.failure("夸克网盘请求失败: ${e.message}")
         }
     }
     
@@ -307,7 +308,7 @@ class CloudDriveManager @Inject constructor() {
             val request = Request.Builder()
                 .url(url)
                 .post(okhttp3.RequestBody.create(
-                    okhttp3.MediaType.Companion.get("application/json"), 
+                    "application/json".toMediaType(),
                     requestBody
                 ))
                 .header("Authorization", "Bearer ${config.token}")
@@ -336,13 +337,13 @@ class CloudDriveManager @Inject constructor() {
                     )
                 }
                 
-                CloudResult.success(files)
+                return CloudResult.success(files)
             } else {
-                CloudResult.failure("请求失败: ${response.code}")
+                return CloudResult.failure("请求失败: ${response.code}")
             }
             
         } catch (e: Exception) {
-            CloudResult.failure("AList请求失败: ${e.message}")
+            return CloudResult.failure("AList请求失败: ${e.message}")
         }
     }
     

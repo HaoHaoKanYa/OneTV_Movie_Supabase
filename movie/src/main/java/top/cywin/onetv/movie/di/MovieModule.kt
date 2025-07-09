@@ -6,6 +6,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import top.cywin.onetv.movie.data.VodConfigManager
 import top.cywin.onetv.movie.data.api.VodApiService
 import top.cywin.onetv.movie.data.cache.MovieCacheManager
 import top.cywin.onetv.movie.data.config.AppConfigManager
@@ -53,10 +54,9 @@ object MovieModule {
     @Provides
     @Singleton
     fun provideVodConfigManager(
-        @ApplicationContext context: Context,
-        appConfigManager: AppConfigManager
+        cacheManager: MovieCacheManager
     ): VodConfigManager {
-        return VodConfigManager(context, appConfigManager)
+        return VodConfigManager(cacheManager)
     }
 
     /**
@@ -121,6 +121,8 @@ object MovieModule {
     fun provideCacheDataDao(database: MovieDatabase): CacheDataDao {
         return database.cacheDataDao()
     }
+
+
 
     /**
      * 提供DatabaseManager
@@ -190,9 +192,10 @@ object MovieModule {
         appConfigManager: AppConfigManager,
         cacheManager: MovieCacheManager,
         configManager: VodConfigManager,
-        parseManager: ParseManager
+        parseManager: ParseManager,
+        @SiteApiService siteApiService: VodApiService
     ): VodRepository {
-        return VodRepository(context, appConfigManager, cacheManager, configManager, parseManager)
+        return VodRepository(context, appConfigManager, cacheManager, configManager, parseManager, siteApiService)
     }
 }
 

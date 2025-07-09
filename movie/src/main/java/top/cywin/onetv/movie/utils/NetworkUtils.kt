@@ -1,6 +1,8 @@
 package top.cywin.onetv.movie.utils
 
+import android.Manifest
 import android.content.Context
+import androidx.annotation.RequiresPermission
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import kotlinx.coroutines.Dispatchers
@@ -18,6 +20,7 @@ object NetworkUtils {
     /**
      * 检查网络连接状态
      */
+    @RequiresPermission(Manifest.permission.ACCESS_NETWORK_STATE)
     fun isNetworkAvailable(context: Context): Boolean {
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val network = connectivityManager.activeNetwork ?: return false

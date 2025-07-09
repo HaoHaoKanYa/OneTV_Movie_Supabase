@@ -7,6 +7,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.serializer
 import java.io.File
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -44,7 +45,10 @@ class MovieCacheManager @Inject constructor(
         if (diskFile.exists()) {
             try {
                 val jsonData = diskFile.readText()
-                val data = Json.decodeFromString(Json.serializersModule.serializer(clazz), jsonData)
+                val data = when (clazz) {
+                    String::class.java -> jsonData.removeSurrounding("\"")
+                    else -> Json.decodeFromString(Json.serializersModule.serializer(clazz), jsonData)
+                }
                 
                 // 回写到内存缓存
                 memoryCache.put(key, data as Any)

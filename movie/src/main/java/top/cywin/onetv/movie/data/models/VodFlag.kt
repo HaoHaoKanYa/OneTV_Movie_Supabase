@@ -87,7 +87,8 @@ data class VodFlag(
             position = pos
             // 更新剧集激活状态
             eps.forEachIndexed { index, episode ->
-                episode.setActivated(index == pos)
+                episode.activated = (index == pos)
+                episode.selected = (index == pos)
             }
         }
     }
@@ -160,13 +161,7 @@ data class VodEpisode(
         return Regex("\\d+").find(name)?.value?.toIntOrNull() ?: (index + 1)
     }
     
-    /**
-     * 设置激活状态
-     */
-    fun setActivated(activated: Boolean) {
-        this.activated = activated
-        this.selected = activated
-    }
+
     
     /**
      * 规则匹配 (参考OneMoVie rule1, rule2)

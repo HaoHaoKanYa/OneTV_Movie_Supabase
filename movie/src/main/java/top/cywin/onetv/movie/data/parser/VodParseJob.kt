@@ -5,9 +5,9 @@ import kotlinx.coroutines.*
 import kotlinx.serialization.json.*
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import top.cywin.onetv.movie.data.VodConfigManager
 import top.cywin.onetv.movie.data.callback.ParseCallback
 import top.cywin.onetv.movie.data.models.VodParse
-import top.cywin.onetv.movie.data.repository.VodConfigManager
 import java.net.URLEncoder
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
@@ -41,12 +41,12 @@ class VodParseJob(private val callback: ParseCallback) {
      */
     private fun setParse(result: VodResult, useParse: Boolean) {
         when {
-            useParse -> parse = VodConfigManager.get().getParse()
+            useParse -> parse = VodConfigManager.getInstance().getParse()
             result.playUrl.startsWith("json:") -> {
                 parse = VodParse.get(1, result.playUrl.substring(5))
             }
             result.playUrl.startsWith("parse:") -> {
-                parse = VodConfigManager.get().getParse(result.playUrl.substring(6))
+                parse = VodConfigManager.getInstance().getParse(result.playUrl.substring(6))
             }
             else -> parse = VodParse.get(0, result.playUrl)
         }

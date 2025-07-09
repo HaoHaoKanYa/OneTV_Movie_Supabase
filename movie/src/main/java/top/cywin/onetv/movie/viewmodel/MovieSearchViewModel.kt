@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import top.cywin.onetv.movie.data.models.*
 import top.cywin.onetv.movie.data.repository.VodRepository
-import top.cywin.onetv.movie.data.repository.VodConfigManager
+import top.cywin.onetv.movie.data.VodConfigManager
 import javax.inject.Inject
 
 /**

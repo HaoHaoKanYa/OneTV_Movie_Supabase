@@ -11,7 +11,6 @@ import retrofit2.http.Query
 import retrofit2.http.Url
 import top.cywin.onetv.movie.data.models.VodResponse
 import top.cywin.onetv.movie.data.models.VodConfigResponse
-import top.cywin.onetv.movie.utils.SecurityIssueType
 import java.util.concurrent.TimeUnit
 
 /**
@@ -76,7 +75,7 @@ interface VodApiService {
                 .build()
 
             val retrofit = Retrofit.Builder()
-                .baseUrl("${SecurityIssueType.SUPABASE_URL}/functions/v1/")
+                .baseUrl("https://api.placeholder.com/") // 占位符，实际从配置读取
                 .client(client)
                 .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
                 .build()

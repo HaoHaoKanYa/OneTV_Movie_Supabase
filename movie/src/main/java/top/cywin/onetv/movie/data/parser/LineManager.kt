@@ -2,6 +2,7 @@ package top.cywin.onetv.movie.data.parser
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import top.cywin.onetv.movie.data.VodConfigManager
 import top.cywin.onetv.movie.data.models.VodFlag
 import top.cywin.onetv.movie.data.models.VodItem
 import top.cywin.onetv.movie.data.models.VodParse
@@ -318,7 +319,7 @@ class LineManager @Inject constructor(
      */
     fun getBestParseForFlag(flag: VodFlag): VodParse? {
         return try {
-            val configManager = top.cywin.onetv.movie.data.repository.VodConfigManager.get()
+            val configManager = VodConfigManager.getInstance()
             val parses = configManager.getParses()
 
             // 优先选择神解析器

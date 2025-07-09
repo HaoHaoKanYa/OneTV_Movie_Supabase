@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import top.cywin.onetv.movie.data.models.*
 import top.cywin.onetv.movie.data.repository.VodRepository
-import top.cywin.onetv.movie.data.repository.VodConfigManager
+import top.cywin.onetv.movie.data.VodConfigManager
 import javax.inject.Inject
 
 /**
@@ -33,7 +33,7 @@ class MovieCategoryViewModel @Inject constructor(
 
             try {
                 // 1. 获取站点信息
-                val site = configManager.getCurrentSite(siteKey)
+                val site = configManager.getSite(siteKey)
                 if (site == null) {
                     throw Exception("未找到站点")
                 }
@@ -49,7 +49,8 @@ class MovieCategoryViewModel @Inject constructor(
                 }
 
                 // 4. 获取筛选条件
-                val filters = currentCategory.getFilters()
+                val filterList = currentCategory.filters
+                val filters = filterList.groupBy { it.key }
 
                 // 5. 加载分类内容
                 loadCategoryContent(typeId, site.key, 1, emptyMap())
@@ -206,7 +207,7 @@ class MovieCategoryViewModel @Inject constructor(
                 movies = emptyList(),
                 currentPage = 1,
                 selectedFilters = emptyMap(),
-                filters = category.getFilters()
+                filters = category.filters.groupBy { it.key }
             )
 
             loadCategoryContent(
