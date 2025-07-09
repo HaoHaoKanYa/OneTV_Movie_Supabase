@@ -153,7 +153,7 @@ class CacheOptimizationService @Inject constructor(
     /**
      * 获取缓存健康状态
      */
-    fun getCacheHealth(): CacheHealth {
+    suspend fun getCacheHealth(): CacheHealth {
         val stats = cacheManager.getCacheStats()
         val hitRate = stats["cache_hit_rate"] as? Double ?: 0.0
         val cacheSize = cacheManager.getCacheSize()

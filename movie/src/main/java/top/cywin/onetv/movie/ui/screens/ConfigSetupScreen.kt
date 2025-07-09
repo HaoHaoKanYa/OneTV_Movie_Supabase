@@ -213,7 +213,7 @@ fun ConfigSetupScreen(
                     Spacer(modifier = Modifier.width(8.dp))
                     
                     Text(
-                        text = uiState.error,
+                        text = uiState.error ?: "未知错误",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onErrorContainer
                     )

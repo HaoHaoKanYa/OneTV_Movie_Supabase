@@ -63,45 +63,4 @@ data class VodClass(
     }
 }
 
-/**
- * 筛选条件
- */
-@Serializable
-data class VodFilter(
-    val key: String, // 筛选key
-    val name: String, // 筛选名称
-    val value: List<VodFilterValue> = emptyList() // 筛选值列表
-) {
-    /**
-     * 根据值获取筛选项
-     */
-    fun getValue(v: String): VodFilterValue? {
-        return value.find { it.v == v }
-    }
-    
-    /**
-     * 获取默认值
-     */
-    fun getDefaultValue(): VodFilterValue? {
-        return value.firstOrNull()
-    }
-    
-    /**
-     * 是否有筛选值
-     */
-    fun hasValues(): Boolean = value.isNotEmpty()
-}
 
-/**
- * 筛选值
- */
-@Serializable
-data class VodFilterValue(
-    val n: String, // 显示名称
-    val v: String  // 实际值
-) {
-    /**
-     * 是否为默认值（通常空值或"全部"）
-     */
-    fun isDefault(): Boolean = v.isEmpty() || v == "0" || n.contains("全部")
-}

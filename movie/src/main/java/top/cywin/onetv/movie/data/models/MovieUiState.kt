@@ -86,24 +86,7 @@ data class HistoryUiState(
     val error: String? = null
 )
 
-/**
- * 播放器UI状态
- */
-data class PlayerUiState(
-    val isLoading: Boolean = false,
-    val movie: VodItem? = null,
-    val playFlags: List<VodFlag> = emptyList(),
-    val currentFlag: VodFlag? = null,
-    val currentEpisode: VodEpisode? = null,
-    val playUrl: String = "",
-    val isPlaying: Boolean = false,
-    val position: Long = 0L,
-    val duration: Long = 0L,
-    val isControlsVisible: Boolean = true,
-    val isFullscreen: Boolean = false,
-    val playbackSpeed: Float = 1.0f,
-    val error: String? = null
-)
+
 
 /**
  * 设置页面UI状态

@@ -44,11 +44,11 @@ class MovieCacheManager @Inject constructor(
         if (diskFile.exists()) {
             try {
                 val jsonData = diskFile.readText()
-                val data = Json.decodeFromString(clazz, jsonData)
+                val data = Json.decodeFromString(Json.serializersModule.serializer(clazz), jsonData)
                 
                 // 回写到内存缓存
                 memoryCache.put(key, data as Any)
-                return data
+                return data as T
             } catch (e: Exception) {
                 diskFile.delete()
             }

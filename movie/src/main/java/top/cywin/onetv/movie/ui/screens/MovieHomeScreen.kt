@@ -44,7 +44,7 @@ fun MovieHomeScreen(
         uiState = uiState,
         onRefresh = { viewModel.refresh() },
         onCategoryClick = { category ->
-            navController.navigate(MovieRoutes.category(category.typeId, category.siteKey))
+            navController.navigate(MovieRoutes.category(category.typeId, uiState.currentSite?.key))
         },
         onMovieClick = { movie ->
             navController.navigate(MovieRoutes.detail(movie.vodId, movie.siteKey))

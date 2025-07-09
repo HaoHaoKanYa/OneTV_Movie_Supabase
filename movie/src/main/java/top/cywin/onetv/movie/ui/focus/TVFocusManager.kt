@@ -376,12 +376,12 @@ fun rememberTVFocusRequester(): FocusRequester {
  * 自动焦点效果
  */
 @Composable
-fun LaunchedEffect.requestInitialFocus(
+fun RequestInitialFocus(
     focusRequester: FocusRequester,
     delay: Long = 100L
 ) {
     LaunchedEffect(Unit) {
-        delay(delay)
+        kotlinx.coroutines.delay(delay)
         focusRequester.requestFocus()
     }
 }

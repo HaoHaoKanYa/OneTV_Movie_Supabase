@@ -112,16 +112,16 @@ class VodCacheManager @Inject constructor(
     /**
      * 通用缓存获取 (增加统计功能)
      */
-    inline fun <reified T> getCache(key: String): T? {
+    fun <T> getCache(key: String, clazz: Class<T>): T? {
         // 1. 先从内存缓存获取
         val memoryEntry = memoryCache.get(key)
         if (memoryEntry != null && !memoryEntry.isExpired()) {
             cacheHits++
-            return memoryEntry.data as? T
+            return if (clazz.isInstance(memoryEntry.data)) clazz.cast(memoryEntry.data) else null
         }
 
         // 2. 从磁盘缓存获取
-        val diskResult = getDiskCache<T>(key)
+        val diskResult = getDiskCache(key, clazz)
         if (diskResult != null) {
             cacheHits++
             // 将热点数据提升到内存缓存
@@ -433,26 +433,7 @@ class VodCacheManager @Inject constructor(
         }
     }
 
-    /**
-     * 启动后台清理任务
-     */
-    private fun startBackgroundCleanup() {
-        cacheScope.launch {
-            while (true) {
-                try {
-                    kotlinx.coroutines.delay(60 * 60 * 1000) // 每小时执行一次
 
-                    // 检查是否需要清理
-                    val now = System.currentTimeMillis()
-                    if (now - lastCleanupTime > 6 * 60 * 60 * 1000) { // 6小时未清理
-                        smartCleanup()
-                    }
-                } catch (e: Exception) {
-                    // 后台任务异常不影响主流程
-                }
-            }
-        }
-    }
 
     /**
      * 检查是否有缓存
