@@ -63,6 +63,7 @@ fun MainContent(
     epgListProvider: () -> EpgList = { EpgList() },
     settingsViewModel: SettingsViewModel = viewModel(),
     mainViewModel: MainViewModel = viewModel(),
+    onNavigateToMovie: () -> Unit = {}, // 新增：点播导航回调
 ) {
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -476,6 +477,7 @@ fun MainContent(
                 mainContentState.isChannelScreenVisible = false
                 mainContentState.isMainChannelUrlScreenVisible = false
             },
+            onNavigateToMovie = onNavigateToMovie, // 新增：传递点播导航回调
         )
     }
 

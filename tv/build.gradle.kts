@@ -104,6 +104,7 @@ dependencies {
     implementation(project(":core:data"))
     implementation(project(":core:designsystem"))
     implementation(project(":core:util"))
+    implementation(project(":movie"))
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.aar"))))
 
     androidTestImplementation(platform(libs.androidx.compose.bom))
@@ -115,6 +116,9 @@ dependencies {
     // Compose相关
     implementation(libs.compose.ui)
     implementation(libs.compose.material3)
+
+    // Navigation Compose
+    implementation("androidx.navigation:navigation-compose:2.7.5")
     
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")

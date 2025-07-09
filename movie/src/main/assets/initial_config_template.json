@@ -1,0 +1,53 @@
+{
+  "template_version": "1.0",
+  "description": "OneTV 初始配置模板",
+  "instructions": {
+    "zh": "请将此文件重命名为 initial_config.json 并填入您的实际配置信息",
+    "en": "Please rename this file to initial_config.json and fill in your actual configuration"
+  },
+  "config": {
+    "id": 0,
+    "appId": "onetv",
+    "projectName": "OneTV Project",
+    "projectUrl": "https://your-project.supabase.co",
+    "projectId": "your-project-id",
+    "apiKey": "your-anon-public-key-here",
+    "accessToken": "",
+    "isActive": true,
+    "createdAt": "",
+    "updatedAt": "",
+    "jwtSecret": ""
+  },
+  "security_notes": {
+    "zh": [
+      "请确保 initial_config.json 文件不被提交到版本控制系统",
+      "API Key 应该是 anon public key，不是 service role key",
+      "生产环境中建议使用环境变量或安全的密钥管理服务",
+      "定期轮换 API Key 以提高安全性"
+    ],
+    "en": [
+      "Ensure initial_config.json is not committed to version control",
+      "API Key should be anon public key, not service role key",
+      "Use environment variables or secure key management in production",
+      "Rotate API keys regularly for better security"
+    ]
+  },
+  "setup_steps": {
+    "zh": [
+      "1. 登录 Supabase 控制台",
+      "2. 选择您的项目",
+      "3. 进入 Settings > API",
+      "4. 复制 Project URL 和 anon public key",
+      "5. 将信息填入此配置文件",
+      "6. 重命名文件为 initial_config.json"
+    ],
+    "en": [
+      "1. Login to Supabase Dashboard",
+      "2. Select your project",
+      "3. Go to Settings > API",
+      "4. Copy Project URL and anon public key",
+      "5. Fill the information into this config file",
+      "6. Rename file to initial_config.json"
+    ]
+  }
+}

@@ -48,7 +48,8 @@ fun MainScreen(
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit = {},
     viewModel: MainViewModel = viewModel(),
-    settingsViewModel: SettingsViewModel = viewModel()
+    settingsViewModel: SettingsViewModel = viewModel(),
+    onNavigateToMovie: () -> Unit = {} // 新增：点播导航回调
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
@@ -66,6 +67,7 @@ fun MainScreen(
             },
             epgListProvider = { s.epgList },
             onBackPressed = onBackPressed,
+            onNavigateToMovie = onNavigateToMovie, // 新增：传递点播导航回调
         )
 
         is MainUiState.Loading -> MainScreenSettingsWrapper(onBackPressed = onBackPressed) {

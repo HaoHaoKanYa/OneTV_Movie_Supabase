@@ -32,6 +32,9 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.consumeAsFlow
@@ -50,6 +53,7 @@ import top.cywin.onetv.tv.ui.screens.settings.LocalSettings
 import top.cywin.onetv.tv.ui.screens.settings.LocalSettingsCurrent
 import top.cywin.onetv.tv.ui.screens.settings.SettingsViewModel
 import top.cywin.onetv.tv.ui.tooling.PreviewWithLayoutGrids
+import top.cywin.onetv.movie.navigation.movieNavigation
 
 
 
@@ -60,6 +64,7 @@ fun App(
     settingsViewModel: SettingsViewModel = viewModel(),
     mainViewModel: MainViewModel = viewModel() // 正确定义参数
 ) {
+    val navController = rememberNavController()
     if (settingsViewModel.iptvSourceCurrent.needExternalStoragePermission()) {
         requestExternalStoragePermission()
     }
@@ -81,18 +86,33 @@ fun App(
     ) {
         PopupHandleableApplication {
             if (settingsViewModel.appAgreementAgreed) {
-                MainScreen(
-                    modifier = modifier,
-                    onBackPressed = {
-                        if (doubleBackPressedExitState.allowExit) {
-                            onBackPressed()
-                        } else {
-                            doubleBackPressedExitState.backPress()
-                            Snackbar.show("再按一次退出")
-                        }
-                    },
-                    viewModel = mainViewModel // 参数名称匹配
-                )
+                NavHost(
+                    navController = navController,
+                    startDestination = "main"
+                ) {
+                    // 主界面路由
+                    composable("main") {
+                        MainScreen(
+                            modifier = modifier,
+                            onBackPressed = {
+                                if (doubleBackPressedExitState.allowExit) {
+                                    onBackPressed()
+                                } else {
+                                    doubleBackPressedExitState.backPress()
+                                    Snackbar.show("再按一次退出")
+                                }
+                            },
+                            viewModel = mainViewModel,
+                            onNavigateToMovie = {
+                                // 导航到点播首页
+                                navController.navigate("movie_home")
+                            }
+                        )
+                    }
+
+                    // Movie模块导航路由
+                    movieNavigation(navController)
+                }
             } else {
                 AgreementScreen(
                     onAgree = { settingsViewModel.appAgreementAgreed = true },

@@ -274,6 +274,82 @@ fun PersonalCenterButton(
     }
 }
 
+/**
+ * 点播影视入口按钮组件
+ *
+ * @param onClick 点击事件回调
+ * @param modifier Modifier修饰符
+ * @param buttonHeight 按钮高度
+ */
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable
+fun MovieEntranceButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    buttonHeight: Dp = 56.dp
+) {
+    // 渐变背景色 - 影视主题色彩
+    val movieGradientColors = listOf(
+        Color(0xFF1976D2), // 深蓝色
+        Color(0xFF42A5F5), // 亮蓝色
+        Color(0xFF64B5F6)  // 浅蓝色
+    )
+
+    val movieBrush = Brush.linearGradient(
+        colors = movieGradientColors,
+        start = Offset(0f, 0f),
+        end = Offset(300f, 100f)
+    )
+
+    Surface(
+        onClick = onClick,
+        modifier = modifier
+            .clip(RoundedCornerShape(12.dp))
+            .focusable(),
+        shape = RoundedCornerShape(12.dp),
+        color = Color.Transparent,
+        tonalElevation = 4.dp
+    ) {
+        Row(
+            modifier = Modifier
+                .background(movieBrush)
+                .padding(horizontal = 16.dp, vertical = 12.dp)
+                .width(IntrinsicSize.Min),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // 影视图标
+            Box(
+                modifier = Modifier.size(32.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                // 使用简单的播放图标
+                Canvas(modifier = Modifier.size(24.dp)) {
+                    val trianglePath = androidx.compose.ui.graphics.Path().apply {
+                        moveTo(size.width * 0.2f, size.height * 0.1f)
+                        lineTo(size.width * 0.2f, size.height * 0.9f)
+                        lineTo(size.width * 0.8f, size.height * 0.5f)
+                        close()
+                    }
+                    drawPath(
+                        path = trianglePath,
+                        color = Color.White
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+                text = "点播影视",
+                style = MaterialTheme.typography.labelLarge.copy(
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp
+                )
+            )
+        }
+    }
+}
+
 val ClassicPanelScreenFavoriteChannelGroup = ChannelGroup(name = "我的收藏")
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -302,6 +378,8 @@ fun ClassicChannelScreen(
     onClose: () -> Unit = {},
     onShowMoreSettings: () -> Unit = {},
     onNavigateToSettingsCategory: ((SettingsCategories) -> Unit)? = null,
+    // 新增：点播导航回调
+    onNavigateToMovie: () -> Unit = {},
     // 多线路相关参数
     showChannelUrlListProvider: () -> Boolean = { false },
     onChannelUrlSelected: (String) -> Unit = {},
@@ -348,18 +426,27 @@ fun ClassicChannelScreen(
         onClose = onClose,
     ) {
         Row {
-            // 左侧区域：包含个人中心按钮与频道组列表
+            // 左侧区域：包含个人中心按钮、点播入口与频道组列表
             Column {
                 PersonalCenterButton(
-                    onClick = { 
+                    onClick = {
                         // 修改为导航到个人中心设置项
-                        onNavigateToSettingsCategory?.invoke(SettingsCategories.PROFILE) 
+                        onNavigateToSettingsCategory?.invoke(SettingsCategories.PROFILE)
                             ?: onShowMoreSettings()
                     },
                     modifier = if (groupWidth > 0)
                         Modifier.width(with(LocalDensity.current) { groupWidth.toDp() })
                     else Modifier,
                     userType = userType // 传递用户类型
+                )
+
+                // 新增：点播影视入口按钮
+                Spacer(modifier = Modifier.height(8.dp))
+                MovieEntranceButton(
+                    onClick = onNavigateToMovie,
+                    modifier = if (groupWidth > 0)
+                        Modifier.width(with(LocalDensity.current) { groupWidth.toDp() })
+                    else Modifier
                 )
                 ClassicChannelGroupItemList(
                     modifier = Modifier
@@ -546,7 +633,8 @@ fun ClassicChannelScreenPreview() {
                 epgListProvider = { EpgList.example(ChannelGroupList.EXAMPLE.channelList) },
                 showEpgProgrammeProgressProvider = { true },
                 onShowMoreSettings = {},
-                onNavigateToSettingsCategory = {}
+                onNavigateToSettingsCategory = {},
+                onNavigateToMovie = {} // 新增：点播导航回调
             )
         }
     }
