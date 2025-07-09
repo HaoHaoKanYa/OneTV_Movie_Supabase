@@ -93,7 +93,7 @@ dependencies {
     implementation(libs.androidx.activity.compose)
 
     implementation(libs.okhttp)
-    implementation(libs.kotlinx.serialization)
+    implementation(libs.kotlinx.serialization.json)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

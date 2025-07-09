@@ -90,7 +90,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
 
-    implementation(libs.kotlinx.serialization)
+    implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlinx.collections.immutable)
     implementation(libs.compose.material.icons.extended)
 

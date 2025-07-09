@@ -83,7 +83,7 @@ dependencies {
     implementation(libs.compose.material3)
     implementation(libs.navigation.compose)
 
-    implementation(libs.kotlinx.serialization)
+    implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlinx.collections.immutable)
     implementation(libs.compose.material.icons.extended)
 

@@ -1,15 +1,17 @@
 package top.cywin.onetv.movie.data.api
 
+import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
-import retrofit2.converter.kotlinx.serialization.asConverterFactory
+//import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 import retrofit2.http.Url
 import top.cywin.onetv.movie.data.models.VodResponse
 import top.cywin.onetv.movie.data.models.VodConfigResponse
+import top.cywin.onetv.movie.utils.SecurityIssueType
 import java.util.concurrent.TimeUnit
 
 /**
@@ -74,7 +76,7 @@ interface VodApiService {
                 .build()
 
             val retrofit = Retrofit.Builder()
-                .baseUrl("${Constants.SUPABASE_URL}/functions/v1/")
+                .baseUrl("${SecurityIssueType.SUPABASE_URL}/functions/v1/")
                 .client(client)
                 .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
                 .build()
