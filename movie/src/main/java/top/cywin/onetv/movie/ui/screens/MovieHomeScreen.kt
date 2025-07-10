@@ -17,7 +17,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
+// KotlinPoet专业重构 - 移除hiltViewModel import
+// import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import top.cywin.onetv.movie.data.models.MovieUiState
@@ -37,7 +39,12 @@ import android.util.Log
 @Composable
 fun MovieHomeScreen(
     navController: NavController,
-    viewModel: MovieViewModel = hiltViewModel()
+    viewModel: MovieViewModel = viewModel {
+        MovieViewModel(
+            repository = top.cywin.onetv.movie.MovieApp.vodRepository,
+            configManager = top.cywin.onetv.movie.MovieApp.vodConfigManager
+        )
+    }
 ) {
     Log.d("ONETV_MOVIE", "MovieHomeScreen 开始初始化")
     Log.d("ONETV_MOVIE", "开始获取ViewModel")

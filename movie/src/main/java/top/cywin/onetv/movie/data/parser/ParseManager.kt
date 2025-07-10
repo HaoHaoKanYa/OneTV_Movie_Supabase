@@ -13,15 +13,17 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import top.cywin.onetv.movie.data.models.VodParse
 import java.net.URLEncoder
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
-import javax.inject.Singleton
+// KotlinPoet专业重构 - 移除Hilt相关import
+// import javax.inject.Inject
+// import javax.inject.Singleton
 
 /**
  * 解析管理器 - 基于OneMoVie架构的多解析器系统
  * 支持嗅探、JSON、WebView等多种解析方式
+ * KotlinPoet专业重构 - 移除Hilt依赖，使用标准构造函数
  */
-@Singleton
-class ParseManager @Inject constructor() {
+// @Singleton
+class ParseManager() {
     
     private val client = OkHttpClient.Builder()
         .connectTimeout(15, TimeUnit.SECONDS)

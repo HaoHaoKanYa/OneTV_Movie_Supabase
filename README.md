@@ -1,20 +1,21 @@
-# OneTV Supabase 2.1.0 🎬
+# OneTV Supabase 2.1.1 🎬
 
 <div align="center">
 
-![版本](https://img.shields.io/badge/版本-2.1.0-blue)
+![版本](https://img.shields.io/badge/版本-2.1.1-blue)
 ![Kotlin](https://img.shields.io/badge/Kotlin-2.1.10-blue.svg?logo=kotlin)
 ![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-Latest-brightgreen.svg?logo=jetpack-compose)
 ![Supabase](https://img.shields.io/badge/Supabase-3.1.4-green.svg?logo=supabase)
 ![构建状态](https://img.shields.io/badge/构建-通过-brightgreen)
 ![点播功能](https://img.shields.io/badge/点播功能-已集成-orange)
 ![TVBOX](https://img.shields.io/badge/TVBOX-兼容-purple)
+![KotlinPoet](https://img.shields.io/badge/KotlinPoet-专业重构-red)
 
 </div>
 
 ## 📱 项目概述
 
-OneTV Supabase是一款现代化的Android电视应用，集成了**直播**和**点播**双重功能。本项目完成了从Cloudflare到Supabase的全面迁移，并在2.1.0版本中新增了完整的TVBOX模式点播功能，采用最新的Android开发技术和多模块架构，实现了更快、更稳定、功能更丰富的用户体验。本软件仅供技术研究与学习交流使用，严禁用于任何商业场景或非法用途。
+OneTV Supabase是一款现代化的Android电视应用，集成了**直播**和**点播**双重功能。本项目完成了从Cloudflare到Supabase的全面迁移，并在2.1.1版本中完成了KotlinPoet专业重构，移除了Hilt依赖注入，解决了Kotlin版本冲突问题，采用最新的Android开发技术和多模块架构，实现了更快、更稳定、功能更丰富的用户体验。本软件仅供技术研究与学习交流使用，严禁用于任何商业场景或非法用途。
 
 ## 🎯 核心功能
 
@@ -54,7 +55,7 @@ OneTV_Movie_Supabase/
 ### 核心技术栈
 - **UI框架**: Jetpack Compose + TV Material Design
 - **架构模式**: MVVM + Repository Pattern
-- **依赖注入**: Hilt
+- **代码生成**: KotlinPoet + KSP (替代Hilt)
 - **数据库**: Room + Supabase
 - **网络请求**: Retrofit + OkHttp + Ktor
 - **播放器**: ExoPlayer (Media3)
@@ -63,10 +64,12 @@ OneTV_Movie_Supabase/
 
 ### 点播功能技术特性
 - **OneMoVie架构**: 基于成熟的OneMoVie项目架构
+- **KotlinPoet重构**: 专业代码生成，移除Hilt依赖
 - **智能解析**: 支持嗅探、JSON、WebView、自定义解析
 - **三级缓存**: 内存、磁盘、数据库缓存机制
 - **安全配置**: 动态配置加载，无硬编码敏感信息
 - **TV适配**: 完整的遥控器和焦点管理系统
+- **版本兼容**: 解决Kotlin 2.1.10版本冲突问题
 
 ## 📦 安装说明
 

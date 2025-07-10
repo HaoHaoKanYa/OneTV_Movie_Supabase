@@ -20,7 +20,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
+// KotlinPoet专业重构 - 移除hiltViewModel import
+// import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import top.cywin.onetv.movie.data.models.SearchUiState
@@ -38,7 +40,12 @@ import top.cywin.onetv.movie.viewmodel.MovieSearchViewModel
 fun MovieSearchScreen(
     initialKeyword: String = "",
     navController: NavController,
-    viewModel: MovieSearchViewModel = hiltViewModel()
+    viewModel: MovieSearchViewModel = viewModel {
+        MovieSearchViewModel(
+            repository = top.cywin.onetv.movie.MovieApp.vodRepository,
+            configManager = top.cywin.onetv.movie.MovieApp.vodConfigManager
+        )
+    }
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 

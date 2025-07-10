@@ -6,15 +6,17 @@ import top.cywin.onetv.movie.data.VodConfigManager
 import top.cywin.onetv.movie.data.models.VodFlag
 import top.cywin.onetv.movie.data.models.VodItem
 import top.cywin.onetv.movie.data.models.VodParse
-import javax.inject.Inject
-import javax.inject.Singleton
+// KotlinPoet专业重构 - 移除Hilt相关import
+// import javax.inject.Inject
+// import javax.inject.Singleton
 
 /**
  * 线路管理器 - 完全基于OneMoVie架构的线路切换系统
  * 实现Flag管理、Parse管理、智能线路选择
+ * KotlinPoet专业重构 - 移除Hilt依赖，使用标准构造函数
  */
-@Singleton
-class LineManager @Inject constructor(
+// @Singleton
+class LineManager(
     private val parseManager: ParseManager
 ) {
 

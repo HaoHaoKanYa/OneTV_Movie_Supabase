@@ -17,7 +17,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+// KotlinPoet专业重构 - 移除hiltViewModel import
+// import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import top.cywin.onetv.movie.data.cloud.CloudDriveManager
 import top.cywin.onetv.movie.ui.focus.tvFocusable
@@ -31,9 +33,15 @@ import top.cywin.onetv.movie.viewmodel.CloudDriveViewModel
 @Composable
 fun CloudDriveScreen(
     onNavigateBack: () -> Unit,
-    onPlayVideo: (String) -> Unit,
-    viewModel: CloudDriveViewModel = hiltViewModel()
+    onPlayVideo: (String) -> Unit
 ) {
+    val context = androidx.compose.ui.platform.LocalContext.current
+    val viewModel: CloudDriveViewModel = viewModel {
+        CloudDriveViewModel(
+            context = context,
+            cloudDriveManager = top.cywin.onetv.movie.MovieApp.cloudDriveManager
+        )
+    }
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     
     LaunchedEffect(Unit) {

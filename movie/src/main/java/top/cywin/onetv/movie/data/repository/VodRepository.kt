@@ -10,22 +10,24 @@ import top.cywin.onetv.movie.data.config.AppConfigManager
 import top.cywin.onetv.movie.data.models.*
 import top.cywin.onetv.movie.data.parser.ParseManager
 import top.cywin.onetv.movie.data.parser.ParseResult
-import top.cywin.onetv.movie.di.SiteApiService
-import javax.inject.Inject
-import javax.inject.Singleton
+// KotlinPoet专业重构 - 移除Hilt相关import
+// import top.cywin.onetv.movie.di.SiteApiService
+// import javax.inject.Inject
+// import javax.inject.Singleton
 import android.util.Log
 
 /**
  * 点播数据仓库 (参考OneMoVie Repository模式)
+ * KotlinPoet专业重构 - 移除Hilt依赖，使用标准构造函数
  */
-@Singleton
-class VodRepository @Inject constructor(
+// @Singleton
+class VodRepository(
     private val context: Context,
     private val appConfigManager: AppConfigManager,
     private val cacheManager: MovieCacheManager,
     private val configManager: VodConfigManager,
     private val parseManager: ParseManager,
-    @SiteApiService private val siteApiService: VodApiService
+    private val siteApiService: VodApiService
 ) {
 
     /**

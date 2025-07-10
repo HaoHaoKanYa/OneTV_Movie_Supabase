@@ -17,8 +17,8 @@ android {
 
     defaultConfig {
         applicationId = "top.cywin.onetv.mobile"
-        minSdk = 24
-        targetSdk = libs.versions.compileSdk.get().toInt()
+        minSdk = libs.versions.minSdk.get().toInt()
+        targetSdk = libs.versions.targetSdk.get().toInt()
         versionCode = 2
         versionName = "2.0.0"
 

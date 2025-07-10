@@ -2,7 +2,8 @@ package top.cywin.onetv.movie.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
+// KotlinPoet专业重构 - 移除Hilt import
+// import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -12,13 +13,15 @@ import top.cywin.onetv.movie.data.parser.LineManager
 import top.cywin.onetv.movie.data.parser.ParseManager
 import top.cywin.onetv.movie.data.repository.VodRepository
 import top.cywin.onetv.movie.data.repository.WatchHistoryRepository
-import javax.inject.Inject
+// KotlinPoet专业重构 - 移除Inject import
+// import javax.inject.Inject
 
 /**
  * 播放器ViewModel (参考OneMoVie播放器架构)
+ * KotlinPoet专业重构 - 移除Hilt注解，使用标准构造函数
  */
-@HiltViewModel
-class MoviePlayerViewModel @Inject constructor(
+// @HiltViewModel
+class MoviePlayerViewModel(
     private val vodRepository: VodRepository,
     private val historyRepository: WatchHistoryRepository,
     private val lineManager: LineManager,

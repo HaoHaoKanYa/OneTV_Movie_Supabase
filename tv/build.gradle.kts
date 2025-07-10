@@ -6,8 +6,9 @@ plugins {
     alias(libs.plugins.compose)
     alias(libs.plugins.jetpack.compose.compiler)
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.hilt)
-    alias(libs.plugins.ksp)
+    // KotlinPoet专业重构 - 移除Hilt插件
+    // alias(libs.plugins.hilt)
+    // alias(libs.plugins.ksp)
 }
 
 android {
@@ -69,6 +70,17 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            // 解决Kotlin jar包冲突 - 使用新的语法
+            pickFirsts.add("**/kotlin-compiler-embeddable*.jar")
+            pickFirsts.add("**/kotlin-stdlib*.jar")
+            pickFirsts.add("**/kotlin-reflect*.jar")
+            pickFirsts.add("**/kotlin-scripting*.jar")
+            // 处理META-INF冲突
+            pickFirsts.add("META-INF/versions/9/previous-compilation-data.bin")
+            pickFirsts.add("META-INF/com.android.tools/r8-from-*.version")
+        }
+        jniLibs {
+            useLegacyPackaging = true
         }
     }
 
@@ -105,13 +117,13 @@ dependencies {
 
 
 
-    // Hilt依赖注入
-    implementation(libs.hilt.android)
-    ksp(libs.hilt.compiler)
-    implementation(libs.androidx.hilt.navigation.compose)
+    // KotlinPoet专业重构 - 移除Hilt依赖注入
+    // implementation(libs.hilt.android)
+    // ksp(libs.hilt.compiler)
+    // implementation(libs.androidx.hilt.navigation.compose)
 
-    // JavaPoet - 解决Hilt版本兼容性问题
-    implementation(libs.javapoet)
+    // KotlinPoet专业重构 - 移除JavaPoet
+    // implementation(libs.javapoet)
 
     implementation(project(":core:data"))
     implementation(project(":core:designsystem"))

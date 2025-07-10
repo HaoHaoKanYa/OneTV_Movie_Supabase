@@ -3,16 +3,17 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.ksp)
-    alias(libs.plugins.hilt)
+    alias(libs.plugins.ksp) // 保留KSP用于Room
+    // KotlinPoet专业重构 - 移除Hilt插件
+    // alias(libs.plugins.hilt)
 }
 
 android {
     namespace = "top.cywin.onetv.movie"
-    compileSdk = 34
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        minSdk = 21
+        minSdk = libs.versions.minSdk.get().toInt()
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
@@ -42,6 +43,20 @@ android {
 
     composeOptions {
         kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
+    }
+
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            // 解决Kotlin jar包冲突 - 使用新的语法
+            pickFirsts.add("**/kotlin-compiler-embeddable*.jar")
+            pickFirsts.add("**/kotlin-stdlib*.jar")
+            pickFirsts.add("**/kotlin-reflect*.jar")
+            pickFirsts.add("**/kotlin-scripting*.jar")
+            // 处理META-INF冲突
+            pickFirsts.add("META-INF/versions/9/previous-compilation-data.bin")
+            pickFirsts.add("META-INF/com.android.tools/r8-from-*.version")
+        }
     }
 }
 
@@ -89,10 +104,12 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
 
-    // 依赖注入
-    implementation(libs.hilt.android)
-    implementation(libs.androidx.hilt.navigation.compose)
-    ksp(libs.hilt.compiler)
+    // KotlinPoet专业代码生成 - 替代Hilt依赖注入
+    implementation(libs.kotlinpoet)
+    implementation(libs.kotlinpoet.ksp)
+    // 移除kotlin-compiler依赖，避免与KSP插件冲突
+    // implementation(libs.kotlin.compiler)
+    // implementation(libs.kotlin.scripting)
 
     // 协程
     implementation(libs.kotlinx.coroutines.android)

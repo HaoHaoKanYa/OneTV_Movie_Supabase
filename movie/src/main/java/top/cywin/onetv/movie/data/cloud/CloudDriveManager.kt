@@ -13,15 +13,17 @@ import okhttp3.Request
 import okhttp3.MediaType.Companion.toMediaType
 import java.net.URLEncoder
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
-import javax.inject.Singleton
+// KotlinPoet专业重构 - 移除Hilt相关import
+// import javax.inject.Inject
+// import javax.inject.Singleton
 
 /**
  * 网盘管理器 - 基于OneMoVie架构的网盘功能实现
  * 支持阿里云盘、百度网盘、夸克网盘等多种网盘服务
+ * KotlinPoet专业重构 - 移除Hilt依赖，使用标准构造函数
  */
-@Singleton
-class CloudDriveManager @Inject constructor() {
+// @Singleton
+class CloudDriveManager() {
     
     private val client = OkHttpClient.Builder()
         .connectTimeout(30, TimeUnit.SECONDS)

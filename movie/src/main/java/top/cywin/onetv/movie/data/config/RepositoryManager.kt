@@ -9,15 +9,17 @@ import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import top.cywin.onetv.movie.data.models.VodConfig
-import javax.inject.Inject
-import javax.inject.Singleton
+// KotlinPoet专业重构 - 移除Hilt相关import
+// import javax.inject.Inject
+// import javax.inject.Singleton
 
 /**
  * 仓库配置管理器 - 基于OneMoVie架构的多配置源管理
  * 支持多个配置仓库、配置订阅、自动更新等功能
+ * KotlinPoet专业重构 - 移除Hilt依赖，使用标准构造函数
  */
-@Singleton
-class RepositoryManager @Inject constructor(
+// @Singleton
+class RepositoryManager(
     private val context: Context,
     private val appConfigManager: AppConfigManager
 ) {

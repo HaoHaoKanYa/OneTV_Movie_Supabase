@@ -18,15 +18,17 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import javax.inject.Inject
-import javax.inject.Singleton
+// KotlinPoet专业重构 - 移除Hilt相关import
+// import javax.inject.Inject
+// import javax.inject.Singleton
 
 /**
  * 用户体验优化工具类
  * 提供动画、反馈、引导、个性化等UX优化功能
+ * KotlinPoet专业重构 - 移除Hilt依赖，使用标准构造函数
  */
-@Singleton
-class UXOptimizer @Inject constructor(
+// @Singleton
+class UXOptimizer(
     private val context: Context
 ) {
     

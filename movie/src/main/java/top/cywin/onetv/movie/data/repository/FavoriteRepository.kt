@@ -7,14 +7,16 @@ import kotlinx.coroutines.withContext
 import top.cywin.onetv.movie.data.database.dao.FavoriteDao
 import top.cywin.onetv.movie.data.database.entity.FavoriteEntity
 import top.cywin.onetv.movie.data.models.VodItem
-import javax.inject.Inject
-import javax.inject.Singleton
+// KotlinPoet专业重构 - 移除Hilt相关import
+// import javax.inject.Inject
+// import javax.inject.Singleton
 
 /**
  * 收藏Repository (参考OneMoVie Favorite管理)
+ * KotlinPoet专业重构 - 移除Hilt依赖，使用标准构造函数
  */
-@Singleton
-class FavoriteRepository @Inject constructor(
+// @Singleton
+class FavoriteRepository(
     private val favoriteDao: FavoriteDao
 ) {
 

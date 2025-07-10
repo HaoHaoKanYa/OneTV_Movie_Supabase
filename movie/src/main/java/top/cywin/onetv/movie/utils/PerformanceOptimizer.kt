@@ -10,15 +10,17 @@ import top.cywin.onetv.movie.data.database.MovieDatabase
 import top.cywin.onetv.movie.data.models.VodItem
 import java.lang.ref.WeakReference
 import java.util.concurrent.ConcurrentHashMap
-import javax.inject.Inject
-import javax.inject.Singleton
+// KotlinPoet专业重构 - 移除Hilt相关import
+// import javax.inject.Inject
+// import javax.inject.Singleton
 
 /**
  * 性能优化工具类
  * 提供内存管理、性能监控、资源优化等功能
+ * KotlinPoet专业重构 - 移除Hilt依赖，使用标准构造函数
  */
-@Singleton
-class PerformanceOptimizer @Inject constructor(
+// @Singleton
+class PerformanceOptimizer(
     private val context: Context,
     private val cacheManager: VodCacheManager,
     private val database: MovieDatabase

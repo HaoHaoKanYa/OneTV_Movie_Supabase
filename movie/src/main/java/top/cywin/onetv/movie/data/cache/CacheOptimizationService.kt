@@ -5,14 +5,16 @@ import kotlinx.coroutines.*
 import top.cywin.onetv.movie.data.models.VodItem
 import top.cywin.onetv.movie.data.repository.VodRepository
 import top.cywin.onetv.movie.data.repository.WatchHistoryRepository
-import javax.inject.Inject
-import javax.inject.Singleton
+// KotlinPoet专业重构 - 移除Hilt相关import
+// import javax.inject.Inject
+// import javax.inject.Singleton
 
 /**
  * 缓存优化服务 (智能缓存管理)
+ * KotlinPoet专业重构 - 移除Hilt依赖，使用标准构造函数
  */
-@Singleton
-class CacheOptimizationService @Inject constructor(
+// @Singleton
+class CacheOptimizationService(
     private val context: Context,
     private val cacheManager: VodCacheManager,
     private val vodRepository: VodRepository,

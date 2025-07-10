@@ -9,14 +9,16 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
 import java.io.File
-import javax.inject.Inject
-import javax.inject.Singleton
+// KotlinPoet专业重构 - 移除Hilt相关import
+// import javax.inject.Inject
+// import javax.inject.Singleton
 
 /**
  * movie模块专用缓存管理器 (三级缓存：内存 -> 磁盘)
+ * KotlinPoet专业重构 - 移除Hilt依赖，使用标准构造函数
  */
-@Singleton
-class MovieCacheManager @Inject constructor(
+// @Singleton
+class MovieCacheManager(
     private val context: Context
 ) {
     

@@ -6,6 +6,8 @@ import android.content.Intent
 import android.net.Uri
 import android.util.Log
 import androidx.core.content.FileProvider
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 import top.cywin.onetv.core.data.AppData
 import top.cywin.onetv.core.data.repositories.supabase.SupabaseClient
@@ -14,9 +16,10 @@ import java.io.File
 import java.io.FileWriter
 import java.io.IOException
 
-import dagger.hilt.android.HiltAndroidApp
+// KotlinPoet专业重构 - 移除Hilt依赖
+// import dagger.hilt.android.HiltAndroidApp
 
-@HiltAndroidApp
+// @HiltAndroidApp
 class MyTVApplication : Application() {
     override fun onCreate() {
         super.onCreate()
@@ -30,7 +33,10 @@ class MyTVApplication : Application() {
         // 初始化 SupabaseClient
         SupabaseClient.initialize(applicationContext)
         Log.i("MyTVApplication", "已初始化 SupabaseClient: URL=${SupabaseClient.getUrl()}")
-        
+
+        // 🚀 初始化KotlinPoet专业版Movie模块
+        initializeMovieModule()
+
         UnsafeTrustManager.enableUnsafeTrustManager()
 
         // 设置全局未捕获异常处理器
@@ -47,6 +53,28 @@ class MyTVApplication : Application() {
             // 终止应用进程
             android.os.Process.killProcess(android.os.Process.myPid())
             System.exit(1)
+        }
+    }
+
+    /**
+     * 🚀 初始化Movie模块 - KotlinPoet专业版
+     * 异步初始化，避免阻塞主线程启动
+     */
+    private fun initializeMovieModule() {
+        try {
+            Log.i("MyTVApplication", "🚀 开始初始化KotlinPoet专业版Movie模块...")
+
+            // 异步初始化Movie模块，避免阻塞主线程
+            kotlinx.coroutines.GlobalScope.launch {
+                try {
+                    top.cywin.onetv.movie.MovieApp.initialize(applicationContext)
+                    Log.i("MyTVApplication", "✅ Movie模块初始化完成")
+                } catch (e: Exception) {
+                    Log.e("MyTVApplication", "❌ Movie模块初始化失败", e)
+                }
+            }
+        } catch (e: Exception) {
+            Log.e("MyTVApplication", "❌ Movie模块初始化启动失败", e)
         }
     }
 

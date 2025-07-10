@@ -9,16 +9,18 @@ import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import top.cywin.onetv.movie.data.api.Constants
-import javax.inject.Inject
-import javax.inject.Singleton
+// KotlinPoet专业重构 - 移除Hilt相关import
+// import javax.inject.Inject
+// import javax.inject.Singleton
 import android.util.Log
 
 /**
  * 应用配置管理器 - 从app_configs表读取配置
  * 基于OneMoVie架构，支持动态配置加载
+ * KotlinPoet专业重构 - 移除Hilt依赖，使用标准构造函数
  */
-@Singleton
-class AppConfigManager @Inject constructor(
+// @Singleton
+class AppConfigManager(
     private val context: Context
 ) {
     

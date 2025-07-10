@@ -15,7 +15,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+// KotlinPoet专业重构 - 移除hiltViewModel import
+// import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import top.cywin.onetv.movie.ui.focus.tvFocusable
 import top.cywin.onetv.movie.viewmodel.ConfigSetupViewModel
@@ -29,7 +31,11 @@ import top.cywin.onetv.movie.viewmodel.ConfigSetupViewModel
 fun ConfigSetupScreen(
     onConfigComplete: () -> Unit,
     onSkip: (() -> Unit)? = null,
-    viewModel: ConfigSetupViewModel = hiltViewModel()
+    viewModel: ConfigSetupViewModel = viewModel {
+        ConfigSetupViewModel(
+            appConfigManager = top.cywin.onetv.movie.MovieApp.appConfigManager
+        )
+    }
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     

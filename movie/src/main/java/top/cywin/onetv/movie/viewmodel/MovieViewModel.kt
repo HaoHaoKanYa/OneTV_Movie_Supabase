@@ -2,7 +2,8 @@ package top.cywin.onetv.movie.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
+// KotlinPoet专业重构 - 移除Hilt import
+// import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -10,14 +11,16 @@ import kotlinx.coroutines.launch
 import top.cywin.onetv.movie.data.models.*
 import top.cywin.onetv.movie.data.repository.VodRepository
 import top.cywin.onetv.movie.data.VodConfigManager
-import javax.inject.Inject
+// KotlinPoet专业重构 - 移除Inject import
+// import javax.inject.Inject
 import android.util.Log
 
 /**
  * 点播首页ViewModel (参考OneMoVie架构)
  */
-@HiltViewModel
-class MovieViewModel @Inject constructor(
+// KotlinPoet专业重构 - 移除Hilt注解，使用标准构造函数
+// @HiltViewModel
+class MovieViewModel(
     private val repository: VodRepository,
     private val configManager: VodConfigManager
 ) : ViewModel() {

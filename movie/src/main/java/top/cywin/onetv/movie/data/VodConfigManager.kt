@@ -4,15 +4,18 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import top.cywin.onetv.movie.data.cache.MovieCacheManager
+import top.cywin.onetv.movie.data.config.DefaultConfigProvider
 import top.cywin.onetv.movie.data.models.*
-import javax.inject.Inject
-import javax.inject.Singleton
+// KotlinPoet专业重构 - 移除Hilt相关import
+// import javax.inject.Inject
+// import javax.inject.Singleton
 
 /**
  * 点播配置管理器 (完全参考OneMoVie VodConfig实现)
+ * KotlinPoet专业重构 - 移除Hilt依赖，使用标准构造函数
  */
-@Singleton
-class VodConfigManager @Inject constructor(
+// @Singleton
+class VodConfigManager(
     private val cacheManager: MovieCacheManager
 ) {
     
@@ -218,13 +221,14 @@ class VodConfigManager @Inject constructor(
     }
 
     /**
-     * 获取默认站点（临时解决方案）
+     * 获取默认站点（使用DefaultConfigProvider）
      */
     private fun getDefaultSite(): VodSite {
-        return VodSite(
-            key = "default",
-            name = "默认站点",
-            api = "https://example.com/api.php/provide/vod/",
+        val defaultConfig = DefaultConfigProvider.getDefaultConfig()
+        return defaultConfig.sites.firstOrNull() ?: VodSite(
+            key = "fallback",
+            name = "备用站点",
+            api = "https://fallback.example.com/api.php/provide/vod/",
             ext = "",
             jar = "",
             type = 1,
@@ -235,6 +239,18 @@ class VodConfigManager @Inject constructor(
             style = null,
             categories = emptyList()
         )
+    }
+
+    /**
+     * 加载默认配置
+     */
+    suspend fun loadDefaultConfig(): Result<String> {
+        return try {
+            val defaultConfig = DefaultConfigProvider.getDefaultConfig()
+            load(defaultConfig)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 
     /**

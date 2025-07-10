@@ -3,8 +3,9 @@ package top.cywin.onetv.movie.viewmodel
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
+// KotlinPoet专业重构 - 移除Hilt import
+// import dagger.hilt.android.lifecycle.HiltViewModel
+// import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -12,15 +13,17 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 import top.cywin.onetv.movie.data.cloud.CloudDriveManager
 import top.cywin.onetv.movie.ui.screens.CloudDriveUiState
-import javax.inject.Inject
+// KotlinPoet专业重构 - 移除Inject import
+// import javax.inject.Inject
 
 /**
  * 网盘功能ViewModel
  * 管理网盘配置、文件浏览、下载等功能
+ * KotlinPoet专业重构 - 使用MovieApp单例管理依赖
  */
-@HiltViewModel
-class CloudDriveViewModel @Inject constructor(
-    @ApplicationContext private val context: Context,
+// @HiltViewModel
+class CloudDriveViewModel(
+    private val context: Context,
     private val cloudDriveManager: CloudDriveManager
 ) : ViewModel() {
     

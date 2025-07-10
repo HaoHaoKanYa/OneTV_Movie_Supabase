@@ -26,7 +26,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
+// KotlinPoet专业重构 - 移除hiltViewModel import
+// import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import top.cywin.onetv.movie.data.models.PlayerUiState
@@ -54,7 +56,14 @@ fun MoviePlayerScreen(
     episodeIndex: Int,
     siteKey: String = "",
     navController: NavController,
-    viewModel: MoviePlayerViewModel = hiltViewModel()
+    viewModel: MoviePlayerViewModel = viewModel {
+        MoviePlayerViewModel(
+            vodRepository = top.cywin.onetv.movie.MovieApp.vodRepository,
+            historyRepository = top.cywin.onetv.movie.MovieApp.watchHistoryRepository,
+            lineManager = top.cywin.onetv.movie.MovieApp.lineManager,
+            parseManager = top.cywin.onetv.movie.MovieApp.parseManager
+        )
+    }
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current

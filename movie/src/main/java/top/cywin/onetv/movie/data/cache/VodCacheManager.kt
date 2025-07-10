@@ -14,17 +14,19 @@ import java.io.File
 import java.security.MessageDigest
 import java.util.zip.GZIPInputStream
 import java.util.zip.GZIPOutputStream
-import javax.inject.Inject
-import javax.inject.Singleton
+// KotlinPoet专业重构 - 移除Hilt相关import
+// import javax.inject.Inject
+// import javax.inject.Singleton
 
 /**
  * 三级缓存管理器 (参考OneMoVie缓存架构)
  * 1. 内存缓存 (LruCache) - 最快访问
  * 2. 磁盘缓存 (File) - 持久化存储
  * 3. 数据库缓存 (Room) - 结构化数据
+ * KotlinPoet专业重构 - 移除Hilt依赖，使用标准构造函数
  */
-@Singleton
-class VodCacheManager @Inject constructor(
+// @Singleton
+class VodCacheManager(
     private val context: Context
 ) {
     private val json = Json {
