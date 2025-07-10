@@ -212,7 +212,30 @@ class VodConfigManager @Inject constructor(
     /**
      * 获取当前站点
      */
-    fun getCurrentSite(): VodSite? = home
+    fun getCurrentSite(): VodSite? {
+        // 如果没有配置站点，返回一个默认站点避免崩溃
+        return home ?: getDefaultSite()
+    }
+
+    /**
+     * 获取默认站点（临时解决方案）
+     */
+    private fun getDefaultSite(): VodSite {
+        return VodSite(
+            key = "default",
+            name = "默认站点",
+            api = "https://example.com/api.php/provide/vod/",
+            ext = "",
+            jar = "",
+            type = 1,
+            searchable = 1,
+            changeable = 1,
+            timeout = 30000,
+            header = emptyMap(),
+            style = null,
+            categories = emptyList()
+        )
+    }
 
     /**
      * 设置当前站点

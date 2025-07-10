@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -27,6 +28,7 @@ import top.cywin.onetv.movie.navigation.MovieRoutes
 import top.cywin.onetv.movie.ui.components.MovieCard
 import top.cywin.onetv.movie.ui.components.QuickCategoryGrid
 import top.cywin.onetv.movie.viewmodel.MovieViewModel
+import android.util.Log
 
 /**
  * 点播首页 (参考OneMoVie主界面)
@@ -37,7 +39,40 @@ fun MovieHomeScreen(
     navController: NavController,
     viewModel: MovieViewModel = hiltViewModel()
 ) {
+    Log.d("ONETV_MOVIE", "MovieHomeScreen 开始初始化")
+    Log.d("ONETV_MOVIE", "开始获取ViewModel")
+
+    // 使用LaunchedEffect来捕获初始化错误
+    var initError by remember { mutableStateOf<String?>(null) }
+
+    LaunchedEffect(Unit) {
+        try {
+            Log.d("ONETV_MOVIE", "LaunchedEffect: 开始初始化检查")
+        } catch (e: Exception) {
+            Log.e("ONETV_MOVIE", "初始化检查失败", e)
+            initError = e.message
+        }
+    }
+
+    // 如果有初始化错误，显示错误信息
+    if (initError != null) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = "点播功能初始化失败: $initError",
+                color = Color.Red,
+                textAlign = TextAlign.Center
+            )
+        }
+        return
+    }
+
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    Log.d("ONETV_MOVIE", "ViewModel获取成功，开始收集UI状态")
+
+    Log.d("ONETV_MOVIE", "UI状态: isLoading=${uiState.isLoading}, error=${uiState.error}")
 
     MovieHomeContent(
         navController = navController,

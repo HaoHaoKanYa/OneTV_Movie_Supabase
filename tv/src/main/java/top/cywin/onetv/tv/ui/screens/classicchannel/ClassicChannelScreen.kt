@@ -102,6 +102,7 @@ import androidx.compose.material3.Icon
 import top.cywin.onetv.core.data.repositories.supabase.SupabaseSessionManager
 import top.cywin.onetv.tv.ui.screens.settings.SettingsCategories
 import androidx.compose.ui.platform.LocalContext
+import android.util.Log
 
 /**
  * 个人中心按钮组件，采用动态流光背景和圆角效果，并根据用户类型显示不同的 VIP 图标
@@ -443,7 +444,15 @@ fun ClassicChannelScreen(
                 // 新增：点播影视入口按钮
                 Spacer(modifier = Modifier.height(8.dp))
                 MovieEntranceButton(
-                    onClick = onNavigateToMovie,
+                    onClick = {
+                        Log.d("ONETV_MOVIE", "点播影视按钮被点击")
+                        try {
+                            onNavigateToMovie()
+                            Log.d("ONETV_MOVIE", "点播导航回调执行成功")
+                        } catch (e: Exception) {
+                            Log.e("ONETV_MOVIE", "点播导航回调执行失败", e)
+                        }
+                    },
                     modifier = if (groupWidth > 0)
                         Modifier.width(with(LocalDensity.current) { groupWidth.toDp() })
                     else Modifier

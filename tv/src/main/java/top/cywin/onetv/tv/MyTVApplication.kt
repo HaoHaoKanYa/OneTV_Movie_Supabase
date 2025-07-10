@@ -6,6 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import android.util.Log
 import androidx.core.content.FileProvider
+
 import top.cywin.onetv.core.data.AppData
 import top.cywin.onetv.core.data.repositories.supabase.SupabaseClient
 import top.cywin.onetv.core.data.repositories.supabase.SupabaseEnvChecker
@@ -13,6 +14,9 @@ import java.io.File
 import java.io.FileWriter
 import java.io.IOException
 
+import dagger.hilt.android.HiltAndroidApp
+
+@HiltAndroidApp
 class MyTVApplication : Application() {
     override fun onCreate() {
         super.onCreate()

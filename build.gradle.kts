@@ -13,6 +13,16 @@ plugins {
     alias(libs.plugins.kotlin.serialization) apply false
 }
 
+// 解决Hilt与JavaPoet的版本冲突
+allprojects {
+    configurations.all {
+        resolutionStrategy {
+            // 强制使用指定版本的JavaPoet
+            force("com.squareup:javapoet:1.13.0")
+        }
+    }
+}
+
 // 加载签名配置
 val keystorePropertiesFile = rootProject.file("key.properties")
 val keystoreProperties = Properties()

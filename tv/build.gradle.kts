@@ -6,6 +6,8 @@ plugins {
     alias(libs.plugins.compose)
     alias(libs.plugins.jetpack.compose.compiler)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -100,6 +102,16 @@ dependencies {
     implementation(libs.media3.ui)
 
     implementation(libs.okhttp)
+
+
+
+    // Hilt依赖注入
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
+
+    // JavaPoet - 解决Hilt版本兼容性问题
+    implementation(libs.javapoet)
 
     implementation(project(":core:data"))
     implementation(project(":core:designsystem"))

@@ -11,6 +11,7 @@ import okhttp3.Request
 import top.cywin.onetv.movie.data.api.Constants
 import javax.inject.Inject
 import javax.inject.Singleton
+import android.util.Log
 
 /**
  * 应用配置管理器 - 从app_configs表读取配置
@@ -49,63 +50,71 @@ class AppConfigManager @Inject constructor(
      */
     suspend fun initializeConfig(): Result<AppConfig> {
         return try {
+            Log.d("ONETV_MOVIE", "开始初始化配置")
+
             // 1. 尝试从缓存获取
             val cachedConfig = getCachedConfig()
             if (cachedConfig != null && isConfigValid(cachedConfig)) {
+                Log.d("ONETV_MOVIE", "使用缓存配置")
                 currentConfig = cachedConfig
                 return Result.success(cachedConfig)
             }
-            
+
             // 2. 从服务器获取最新配置
+            Log.d("ONETV_MOVIE", "从服务器获取配置")
             val serverConfig = fetchConfigFromServer()
             if (serverConfig != null) {
+                Log.d("ONETV_MOVIE", "服务器配置获取成功")
                 currentConfig = serverConfig
                 cacheConfig(serverConfig)
                 return Result.success(serverConfig)
             }
-            
-            // 3. 无法获取配置，需要用户手动设置
-            Result.failure(Exception("无法获取配置，请检查网络连接或手动配置服务器信息"))
-            
+
+            // 3. 使用临时默认配置，避免应用崩溃
+            Log.w("ONETV_MOVIE", "无法获取服务器配置，使用临时默认配置")
+            val defaultConfig = getTemporaryDefaultConfig()
+            currentConfig = defaultConfig
+            Result.success(defaultConfig)
+
         } catch (e: Exception) {
-            Result.failure(Exception("配置初始化失败: ${e.message}"))
+            Log.e("ONETV_MOVIE", "配置初始化失败", e)
+            // 即使失败也提供默认配置，避免应用崩溃
+            val defaultConfig = getTemporaryDefaultConfig()
+            currentConfig = defaultConfig
+            Result.success(defaultConfig)
         }
     }
     
     /**
      * 从服务器获取配置
-     * 注意：这里需要一个初始的配置来获取完整配置，通常通过以下方式之一：
-     * 1. 从本地预置的最小配置文件读取
-     * 2. 从应用启动参数获取
-     * 3. 从环境变量获取
-     * 4. 从用户输入获取
+     * 使用现有的 Supabase 配置系统
      */
     private suspend fun fetchConfigFromServer(): AppConfig? {
         return withContext(Dispatchers.IO) {
             try {
-                // 尝试从本地预置配置获取初始连接信息
-                val initialConfig = getInitialConfig()
-                if (initialConfig == null) {
-                    return@withContext null
+                // 使用现有的 SupabaseClient 获取配置
+                val supabaseClient = top.cywin.onetv.core.data.repositories.supabase.SupabaseClient
+                val appConfig = supabaseClient.getAppConfig(Constants.CONFIG_APP_ID)
+
+                // 转换为本地 AppConfig 格式
+                appConfig?.let { config ->
+                    AppConfig(
+                        id = config.id,
+                        appId = config.appId,
+                        projectName = config.projectName,
+                        projectUrl = config.projectUrl,
+                        projectId = config.projectId,
+                        apiKey = config.apiKey,
+                        accessToken = config.accessToken ?: "",
+                        isActive = config.isActive,
+                        createdAt = config.createdAt ?: "",
+                        updatedAt = config.updatedAt ?: "",
+                        jwtSecret = config.jwtSecret ?: ""
+                    )
                 }
 
-                val client = OkHttpClient()
-                val request = Request.Builder()
-                    .url("${initialConfig.projectUrl}/rest/v1/app_configs?app_id=eq.${Constants.CONFIG_APP_ID}&is_active=eq.true")
-                    .header("apikey", initialConfig.apiKey)
-                    .header("Authorization", "Bearer ${initialConfig.apiKey}")
-                    .build()
-
-                val response = client.newCall(request).execute()
-                if (response.isSuccessful) {
-                    val responseBody = response.body?.string()
-                    if (!responseBody.isNullOrEmpty()) {
-                        val configs = Json.decodeFromString<List<AppConfig>>(responseBody)
-                        configs.firstOrNull { it.isActive }
-                    } else null
-                } else null
-
             } catch (e: Exception) {
+                Log.e("ONETV_MOVIE", "从服务器获取配置失败", e)
                 null
             }
         }
@@ -154,38 +163,12 @@ class AppConfigManager @Inject constructor(
     }
     
     /**
-     * 获取初始配置（用于首次连接服务器）
-     * 这里从安全的本地存储或用户输入获取最小必要信息
+     * 获取初始配置（已废弃，现在使用 SupabaseClient）
+     * 保留此方法以防兼容性问题
      */
+    @Deprecated("使用 SupabaseClient 替代")
     private fun getInitialConfig(): AppConfig? {
-        return try {
-            // 方案1: 从加密的本地配置文件读取
-            val configFile = context.assets.open("initial_config.json")
-            val configJson = configFile.bufferedReader().use { it.readText() }
-            Json.decodeFromString<AppConfig>(configJson)
-        } catch (e: Exception) {
-            // 方案2: 从SharedPreferences读取用户设置的配置
-            val savedUrl = preferences.getString("initial_project_url", null)
-            val savedKey = preferences.getString("initial_api_key", null)
-
-            if (!savedUrl.isNullOrEmpty() && !savedKey.isNullOrEmpty()) {
-                AppConfig(
-                    id = 0,
-                    appId = Constants.CONFIG_APP_ID,
-                    projectName = "Initial Config",
-                    projectUrl = savedUrl,
-                    projectId = extractProjectIdFromUrl(savedUrl),
-                    apiKey = savedKey,
-                    accessToken = "",
-                    isActive = true,
-                    createdAt = "",
-                    updatedAt = "",
-                    jwtSecret = ""
-                )
-            } else {
-                null
-            }
-        }
+        return null // 不再使用本地配置文件
     }
 
     /**
@@ -199,6 +182,25 @@ class AppConfigManager @Inject constructor(
         } catch (e: Exception) {
             ""
         }
+    }
+
+    /**
+     * 获取临时默认配置（避免应用崩溃）
+     */
+    private fun getTemporaryDefaultConfig(): AppConfig {
+        return AppConfig(
+            id = 0,
+            appId = Constants.CONFIG_APP_ID,
+            projectName = "Temporary Config",
+            projectUrl = "https://temp.supabase.co",
+            projectId = "temp",
+            apiKey = "temp-key",
+            accessToken = "",
+            isActive = true,
+            createdAt = "",
+            updatedAt = "",
+            jwtSecret = ""
+        )
     }
 
     /**

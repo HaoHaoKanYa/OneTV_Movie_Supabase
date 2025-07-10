@@ -11,6 +11,7 @@ import top.cywin.onetv.movie.data.models.*
 import top.cywin.onetv.movie.data.repository.VodRepository
 import top.cywin.onetv.movie.data.VodConfigManager
 import javax.inject.Inject
+import android.util.Log
 
 /**
  * 点播首页ViewModel (参考OneMoVie架构)
@@ -25,28 +26,48 @@ class MovieViewModel @Inject constructor(
     val uiState: StateFlow<MovieUiState> = _uiState.asStateFlow()
 
     init {
-        loadHomeData()
+        Log.d("ONETV_MOVIE", "MovieViewModel 初始化开始")
+        Log.d("ONETV_MOVIE", "Repository: $repository")
+        Log.d("ONETV_MOVIE", "ConfigManager: $configManager")
+        try {
+            loadHomeData()
+            Log.d("ONETV_MOVIE", "loadHomeData调用成功")
+        } catch (e: Exception) {
+            Log.e("ONETV_MOVIE", "MovieViewModel初始化失败", e)
+            _uiState.value = _uiState.value.copy(
+                isLoading = false,
+                error = "初始化失败: ${e.message}"
+            )
+        }
     }
 
     /**
      * 加载首页数据 (动态分类驱动)
      */
     private fun loadHomeData() {
+        Log.d("ONETV_MOVIE", "开始加载首页数据")
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true, error = null)
 
             try {
+                Log.d("ONETV_MOVIE", "开始加载配置文件")
                 // 1. 加载配置文件
                 val configResult = repository.loadConfig()
                 if (configResult.isFailure) {
-                    throw configResult.exceptionOrNull() ?: Exception("配置加载失败")
+                    val error = configResult.exceptionOrNull() ?: Exception("配置加载失败")
+                    Log.e("ONETV_MOVIE", "配置加载失败", error)
+                    throw error
                 }
+                Log.d("ONETV_MOVIE", "配置文件加载成功")
 
                 // 2. 获取当前站点和分类
+                Log.d("ONETV_MOVIE", "获取当前站点")
                 val currentSite = configManager.getCurrentSite()
                 if (currentSite == null) {
+                    Log.e("ONETV_MOVIE", "未找到可用站点")
                     throw Exception("未找到可用站点")
                 }
+                Log.d("ONETV_MOVIE", "当前站点: ${currentSite.name}")
 
                 // 3. 获取站点分类 (动态获取，不硬编码)
                 val categoriesResult = repository.getCategories(currentSite.key)
@@ -56,6 +77,7 @@ class MovieViewModel @Inject constructor(
                 loadHomeContent(currentSite, categories)
 
             } catch (e: Exception) {
+                Log.e("ONETV_MOVIE", "首页数据加载失败", e)
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
                     error = e.message ?: "加载失败"

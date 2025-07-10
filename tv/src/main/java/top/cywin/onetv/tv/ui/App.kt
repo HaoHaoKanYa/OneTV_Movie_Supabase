@@ -35,6 +35,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import android.util.Log
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.consumeAsFlow
@@ -104,8 +105,13 @@ fun App(
                             },
                             viewModel = mainViewModel,
                             onNavigateToMovie = {
-                                // 导航到点播首页
-                                navController.navigate("movie_home")
+                                Log.d("ONETV_MOVIE", "开始导航到点播首页")
+                                try {
+                                    navController.navigate("movie_home")
+                                    Log.d("ONETV_MOVIE", "导航到点播首页成功")
+                                } catch (e: Exception) {
+                                    Log.e("ONETV_MOVIE", "导航到点播首页失败", e)
+                                }
                             }
                         )
                     }

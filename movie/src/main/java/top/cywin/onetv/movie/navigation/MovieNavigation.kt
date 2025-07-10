@@ -1,6 +1,13 @@
 package top.cywin.onetv.movie.navigation
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
@@ -13,6 +20,7 @@ import top.cywin.onetv.movie.ui.screens.MoviePlayerScreen
 import top.cywin.onetv.movie.ui.screens.MovieSearchScreen
 import top.cywin.onetv.movie.ui.screens.MovieHistoryScreen
 import top.cywin.onetv.movie.ui.screens.MovieSettingsScreen
+import android.util.Log
 
 /**
  * Movie模块导航扩展 (TVBOX标准)
@@ -21,7 +29,10 @@ fun NavGraphBuilder.movieNavigation(navController: NavController) {
     
     // 点播首页
     composable("movie_home") {
+        Log.d("ONETV_MOVIE", "进入点播首页路由")
+        Log.d("ONETV_MOVIE", "开始创建MovieHomeScreen组件")
         MovieHomeScreen(navController = navController)
+        Log.d("ONETV_MOVIE", "点播首页组件创建成功")
     }
     
     // 分类页面
