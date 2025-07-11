@@ -8,6 +8,7 @@ import top.cywin.onetv.movie.codegen.MovieCodeGenerator
 import top.cywin.onetv.movie.data.VodConfigManager
 import top.cywin.onetv.movie.data.api.VodApiService
 import top.cywin.onetv.movie.data.cache.MovieCacheManager
+import top.cywin.onetv.movie.data.cache.VodCacheManager
 import top.cywin.onetv.movie.data.config.AppConfigManager
 import top.cywin.onetv.movie.data.database.MovieDatabase
 import top.cywin.onetv.movie.data.models.VodConfigResponse
@@ -88,12 +89,20 @@ object MovieApp {
     // ========== API服务 ==========
     val configApiService by lazy {
         Log.d(TAG, "🏗️ 创建配置API服务")
-        VodApiService.createConfigService()
+        // 确保AppConfigManager已初始化
+        ensureAppConfigInitialized()
+        VodApiService.createConfigService(appConfigManager)
     }
 
     val siteApiService by lazy {
         Log.d(TAG, "🏗️ 创建站点API服务")
         VodApiService.createSiteService()
+    }
+
+    // ========== 缓存管理器 ==========
+    val vodCacheManager by lazy {
+        Log.d(TAG, "🏗️ 创建VodCacheManager")
+        VodCacheManager(applicationContext)
     }
 
     // ========== 仓库层 ==========
@@ -103,9 +112,11 @@ object MovieApp {
             context = applicationContext,
             appConfigManager = appConfigManager,
             cacheManager = cacheManager,
+            vodCacheManager = vodCacheManager,
             configManager = vodConfigManager,
             parseManager = parseManager,
-            siteApiService = siteApiService
+            apiService = configApiService, // 配置API服务
+            siteApiService = siteApiService // 站点API服务
         )
     }
 
@@ -118,7 +129,31 @@ object MovieApp {
         Log.d(TAG, "🏗️ 创建FavoriteRepository")
         FavoriteRepository(database.favoriteDao())
     }
-    
+
+    /**
+     * 确保AppConfigManager已初始化
+     */
+    private fun ensureAppConfigInitialized() {
+        try {
+            if (!appConfigManager.isConfigInitialized()) {
+                Log.d(TAG, "🔧 AppConfigManager未初始化，开始初始化...")
+                // 使用runBlocking确保初始化完成
+                kotlinx.coroutines.runBlocking {
+                    val result = appConfigManager.initializeConfig()
+                    if (result.isSuccess) {
+                        Log.d(TAG, "✅ AppConfigManager初始化成功")
+                    } else {
+                        Log.w(TAG, "⚠️ AppConfigManager初始化失败: ${result.exceptionOrNull()?.message}")
+                    }
+                }
+            } else {
+                Log.d(TAG, "✅ AppConfigManager已初始化")
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "❌ AppConfigManager初始化异常", e)
+        }
+    }
+
     /**
      * 🚀 初始化MovieApp - KotlinPoet专业版
      * 集成动态代码生成，提升系统专业性和扩展能力

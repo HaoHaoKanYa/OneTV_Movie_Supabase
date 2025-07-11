@@ -58,8 +58,13 @@ class MovieViewModel(
                 val configResult = repository.loadConfig()
                 if (configResult.isFailure) {
                     val error = configResult.exceptionOrNull() ?: Exception("配置加载失败")
-                    Log.e("ONETV_MOVIE", "配置加载失败", error)
-                    throw error
+                    Log.w("ONETV_MOVIE", "配置加载失败，显示空状态: ${error.message}")
+                    // 配置加载失败时，显示空状态而不是错误
+                    _uiState.value = _uiState.value.copy(
+                        isLoading = false,
+                        error = null // 不显示错误，而是显示空状态
+                    )
+                    return@launch
                 }
                 Log.d("ONETV_MOVIE", "配置文件加载成功")
 
@@ -67,8 +72,13 @@ class MovieViewModel(
                 Log.d("ONETV_MOVIE", "获取当前站点")
                 val currentSite = configManager.getCurrentSite()
                 if (currentSite == null) {
-                    Log.e("ONETV_MOVIE", "未找到可用站点")
-                    throw Exception("未找到可用站点")
+                    Log.w("ONETV_MOVIE", "未找到可用站点，显示空状态")
+                    // 没有站点时，显示空状态而不是错误
+                    _uiState.value = _uiState.value.copy(
+                        isLoading = false,
+                        error = null // 不显示错误，而是显示空状态
+                    )
+                    return@launch
                 }
                 Log.d("ONETV_MOVIE", "当前站点: ${currentSite.name}")
 
@@ -81,9 +91,10 @@ class MovieViewModel(
 
             } catch (e: Exception) {
                 Log.e("ONETV_MOVIE", "首页数据加载失败", e)
+                // 只有在真正的网络错误或其他严重错误时才显示错误信息
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
-                    error = e.message ?: "加载失败"
+                    error = "网络连接失败，请检查网络设置"
                 )
             }
         }
@@ -125,7 +136,7 @@ class MovieViewModel(
                 }
             }
 
-            // 4. 更新UI状态
+            // 4. 更新UI状态 (不再提供硬编码的默认分类)
             _uiState.value = _uiState.value.copy(
                 isLoading = false,
                 recommendMovies = recommendMovies,
@@ -136,19 +147,67 @@ class MovieViewModel(
                 error = null
             )
 
+            // 5. 记录加载结果
+            if (recommendMovies.isEmpty() && quickCategories.isEmpty() && homeCategorySections.isEmpty()) {
+                Log.d("ONETV_MOVIE", "📭 没有加载到任何内容，显示空状态界面")
+            } else {
+                Log.d("ONETV_MOVIE", "🎉 内容加载成功: 推荐=${recommendMovies.size}, 分类=${quickCategories.size}, 区域=${homeCategorySections.size}")
+            }
+
         } catch (e: Exception) {
+            Log.e("ONETV_MOVIE", "内容加载失败", e)
+            // 网络错误时也显示空状态而不是错误
             _uiState.value = _uiState.value.copy(
                 isLoading = false,
-                error = e.message ?: "内容加载失败"
+                error = null // 显示空状态而不是错误
             )
         }
     }
 
     /**
-     * 刷新首页数据
+     * 刷新首页数据 (强制刷新配置)
      */
     fun refresh() {
-        loadHomeData()
+        Log.d("ONETV_MOVIE", "🔄 用户触发刷新，强制更新配置")
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(isLoading = true, error = null)
+
+            try {
+                // 强制刷新配置
+                val refreshResult = repository.refreshConfig()
+                if (refreshResult.isSuccess) {
+                    Log.d("ONETV_MOVIE", "✅ 配置刷新成功，重新加载首页数据")
+                    loadHomeData()
+                } else {
+                    Log.e("ONETV_MOVIE", "❌ 配置刷新失败，使用现有数据")
+                    loadHomeData() // 仍然尝试加载，可能使用默认配置
+                }
+            } catch (e: Exception) {
+                Log.e("ONETV_MOVIE", "💥 刷新过程异常", e)
+                loadHomeData() // 降级处理
+            }
+        }
+    }
+
+    /**
+     * 检查并更新配置 (应用启动时调用)
+     */
+    fun checkAndUpdateConfig() {
+        viewModelScope.launch {
+            try {
+                val needUpdate = repository.isConfigUpdateNeeded()
+                if (needUpdate) {
+                    Log.d("ONETV_MOVIE", "🔄 检测到配置需要更新，自动刷新")
+                    refresh()
+                } else {
+                    Log.d("ONETV_MOVIE", "✅ 配置缓存有效，直接加载")
+                    loadHomeData()
+                }
+            } catch (e: Exception) {
+                Log.e("ONETV_MOVIE", "❌ 配置检查失败，直接加载", e)
+                loadHomeData()
+            }
+        }
     }
 
     /**

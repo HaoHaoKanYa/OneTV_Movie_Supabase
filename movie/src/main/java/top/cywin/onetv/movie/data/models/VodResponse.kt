@@ -2,6 +2,7 @@ package top.cywin.onetv.movie.data.models
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonElement
 
 /**
  * TVBOX标准API响应 (完全参考OneMoVie Result)
@@ -97,12 +98,29 @@ typealias VodSearchResponse = VodResponse
 typealias VodParseResponse = VodResponse
 
 /**
+ * Edge Function TVBOX配置链接响应 (简化版)
+ */
+@Serializable
+data class VodConfigLinkResponse(
+    @SerialName("config_url") val config_url: String = "",
+    val message: String = "",
+    val timestamp: String = "",
+    val type: String = ""
+)
+
+/**
  * 配置响应
  */
 @Serializable
 data class VodConfigResponse(
     val spider: String = "",
     val wallpaper: String = "",
+    val logo: String = "", // TVBOX扩展字段：应用logo
+    val storeHouse: List<VodStoreHouse> = emptyList(), // TVBOX扩展字段：仓库配置
+    val urls: List<VodConfigUrl> = emptyList(), // TVBOX扩展字段：配置文件链接列表
+    val doh: List<VodDohConfig> = emptyList(), // TVBOX扩展字段：DNS over HTTPS配置
+    val rules: List<VodProxyRule> = emptyList(), // TVBOX扩展字段：代理规则配置
+    val lives: List<JsonElement> = emptyList(), // TVBOX扩展字段：直播源配置
     val sites: List<VodSite> = emptyList(),
     val parses: List<VodParse> = emptyList(),
     val flags: List<String> = emptyList(),
@@ -114,7 +132,7 @@ data class VodConfigResponse(
      * 是否为空配置
      */
     fun isEmpty(): Boolean = sites.isEmpty() && parses.isEmpty()
-    
+
     /**
      * 获取配置摘要
      */
@@ -140,4 +158,41 @@ data class VodIjkParam(
     val category: Int,
     val name: String,
     val value: String
+)
+
+/**
+ * TVBOX配置文件链接
+ */
+@Serializable
+data class VodConfigUrl(
+    val url: String = "",
+    val name: String = ""
+)
+
+/**
+ * DNS over HTTPS配置
+ */
+@Serializable
+data class VodDohConfig(
+    val name: String = "",
+    val url: String = "",
+    val ips: List<String> = emptyList()
+)
+
+/**
+ * 代理规则配置
+ */
+@Serializable
+data class VodProxyRule(
+    val name: String = "",
+    val hosts: List<String> = emptyList()
+)
+
+/**
+ * 仓库配置
+ */
+@Serializable
+data class VodStoreHouse(
+    val sourceName: String = "",
+    val sourceUrl: String = ""
 )

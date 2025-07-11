@@ -1,5 +1,6 @@
 package top.cywin.onetv.movie.data.api
 
+import android.util.Log
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -11,6 +12,7 @@ import retrofit2.http.Query
 import retrofit2.http.Url
 import top.cywin.onetv.movie.data.models.VodResponse
 import top.cywin.onetv.movie.data.models.VodConfigResponse
+import top.cywin.onetv.movie.data.models.VodConfigLinkResponse
 import java.util.concurrent.TimeUnit
 
 /**
@@ -19,10 +21,16 @@ import java.util.concurrent.TimeUnit
 interface VodApiService {
 
     /**
-     * 获取配置文件 (从Supabase获取onetv-api-movie.json)
+     * 获取配置文件链接 (从Edge Function获取onetv-api-movie.json的访问链接)
      */
     @GET("vod-config")
-    suspend fun getConfig(): VodConfigResponse
+    suspend fun getConfigLink(): VodConfigLinkResponse
+
+    /**
+     * 直接获取配置文件内容 (通过URL下载配置文件)
+     */
+    @GET
+    suspend fun getConfigContent(@Url url: String): VodConfigResponse
 
     /**
      * 直接调用站点API - 获取首页内容 (TVBOX标准)
@@ -66,16 +74,67 @@ interface VodApiService {
     companion object {
         /**
          * 创建配置API服务 (用于获取配置文件)
+         * 使用AppConfigManager获取真实的Supabase URL
          */
-        fun createConfigService(): VodApiService {
+        fun createConfigService(appConfigManager: top.cywin.onetv.movie.data.config.AppConfigManager): VodApiService {
             val client = OkHttpClient.Builder()
                 .connectTimeout(30, TimeUnit.SECONDS)
                 .readTimeout(30, TimeUnit.SECONDS)
                 .writeTimeout(30, TimeUnit.SECONDS)
+                .addInterceptor { chain ->
+                    val request = chain.request().newBuilder()
+                        .addHeader("User-Agent", "OneTV/2.1.1")
+
+                    // 安全获取Service Role Key，Edge Function需要service_role权限
+                    Log.d("ONETV_MOVIE", "🔐 开始设置Edge Function认证头...")
+                    try {
+                        if (appConfigManager.isConfigInitialized()) {
+                            Log.d("ONETV_MOVIE", "✅ AppConfigManager已初始化，获取Service Role Key...")
+                            val serviceKey = appConfigManager.getServiceRoleKey()
+                            val apiKey = appConfigManager.getApiKey()
+
+                            // Edge Function需要Service Role Key来访问存储桶
+                            request.addHeader("apikey", serviceKey)
+                            request.addHeader("Authorization", "Bearer $serviceKey")
+
+                            // 添加详细调试信息
+                            Log.d("ONETV_MOVIE", "✅ 使用Service Role Key访问Edge Function")
+                            Log.d("ONETV_MOVIE", "🔑 Service Key前缀: ${serviceKey.take(20)}...")
+                            Log.d("ONETV_MOVIE", "🔑 Service Key长度: ${serviceKey.length}")
+                            Log.d("ONETV_MOVIE", "🔗 请求URL: ${chain.request().url}")
+                            Log.d("ONETV_MOVIE", "📋 请求头: apikey=${serviceKey.take(20)}..., Authorization=Bearer ${serviceKey.take(20)}...")
+                        } else {
+                            // 配置未初始化时使用临时头
+                            request.addHeader("apikey", "temp-key")
+                            request.addHeader("Authorization", "Bearer temp-key")
+                            Log.w("ONETV_MOVIE", "⚠️ 配置未初始化，使用临时认证")
+                        }
+                    } catch (e: Exception) {
+                        // 异常时使用临时头
+                        request.addHeader("apikey", "temp-key")
+                        request.addHeader("Authorization", "Bearer temp-key")
+                        Log.e("ONETV_MOVIE", "❌ 获取Service Role Key失败，使用临时认证", e)
+                        Log.e("ONETV_MOVIE", "❌ 异常详情: ${e.message}")
+                        Log.e("ONETV_MOVIE", "❌ 异常类型: ${e.javaClass.simpleName}")
+                    }
+
+                    chain.proceed(request.build())
+                }
                 .build()
 
+            // 安全获取Supabase URL
+            val baseUrl = try {
+                if (appConfigManager.isConfigInitialized()) {
+                    appConfigManager.getSupabaseUrl()
+                } else {
+                    "https://temp.supabase.co"
+                }
+            } catch (e: Exception) {
+                "https://temp.supabase.co" // 临时后备URL
+            }
+
             val retrofit = Retrofit.Builder()
-                .baseUrl("https://api.placeholder.com/") // 占位符，实际从配置读取
+                .baseUrl("$baseUrl/functions/v1/")
                 .client(client)
                 .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
                 .build()

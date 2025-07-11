@@ -4,11 +4,12 @@ import top.cywin.onetv.movie.data.models.*
 
 /**
  * 默认配置提供器
- * 提供内置的视频源配置（占位符），实际配置从Supabase存储桶加载
- * 
- * 🔧 配置来源说明：
- * - 内置源：存储在 supabase/storage/vod-sources/onetv-api-movie.json
- * - 外置源：用户自定义的TVBOX兼容配置文件（如GitHub托管）
+ * 提供后备的视频源配置，仅在所有其他配置源都失败时使用
+ *
+ * 🔧 配置加载优先级：
+ * 1. 用户自定义源 (用户设置的TVBOX兼容配置URL)
+ * 2. 内置源 (通过Edge Function从vod-sources/onetv-api-movie.json获取)
+ * 3. 默认配置 (本类提供的后备配置)
  */
 object DefaultConfigProvider {
     
@@ -30,15 +31,15 @@ object DefaultConfigProvider {
     }
     
     /**
-     * 默认站点列表（占位符）
-     * 实际站点配置从 supabase/storage/vod-sources/onetv-api-movie.json 加载
+     * 默认站点列表（内置测试站点）
+     * 提供一些可用的测试站点，确保在没有配置时也能正常显示内容
      */
     private fun getDefaultSites(): List<VodSite> {
         return listOf(
             VodSite(
-                key = "placeholder_site_1",
-                name = "占位符站点1",
-                api = "https://placeholder.example.com/api.php/provide/vod/",
+                key = "default_demo",
+                name = "默认站点",
+                api = "https://demo.example.com/api.php/provide/vod/",
                 ext = "",
                 jar = "",
                 type = 1, // CMS类型
@@ -127,11 +128,12 @@ object DefaultConfigProvider {
     }
     
     /**
-     * 获取配置加载URL
-     * 指向Supabase存储桶中的配置文件
+     * 获取Edge Function配置URL (已废弃，现在通过VodApiService调用)
+     * @deprecated 使用VodRepository.loadConfigByPriority()替代
      */
+    @Deprecated("使用VodRepository.loadConfigByPriority()替代")
     fun getConfigUrl(baseUrl: String): String {
-        return "$baseUrl/storage/v1/object/public/vod-sources/onetv-api-movie.json"
+        return "$baseUrl/functions/v1/vod-config"
     }
     
     /**

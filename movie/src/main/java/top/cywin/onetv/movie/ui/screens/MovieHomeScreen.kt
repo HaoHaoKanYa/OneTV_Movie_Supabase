@@ -8,10 +8,13 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Tv
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -22,6 +25,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import kotlinx.coroutines.delay
 import top.cywin.onetv.movie.data.models.MovieUiState
 import top.cywin.onetv.movie.data.models.VodItem
 import top.cywin.onetv.movie.data.models.VodClass
@@ -54,7 +58,9 @@ fun MovieHomeScreen(
 
     LaunchedEffect(Unit) {
         try {
-            Log.d("ONETV_MOVIE", "LaunchedEffect: 开始初始化检查")
+            Log.d("ONETV_MOVIE", "LaunchedEffect: 开始初始化检查和配置更新")
+            // 检查并更新配置 (智能缓存策略)
+            viewModel.checkAndUpdateConfig()
         } catch (e: Exception) {
             Log.e("ONETV_MOVIE", "初始化检查失败", e)
             initError = e.message
@@ -110,6 +116,21 @@ private fun MovieHomeContent(
         // 顶部导航栏
         MovieTopBar(
             title = "影视点播",
+            onBackToLiveClick = {
+                // 返回直播，回到上一次播放的频道
+                Log.d("ONETV_MOVIE", "用户点击返回直播按钮")
+                try {
+                    navController.navigate("main") {
+                        // 清除点播页面的回退栈，避免循环导航
+                        popUpTo("movie_home") { inclusive = true }
+                        // 确保不会重复添加main页面
+                        launchSingleTop = true
+                    }
+                    Log.d("ONETV_MOVIE", "成功导航回直播页面，将恢复上一次播放的频道")
+                } catch (e: Exception) {
+                    Log.e("ONETV_MOVIE", "返回直播页面失败", e)
+                }
+            },
             onSearchClick = {
                 navController.navigate(MovieRoutes.SEARCH)
             },
@@ -133,44 +154,57 @@ private fun MovieHomeContent(
                 onRetry = onRefresh
             )
         } else {
-            // 主要内容
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-                contentPadding = PaddingValues(16.dp)
-            ) {
-                // 推荐内容区域
-                if (uiState.recommendMovies.isNotEmpty()) {
-                    item {
-                        RecommendSection(
-                            movies = uiState.recommendMovies,
-                            onMovieClick = onMovieClick
-                        )
-                    }
-                }
-                
-                // 快速分类导航
-                if (uiState.quickCategories.isNotEmpty()) {
-                    item {
-                        QuickCategoryGrid(
-                            categories = uiState.quickCategories,
-                            onCategoryClick = onCategoryClick
-                        )
-                    }
-                }
-                
-                // 分类内容区域
-                items(uiState.homeCategories) { categorySection ->
-                    HomeCategorySection(
-                        section = categorySection,
-                        onMovieClick = onMovieClick,
-                        onMoreClick = {
-                            navController.navigate(
-                                MovieRoutes.category(categorySection.categoryId, categorySection.siteKey)
+            // 检查是否有任何内容
+            val hasAnyContent = uiState.recommendMovies.isNotEmpty() ||
+                               uiState.quickCategories.isNotEmpty() ||
+                               uiState.homeCategories.isNotEmpty()
+
+            if (hasAnyContent) {
+                // 主要内容
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    contentPadding = PaddingValues(16.dp)
+                ) {
+                    // 推荐内容区域
+                    if (uiState.recommendMovies.isNotEmpty()) {
+                        item {
+                            RecommendSection(
+                                movies = uiState.recommendMovies,
+                                onMovieClick = onMovieClick
                             )
                         }
-                    )
+                    }
+
+                    // 快速分类导航
+                    if (uiState.quickCategories.isNotEmpty()) {
+                        item {
+                            QuickCategoryGrid(
+                                categories = uiState.quickCategories,
+                                onCategoryClick = onCategoryClick
+                            )
+                        }
+                    }
+
+                    // 分类内容区域
+                    items(uiState.homeCategories) { categorySection ->
+                        HomeCategorySection(
+                            section = categorySection,
+                            onMovieClick = onMovieClick,
+                            onMoreClick = {
+                                navController.navigate(
+                                    MovieRoutes.category(categorySection.categoryId, categorySection.siteKey)
+                                )
+                            }
+                        )
+                    }
                 }
+            } else {
+                // 显示空状态或默认内容
+                EmptyStateContent(
+                    onRefresh = onRefresh,
+                    navController = navController
+                )
             }
         }
     }
@@ -183,6 +217,7 @@ private fun MovieHomeContent(
 @Composable
 private fun MovieTopBar(
     title: String,
+    onBackToLiveClick: () -> Unit,
     onSearchClick: () -> Unit,
     onSettingsClick: () -> Unit
 ) {
@@ -194,6 +229,30 @@ private fun MovieTopBar(
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold
             )
+        },
+        navigationIcon = {
+            // 返回直播按钮 - 返回上一次播放的频道
+            IconButton(
+                onClick = onBackToLiveClick,
+                modifier = Modifier.padding(horizontal = 4.dp)
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Tv,
+                        contentDescription = "返回直播",
+                        tint = Color.White
+                    )
+                    Text(
+                        text = "直播",
+                        color = Color.White,
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
+            }
         },
         actions = {
             IconButton(onClick = onSearchClick) {
@@ -293,6 +352,111 @@ private fun HomeCategorySection(
 }
 
 /**
+ * 空状态内容组件
+ */
+@Composable
+private fun EmptyStateContent(
+    onRefresh: () -> Unit,
+    navController: NavController
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(32.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        // 图标
+        Icon(
+            imageVector = Icons.Default.Tv,
+            contentDescription = null,
+            tint = Color.Gray,
+            modifier = Modifier.size(64.dp)
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Text(
+            text = "欢迎使用OneTV点播",
+            color = Color.White,
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Text(
+            text = "正在加载影视资源，请稍候...",
+            color = Color.Gray,
+            fontSize = 14.sp,
+            textAlign = TextAlign.Center
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        // 操作按钮
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            Button(
+                onClick = onRefresh,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.White,
+                    contentColor = Color.Black
+                )
+            ) {
+                Text("刷新")
+            }
+
+            Button(
+                onClick = {
+                    navController.navigate(MovieRoutes.SETTINGS)
+                },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.Transparent,
+                    contentColor = Color.White
+                ),
+                border = ButtonDefaults.outlinedButtonBorder(enabled = true)
+            ) {
+                Text("设置")
+            }
+        }
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+        // 功能说明
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "功能特色",
+                color = Color.White,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Medium
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            val features = listOf(
+                "🎬 海量影视资源",
+                "🔍 智能搜索推荐",
+                "📱 多设备同步",
+                "⚡ 高清流畅播放"
+            )
+
+            features.forEach { feature ->
+                Text(
+                    text = feature,
+                    color = Color.Gray,
+                    fontSize = 14.sp,
+                    modifier = Modifier.padding(vertical = 2.dp)
+                )
+            }
+        }
+    }
+}
+
+/**
  * 错误内容
  */
 @Composable
@@ -310,9 +474,9 @@ private fun ErrorContent(
             color = Color.White,
             fontSize = 16.sp
         )
-        
+
         Spacer(modifier = Modifier.height(16.dp))
-        
+
         Button(onClick = onRetry) {
             Text("重试")
         }
