@@ -1,9 +1,12 @@
 package top.cywin.onetv.movie.data.models
 
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
+
+
 
 /**
  * 点播站点 (参考OneMoVie Site，支持动态分类配置)
@@ -13,38 +16,74 @@ data class VodSite(
     val key: String, // 站点唯一标识
     val name: String, // 站点名称
     val api: String, // API地址
-    val ext: String = "", // 扩展配置
+    val ext: JsonElement = JsonPrimitive(""), // 扩展配置 (TVBOX标准支持字符串或JSON对象)
     val jar: String = "", // JAR包地址
     val type: Int = 1, // 站点类型: 0=spider, 1=cms, 3=app, 4=alist
     val searchable: Int = 1, // 是否可搜索
-    val changeable: Int = 1, // 是否可切换
-    val timeout: Int = 30000, // 超时时间
-    val header: Map<String, String> = emptyMap(), // 请求头
+    val quickSearch: Int = 1, // 是否支持快速搜索 (TVBOX标准字段)
+    val filterable: Int = 1, // 是否支持筛选 (TVBOX标准字段)
+    val playerType: Int = 1, // 播放器类型 (TVBOX标准字段)
+    val changeable: Int = 1, // 是否可切换 (TVBOX标准字段)
+    val click: String = "", // 点击事件配置 (TVBOX扩展字段)
+    val timeout: Int = 15000, // 超时时间 (15秒)
+    val header: JsonElement? = null, // 请求头 (TVBOX标准JsonElement)
     val style: VodStyle? = null, // 显示样式配置
-    val categories: List<VodClass> = emptyList() // 动态分类列表 (从API获取)
+    val categories: List<String> = emptyList() // 分类列表 (TVBOX标准字符串数组)
 ) {
     /**
      * 是否可搜索
      */
     fun isSearchable(): Boolean = searchable == 1
-    
+
+    /**
+     * 是否支持快速搜索
+     */
+    fun isQuickSearchable(): Boolean = quickSearch == 1
+
+    /**
+     * 是否支持筛选
+     */
+    fun isFilterable(): Boolean = filterable == 1
+
     /**
      * 是否可切换
      */
     fun isChangeable(): Boolean = changeable == 1
-    
+
     /**
-     * 获取分类显示名称
+     * 获取扩展配置字符串 (TVBOX标准支持字符串或JSON对象)
      */
-    fun getCategoryName(typeId: String): String {
-        return categories.find { it.typeId == typeId }?.typeName ?: "未知分类"
+    fun getExtString(): String {
+        return when (ext) {
+            is JsonPrimitive -> ext.content
+            else -> ext.toString()
+        }
+    }
+
+    /**
+     * 获取播放器类型名称
+     */
+    fun getPlayerTypeName(): String {
+        return when (playerType) {
+            0 -> "系统播放器"
+            1 -> "IJK播放器"
+            2 -> "EXO播放器"
+            else -> "未知播放器"
+        }
     }
     
     /**
-     * 获取所有可用分类
+     * 获取分类显示名称 (TVBOX标准字符串数组)
      */
-    fun getAvailableCategories(): List<VodClass> {
-        return categories.filter { it.typeFlag != "0" }
+    fun getCategoryName(categoryName: String): String {
+        return if (categories.contains(categoryName)) categoryName else "未知分类"
+    }
+    
+    /**
+     * 获取所有可用分类 (TVBOX标准字符串数组)
+     */
+    fun getAvailableCategories(): List<String> {
+        return categories.filter { it.isNotEmpty() }
     }
     
     /**
@@ -81,16 +120,16 @@ data class VodSite(
     }
     
     /**
-     * 获取请求头字符串
+     * 获取请求头字符串 (TVBOX标准)
      */
     fun getHeaderString(): String {
-        return header.entries.joinToString("; ") { "${it.key}: ${it.value}" }
+        return "" // header现在是JsonElement，暂时返回空字符串
     }
     
     /**
-     * 是否有扩展配置
+     * 是否有扩展配置 (TVBOX标准支持字符串或JSON对象)
      */
-    fun hasExtension(): Boolean = ext.isNotEmpty()
+    fun hasExtension(): Boolean = getExtString().isNotEmpty()
     
     /**
      * 是否有JAR包
@@ -107,19 +146,18 @@ data class VodSite(
     }
 
     /**
-     * 获取User-Agent
+     * 获取User-Agent (TVBOX标准支持从ext中获取)
      */
     fun getUserAgent(): String {
-        return if (ext.isNotEmpty()) {
-            // 从ext中提取User-Agent
-            try {
-                val extJson = kotlinx.serialization.json.Json.parseToJsonElement(ext)
-                extJson.jsonObject["User-Agent"]?.jsonPrimitive?.content
-                    ?: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
-            } catch (e: Exception) {
-                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+        return try {
+            when (ext) {
+                is JsonPrimitive -> "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+                else -> {
+                    ext.jsonObject["User-Agent"]?.jsonPrimitive?.content
+                        ?: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+                }
             }
-        } else {
+        } catch (e: Exception) {
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
         }
     }

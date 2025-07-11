@@ -104,9 +104,9 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
 
-    // KotlinPoet专业代码生成 - 替代Hilt依赖注入
-    implementation(libs.kotlinpoet)
-    implementation(libs.kotlinpoet.ksp)
+    // KotlinPoet专业代码生成 - 替代Hilt依赖注入 (仅编译时使用)
+    compileOnly(libs.kotlinpoet)
+    compileOnly(libs.kotlinpoet.ksp)
     // 移除kotlin-compiler依赖，避免与KSP插件冲突
     // implementation(libs.kotlin.compiler)
     // implementation(libs.kotlin.scripting)

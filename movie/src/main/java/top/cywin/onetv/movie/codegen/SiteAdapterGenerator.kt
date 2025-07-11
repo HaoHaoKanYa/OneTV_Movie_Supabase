@@ -2,6 +2,8 @@ package top.cywin.onetv.movie.codegen
 
 import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonPrimitive
 import top.cywin.onetv.movie.data.models.VodSite
 import top.cywin.onetv.movie.data.models.VodResponse
 
@@ -125,7 +127,7 @@ object SiteAdapterGenerator {
             .add("searchable = %L,\n", site.searchable)
             .add("changeable = %L,\n", site.changeable)
             .add("timeout = %L,\n", site.timeout)
-            .add("header = mapOf(${generateMapEntries(site.header)})\n")
+            .add("header = null\n")
             .unindent()
             .add(")")
             .build()
@@ -174,9 +176,8 @@ object SiteAdapterGenerator {
                 .addStatement("val request = Request.Builder()")
                 .addStatement("    .url(searchUrl)")
                 .apply {
-                    site.header.forEach { (key, value) ->
-                        addStatement("    .addHeader(%S, %S)", key, value)
-                    }
+                    // header现在是JsonElement，暂时跳过添加header
+                    addStatement("    .addHeader(%S, %S)", "User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
                 }
                 .addStatement("    .build()")
                 .addStatement("")
@@ -248,9 +249,8 @@ object SiteAdapterGenerator {
             .addStatement("val request = Request.Builder()")
             .addStatement("    .url(detailUrl)")
             .apply {
-                site.header.forEach { (key, value) ->
-                    addStatement("    .addHeader(%S, %S)", key, value)
-                }
+                // header现在是JsonElement，暂时跳过添加header
+                addStatement("    .addHeader(%S, %S)", "User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
             }
             .addStatement("    .build()")
             .addStatement("")
@@ -288,10 +288,13 @@ object SiteAdapterGenerator {
     }
     
     /**
-     * 生成Map条目字符串
+     * 生成JsonElement字符串表示
      */
-    private fun generateMapEntries(map: Map<String, String>): String {
-        return map.entries.joinToString(", ") { "\"${it.key}\" to \"${it.value}\"" }
+    private fun generateJsonElementString(jsonElement: JsonElement): String {
+        return when (jsonElement) {
+            is JsonPrimitive -> "JsonPrimitive(\"${jsonElement.content}\")"
+            else -> "JsonPrimitive(\"${jsonElement.toString().replace("\"", "\\\"")}\")"
+        }
     }
     
     /**

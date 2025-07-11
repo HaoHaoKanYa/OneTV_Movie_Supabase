@@ -116,6 +116,7 @@ data class VodConfigResponse(
     val spider: String = "",
     val wallpaper: String = "",
     val logo: String = "", // TVBOX扩展字段：应用logo
+    val warningText: String = "", // TVBOX扩展字段：警告文本
     val storeHouse: List<VodStoreHouse> = emptyList(), // TVBOX扩展字段：仓库配置
     val urls: List<VodConfigUrl> = emptyList(), // TVBOX扩展字段：配置文件链接列表
     val doh: List<VodDohConfig> = emptyList(), // TVBOX扩展字段：DNS over HTTPS配置

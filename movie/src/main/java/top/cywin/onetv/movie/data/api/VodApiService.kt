@@ -78,9 +78,9 @@ interface VodApiService {
          */
         fun createConfigService(appConfigManager: top.cywin.onetv.movie.data.config.AppConfigManager): VodApiService {
             val client = OkHttpClient.Builder()
-                .connectTimeout(30, TimeUnit.SECONDS)
-                .readTimeout(30, TimeUnit.SECONDS)
-                .writeTimeout(30, TimeUnit.SECONDS)
+                .connectTimeout(15, TimeUnit.SECONDS) // 连接超时15秒
+                .readTimeout(30, TimeUnit.SECONDS) // 读取超时30秒
+                .writeTimeout(15, TimeUnit.SECONDS) // 写入超时15秒
                 .addInterceptor { chain ->
                     val request = chain.request().newBuilder()
                         .addHeader("User-Agent", "OneTV/2.1.1")
@@ -147,9 +147,9 @@ interface VodApiService {
          */
         fun createSiteService(): VodApiService {
             val client = OkHttpClient.Builder()
-                .connectTimeout(30, TimeUnit.SECONDS)
-                .readTimeout(30, TimeUnit.SECONDS)
-                .writeTimeout(30, TimeUnit.SECONDS)
+                .connectTimeout(15, TimeUnit.SECONDS) // 连接超时15秒
+                .readTimeout(30, TimeUnit.SECONDS) // 读取超时30秒
+                .writeTimeout(15, TimeUnit.SECONDS) // 写入超时15秒
                 .addInterceptor { chain ->
                     val request = chain.request().newBuilder()
                         .addHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
@@ -188,7 +188,7 @@ object Constants {
 
     // 缓存相关
     const val CONFIG_CACHE_EXPIRE_TIME = 24 * 60 * 60 * 1000L // 24小时
-    const val DEFAULT_REQUEST_TIMEOUT = 30000L // 30秒
+    const val DEFAULT_REQUEST_TIMEOUT = 15000L // 15秒
 
     // 错误信息
     const val ERROR_CONFIG_NOT_INITIALIZED = "配置未初始化，请先调用AppConfigManager.initializeConfig()"

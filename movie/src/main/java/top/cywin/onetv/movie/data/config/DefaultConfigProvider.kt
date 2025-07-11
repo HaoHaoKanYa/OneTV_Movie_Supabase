@@ -1,6 +1,7 @@
 package top.cywin.onetv.movie.data.config
 
 import top.cywin.onetv.movie.data.models.*
+import kotlinx.serialization.json.JsonPrimitive
 
 /**
  * 默认配置提供器
@@ -40,15 +41,17 @@ object DefaultConfigProvider {
                 key = "default_demo",
                 name = "默认站点",
                 api = "https://demo.example.com/api.php/provide/vod/",
-                ext = "",
+                ext = JsonPrimitive(""),
                 jar = "",
                 type = 1, // CMS类型
                 searchable = 1,
+                quickSearch = 1,
+                filterable = 1,
+                playerType = 1,
                 changeable = 1,
-                timeout = 30000,
-                header = mapOf(
-                    "User-Agent" to "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
-                ),
+                click = "",
+                timeout = 15000, // 15秒超时
+                header = null,
                 style = null,
                 categories = emptyList()
             ),
@@ -56,15 +59,13 @@ object DefaultConfigProvider {
                 key = "placeholder_site_2", 
                 name = "占位符站点2",
                 api = "https://placeholder2.example.com/api.php/provide/vod/",
-                ext = "",
+                ext = JsonPrimitive(""),
                 jar = "",
                 type = 1, // CMS类型
                 searchable = 1,
                 changeable = 1,
-                timeout = 30000,
-                header = mapOf(
-                    "User-Agent" to "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
-                ),
+                timeout = 15000,
+                header = null,
                 style = null,
                 categories = emptyList()
             )
@@ -167,35 +168,23 @@ object DefaultConfigProvider {
                     key = "test_site",
                     name = "测试站点",
                     api = "https://test.example.com/api.php/provide/vod/",
-                    ext = "",
+                    ext = JsonPrimitive(""),
                     jar = "",
                     type = 1,
                     searchable = 1,
+                    quickSearch = 1,
+                    filterable = 1,
+                    playerType = 1,
                     changeable = 1,
-                    timeout = 30000,
-                    header = mapOf("User-Agent" to "OneTV/2.0"),
+                    click = "",
+                    timeout = 15000, // 15秒超时
+                    header = null,
                     style = null,
                     categories = listOf(
-                        VodClass(
-                            typeId = "1",
-                            typeName = "电影",
-                            typeFlag = "1"
-                        ),
-                        VodClass(
-                            typeId = "2", 
-                            typeName = "电视剧",
-                            typeFlag = "1"
-                        ),
-                        VodClass(
-                            typeId = "3",
-                            typeName = "综艺",
-                            typeFlag = "1"
-                        ),
-                        VodClass(
-                            typeId = "4",
-                            typeName = "动漫",
-                            typeFlag = "1"
-                        )
+                        "电影",
+                        "电视剧",
+                        "综艺",
+                        "动漫"
                     )
                 )
             ),

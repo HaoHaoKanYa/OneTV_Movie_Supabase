@@ -199,3 +199,6 @@ GIT_GUIDE.md
 # 点播功能设计文档 - 不进行版本控制
 /movieMD/
 /movieMD/
+supabase/debug/check_service_key.sql
+supabase/deploy_vod_config.sh
+supabase/migrations/20250711_rename_supabase_service_to_service_role.sql

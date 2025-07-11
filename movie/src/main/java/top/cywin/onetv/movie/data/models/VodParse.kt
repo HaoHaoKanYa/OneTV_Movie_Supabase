@@ -12,6 +12,7 @@ data class VodParse(
     val url: String, // 解析地址
     val ext: Map<String, String> = emptyMap(), // 扩展配置
     val header: Map<String, String> = emptyMap(), // 请求头
+    val flag: List<String> = emptyList(), // 支持的播放标识 (TVBOX标准字段)
     private var runtimeHeaders: Map<String, String> = emptyMap(), // 运行时请求头
     private var clickUrl: String = "" // 点击地址
 ) {

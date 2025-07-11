@@ -26,7 +26,7 @@ interface VodParserInterface {
     /**
      * 获取超时时间
      */
-    fun getTimeout(): Long = 30000L
+    fun getTimeout(): Long = 15000L
     
     /**
      * 清理资源

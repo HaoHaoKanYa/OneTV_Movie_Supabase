@@ -4,6 +4,7 @@ import android.content.Context
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonPrimitive
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.util.concurrent.TimeUnit
@@ -15,6 +16,8 @@ import top.cywin.onetv.movie.data.config.AppConfigManager
 import top.cywin.onetv.movie.data.models.*
 import top.cywin.onetv.movie.data.parser.ParseManager
 import top.cywin.onetv.movie.data.parser.ParseResult
+import top.cywin.onetv.movie.data.parser.TvboxConfigParser
+import top.cywin.onetv.movie.data.network.TvboxNetworkConfig
 // KotlinPoet专业重构 - 移除Hilt相关import
 // import top.cywin.onetv.movie.di.SiteApiService
 // import javax.inject.Inject
@@ -34,7 +37,8 @@ class VodRepository(
     private val configManager: VodConfigManager,
     private val parseManager: ParseManager,
     private val apiService: VodApiService, // 配置API服务
-    private val siteApiService: VodApiService // 站点API服务
+    private val siteApiService: VodApiService, // 站点API服务
+    private val tvboxParser: TvboxConfigParser = TvboxConfigParser.create() // TVBOX配置解析器
 ) {
 
     /**
@@ -50,7 +54,7 @@ class VodRepository(
             // 1. 优先从缓存获取 (内存 + 磁盘)
             Log.d("ONETV_MOVIE", "📦 检查缓存配置")
             val cachedConfig = vodCacheManager.getConfig()
-            if (cachedConfig != null) {
+            if (cachedConfig != null && cachedConfig.sites.isNotEmpty()) {
                 Log.d("ONETV_MOVIE", "✅ 使用缓存配置: 站点数=${cachedConfig.sites.size}")
                 val vodConfigResponse = convertToVodConfigResponse(cachedConfig)
 
@@ -59,6 +63,8 @@ class VodRepository(
                 if (loadResult.isSuccess) {
                     return@withContext Result.success(vodConfigResponse)
                 }
+            } else if (cachedConfig != null) {
+                Log.d("ONETV_MOVIE", "⚠️ 缓存配置无效（站点数=0），强制重新获取")
             }
 
             // 2. 缓存未命中，根据优先级获取配置
@@ -263,70 +269,49 @@ class VodRepository(
 
             Log.d("ONETV_MOVIE", "✅ 获取TVBOX配置链接成功: $configUrl")
 
-            // 按TVBOX标准：解析配置文件获取影视接口列表
-            Log.d("ONETV_MOVIE", "📋 解析TVBOX配置文件获取影视接口列表...")
-            val vodConfig = parseConfigFromUrl(configUrl)
+            // 按TVBOX标准：返回配置文件URL供前端解析（不下载配置文件）
+            Log.d("ONETV_MOVIE", "📋 返回TVBOX配置文件URL供前端解析...")
 
-            Log.d("ONETV_MOVIE", "✅ TVBOX配置解析成功")
-            Log.d("ONETV_MOVIE", "📊 影视接口统计: 站点=${vodConfig.sites.size}个, 解析器=${vodConfig.parses.size}个")
+            // 创建包含配置URL的VodConfigResponse，前端将直接从URL加载影视接口
+            val vodConfig = VodConfigResponse(
+                sites = emptyList(), // 前端将从URL加载
+                parses = emptyList(), // 前端将从URL加载
+                urls = listOf(
+                    VodConfigUrl(
+                        name = "OneTV主配置",
+                        url = configUrl
+                    )
+                ),
+                spider = "",
+                wallpaper = "",
+                logo = "",
+                lives = emptyList(),
+                doh = emptyList(),
+                flags = emptyList(),
+                ijk = emptyList(),
+                ads = emptyList(),
+                rules = emptyList()
+            )
 
-            // 检查是否为仓库索引文件（有urls但没有sites）
-            if (vodConfig.sites.isEmpty() && vodConfig.urls.isNotEmpty()) {
-                Log.d("ONETV_MOVIE", "🏪 检测到仓库索引文件，尝试加载实际配置文件")
+            Log.d("ONETV_MOVIE", "✅ 配置URL准备完成，供前端解析")
+            Log.d("ONETV_MOVIE", "🔗 配置URL: $configUrl")
+            Log.d("ONETV_MOVIE", "� 前端将直接从URL加载影视接口，无需后端下载配置文件")
 
-                // 优先使用GitHub测试链接验证解析功能
-                val testUrl = "https://raw.githubusercontent.com/HaoHaoKanYa/OneTV-API/refs/heads/main/vod/output/onetv-api-movie.json"
-                Log.d("ONETV_MOVIE", "🧪 使用GitHub测试链接验证解析功能: $testUrl")
+            // 按TVBOX标准：客户端解析配置URL（完全符合TVBOX逻辑）
+            Log.d("ONETV_MOVIE", "🔄 使用TVBOX解析器解析配置URL...")
 
-                try {
-                    val actualConfig = parseConfigFromUrl(testUrl)
-                    Log.d("ONETV_MOVIE", "✅ GitHub测试配置解析成功")
-                    Log.d("ONETV_MOVIE", "📊 GitHub测试配置统计: 站点=${actualConfig.sites.size}个, 解析器=${actualConfig.parses.size}个")
-
-                    if (actualConfig.sites.isNotEmpty()) {
-                        // 输出站点信息用于调试
-                        actualConfig.sites.take(5).forEachIndexed { index, site ->
-                            Log.d("ONETV_MOVIE", "🌐 GitHub测试站点${index + 1}: ${site.name} (${site.key})")
-                        }
-                        return@withContext Result.success(actualConfig)
-                    }
-                } catch (e: Exception) {
-                    Log.e("ONETV_MOVIE", "💥 GitHub测试配置加载失败", e)
-                }
-
-                // 如果GitHub测试失败，尝试仓库中的第一个配置链接
-                val firstUrl = vodConfig.urls.firstOrNull()
-                if (firstUrl != null) {
-                    Log.d("ONETV_MOVIE", "🔗 尝试加载仓库中的第一个配置: ${firstUrl.name}")
-                    try {
-                        val actualConfig = parseConfigFromUrl(firstUrl.url)
-                        Log.d("ONETV_MOVIE", "✅ 仓库配置解析成功")
-                        Log.d("ONETV_MOVIE", "📊 仓库配置统计: 站点=${actualConfig.sites.size}个, 解析器=${actualConfig.parses.size}个")
-
-                        if (actualConfig.sites.isNotEmpty()) {
-                            return@withContext Result.success(actualConfig)
-                        }
-                    } catch (e: Exception) {
-                        Log.e("ONETV_MOVIE", "💥 仓库配置加载失败", e)
-                    }
-                }
-
-                Log.w("ONETV_MOVIE", "⚠️ 所有配置源都无法加载有效站点")
-                return@withContext Result.failure(Exception("配置中没有可用站点"))
+            // 使用TVBOX解析器解析配置URL
+            val parseResult = tvboxParser.parseConfigUrl(configUrl)
+            if (parseResult.isFailure) {
+                Log.e("ONETV_MOVIE", "� TVBOX配置解析失败", parseResult.exceptionOrNull())
+                return@withContext parseResult
             }
 
-            // 验证配置有效性
-            if (vodConfig.sites.isEmpty()) {
-                Log.w("ONETV_MOVIE", "⚠️ TVBOX配置中没有可用站点")
-                return@withContext Result.failure(Exception("配置中没有可用站点"))
-            }
+            val actualConfig = parseResult.getOrThrow()
+            Log.d("ONETV_MOVIE", "🎉 TVBOX配置解析成功")
+            Log.d("ONETV_MOVIE", "📊 解析结果: 站点=${actualConfig.sites.size}个, 解析器=${actualConfig.parses.size}个")
 
-            // 输出站点信息用于调试
-            vodConfig.sites.forEachIndexed { index, site ->
-                Log.d("ONETV_MOVIE", "🌐 TVBOX站点${index + 1}: ${site.name} (${site.key})")
-            }
-
-            Result.success(vodConfig)
+            Result.success(actualConfig)
 
         } catch (e: Exception) {
             Log.e("ONETV_MOVIE", "💥 Edge Function获取配置失败", e)
@@ -337,7 +322,10 @@ class VodRepository(
     /**
      * 解析配置文件URL获取TVBOX配置
      * 使用正确的认证方式访问私密存储桶
+     *
+     * ⚠️ 已废弃：根据用户要求，客户端不应下载配置文件，应直接返回URL供前端解析
      */
+    @Deprecated("客户端不应下载配置文件，应直接返回URL供前端解析")
     private suspend fun parseConfigFromUrl(configUrl: String): VodConfigResponse = withContext(Dispatchers.IO) {
         try {
             // 判断是否为私密存储桶URL
@@ -345,8 +333,9 @@ class VodRepository(
 
             // 创建HTTP客户端
             val client = OkHttpClient.Builder()
-                .connectTimeout(30, TimeUnit.SECONDS)
-                .readTimeout(60, TimeUnit.SECONDS)
+                .connectTimeout(15, TimeUnit.SECONDS) // 连接超时15秒
+                .readTimeout(30, TimeUnit.SECONDS) // 读取超时30秒
+                .writeTimeout(15, TimeUnit.SECONDS) // 写入超时15秒
                 .build()
 
             val request = if (isPrivateStorage) {
@@ -402,6 +391,28 @@ class VodRepository(
     }
 
     /**
+     * 转换VodConfigResponse为VodConfig用于缓存
+     */
+    private fun convertToVodConfig(response: VodConfigResponse): VodConfig {
+        return VodConfig(
+            id = 0,
+            type = 0,
+            url = "", // 仓库URL
+            name = "TVBOX配置",
+            logo = response.logo,
+            home = response.sites.firstOrNull()?.key ?: "",
+            parse = response.parses.firstOrNull()?.name ?: "",
+            json = "", // 原始JSON
+            time = System.currentTimeMillis(),
+            sites = response.sites,
+            parses = response.parses,
+            spider = response.spider,
+            wallpaper = response.wallpaper,
+            notice = response.notice
+        )
+    }
+
+    /**
      * 强制刷新配置 (清除缓存，重新从网络获取)
      */
     suspend fun refreshConfig(): Result<VodConfigResponse> = withContext(Dispatchers.IO) {
@@ -426,9 +437,13 @@ class VodRepository(
     suspend fun isConfigUpdateNeeded(): Boolean = withContext(Dispatchers.IO) {
         try {
             val cachedConfig = vodCacheManager.getConfig()
-            val needUpdate = cachedConfig == null
+            // 需要更新的条件：缓存为空 或 站点数为0
+            val needUpdate = cachedConfig == null || cachedConfig.sites.isEmpty()
 
             Log.d("ONETV_MOVIE", "🔍 检查配置更新需求: ${if (needUpdate) "需要更新" else "缓存有效"}")
+            if (cachedConfig != null) {
+                Log.d("ONETV_MOVIE", "📊 当前缓存站点数: ${cachedConfig.sites.size}")
+            }
             return@withContext needUpdate
 
         } catch (e: Exception) {
@@ -503,19 +518,7 @@ class VodRepository(
         )
     }
 
-    /**
-     * 将VodConfigResponse转换为VodConfig
-     */
-    private fun convertToVodConfig(vodConfigResponse: VodConfigResponse): VodConfig {
-        return VodConfig(
-            spider = vodConfigResponse.spider,
-            wallpaper = vodConfigResponse.wallpaper,
-            sites = vodConfigResponse.sites,
-            parses = vodConfigResponse.parses,
-            time = System.currentTimeMillis()
-            // VodConfig不包含flags、ijk、ads字段
-        )
-    }
+
 
     /**
      * 创建默认配置响应（临时解决方案）
@@ -525,35 +528,23 @@ class VodRepository(
             key = "default",
             name = "默认站点",
             api = "https://example.com/api.php/provide/vod/",
-            ext = "",
+            ext = JsonPrimitive(""),
             jar = "",
             type = 1,
             searchable = 1,
+            quickSearch = 1,
+            filterable = 1,
+            playerType = 1,
             changeable = 1,
-            timeout = 30000,
-            header = emptyMap(),
+            click = "",
+            timeout = 15000, // 15秒超时
+            header = null,
             style = null,
             categories = listOf(
-                VodClass(
-                    typeId = "1",
-                    typeName = "电影",
-                    typeFlag = "1"
-                ),
-                VodClass(
-                    typeId = "2",
-                    typeName = "电视剧",
-                    typeFlag = "1"
-                ),
-                VodClass(
-                    typeId = "3",
-                    typeName = "综艺",
-                    typeFlag = "1"
-                ),
-                VodClass(
-                    typeId = "4",
-                    typeName = "动漫",
-                    typeFlag = "1"
-                )
+                "电影",
+                "电视剧",
+                "综艺",
+                "动漫"
             )
         )
 

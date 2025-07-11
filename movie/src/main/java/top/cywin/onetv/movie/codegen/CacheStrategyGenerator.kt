@@ -77,7 +77,7 @@ object CacheStrategyGenerator {
                     .add("mapOf(\n")
                     .indent()
                     .add("\"config\" to 24 * 60 * 60 * 1000L, // 24小时\n")
-                    .add("\"content\" to 30 * 60 * 1000L, // 30分钟\n")
+                    .add("\"content\" to 15 * 60 * 1000L, // 15分钟\n")
                     .add("\"search\" to 5 * 60 * 1000L, // 5分钟\n")
                     .add("\"detail\" to 60 * 60 * 1000L, // 1小时\n")
                     .add("\"playurl\" to 10 * 60 * 1000L, // 10分钟\n")

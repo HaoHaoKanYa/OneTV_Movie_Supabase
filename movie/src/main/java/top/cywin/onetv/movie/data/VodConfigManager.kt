@@ -3,6 +3,7 @@ package top.cywin.onetv.movie.data
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonPrimitive
 import top.cywin.onetv.movie.data.cache.MovieCacheManager
 import top.cywin.onetv.movie.data.config.DefaultConfigProvider
 import top.cywin.onetv.movie.data.models.*
@@ -83,7 +84,7 @@ class VodConfigManager(
             site.copy(
                 // 转换URL
                 api = convertUrl(site.api),
-                ext = convertUrl(site.ext),
+                ext = site.ext, // ext现在是JsonElement，不需要转换
                 // 设置JAR包
                 jar = parseJar(site, config.spider)
             )
@@ -229,13 +230,13 @@ class VodConfigManager(
             key = "fallback",
             name = "备用站点",
             api = "https://fallback.example.com/api.php/provide/vod/",
-            ext = "",
+            ext = JsonPrimitive(""),
             jar = "",
             type = 1,
             searchable = 1,
             changeable = 1,
-            timeout = 30000,
-            header = emptyMap(),
+            timeout = 15000,
+            header = null,
             style = null,
             categories = emptyList()
         )
