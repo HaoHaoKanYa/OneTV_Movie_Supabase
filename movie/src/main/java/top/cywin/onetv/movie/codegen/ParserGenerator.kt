@@ -5,6 +5,7 @@ import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import top.cywin.onetv.movie.data.models.VodParse
 import top.cywin.onetv.movie.data.models.VodSite
 import top.cywin.onetv.movie.data.models.ParseResult
+import kotlinx.serialization.json.JsonPrimitive
 import java.net.URLEncoder
 import java.util.concurrent.TimeUnit
 
@@ -106,7 +107,7 @@ object ParserGenerator {
                     .add("name = %S,\n", parse.name)
                     .add("type = %L,\n", parse.type)
                     .add("url = %S,\n", parse.url)
-                    .add("ext = mapOf(${generateMapEntries(parse.ext)}),\n")
+                    .add("ext = mapOf(${generateJsonMapEntries(parse.ext)}),\n")
                     .add("header = mapOf(${generateMapEntries(parse.header)})\n")
                     .unindent()
                     .add(")")
@@ -306,6 +307,22 @@ object ParserGenerator {
      */
     private fun generateMapEntries(map: Map<String, String>): String {
         return map.entries.joinToString(", ") { "\"${it.key}\" to \"${it.value}\"" }
+    }
+
+    /**
+     * 生成JsonElement Map条目字符串
+     */
+    private fun generateJsonMapEntries(map: Map<String, kotlinx.serialization.json.JsonElement>): String {
+        return map.entries.joinToString(", ") {
+            val value = when (val element = it.value) {
+                is kotlinx.serialization.json.JsonPrimitive -> {
+                    if (element.isString) "\"${element.content}\""
+                    else element.content
+                }
+                else -> "\"${element.toString()}\""
+            }
+            "\"${it.key}\" to JsonPrimitive($value)"
+        }
     }
     
     /**

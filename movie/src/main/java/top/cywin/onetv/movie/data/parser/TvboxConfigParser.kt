@@ -48,17 +48,44 @@ class TvboxConfigParser {
             Log.d("ONETV_MOVIE", "✅ JSON流式解析成功")
             Log.d("ONETV_MOVIE", "📊 解析结果: 站点=${config.sites.size}个, 解析器=${config.parses.size}个")
 
+        // 🧪 详细调试信息
+        if (config.sites.isNotEmpty()) {
+            Log.d("ONETV_MOVIE", "🧪 第一个站点: ${config.sites.first().name} (${config.sites.first().key})")
+        }
+        if (config.parses.isNotEmpty()) {
+            Log.d("ONETV_MOVIE", "🧪 第一个解析器: ${config.parses.first().name} (类型=${config.parses.first().type})")
+            val firstParse = config.parses.first()
+            Log.d("ONETV_MOVIE", "🧪 解析器ext字段: ${firstParse.ext}")
+            Log.d("ONETV_MOVIE", "🧪 解析器flag字段: ${firstParse.getFlagList()}")
+        }
+
             // 2. 检查是否为仓库索引文件
             if (config.sites.isEmpty() && config.urls.isNotEmpty()) {
-                Log.d("ONETV_MOVIE", "🏪 检测到仓库索引文件，解析第一个配置源")
-                val firstUrl = config.urls.firstOrNull()
-                if (firstUrl != null) {
-                    Log.d("ONETV_MOVIE", "🔗 解析仓库配置: ${firstUrl.name}")
-                    Log.d("ONETV_MOVIE", "🌐 仓库URL: ${firstUrl.url}")
+                Log.d("ONETV_MOVIE", "🏪 检测到仓库索引文件，共${config.urls.size}个线路")
 
-                    // 递归解析仓库中的配置
-                    return@withContext parseConfigUrl(firstUrl.url)
+                // 按顺序尝试所有线路，直到找到可用的配置
+                for ((index, urlConfig) in config.urls.withIndex()) {
+                    Log.d("ONETV_MOVIE", "🔗 尝试线路${index + 1}/${config.urls.size}: ${urlConfig.name}")
+                    Log.d("ONETV_MOVIE", "🌐 线路URL: ${urlConfig.url}")
+
+                    try {
+                        // 递归解析仓库中的配置
+                        val result = parseConfigUrl(urlConfig.url)
+                        if (result.isSuccess) {
+                            val parsedConfig = result.getOrNull()
+                            if (parsedConfig != null && parsedConfig.sites.isNotEmpty()) {
+                                Log.d("ONETV_MOVIE", "✅ 线路${index + 1}解析成功: 站点=${parsedConfig.sites.size}个")
+                                return@withContext result
+                            }
+                        }
+                        Log.w("ONETV_MOVIE", "⚠️ 线路${index + 1}解析失败或无有效站点")
+                    } catch (e: Exception) {
+                        Log.w("ONETV_MOVIE", "⚠️ 线路${index + 1}解析异常: ${e.message}")
+                    }
                 }
+
+                Log.e("ONETV_MOVIE", "💥 所有线路解析失败")
+                return@withContext Result.failure(Exception("所有线路解析失败"))
             }
 
             // 3. 验证配置有效性

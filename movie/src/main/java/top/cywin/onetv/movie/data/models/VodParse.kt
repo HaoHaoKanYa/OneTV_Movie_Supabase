@@ -1,6 +1,11 @@
 package top.cywin.onetv.movie.data.models
 
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.JsonArray
+import kotlinx.serialization.json.jsonPrimitive
+import kotlinx.serialization.json.jsonArray
 
 /**
  * 解析器配置 (参考OneMoVie Parse)
@@ -10,7 +15,7 @@ data class VodParse(
     val name: String, // 解析器名称
     val type: Int, // 解析器类型: 0=嗅探, 1=JSON, 2=WebView, 3=自定义
     val url: String, // 解析地址
-    val ext: Map<String, String> = emptyMap(), // 扩展配置
+    val ext: Map<String, JsonElement> = emptyMap(), // 扩展配置 - 使用JsonElement支持TVBOX各种数据类型
     val header: Map<String, String> = emptyMap(), // 请求头
     val flag: List<String> = emptyList(), // 支持的播放标识 (TVBOX标准字段)
     private var runtimeHeaders: Map<String, String> = emptyMap(), // 运行时请求头
@@ -122,9 +127,42 @@ data class VodParse(
     fun hasExtension(): Boolean = ext.isNotEmpty()
     
     /**
-     * 获取扩展配置值
+     * 获取扩展配置值 - 支持TVBOX标准的各种数据类型
      */
-    fun getExtValue(key: String): String? = ext[key]
+    fun getExtValue(key: String): String? {
+        val element = ext[key] ?: return null
+        return when {
+            element is JsonPrimitive && element.isString -> element.content
+            element is JsonPrimitive -> element.toString().trim('"')
+            element is JsonArray -> element.joinToString(",") {
+                if (it is JsonPrimitive) it.content else it.toString()
+            }
+            else -> element.toString()
+        }
+    }
+
+    /**
+     * 获取扩展配置数组值 - 专门处理TVBOX的flag等数组字段
+     */
+    fun getExtArrayValue(key: String): List<String> {
+        val element = ext[key] ?: return emptyList()
+        return when {
+            element is JsonArray -> element.map {
+                if (it is JsonPrimitive) it.content else it.toString()
+            }
+            element is JsonPrimitive -> listOf(element.content)
+            else -> listOf(element.toString())
+        }
+    }
+
+    /**
+     * 获取flag数组 - 从ext.flag或直接从flag字段获取
+     */
+    fun getFlagList(): List<String> {
+        // 优先从ext.flag获取（TVBOX标准）
+        val extFlags = getExtArrayValue("flag")
+        return if (extFlags.isNotEmpty()) extFlags else flag
+    }
     
     /**
      * 获取解析器摘要信息
