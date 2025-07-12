@@ -41,6 +41,11 @@ class VodRepository(
     private val tvboxParser: TvboxConfigParser = TvboxConfigParser.create() // TVBOX配置解析器
 ) {
 
+    // 各种站点处理器 - 延迟初始化
+    private lateinit var spiderProcessor: top.cywin.onetv.movie.data.spider.SpiderProcessor
+    private lateinit var appProcessor: top.cywin.onetv.movie.data.app.AppSiteProcessor
+    private lateinit var alistProcessor: top.cywin.onetv.movie.data.alist.AlistProcessor
+
     /**
      * 获取配置文件并初始化站点
      */
@@ -51,21 +56,12 @@ class VodRepository(
             // 0. 确保AppConfigManager已初始化
             ensureAppConfigInitialized()
 
-            // 1. 优先从缓存获取 (内存 + 磁盘)
-            Log.d("ONETV_MOVIE", "📦 检查缓存配置")
-            val cachedConfig = vodCacheManager.getConfig()
-            if (cachedConfig != null && cachedConfig.sites.isNotEmpty()) {
-                Log.d("ONETV_MOVIE", "✅ 使用缓存配置: 站点数=${cachedConfig.sites.size}")
-                val vodConfigResponse = convertToVodConfigResponse(cachedConfig)
+            // 1. TVBOX标准：强制清除缓存，重新检测仓库索引
+            Log.d("ONETV_MOVIE", "🗑️ 强制清除缓存以检测仓库索引")
+            vodCacheManager.clearAll()
+            configManager.clear()
 
-                // 加载到配置管理器
-                val loadResult = configManager.load(vodConfigResponse)
-                if (loadResult.isSuccess) {
-                    return@withContext Result.success(vodConfigResponse)
-                }
-            } else if (cachedConfig != null) {
-                Log.d("ONETV_MOVIE", "⚠️ 缓存配置无效（站点数=0），强制重新获取")
-            }
+            Log.d("ONETV_MOVIE", "📦 重新解析配置文件以检测仓库索引")
 
             // 2. 缓存未命中，根据优先级获取配置
             Log.d("ONETV_MOVIE", "🌐 缓存未命中，根据优先级获取配置")
@@ -503,6 +499,21 @@ class VodRepository(
     }
 
     /**
+     * 清除配置缓存，强制重新解析（用于TVBOX仓库索引检测）
+     */
+    suspend fun clearConfigCache(): Result<String> = withContext(Dispatchers.IO) {
+        try {
+            Log.d("ONETV_MOVIE", "🗑️ 清除配置缓存，强制重新解析")
+            vodCacheManager.clearAll()
+            configManager.clear()
+            Result.success("缓存清除成功")
+        } catch (e: Exception) {
+            Log.e("ONETV_MOVIE", "清除缓存失败", e)
+            Result.failure(e)
+        }
+    }
+
+    /**
      * 将VodConfig转换为VodConfigResponse
      */
     private fun convertToVodConfigResponse(vodConfig: VodConfig): VodConfigResponse {
@@ -540,12 +551,7 @@ class VodRepository(
             timeout = 15000, // 15秒超时
             header = null,
             style = null,
-            categories = listOf(
-                "电影",
-                "电视剧",
-                "综艺",
-                "动漫"
-            )
+            categories = emptyList() // 不提供硬编码分类
         )
 
         val defaultParse = VodParse(
@@ -583,10 +589,8 @@ class VodRepository(
                 return@withContext Result.success(cached)
             }
 
-            // 从网络获取 (这里需要实际的网络请求实现)
-            // val response = siteApiService.getHomeContent(site.api)
-            // val categories = response.`class` ?: emptyList()
-            val categories = emptyList<VodClass>() // 临时返回空列表
+            // TVBOX智能容错处理：尝试多种方式直到成功
+            val categories = getCategoriesWithFallback(site)
 
             // 缓存结果
             cacheManager.putCache(cacheKey, categories.toTypedArray(), 24 * 60 * 60 * 1000L)
@@ -596,6 +600,139 @@ class VodRepository(
             Result.failure(e)
         }
     }
+
+    /**
+     * 获取Spider站点分类
+     */
+    private suspend fun getSpiderCategories(site: VodSite): List<VodClass> {
+        return try {
+            Log.d("ONETV_MOVIE", "🕷️ 获取Spider站点分类: ${site.name}")
+
+            // 初始化Spider处理器（如果尚未初始化）
+            if (!::spiderProcessor.isInitialized) {
+                spiderProcessor = top.cywin.onetv.movie.data.spider.SpiderProcessor(context)
+                val initResult = spiderProcessor.initialize()
+                if (!initResult) {
+                    Log.w("ONETV_MOVIE", "⚠️ Spider处理器初始化失败，返回空分类")
+                    return emptyList()
+                }
+            }
+
+            // 使用Spider处理器获取分类
+            spiderProcessor.getCategories(site)
+
+        } catch (e: Exception) {
+            Log.e("ONETV_MOVIE", "❌ Spider站点分类获取失败: ${e.message}")
+            emptyList()
+        }
+    }
+
+    /**
+     * 获取CMS站点分类
+     */
+    private suspend fun getCmsCategories(site: VodSite): List<VodClass> {
+        return try {
+            // 检查是否为真正的CMS站点
+            if (!isTrueCmsSite(site)) {
+                Log.d("ONETV_MOVIE", "⚠️ 站点 ${site.name} 不是真正的CMS站点，跳过CMS处理")
+                return emptyList()
+            }
+
+            if (site.api.isBlank() || !site.api.startsWith("http")) {
+                Log.w("ONETV_MOVIE", "⚠️ CMS站点API格式无效，返回空分类")
+                return emptyList()
+            }
+
+            Log.d("ONETV_MOVIE", "🌐 调用CMS站点API获取分类...")
+
+            // 构建获取分类的API URL
+            val apiUrl = buildCmsApiUrl(site.api, "list")
+            Log.d("ONETV_MOVIE", "🔗 分类API URL: $apiUrl")
+
+            val response = siteApiService.getHomeContent(apiUrl)
+            val categories = response.classes
+
+            Log.d("ONETV_MOVIE", "✅ CMS站点分类获取成功: ${categories.size}个分类")
+            categories.forEach { category ->
+                Log.d("ONETV_MOVIE", "📂 分类: ${category.typeName} (${category.typeId})")
+            }
+
+            categories
+
+        } catch (e: Exception) {
+            Log.w("ONETV_MOVIE", "⚠️ CMS站点API调用失败: ${e.message}")
+            emptyList()
+        }
+    }
+
+    /**
+     * 检查是否为真正的CMS站点
+     */
+    private fun isTrueCmsSite(site: VodSite): Boolean {
+        val api = site.api.lowercase()
+
+        // 如果是JavaScript文件，不是CMS站点
+        if (api.endsWith(".js") || api.contains("drpy") || api.contains("hipy")) {
+            return false
+        }
+
+        // 如果API包含csp_前缀，通常是Spider站点
+        if (api.startsWith("csp_") || site.name.contains("csp_")) {
+            return false
+        }
+
+        // 如果有JAR包，通常是Spider站点
+        if (site.jar.isNotEmpty()) {
+            return false
+        }
+
+        // 真正的CMS站点应该是HTTP API
+        return api.startsWith("http") && (api.contains("/api/") || api.contains("?ac="))
+    }
+
+    /**
+     * 获取APP站点分类
+     */
+    private suspend fun getAppCategories(site: VodSite): List<VodClass> {
+        return try {
+            Log.d("ONETV_MOVIE", "📱 获取APP站点分类: ${site.name}")
+
+            // 初始化APP处理器（如果尚未初始化）
+            if (!::appProcessor.isInitialized) {
+                appProcessor = top.cywin.onetv.movie.data.app.AppSiteProcessor(context)
+            }
+
+            // 使用APP处理器获取分类
+            appProcessor.getCategories(site)
+
+        } catch (e: Exception) {
+            Log.e("ONETV_MOVIE", "❌ APP站点分类获取失败: ${e.message}")
+            emptyList()
+        }
+    }
+
+    /**
+     * 获取Alist站点分类
+     */
+    private suspend fun getAlistCategories(site: VodSite): List<VodClass> {
+        return try {
+            Log.d("ONETV_MOVIE", "💾 获取Alist站点分类: ${site.name}")
+
+            // 初始化Alist处理器（如果尚未初始化）
+            if (!::alistProcessor.isInitialized) {
+                alistProcessor = top.cywin.onetv.movie.data.alist.AlistProcessor(context)
+            }
+
+            // 使用Alist处理器获取分类
+            alistProcessor.getCategories(site)
+
+        } catch (e: Exception) {
+            Log.e("ONETV_MOVIE", "❌ Alist站点分类获取失败: ${e.message}")
+            emptyList()
+        }
+    }
+
+
 
     /**
      * 获取内容列表
@@ -620,17 +757,72 @@ class VodRepository(
                 return@withContext Result.success(cached)
             }
 
-            // 从网络获取 (这里需要实际的网络请求实现)
-            // val response = siteApiService.getCategoryContent(...)
-            val response = VodResponse(
-                code = 1,
-                msg = "success",
-                page = page,
-                pagecount = 1,
-                limit = 20,
-                total = 0,
-                list = emptyList()
-            )
+            // 根据站点类型获取内容
+            val response = when {
+                // Spider站点 - 使用Spider处理器
+                site.isSpider() -> {
+                    Log.d("ONETV_MOVIE", "🕷️ Spider站点获取分类内容")
+                    val items = getSpiderCategoryContent(site, typeId, page)
+                    VodResponse(
+                        code = 1,
+                        msg = "success",
+                        page = page,
+                        pagecount = if (items.isEmpty()) 0 else 1,
+                        limit = 20,
+                        total = items.size,
+                        list = items
+                    )
+                }
+
+                // CMS站点 - 使用标准API
+                site.isCms() -> {
+                    Log.d("ONETV_MOVIE", "🌐 CMS站点获取分类内容")
+                    getCmsCategoryContent(site, typeId, page)
+                }
+
+                // APP站点 - 使用APP处理器
+                site.isApp() -> {
+                    Log.d("ONETV_MOVIE", "📱 APP站点获取分类内容")
+                    val items = getAppCategoryContent(site, typeId, page)
+                    VodResponse(
+                        code = 1,
+                        msg = "success",
+                        page = page,
+                        pagecount = if (items.isEmpty()) 0 else 1,
+                        limit = 20,
+                        total = items.size,
+                        list = items
+                    )
+                }
+
+                // Alist站点 - 使用Alist处理器
+                site.isAlist() -> {
+                    Log.d("ONETV_MOVIE", "💾 Alist站点获取分类内容")
+                    val items = getAlistCategoryContent(site, typeId, page)
+                    VodResponse(
+                        code = 1,
+                        msg = "success",
+                        page = page,
+                        pagecount = if (items.isEmpty()) 0 else 1,
+                        limit = 20,
+                        total = items.size,
+                        list = items
+                    )
+                }
+
+                else -> {
+                    Log.w("ONETV_MOVIE", "⚠️ 未知站点类型，返回空结果")
+                    VodResponse(
+                        code = 1,
+                        msg = "success",
+                        page = page,
+                        pagecount = 0,
+                        limit = 20,
+                        total = 0,
+                        list = emptyList()
+                    )
+                }
+            }
 
             // 缓存结果
             cacheManager.putCache(cacheKey, response, 24 * 60 * 60 * 1000L)
@@ -638,6 +830,81 @@ class VodRepository(
             Result.success(response)
         } catch (e: Exception) {
             Result.failure(e)
+        }
+    }
+
+    /**
+     * 获取Spider站点分类内容
+     */
+    private suspend fun getSpiderCategoryContent(site: VodSite, typeId: String, page: Int): List<VodItem> {
+        return try {
+            // 初始化Spider处理器（如果尚未初始化）
+            if (!::spiderProcessor.isInitialized) {
+                spiderProcessor = top.cywin.onetv.movie.data.spider.SpiderProcessor(context)
+                val initResult = spiderProcessor.initialize()
+                if (!initResult) {
+                    Log.w("ONETV_MOVIE", "⚠️ Spider处理器初始化失败")
+                    return emptyList()
+                }
+            }
+
+            spiderProcessor.getCategoryContent(site, typeId, page)
+        } catch (e: Exception) {
+            Log.e("ONETV_MOVIE", "❌ Spider站点分类内容获取失败: ${e.message}")
+            emptyList()
+        }
+    }
+
+    /**
+     * 获取CMS站点分类内容
+     */
+    private suspend fun getCmsCategoryContent(site: VodSite, typeId: String, page: Int): VodResponse {
+        return try {
+            if (site.api.isBlank() || !site.api.startsWith("http")) {
+                Log.w("ONETV_MOVIE", "⚠️ CMS站点API格式无效")
+                return VodResponse(code = 1, msg = "success", page = page, pagecount = 0, limit = 20, total = 0, list = emptyList())
+            }
+
+            Log.d("ONETV_MOVIE", "🌐 调用CMS站点API获取分类内容...")
+            val apiUrl = buildCmsApiUrl(site.api, "list", mapOf("t" to typeId, "pg" to page.toString()))
+            siteApiService.getCategoryContent(url = apiUrl, typeId = typeId, page = page)
+        } catch (e: Exception) {
+            Log.w("ONETV_MOVIE", "⚠️ CMS站点API调用失败: ${e.message}")
+            VodResponse(code = 1, msg = "success", page = page, pagecount = 0, limit = 20, total = 0, list = emptyList())
+        }
+    }
+
+    /**
+     * 获取APP站点分类内容
+     */
+    private suspend fun getAppCategoryContent(site: VodSite, typeId: String, page: Int): List<VodItem> {
+        return try {
+            // 初始化APP处理器（如果尚未初始化）
+            if (!::appProcessor.isInitialized) {
+                appProcessor = top.cywin.onetv.movie.data.app.AppSiteProcessor(context)
+            }
+
+            appProcessor.getCategoryContent(site, typeId, page)
+        } catch (e: Exception) {
+            Log.e("ONETV_MOVIE", "❌ APP站点分类内容获取失败: ${e.message}")
+            emptyList()
+        }
+    }
+
+    /**
+     * 获取Alist站点分类内容
+     */
+    private suspend fun getAlistCategoryContent(site: VodSite, typeId: String, page: Int): List<VodItem> {
+        return try {
+            // 初始化Alist处理器（如果尚未初始化）
+            if (!::alistProcessor.isInitialized) {
+                alistProcessor = top.cywin.onetv.movie.data.alist.AlistProcessor(context)
+            }
+
+            alistProcessor.getCategoryContent(site, typeId, page)
+        } catch (e: Exception) {
+            Log.e("ONETV_MOVIE", "❌ Alist站点分类内容获取失败: ${e.message}")
+            emptyList()
         }
     }
 
@@ -724,12 +991,16 @@ class VodRepository(
     }
 
     /**
-     * 获取推荐内容
+     * 获取推荐内容 - 按TVBOX标准处理不同类型站点
      */
     suspend fun getRecommendContent(siteKey: String = ""): Result<List<VodItem>> = withContext(Dispatchers.IO) {
         try {
+            Log.d("ONETV_MOVIE", "🔍 开始获取推荐内容，站点: $siteKey")
+
             val site = configManager.getSite(siteKey)
                 ?: return@withContext Result.failure(Exception("未找到站点"))
+
+            Log.d("ONETV_MOVIE", "📺 站点信息: ${site.name}, 类型: ${site.getTypeDescription()}, API: ${site.api}")
 
             // 构建缓存键
             val cacheKey = "recommend_$siteKey"
@@ -737,19 +1008,161 @@ class VodRepository(
             // 检查缓存
             val cached = cacheManager.getCache(cacheKey, Array<VodItem>::class.java)?.toList()
             if (cached != null) {
+                Log.d("ONETV_MOVIE", "✅ 从缓存获取推荐内容: ${cached.size}部影片")
                 return@withContext Result.success(cached)
             }
 
-            // 从网络获取首页内容作为推荐
-            val response = siteApiService.getHomeContent(site.api)
-            val recommendList = response.list?.take(20) ?: emptyList()
+            // TVBOX智能容错处理：尝试多种方式直到成功
+            val recommendList = getRecommendContentWithFallback(site)
+
+            Log.d("ONETV_MOVIE", "✅ 推荐内容获取完成: ${recommendList.size}部影片")
 
             // 缓存结果
-            cacheManager.putCache(cacheKey, recommendList, 30 * 60 * 1000) // 30分钟
+            if (recommendList.isNotEmpty()) {
+                cacheManager.putCache(cacheKey, recommendList, 30 * 60 * 1000) // 30分钟
+            }
 
             Result.success(recommendList)
+
         } catch (e: Exception) {
+            Log.e("ONETV_MOVIE", "❌ 推荐内容获取失败", e)
             Result.failure(e)
+        }
+    }
+
+    /**
+     * 处理Spider站点 - 使用Spider处理器
+     */
+    private suspend fun handleSpiderSite(site: VodSite): List<VodItem> {
+        return try {
+            Log.d("ONETV_MOVIE", "🕷️ 处理Spider站点: ${site.name}")
+
+            // 初始化Spider处理器（如果尚未初始化）
+            if (!::spiderProcessor.isInitialized) {
+                spiderProcessor = top.cywin.onetv.movie.data.spider.SpiderProcessor(context)
+                val initResult = spiderProcessor.initialize()
+                if (!initResult) {
+                    Log.w("ONETV_MOVIE", "⚠️ Spider处理器初始化失败")
+                    return emptyList()
+                }
+            }
+
+            // 使用Spider处理器获取首页内容
+            spiderProcessor.getHomeContent(site)
+
+        } catch (e: Exception) {
+            Log.e("ONETV_MOVIE", "❌ Spider站点处理失败: ${e.message}")
+            emptyList()
+        }
+    }
+
+    /**
+     * 处理CMS站点 - 标准TVBOX API
+     */
+    private suspend fun handleCmsSite(site: VodSite): List<VodItem> {
+        return try {
+            if (site.api.isBlank() || !site.api.startsWith("http")) {
+                Log.w("ONETV_MOVIE", "⚠️ CMS站点API格式无效: ${site.api}")
+                return emptyList()
+            }
+
+            Log.d("ONETV_MOVIE", "🌐 调用CMS站点API: ${site.api}")
+
+            // 构建符合TVBOX标准的API请求
+            val apiUrl = buildCmsApiUrl(site.api, "list")
+            Log.d("ONETV_MOVIE", "🔗 构建的API URL: $apiUrl")
+
+            val response = siteApiService.getHomeContent(apiUrl)
+            val items = response.list?.take(20) ?: emptyList()
+
+            Log.d("ONETV_MOVIE", "✅ CMS站点API调用成功，获得${items.size}个项目")
+            items
+
+        } catch (e: Exception) {
+            Log.e("ONETV_MOVIE", "❌ CMS站点API调用失败: ${e.message}")
+            emptyList()
+        }
+    }
+
+    /**
+     * 构建CMS API URL - 符合TVBOX标准
+     */
+    private fun buildCmsApiUrl(baseApi: String, action: String, params: Map<String, String> = emptyMap()): String {
+        return try {
+            val url = StringBuilder(baseApi)
+
+            // 确保API以正确的格式结尾
+            if (!baseApi.endsWith("/")) {
+                url.append("/")
+            }
+
+            // 添加标准参数
+            val queryParams = mutableMapOf<String, String>()
+            queryParams["ac"] = action
+
+            // 添加额外参数
+            queryParams.putAll(params)
+
+            // 构建查询字符串
+            if (queryParams.isNotEmpty()) {
+                if (!baseApi.contains("?")) {
+                    url.append("?")
+                } else {
+                    url.append("&")
+                }
+
+                queryParams.entries.joinToString("&") { "${it.key}=${it.value}" }.let {
+                    url.append(it)
+                }
+            }
+
+            url.toString()
+
+        } catch (e: Exception) {
+            Log.e("ONETV_MOVIE", "❌ 构建CMS API URL失败", e)
+            baseApi
+        }
+    }
+
+    /**
+     * 处理APP站点 - 使用APP站点处理器
+     */
+    private suspend fun handleAppSite(site: VodSite): List<VodItem> {
+        return try {
+            Log.d("ONETV_MOVIE", "📱 处理APP站点: ${site.name}")
+
+            // 初始化APP处理器（如果尚未初始化）
+            if (!::appProcessor.isInitialized) {
+                appProcessor = top.cywin.onetv.movie.data.app.AppSiteProcessor(context)
+            }
+
+            // 使用APP处理器获取首页内容
+            appProcessor.getHomeContent(site)
+
+        } catch (e: Exception) {
+            Log.e("ONETV_MOVIE", "❌ APP站点处理失败: ${e.message}")
+            emptyList()
+        }
+    }
+
+    /**
+     * 处理Alist站点 - 使用Alist处理器
+     */
+    private suspend fun handleAlistSite(site: VodSite): List<VodItem> {
+        return try {
+            Log.d("ONETV_MOVIE", "💾 处理Alist站点: ${site.name}")
+
+            // 初始化Alist处理器（如果尚未初始化）
+            if (!::alistProcessor.isInitialized) {
+                alistProcessor = top.cywin.onetv.movie.data.alist.AlistProcessor(context)
+            }
+
+            // 使用Alist处理器获取首页内容
+            alistProcessor.getHomeContent(site)
+
+        } catch (e: Exception) {
+            Log.e("ONETV_MOVIE", "❌ Alist站点处理失败: ${e.message}")
+            emptyList()
         }
     }
 
@@ -758,6 +1171,35 @@ class VodRepository(
      */
     suspend fun clearCache() = withContext(Dispatchers.IO) {
         cacheManager.clearAllCache()
+    }
+
+    /**
+     * 解析线路配置
+     */
+    suspend fun parseRouteConfig(routeUrl: String): Result<VodConfigResponse> = withContext(Dispatchers.IO) {
+        try {
+            Log.d("ONETV_MOVIE", "🔗 开始解析线路配置: $routeUrl")
+
+            // 使用TVBOX解析器解析线路配置
+            val parseResult = tvboxParser.parseConfigUrl(routeUrl)
+            if (parseResult.isFailure) {
+                Log.e("ONETV_MOVIE", "线路配置解析失败", parseResult.exceptionOrNull())
+                return@withContext parseResult
+            }
+
+            val config = parseResult.getOrThrow()
+            Log.d("ONETV_MOVIE", "✅ 线路配置解析成功: 站点=${config.sites.size}个, 解析器=${config.parses.size}个")
+
+            // 缓存配置
+            val vodConfig = convertToVodConfig(config)
+            vodCacheManager.saveConfig(vodConfig)
+
+            Result.success(config)
+
+        } catch (e: Exception) {
+            Log.e("ONETV_MOVIE", "线路配置解析异常", e)
+            Result.failure(e)
+        }
     }
 
     /**
@@ -867,5 +1309,167 @@ class VodRepository(
      */
     suspend fun getCacheSize(): Long = withContext(Dispatchers.IO) {
         cacheManager.getCacheSize()
+    }
+
+    // ==================== TVBOX智能容错处理机制 ====================
+
+    /**
+     * TVBOX智能容错处理：获取分类时尝试多种方式直到成功
+     */
+    private suspend fun getCategoriesWithFallback(site: VodSite): List<VodClass> {
+        Log.d("ONETV_MOVIE", "🧠 TVBOX智能容错: 开始获取站点分类 - ${site.name}")
+
+        // 方式1：根据智能识别的类型处理
+        val primaryResult = tryGetCategoriesByIntelligentType(site)
+        if (primaryResult.isNotEmpty()) {
+            Log.d("ONETV_MOVIE", "✅ 智能识别成功: ${primaryResult.size}个分类")
+            return primaryResult
+        }
+
+        // 方式2：如果智能识别失败，尝试所有可能的处理器
+        Log.d("ONETV_MOVIE", "🔄 智能识别失败，尝试所有处理器...")
+
+        val fallbackResults = listOf(
+            suspend { getSpiderCategories(site) },
+            suspend { getCmsCategories(site) },
+            suspend { getAppCategories(site) },
+            suspend { getAlistCategories(site) }
+        )
+
+        for ((index, processor) in fallbackResults.withIndex()) {
+            try {
+                val result = processor()
+                if (result.isNotEmpty()) {
+                    val processorName = when(index) {
+                        0 -> "Spider"
+                        1 -> "CMS"
+                        2 -> "APP"
+                        3 -> "Alist"
+                        else -> "Unknown"
+                    }
+                    Log.d("ONETV_MOVIE", "✅ TVBOX容错成功: $processorName 处理器获得${result.size}个分类")
+                    return result
+                }
+            } catch (e: Exception) {
+                Log.d("ONETV_MOVIE", "⚠️ 处理器${index + 1}失败: ${e.message}")
+            }
+        }
+
+        // 方式3：所有处理器都失败，返回空分类
+        Log.d("ONETV_MOVIE", "🔧 所有处理器都失败，返回空分类（不显示硬编码分类）")
+        return emptyList()
+    }
+
+    /**
+     * 根据智能识别的类型获取分类
+     */
+    private suspend fun tryGetCategoriesByIntelligentType(site: VodSite): List<VodClass> {
+        return try {
+            when {
+                site.isSpider() -> {
+                    Log.d("ONETV_MOVIE", "🕷️ 智能识别: Spider站点")
+                    getSpiderCategories(site)
+                }
+                site.isCms() -> {
+                    Log.d("ONETV_MOVIE", "🌐 智能识别: CMS站点")
+                    getCmsCategories(site)
+                }
+                site.isApp() -> {
+                    Log.d("ONETV_MOVIE", "📱 智能识别: APP站点")
+                    getAppCategories(site)
+                }
+                site.isAlist() -> {
+                    Log.d("ONETV_MOVIE", "💾 智能识别: Alist站点")
+                    getAlistCategories(site)
+                }
+                else -> {
+                    Log.w("ONETV_MOVIE", "⚠️ 未知站点类型: ${site.type}")
+                    emptyList()
+                }
+            }
+        } catch (e: Exception) {
+            Log.w("ONETV_MOVIE", "⚠️ 智能识别处理失败: ${e.message}")
+            emptyList()
+        }
+    }
+
+    /**
+     * TVBOX智能容错处理：获取推荐内容时尝试多种方式
+     */
+    private suspend fun getRecommendContentWithFallback(site: VodSite): List<VodItem> {
+        Log.d("ONETV_MOVIE", "🧠 TVBOX智能容错: 开始获取推荐内容 - ${site.name}")
+
+        // 方式1：根据智能识别的类型处理
+        val primaryResult = tryGetRecommendByIntelligentType(site)
+        if (primaryResult.isNotEmpty()) {
+            Log.d("ONETV_MOVIE", "✅ 智能识别成功: ${primaryResult.size}部影片")
+            return primaryResult
+        }
+
+        // 方式2：如果智能识别失败，尝试所有可能的处理器
+        Log.d("ONETV_MOVIE", "🔄 智能识别失败，尝试所有处理器...")
+
+        val fallbackResults = listOf(
+            suspend { handleSpiderSite(site) },
+            suspend { handleCmsSite(site) },
+            suspend { handleAppSite(site) },
+            suspend { handleAlistSite(site) }
+        )
+
+        for ((index, processor) in fallbackResults.withIndex()) {
+            try {
+                val result = processor()
+                if (result.isNotEmpty()) {
+                    val processorName = when(index) {
+                        0 -> "Spider"
+                        1 -> "CMS"
+                        2 -> "APP"
+                        3 -> "Alist"
+                        else -> "Unknown"
+                    }
+                    Log.d("ONETV_MOVIE", "✅ TVBOX容错成功: $processorName 处理器获得${result.size}部影片")
+                    return result
+                }
+            } catch (e: Exception) {
+                Log.d("ONETV_MOVIE", "⚠️ 处理器${index + 1}失败: ${e.message}")
+            }
+        }
+
+        // 方式3：返回空列表
+        Log.d("ONETV_MOVIE", "🔧 所有处理器都失败，返回空列表")
+        return emptyList()
+    }
+
+    /**
+     * 根据智能识别的类型获取推荐内容
+     */
+    private suspend fun tryGetRecommendByIntelligentType(site: VodSite): List<VodItem> {
+        return try {
+            when {
+                site.isSpider() -> {
+                    Log.d("ONETV_MOVIE", "🕷️ 智能识别: Spider站点")
+                    handleSpiderSite(site)
+                }
+                site.isCms() -> {
+                    Log.d("ONETV_MOVIE", "🌐 智能识别: CMS站点")
+                    handleCmsSite(site)
+                }
+                site.isApp() -> {
+                    Log.d("ONETV_MOVIE", "📱 智能识别: APP站点")
+                    handleAppSite(site)
+                }
+                site.isAlist() -> {
+                    Log.d("ONETV_MOVIE", "💾 智能识别: Alist站点")
+                    handleAlistSite(site)
+                }
+                else -> {
+                    Log.w("ONETV_MOVIE", "⚠️ 未知站点类型: ${site.type}")
+                    emptyList()
+                }
+            }
+        } catch (e: Exception) {
+            Log.w("ONETV_MOVIE", "⚠️ 智能识别处理失败: ${e.message}")
+            emptyList()
+        }
     }
 }

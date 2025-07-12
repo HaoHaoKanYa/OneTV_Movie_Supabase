@@ -32,71 +32,19 @@ object DefaultConfigProvider {
     }
     
     /**
-     * 默认站点列表（内置测试站点）
-     * 提供一些可用的测试站点，确保在没有配置时也能正常显示内容
+     * 默认站点列表（空列表）
+     * 生产环境不提供默认站点，必须从服务器加载
      */
     private fun getDefaultSites(): List<VodSite> {
-        return listOf(
-            VodSite(
-                key = "default_demo",
-                name = "默认站点",
-                api = "https://demo.example.com/api.php/provide/vod/",
-                ext = JsonPrimitive(""),
-                jar = "",
-                type = 1, // CMS类型
-                searchable = 1,
-                quickSearch = 1,
-                filterable = 1,
-                playerType = 1,
-                changeable = 1,
-                click = "",
-                timeout = 15000, // 15秒超时
-                header = null,
-                style = null,
-                categories = emptyList()
-            ),
-            VodSite(
-                key = "placeholder_site_2", 
-                name = "占位符站点2",
-                api = "https://placeholder2.example.com/api.php/provide/vod/",
-                ext = JsonPrimitive(""),
-                jar = "",
-                type = 1, // CMS类型
-                searchable = 1,
-                changeable = 1,
-                timeout = 15000,
-                header = null,
-                style = null,
-                categories = emptyList()
-            )
-        )
+        return emptyList()
     }
     
     /**
-     * 默认解析器列表（占位符）
-     * 实际解析器配置从存储桶加载
+     * 默认解析器列表（空列表）
+     * 生产环境不提供默认解析器，必须从服务器加载
      */
     private fun getDefaultParses(): List<VodParse> {
-        return listOf(
-            VodParse(
-                name = "默认解析器1",
-                type = 1, // JSON解析
-                url = "https://placeholder-parser1.example.com/",
-                ext = mapOf(),
-                header = mapOf(
-                    "User-Agent" to "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
-                )
-            ),
-            VodParse(
-                name = "默认解析器2",
-                type = 0, // 嗅探解析
-                url = "https://placeholder-parser2.example.com/",
-                ext = mapOf(),
-                header = mapOf(
-                    "User-Agent" to "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
-                )
-            )
-        )
+        return emptyList()
     }
     
     /**
@@ -155,64 +103,5 @@ object DefaultConfigProvider {
         }
     }
     
-    /**
-     * 创建测试用的TVBOX配置
-     * 用于开发和测试阶段
-     */
-    fun createTestConfig(): VodConfigResponse {
-        return VodConfigResponse(
-            spider = "",
-            wallpaper = "https://picsum.photos/1920/1080",
-            sites = listOf(
-                VodSite(
-                    key = "test_site",
-                    name = "测试站点",
-                    api = "https://test.example.com/api.php/provide/vod/",
-                    ext = JsonPrimitive(""),
-                    jar = "",
-                    type = 1,
-                    searchable = 1,
-                    quickSearch = 1,
-                    filterable = 1,
-                    playerType = 1,
-                    changeable = 1,
-                    click = "",
-                    timeout = 15000, // 15秒超时
-                    header = null,
-                    style = null,
-                    categories = listOf(
-                        "电影",
-                        "电视剧",
-                        "综艺",
-                        "动漫"
-                    )
-                )
-            ),
-            parses = listOf(
-                VodParse(
-                    name = "测试解析器",
-                    type = 1,
-                    url = "https://test-parser.example.com/",
-                    ext = mapOf(),
-                    header = mapOf("User-Agent" to "OneTV/2.0")
-                )
-            ),
-            flags = listOf("test", "demo"),
-            ijk = emptyList(),
-            ads = emptyList(),
-            notice = "这是测试配置，仅用于开发和测试"
-        )
-    }
-    
-    /**
-     * 获取配置文件的示例URL列表
-     * 用于用户参考和配置
-     */
-    fun getExampleConfigUrls(): List<String> {
-        return listOf(
-            "https://raw.githubusercontent.com/example/tvbox-config/main/config.json",
-            "https://gitee.com/example/tvbox-config/raw/master/config.json",
-            "https://cdn.jsdelivr.net/gh/example/tvbox-config@main/config.json"
-        )
-    }
+
 }

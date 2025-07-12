@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountTree
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.ArrowBack
@@ -35,10 +36,13 @@ import top.cywin.onetv.movie.data.models.MovieUiState
 import top.cywin.onetv.movie.data.models.VodItem
 import top.cywin.onetv.movie.data.models.VodClass
 import top.cywin.onetv.movie.data.models.VodSite
+import top.cywin.onetv.movie.data.models.VodConfigUrl
 import top.cywin.onetv.movie.data.models.HomeCategorySection
 import top.cywin.onetv.movie.navigation.MovieRoutes
 import top.cywin.onetv.movie.ui.components.MovieCard
 import top.cywin.onetv.movie.ui.components.QuickCategoryGrid
+import top.cywin.onetv.movie.ui.components.RouteSelector
+import top.cywin.onetv.movie.ui.components.StoreHouseWelcome
 import top.cywin.onetv.movie.viewmodel.MovieViewModel
 
 /**
@@ -104,6 +108,15 @@ fun MovieHomeScreen(
         },
         onSiteSwitch = { siteKey ->
             viewModel.switchSite(siteKey)
+        },
+        onRouteSelected = { route ->
+            viewModel.selectRoute(route)
+        },
+        onShowRouteSelector = {
+            viewModel.showRouteSelector()
+        },
+        onHideRouteSelector = {
+            viewModel.hideRouteSelector()
         }
     )
 }
@@ -115,7 +128,10 @@ private fun MovieHomeContent(
     onRefresh: () -> Unit,
     onCategoryClick: (VodClass) -> Unit,
     onMovieClick: (VodItem) -> Unit,
-    onSiteSwitch: (String) -> Unit
+    onSiteSwitch: (String) -> Unit,
+    onRouteSelected: (VodConfigUrl) -> Unit,
+    onShowRouteSelector: () -> Unit,
+    onHideRouteSelector: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -127,6 +143,11 @@ private fun MovieHomeContent(
             title = "影视点播",
             currentSite = uiState.currentSite,
             availableSites = uiState.availableSites,
+            showSiteSelector = !uiState.isStoreHouseIndex, // TVBOX标准：仓库索引状态下不显示站点选择器
+            // TVBOX仓库线路选择
+            isStoreHouseIndex = uiState.isStoreHouseIndex,
+            availableRoutes = uiState.availableRoutes,
+            storeHouseName = uiState.storeHouseName,
             onBackToLiveClick = {
                 // 返回直播，回到上一次播放的频道
                 Log.d("ONETV_MOVIE", "用户点击返回直播按钮")
@@ -148,9 +169,11 @@ private fun MovieHomeContent(
             onSettingsClick = {
                 navController.navigate(MovieRoutes.SETTINGS)
             },
-            onSiteSwitch = onSiteSwitch
+            onSiteSwitch = onSiteSwitch,
+            onRouteSwitch = onRouteSelected
         )
         
+        // 处理错误状态
         if (uiState.error != null) {
             // 错误状态
             ErrorContent(
@@ -212,6 +235,16 @@ private fun MovieHomeContent(
                 )
             }
         }
+
+        // 线路选择器
+        if (uiState.showRouteSelector && uiState.isStoreHouseIndex) {
+            RouteSelector(
+                storeHouseName = uiState.storeHouseName,
+                availableRoutes = uiState.availableRoutes,
+                onRouteSelected = onRouteSelected,
+                onDismiss = onHideRouteSelector
+            )
+        }
     }
 }
 
@@ -224,31 +257,28 @@ private fun MovieTopBar(
     title: String,
     currentSite: VodSite?,
     availableSites: List<VodSite>,
+    showSiteSelector: Boolean = true, // TVBOX标准：控制是否显示站点选择器
+    // TVBOX仓库线路选择参数
+    isStoreHouseIndex: Boolean = false,
+    availableRoutes: List<VodConfigUrl> = emptyList(),
+    storeHouseName: String = "",
     onBackToLiveClick: () -> Unit,
     onSearchClick: () -> Unit,
     onSettingsClick: () -> Unit,
-    onSiteSwitch: (String) -> Unit
+    onSiteSwitch: (String) -> Unit,
+    onRouteSwitch: (VodConfigUrl) -> Unit = {}
 ) {
-    var showSiteSelector by remember { mutableStateOf(false) }
+    var showSiteSelectorDialog by remember { mutableStateOf(false) }
+    var showRouteSelectorDialog by remember { mutableStateOf(false) }
 
     TopAppBar(
         title = {
-            Column {
-                Text(
-                    text = title,
-                    color = Color.White,
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold
-                )
-                // 显示当前站点信息
-                if (currentSite != null) {
-                    Text(
-                        text = "当前线路: ${currentSite.name}",
-                        color = Color.Gray,
-                        fontSize = 12.sp
-                    )
-                }
-            }
+            Text(
+                text = title,
+                color = Color.White,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold
+            )
         },
         navigationIcon = {
             // 返回直播按钮 - 返回上一次播放的频道
@@ -275,21 +305,79 @@ private fun MovieTopBar(
             }
         },
         actions = {
-            // 线路选择按钮 - 始终显示，方便调试
-            IconButton(
-                onClick = {
-                    Log.d("ONETV_MOVIE", "线路选择按钮被点击，可用站点数: ${availableSites.size}")
-                    availableSites.forEach { site ->
-                        Log.d("ONETV_MOVIE", "站点: ${site.name} (${site.key})")
-                    }
-                    showSiteSelector = true
-                }
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Tune,
-                    contentDescription = "选择线路",
-                    tint = Color.White
+            // 线路信息显示 - 移动到右上角选择图标左边
+            if (isStoreHouseIndex && storeHouseName.isNotEmpty()) {
+                // 仓库索引状态：显示仓库名称
+                Text(
+                    text = storeHouseName,
+                    color = Color.Gray,
+                    fontSize = 12.sp,
+                    modifier = Modifier.padding(end = 8.dp)
                 )
+            } else if (currentSite != null) {
+                // 非仓库索引状态：显示当前站点
+                Text(
+                    text = "当前站点: ${currentSite.name}",
+                    color = Color.Gray,
+                    fontSize = 12.sp,
+                    modifier = Modifier.padding(end = 8.dp)
+                )
+            }
+
+            // 仓库选择按钮 - 仅在仓库索引状态下显示
+            if (isStoreHouseIndex && availableRoutes.isNotEmpty()) {
+                IconButton(
+                    onClick = {
+                        Log.d("ONETV_MOVIE", "仓库选择按钮被点击，可用仓库线路数: ${availableRoutes.size}")
+                        availableRoutes.forEach { route ->
+                            Log.d("ONETV_MOVIE", "仓库线路: ${route.name}")
+                        }
+                        showRouteSelectorDialog = true
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.AccountTree, // 使用树形图标表示仓库
+                        contentDescription = "选择仓库线路",
+                        tint = Color.White
+                    )
+                }
+            }
+
+            // 站点选择按钮 - 根据状态显示
+            if (isStoreHouseIndex && availableSites.isNotEmpty()) {
+                // 仓库索引状态下：显示站点选择器
+                IconButton(
+                    onClick = {
+                        Log.d("ONETV_MOVIE", "站点选择按钮被点击，可用站点数: ${availableSites.size}")
+                        availableSites.forEach { site ->
+                            Log.d("ONETV_MOVIE", "站点: ${site.name} (${site.key})")
+                        }
+                        showSiteSelectorDialog = true
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Tune,
+                        contentDescription = "选择站点",
+                        tint = Color.White
+                    )
+                }
+            } else if (showSiteSelector && availableSites.isNotEmpty()) {
+                // 非仓库索引状态：显示站点选择器
+                IconButton(
+                    onClick = {
+                        Log.d("ONETV_MOVIE", "站点选择按钮被点击，可用站点数: ${availableSites.size}")
+                        availableSites.forEach { site ->
+                            Log.d("ONETV_MOVIE", "站点: ${site.name} (${site.key})")
+                        }
+                        showSiteSelectorDialog = true
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Tune,
+                        contentDescription = "选择站点",
+                        tint = Color.White
+                    )
+                }
             }
 
             IconButton(onClick = onSearchClick) {
@@ -312,16 +400,29 @@ private fun MovieTopBar(
         )
     )
 
-    // 线路选择器 - 始终显示当点击时
-    if (showSiteSelector) {
+    // 仓库线路选择器 - 显示24条仓库线路供用户选择
+    if (showRouteSelectorDialog && isStoreHouseIndex) {
+        RouteSelector(
+            availableRoutes = availableRoutes,
+            storeHouseName = storeHouseName,
+            onRouteSelected = { route ->
+                onRouteSwitch(route)
+                showRouteSelectorDialog = false
+            },
+            onDismiss = { showRouteSelectorDialog = false }
+        )
+    }
+
+    // 站点选择器 - 显示当前仓库线路下的具体站点
+    if (showSiteSelectorDialog) {
         SiteSelector(
             availableSites = availableSites,
             currentSite = currentSite,
             onSiteSelected = { site ->
                 onSiteSwitch(site.key)
-                showSiteSelector = false
+                showSiteSelectorDialog = false
             },
-            onDismiss = { showSiteSelector = false }
+            onDismiss = { showSiteSelectorDialog = false }
         )
     }
 }

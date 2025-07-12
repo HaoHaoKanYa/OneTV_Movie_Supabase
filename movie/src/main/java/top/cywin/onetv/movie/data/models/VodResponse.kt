@@ -130,6 +130,19 @@ data class VodConfigResponse(
     val notice: String = ""
 ) {
     /**
+     * 检查是否为仓库索引文件
+     */
+    fun isStoreHouseIndex(): Boolean {
+        return sites.isEmpty() && urls.isNotEmpty()
+    }
+
+    /**
+     * 获取仓库名称
+     */
+    fun getStoreHouseName(): String {
+        return storeHouse.firstOrNull()?.sourceName ?: "影视仓库"
+    }
+    /**
      * 是否为空配置
      */
     fun isEmpty(): Boolean = sites.isEmpty() && parses.isEmpty()

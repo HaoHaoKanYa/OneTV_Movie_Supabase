@@ -68,6 +68,43 @@ class MovieViewModel(
                 }
                 Log.d("ONETV_MOVIE", "配置文件加载成功")
 
+                val config = configResult.getOrThrow()
+
+                // 2. 检查是否为仓库索引文件
+                if (config.isStoreHouseIndex()) {
+                    Log.d("ONETV_MOVIE", "🏪 检测到仓库索引文件: ${config.getStoreHouseName()}")
+                    Log.d("ONETV_MOVIE", "📋 可用线路数: ${config.urls.size}")
+
+                    // 显示所有可用线路
+                    config.urls.forEachIndexed { index, urlConfig ->
+                        Log.d("ONETV_MOVIE", "🔗 线路${index + 1}: ${urlConfig.name}")
+                    }
+
+                    // TVBOX标准：自动选择第一条线路，但保留线路选择器供用户切换
+                    if (config.urls.isNotEmpty()) {
+                        Log.d("ONETV_MOVIE", "🎯 自动选择第一条线路: ${config.urls[0].name}")
+
+                        // 设置仓库索引状态，但不显示选择器（自动选择第一条）
+                        _uiState.value = _uiState.value.copy(
+                            isStoreHouseIndex = true,
+                            storeHouseName = config.getStoreHouseName(),
+                            availableRoutes = config.urls,
+                            showRouteSelector = false, // 不立即显示选择器
+                            error = null
+                        )
+
+                        // 自动选择第一条线路
+                        selectRoute(config.urls[0])
+                    } else {
+                        Log.w("ONETV_MOVIE", "⚠️ 仓库索引文件中没有可用线路")
+                        _uiState.value = _uiState.value.copy(
+                            isLoading = false,
+                            error = "仓库索引文件中没有可用线路"
+                        )
+                    }
+                    return@launch
+                }
+
                 // 2. 获取当前站点和分类
                 Log.d("ONETV_MOVIE", "获取当前站点")
                 val currentSite = configManager.getCurrentSite()
@@ -105,12 +142,22 @@ class MovieViewModel(
      */
     private suspend fun loadHomeContent(site: VodSite, categories: List<VodClass>) {
         try {
+            Log.d("ONETV_MOVIE", "🏠 开始加载首页内容，站点: ${site.name}")
+
             // 1. 加载推荐内容
+            Log.d("ONETV_MOVIE", "🔍 获取推荐内容...")
             val recommendResult = repository.getRecommendContent(site.key)
             val recommendMovies = recommendResult.getOrNull() ?: emptyList()
 
+            if (recommendResult.isFailure) {
+                Log.w("ONETV_MOVIE", "⚠️ 推荐内容获取失败: ${recommendResult.exceptionOrNull()?.message}")
+            } else {
+                Log.d("ONETV_MOVIE", "✅ 推荐内容获取成功: ${recommendMovies.size}部影片")
+            }
+
             // 2. 设置快速导航分类 (取前5个启用的分类)
             val quickCategories = categories.filter { it.isEnabled() }.take(5)
+            Log.d("ONETV_MOVIE", "📂 快速导航分类: ${quickCategories.size}个")
 
             // 3. 为每个分类动态加载内容
             val homeCategorySections = mutableListOf<HomeCategorySection>()
@@ -211,15 +258,156 @@ class MovieViewModel(
     }
 
     /**
-     * 切换站点
+     * 切换站点 (允许用户自由切换)
      */
     fun switchSite(siteKey: String) {
         viewModelScope.launch {
+            Log.d("ONETV_MOVIE", "🔄 用户切换站点: $siteKey")
             val site = configManager.getSite(siteKey)
             if (site != null) {
                 configManager.setCurrentSite(site)
+                loadHomeData()
+            } else {
+                Log.w("ONETV_MOVIE", "⚠️ 未找到站点: $siteKey")
             }
-            loadHomeData()
+        }
+    }
+
+    /**
+     * 选择仓库线路
+     */
+    fun selectRoute(routeUrl: VodConfigUrl) {
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(
+                isLoading = true,
+                showRouteSelector = false,
+                error = null
+            )
+
+            try {
+                Log.d("ONETV_MOVIE", "🔗 用户选择线路: ${routeUrl.name}")
+                Log.d("ONETV_MOVIE", "🌐 线路URL: ${routeUrl.url}")
+
+                // 解析选中的线路配置
+                val parseResult = repository.parseRouteConfig(routeUrl.url)
+                if (parseResult.isFailure) {
+                    Log.e("ONETV_MOVIE", "线路解析失败", parseResult.exceptionOrNull())
+                    _uiState.value = _uiState.value.copy(
+                        isLoading = false,
+                        error = "线路解析失败: ${parseResult.exceptionOrNull()?.message}",
+                        showRouteSelector = false // 不自动弹出选择器，用户可通过右上角按钮手动选择
+                    )
+                    return@launch
+                }
+
+                val config = parseResult.getOrThrow()
+                Log.d("ONETV_MOVIE", "✅ 线路解析成功: 站点=${config.sites.size}个")
+
+                // 加载配置到管理器
+                val loadResult = configManager.load(config)
+                if (loadResult.isFailure) {
+                    Log.e("ONETV_MOVIE", "配置加载失败", loadResult.exceptionOrNull())
+                    _uiState.value = _uiState.value.copy(
+                        isLoading = false,
+                        error = "配置加载失败: ${loadResult.exceptionOrNull()?.message}",
+                        showRouteSelector = false // 不自动弹出选择器，用户可通过右上角按钮手动选择
+                    )
+                    return@launch
+                }
+
+                Log.d("ONETV_MOVIE", "✅ 线路配置加载成功，按TVBOX标准直接使用默认配置")
+
+                // 保持仓库索引状态，更新当前站点信息（TVBOX标准：保留线路切换功能）
+                val currentSite = configManager.getCurrentSite()
+                _uiState.value = _uiState.value.copy(
+                    // 保持仓库索引状态，以便右上角显示线路选择器
+                    isStoreHouseIndex = true,
+                    currentSite = currentSite,
+                    availableSites = configManager.getAllSites(),
+                    showRouteSelector = false,
+                    isLoading = false
+                )
+
+                Log.d("ONETV_MOVIE", "🎯 UI状态更新: isStoreHouseIndex=true, 当前站点=${currentSite?.name}")
+
+                // 直接加载首页内容，不再提供站点选择
+                loadHomeDataDirectly()
+
+            } catch (e: Exception) {
+                Log.e("ONETV_MOVIE", "线路选择失败", e)
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    error = "线路选择失败: ${e.message}",
+                    showRouteSelector = false // 不自动弹出选择器，用户可通过右上角按钮手动选择
+                )
+            }
+        }
+    }
+
+    /**
+     * 显示线路选择器（用于右上角按钮）
+     */
+    fun showRouteSelector() {
+        if (_uiState.value.isStoreHouseIndex) {
+            Log.d("ONETV_MOVIE", "🔗 显示仓库线路选择器，可用线路: ${_uiState.value.availableRoutes.size}")
+            _uiState.value = _uiState.value.copy(showRouteSelector = true)
+        } else {
+            Log.d("ONETV_MOVIE", "⚠️ 非仓库索引状态，无法显示线路选择器")
+        }
+    }
+
+    /**
+     * 隐藏线路选择器
+     */
+    fun hideRouteSelector() {
+        _uiState.value = _uiState.value.copy(showRouteSelector = false)
+    }
+
+    /**
+     * 直接加载首页数据（TVBOX标准：选择子仓库后直接使用，无需再选择站点）
+     */
+    private fun loadHomeDataDirectly() {
+        viewModelScope.launch {
+            try {
+                Log.d("ONETV_MOVIE", "🎯 按TVBOX标准直接加载内容，使用默认站点")
+
+                // 获取默认站点（第一个可用站点）
+                val defaultSite = configManager.getCurrentSite()
+                if (defaultSite == null) {
+                    Log.w("ONETV_MOVIE", "未找到默认站点，显示空状态")
+                    _uiState.value = _uiState.value.copy(
+                        isLoading = false,
+                        error = null
+                    )
+                    return@launch
+                }
+
+                Log.d("ONETV_MOVIE", "✅ 使用默认站点: ${defaultSite.name}")
+
+                // 获取站点分类
+                Log.d("ONETV_MOVIE", "🔍 开始获取站点分类: ${defaultSite.key}")
+                val categoriesResult = repository.getCategories(defaultSite.key)
+                val categories = categoriesResult.getOrNull() ?: emptyList()
+
+                if (categoriesResult.isFailure) {
+                    Log.w("ONETV_MOVIE", "⚠️ 分类获取失败: ${categoriesResult.exceptionOrNull()?.message}")
+                } else {
+                    Log.d("ONETV_MOVIE", "✅ 分类获取成功: ${categories.size}个分类")
+                    categories.forEach { category ->
+                        Log.d("ONETV_MOVIE", "📂 分类: ${category.typeName} (${category.typeId})")
+                    }
+                }
+
+                // 直接加载首页内容，不显示站点选择器
+                loadHomeContent(defaultSite, categories)
+
+            } catch (e: Exception) {
+                Log.e("ONETV_MOVIE", "直接加载首页数据失败", e)
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    error = "加载失败: ${e.message}"
+                )
+            }
         }
     }
 
@@ -290,5 +478,37 @@ class MovieViewModel(
      */
     fun getCurrentSiteInfo(): VodSite? {
         return configManager.getCurrentSite()
+    }
+
+    /**
+     * 清除缓存并重新加载（用于TVBOX仓库索引检测）
+     */
+    fun clearCacheAndReload() {
+        viewModelScope.launch {
+            try {
+                Log.d("ONETV_MOVIE", "🔄 用户请求清除缓存并重新加载")
+
+                // 清除缓存
+                val clearResult = repository.clearConfigCache()
+                if (clearResult.isFailure) {
+                    Log.e("ONETV_MOVIE", "清除缓存失败", clearResult.exceptionOrNull())
+                    _uiState.value = _uiState.value.copy(
+                        error = "清除缓存失败: ${clearResult.exceptionOrNull()?.message}"
+                    )
+                    return@launch
+                }
+
+                Log.d("ONETV_MOVIE", "✅ 缓存清除成功，重新加载配置")
+
+                // 重新加载配置
+                loadHomeData()
+
+            } catch (e: Exception) {
+                Log.e("ONETV_MOVIE", "清除缓存并重新加载失败", e)
+                _uiState.value = _uiState.value.copy(
+                    error = "操作失败: ${e.message}"
+                )
+            }
+        }
     }
 }

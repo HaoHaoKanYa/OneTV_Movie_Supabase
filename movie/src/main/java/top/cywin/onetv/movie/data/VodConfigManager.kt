@@ -49,7 +49,7 @@ class VodConfigManager(
     suspend fun load(configResponse: VodConfigResponse): Result<String> = withContext(Dispatchers.IO) {
         try {
             this@VodConfigManager.config = configResponse
-            clear()
+            clearInternal()
             
             // 解析站点
             initSites(configResponse)
@@ -69,11 +69,19 @@ class VodConfigManager(
     /**
      * 清理配置
      */
-    private fun clear() {
+    private fun clearInternal() {
         sites = emptyList()
         parses = emptyList()
         home = null
         parse = null
+    }
+
+    /**
+     * 公开的清理配置方法
+     */
+    fun clear() {
+        config = null
+        clearInternal()
     }
     
     /**

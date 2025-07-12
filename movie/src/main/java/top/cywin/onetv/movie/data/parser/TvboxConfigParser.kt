@@ -63,29 +63,20 @@ class TvboxConfigParser {
             if (config.sites.isEmpty() && config.urls.isNotEmpty()) {
                 Log.d("ONETV_MOVIE", "🏪 检测到仓库索引文件，共${config.urls.size}个线路")
 
-                // 按顺序尝试所有线路，直到找到可用的配置
-                for ((index, urlConfig) in config.urls.withIndex()) {
-                    Log.d("ONETV_MOVIE", "🔗 尝试线路${index + 1}/${config.urls.size}: ${urlConfig.name}")
-                    Log.d("ONETV_MOVIE", "🌐 线路URL: ${urlConfig.url}")
+                // 获取仓库信息
+                val storeHouseName = config.storeHouse.firstOrNull()?.sourceName ?: "影视仓库"
+                Log.d("ONETV_MOVIE", "📦 仓库名称: $storeHouseName")
 
-                    try {
-                        // 递归解析仓库中的配置
-                        val result = parseConfigUrl(urlConfig.url)
-                        if (result.isSuccess) {
-                            val parsedConfig = result.getOrNull()
-                            if (parsedConfig != null && parsedConfig.sites.isNotEmpty()) {
-                                Log.d("ONETV_MOVIE", "✅ 线路${index + 1}解析成功: 站点=${parsedConfig.sites.size}个")
-                                return@withContext result
-                            }
-                        }
-                        Log.w("ONETV_MOVIE", "⚠️ 线路${index + 1}解析失败或无有效站点")
-                    } catch (e: Exception) {
-                        Log.w("ONETV_MOVIE", "⚠️ 线路${index + 1}解析异常: ${e.message}")
-                    }
+                // 显示所有可用线路
+                config.urls.forEachIndexed { index, urlConfig ->
+                    Log.d("ONETV_MOVIE", "🔗 线路${index + 1}: ${urlConfig.name}")
                 }
 
-                Log.e("ONETV_MOVIE", "💥 所有线路解析失败")
-                return@withContext Result.failure(Exception("所有线路解析失败"))
+                // 按TVBOX标准：返回仓库索引配置，让用户选择线路
+                // 不自动解析第一条线路，而是返回线路选择界面所需的数据
+                Log.d("ONETV_MOVIE", "✅ 返回仓库索引配置供用户选择线路")
+
+                return@withContext Result.success(config)
             }
 
             // 3. 验证配置有效性
@@ -138,6 +129,20 @@ class TvboxConfigParser {
                     val jsonString = inputStream.bufferedReader().use { it.readText() }
 
                     Log.d("ONETV_MOVIE", "✅ 网络请求成功，JSON大小: ${jsonString.length} 字符")
+
+                    // 检查响应是否为HTML（某些线路可能返回HTML页面）
+                    if (jsonString.trimStart().startsWith("<html", ignoreCase = true) ||
+                        jsonString.trimStart().startsWith("<!DOCTYPE", ignoreCase = true)) {
+                        Log.w("ONETV_MOVIE", "⚠️ 检测到HTML响应，该线路可能不可用或需要特殊处理")
+                        throw Exception("线路返回HTML页面而非JSON配置，该线路可能暂时不可用")
+                    }
+
+                    // 检查响应是否为有效JSON
+                    if (!jsonString.trimStart().startsWith("{") && !jsonString.trimStart().startsWith("[")) {
+                        Log.w("ONETV_MOVIE", "⚠️ 响应内容不是有效的JSON格式")
+                        Log.w("ONETV_MOVIE", "响应内容前100字符: ${jsonString.take(100)}")
+                        throw Exception("线路返回的内容不是有效的JSON配置")
+                    }
 
                     // 解析JSON但不存储文件
                     return@withContext json.decodeFromString<VodConfigResponse>(jsonString)

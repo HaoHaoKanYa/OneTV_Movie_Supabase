@@ -202,3 +202,4 @@ GIT_GUIDE.md
 supabase/debug/check_service_key.sql
 supabase/deploy_vod_config.sh
 supabase/migrations/20250711_rename_supabase_service_to_service_role.sql
+TVBOX_ROUTE_LOGIC_FIX.md

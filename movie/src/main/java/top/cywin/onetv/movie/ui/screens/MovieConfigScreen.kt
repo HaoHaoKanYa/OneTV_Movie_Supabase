@@ -81,7 +81,7 @@ fun MovieConfigScreen(
         // 外置源配置
         ExternalSourceCard(
             onAddCustomConfig = { showAddConfigDialog = true },
-            exampleUrls = DefaultConfigProvider.getExampleConfigUrls()
+            exampleUrls = emptyList() // 生产环境不提供示例URL
         )
         
         Spacer(modifier = Modifier.height(16.dp))

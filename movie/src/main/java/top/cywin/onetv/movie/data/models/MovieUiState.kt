@@ -22,9 +22,14 @@ data class MovieUiState(
     val recommendMovies: List<VodItem> = emptyList(), // 推荐内容
     val quickCategories: List<VodClass> = emptyList(), // 快速导航分类
     val homeCategories: List<HomeCategorySection> = emptyList(), // 首页分类区域
-    val currentSite: VodSite? = null, // 当前站点
-    val availableSites: List<VodSite> = emptyList(), // 可用站点列表
-    val error: String? = null
+    val currentSite: VodSite? = null, // 当前站点 (TVBOX标准：仅显示，不提供选择)
+    val availableSites: List<VodSite> = emptyList(), // 可用站点列表 (TVBOX标准：仅在非仓库索引状态下使用)
+    val error: String? = null,
+    // 仓库索引相关状态
+    val isStoreHouseIndex: Boolean = false, // 是否为仓库索引文件
+    val storeHouseName: String = "", // 仓库名称
+    val availableRoutes: List<VodConfigUrl> = emptyList(), // 可用线路列表
+    val showRouteSelector: Boolean = false // 是否显示线路选择器
 )
 
 /**

@@ -16,9 +16,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import top.cywin.onetv.movie.data.models.SettingsUiState
 import top.cywin.onetv.movie.data.models.VodConfig
+import top.cywin.onetv.movie.viewmodel.MovieSettingsViewModel
 
 /**
  * 设置页面
@@ -27,12 +30,15 @@ import top.cywin.onetv.movie.data.models.VodConfig
 @Composable
 fun MovieSettingsScreen(
     navController: NavController,
-    uiState: SettingsUiState = SettingsUiState(),
-    onAddConfig: (String) -> Unit = {},
-    onSelectConfig: (VodConfig) -> Unit = {},
-    onDeleteConfig: (VodConfig) -> Unit = {},
-    onClearCache: () -> Unit = {}
+    viewModel: MovieSettingsViewModel = viewModel {
+        MovieSettingsViewModel(
+            repository = top.cywin.onetv.movie.MovieApp.vodRepository,
+            configManager = top.cywin.onetv.movie.MovieApp.vodConfigManager,
+            cacheManager = top.cywin.onetv.movie.MovieApp.vodCacheManager
+        )
+    }
 ) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var showAddDialog by remember { mutableStateOf(false) }
     
     Column(
@@ -66,8 +72,8 @@ fun MovieSettingsScreen(
                         ConfigList(
                             configs = uiState.configs,
                             currentConfig = uiState.currentConfig,
-                            onSelectConfig = onSelectConfig,
-                            onDeleteConfig = onDeleteConfig
+                            onSelectConfig = { config -> viewModel.selectConfig(config) },
+                            onDeleteConfig = { config -> viewModel.deleteConfig(config) }
                         )
                     }
                 }
@@ -77,7 +83,8 @@ fun MovieSettingsScreen(
                     SettingsSection(title = "缓存管理") {
                         CacheManagement(
                             cacheSize = uiState.cacheSize,
-                            onClearCache = onClearCache
+                            onClearCache = { viewModel.clearCache() },
+                            onForceReparse = { viewModel.forceReparseConfig() }
                         )
                     }
                 }
@@ -106,7 +113,7 @@ fun MovieSettingsScreen(
         AddConfigDialog(
             onDismiss = { showAddDialog = false },
             onConfirm = { url ->
-                onAddConfig(url)
+                viewModel.addConfig(url)
                 showAddDialog = false
             }
         )
@@ -273,29 +280,65 @@ private fun ConfigItem(
 @Composable
 private fun CacheManagement(
     cacheSize: Long,
-    onClearCache: () -> Unit
+    onClearCache: () -> Unit,
+    onForceReparse: () -> Unit
 ) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+    Column(
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Column {
-            Text(
-                text = "缓存大小",
-                color = Color.White,
-                fontSize = 16.sp
-            )
-            
-            Text(
-                text = formatFileSize(cacheSize),
-                color = Color.Gray,
-                fontSize = 14.sp
-            )
+        // 缓存大小显示
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column {
+                Text(
+                    text = "缓存大小",
+                    color = Color.White,
+                    fontSize = 16.sp
+                )
+
+                Text(
+                    text = formatFileSize(cacheSize),
+                    color = Color.Gray,
+                    fontSize = 14.sp
+                )
+            }
+
+            Button(onClick = onClearCache) {
+                Text("清空缓存")
+            }
         }
-        
-        Button(onClick = onClearCache) {
-            Text("清空缓存")
+
+        // TVBOX仓库索引重新解析
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column {
+                Text(
+                    text = "强制重新解析",
+                    color = Color.White,
+                    fontSize = 16.sp
+                )
+
+                Text(
+                    text = "清除缓存并重新检测TVBOX仓库索引",
+                    color = Color.Gray,
+                    fontSize = 14.sp
+                )
+            }
+
+            Button(
+                onClick = onForceReparse,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.secondary
+                )
+            ) {
+                Text("重新解析")
+            }
         }
     }
 }
