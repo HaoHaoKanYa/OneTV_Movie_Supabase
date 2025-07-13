@@ -24,7 +24,7 @@ import java.net.URLEncoder
  * @author OneTV Team
  * @since 2025-07-12
  */
-class CokemvSpider : SpecializedSpider() {
+class CokemvSpider : CustomSpider() {
     
     companion object {
         private const val TAG = "ONETV_FILM_COKEMV_SPIDER"
@@ -46,7 +46,7 @@ class CokemvSpider : SpecializedSpider() {
         try {
             logDebug("🏠 Cokemv 获取首页内容, filter=$filter")
             
-            val homeUrl = buildSpecializedUrl(PATH_HOME)
+            val homeUrl = buildCustomUrl(PATH_HOME)
             val response = getWithCache(homeUrl)
             
             val categories = parseCokemvCategories(response)
@@ -96,7 +96,7 @@ class CokemvSpider : SpecializedSpider() {
                 }
             }
             
-            val categoryUrl = buildSpecializedUrl(PATH_CATEGORY, params)
+            val categoryUrl = buildCustomUrl(PATH_CATEGORY, params)
             val response = getWithCache(categoryUrl)
             
             val vodData = parseCokemvVideoList(response)
@@ -133,7 +133,7 @@ class CokemvSpider : SpecializedSpider() {
             logDebug("🎭 Cokemv 获取视频详情: vodId=$vodId")
             
             val params = mapOf("id" to vodId)
-            val detailUrl = buildSpecializedUrl(PATH_DETAIL, params)
+            val detailUrl = buildCustomUrl(PATH_DETAIL, params)
             val response = getWithCache(detailUrl)
             
             val vodDetail = parseCokemvDetail(response)
@@ -172,7 +172,7 @@ class CokemvSpider : SpecializedSpider() {
                 "wd" to URLEncoder.encode(key, "UTF-8")
             )
             
-            val searchUrl = buildSpecializedUrl(PATH_SEARCH, params)
+            val searchUrl = buildCustomUrl(PATH_SEARCH, params)
             val response = getWithCache(searchUrl, useCache = false)
             
             val searchData = parseCokemvSearchResults(response)
@@ -209,7 +209,7 @@ class CokemvSpider : SpecializedSpider() {
                 "nid" to "1"
             )
             
-            val playUrl = buildSpecializedUrl(PATH_PLAY, params)
+            val playUrl = buildCustomUrl(PATH_PLAY, params)
             val response = getWithCache(playUrl, useCache = false)
             
             val playData = parseCokemvPlayData(response)
@@ -456,8 +456,8 @@ class CokemvSpider : SpecializedSpider() {
     
     // ========== 配置和工具方法 ==========
     
-    override fun parseSpecializedConfig(extend: String): SpecializedConfig {
-        return SpecializedConfig(
+    override fun parseCustomConfig(extend: String): CustomConfig {
+        return CustomConfig(
             siteName = "Cokemv影视",
             baseUrl = siteUrl,
             apiVersion = "1.0",
@@ -470,18 +470,18 @@ class CokemvSpider : SpecializedSpider() {
         )
     }
     
-    override fun createDefaultConfig(): SpecializedConfig {
-        return parseSpecializedConfig("")
+    override fun createDefaultConfig(): CustomConfig {
+        return parseCustomConfig("")
     }
-    
-    override fun getSpecializedHeaders(): Map<String, String> {
+
+    override fun getCustomHeaders(): Map<String, String> {
         return siteConfig?.customHeaders ?: mapOf(
             "Accept" to "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
             "User-Agent" to "Cokemv Spider/1.0"
         )
     }
     
-    override fun buildSpecializedUrl(path: String, params: Map<String, String>): String {
+    override fun buildCustomUrl(path: String, params: Map<String, String>): String {
         var url = UrlUtils.buildUrl(siteUrl, path)
         
         if (params.isNotEmpty()) {

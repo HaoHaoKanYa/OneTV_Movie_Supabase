@@ -202,31 +202,7 @@ data class VodSite(
     }
 }
 
-/**
- * VOD 分类
- */
-@Serializable
-data class VodCategory(
-    val typeId: String,                 // 分类ID
-    val typeName: String,               // 分类名称
-    val typeFlag: String = "",          // 分类标识
-    val land: Int = 0,                  // 横竖屏 (0=竖屏, 1=横屏)
-    val ratio: Double = 1.0,            // 宽高比
-    val pic: String = "",               // 分类图片
-    val description: String = "",       // 分类描述
-    val filters: List<VodFilter> = emptyList() // 筛选条件
-) {
-    
-    /**
-     * 🔍 是否为横屏分类
-     */
-    fun isLandscape(): Boolean = land == 1
-    
-    /**
-     * 🔍 是否有筛选条件
-     */
-    fun hasFilters(): Boolean = filters.isNotEmpty()
-}
+
 
 /**
  * VOD 筛选条件
@@ -247,154 +223,9 @@ data class VodFilterValue(
     val v: String                       // 实际值
 )
 
-/**
- * VOD 信息
- */
-@Serializable
-data class VodInfo(
-    val vodId: String,                  // VOD ID
-    val vodName: String,                // VOD 名称
-    val vodPic: String = "",            // VOD 图片
-    val vodRemarks: String = "",        // VOD 备注
-    val vodYear: String = "",           // 年份
-    val vodArea: String = "",           // 地区
-    val vodDirector: String = "",       // 导演
-    val vodActor: String = "",          // 演员
-    val vodLang: String = "",           // 语言
-    val vodContent: String = "",        // 内容简介
-    val vodPlayFrom: String = "",       // 播放来源
-    val vodPlayUrl: String = "",        // 播放地址
-    val vodDownloadFrom: String = "",   // 下载来源
-    val vodDownloadUrl: String = "",    // 下载地址
-    val vodTag: String = "",            // 标签
-    val vodClass: String = "",          // 分类
-    val vodScore: String = "",          // 评分
-    val vodScoreAll: String = "",       // 总评分
-    val vodScoreNum: String = "",       // 评分人数
-    val vodTime: String = "",           // 时长
-    val vodTimeAdd: String = "",        // 添加时间
-    val vodTimeHits: String = "",       // 点击时间
-    val vodTimeHitsDay: String = "",    // 日点击
-    val vodTimeHitsWeek: String = "",   // 周点击
-    val vodTimeHitsMonth: String = "",  // 月点击
-    val vodHits: String = "",           // 总点击
-    val vodHitsDay: String = "",        // 日点击数
-    val vodHitsWeek: String = "",       // 周点击数
-    val vodHitsMonth: String = "",      // 月点击数
-    val vodUp: String = "",             // 顶
-    val vodDown: String = "",           // 踩
-    val vodLevel: String = "",          // 等级
-    val vodLock: String = "",           // 锁定
-    val vodPoints: String = "",         // 积分
-    val vodPointsPlay: String = "",     // 播放积分
-    val vodPointsDown: String = "",     // 下载积分
-    val vodIsend: String = "",          // 是否完结
-    val vodCopyright: String = "",      // 版权
-    val vodJumpurl: String = "",        // 跳转地址
-    val vodTpl: String = "",            // 模板
-    val vodTplPlay: String = "",        // 播放模板
-    val vodTplDown: String = "",        // 下载模板
-    val vodIsunion: String = "",        // 是否联盟
-    val vodTrailer: String = "",        // 预告片
-    val vodSerial: String = "",         // 连载
-    val vodTv: String = "",             // 电视台
-    val vodWeekday: String = "",        // 星期
-    val vodRelease: String = "",        // 发布
-    val vodDouban: String = "",         // 豆瓣
-    val vodImdb: String = "",           // IMDB
-    val vodTvs: String = "",            // 电视台列表
-    val vodVersion: String = "",        // 版本
-    val vodSeasonCount: String = "",    // 季数
-    val vodEpisodeCount: String = "",   // 集数
-    val vodDuration: String = "",       // 时长
-    val vodStatus: String = "",         // 状态
-    val vodSubtitle: String = "",       // 字幕
-    val vodBlurb: String = "",          // 简介
-    val vodPicThumb: String = "",       // 缩略图
-    val vodPicSlide: String = "",       // 轮播图
-    val vodPicScreenshot: String = "",  // 截图
-    val vodPicLogo: String = "",        // Logo
-    val typeId: String = "",            // 分类ID
-    val typeName: String = "",          // 分类名称
-    val siteKey: String = "",           // 站点标识
-    val siteName: String = "",          // 站点名称
-    val createTime: Long = System.currentTimeMillis(), // 创建时间
-    val updateTime: Long = System.currentTimeMillis()  // 更新时间
-) {
-    
-    /**
-     * 🎬 获取播放列表
-     */
-    fun getPlayList(): List<VodPlayGroup> {
-        if (vodPlayFrom.isEmpty() || vodPlayUrl.isEmpty()) {
-            return emptyList()
-        }
-        
-        val fromList = vodPlayFrom.split("$$$")
-        val urlList = vodPlayUrl.split("$$$")
-        
-        return fromList.mapIndexed { index, from ->
-            val urls = if (index < urlList.size) urlList[index] else ""
-            val episodes = urls.split("#").mapNotNull { episode ->
-                val parts = episode.split("$")
-                if (parts.size >= 2) {
-                    VodPlayEpisode(parts[0], parts[1])
-                } else {
-                    null
-                }
-            }
-            VodPlayGroup(from, episodes)
-        }
-    }
-    
-    /**
-     * 📥 获取下载列表
-     */
-    fun getDownloadList(): List<VodDownloadGroup> {
-        if (vodDownloadFrom.isEmpty() || vodDownloadUrl.isEmpty()) {
-            return emptyList()
-        }
-        
-        val fromList = vodDownloadFrom.split("$$$")
-        val urlList = vodDownloadUrl.split("$$$")
-        
-        return fromList.mapIndexed { index, from ->
-            val urls = if (index < urlList.size) urlList[index] else ""
-            val episodes = urls.split("#").mapNotNull { episode ->
-                val parts = episode.split("$")
-                if (parts.size >= 2) {
-                    VodDownloadEpisode(parts[0], parts[1])
-                } else {
-                    null
-                }
-            }
-            VodDownloadGroup(from, episodes)
-        }
-    }
-    
-    /**
-     * 📊 获取VOD摘要
-     */
-    fun getSummary(): Map<String, Any> {
-        return mapOf(
-            "vod_id" to vodId,
-            "vod_name" to vodName,
-            "vod_pic" to vodPic,
-            "vod_remarks" to vodRemarks,
-            "vod_year" to vodYear,
-            "vod_area" to vodArea,
-            "vod_director" to vodDirector,
-            "vod_actor" to vodActor,
-            "vod_score" to vodScore,
-            "type_name" to typeName,
-            "site_name" to siteName,
-            "play_groups" to getPlayList().size,
-            "download_groups" to getDownloadList().size,
-            "has_content" to vodContent.isNotEmpty(),
-            "create_time" to createTime
-        )
-    }
-}
+
+
+
 
 /**
  * VOD 播放组
@@ -452,7 +283,7 @@ data class VodDownloadEpisode(
  */
 @Serializable
 data class VodSearchResult(
-    val list: List<VodInfo> = emptyList(), // VOD 列表
+    val list: List<VodItem> = emptyList(), // VOD 列表
     val page: Int = 1,                  // 当前页码
     val pageCount: Int = 1,             // 总页数
     val limit: Int = 20,                // 每页数量
@@ -495,7 +326,7 @@ data class VodSearchResult(
  */
 @Serializable
 data class VodCategoryResult(
-    val list: List<VodInfo> = emptyList(), // VOD 列表
+    val list: List<VodItem> = emptyList(), // VOD 列表
     val page: Int = 1,                  // 当前页码
     val pageCount: Int = 1,             // 总页数
     val limit: Int = 20,                // 每页数量
@@ -542,10 +373,10 @@ data class VodCategoryResult(
  */
 @Serializable
 data class VodHomeResult(
-    val categories: List<VodCategory> = emptyList(), // 分类列表
+    val categories: List<VodClass> = emptyList(), // 分类列表
     val filters: Map<String, List<VodFilter>> = emptyMap(), // 筛选条件
     val banners: List<VodBanner> = emptyList(), // 轮播图
-    val recommendations: List<VodInfo> = emptyList(), // 推荐内容
+    val recommendations: List<VodItem> = emptyList(), // 推荐内容
     val siteKey: String = "",           // 站点标识
     val siteName: String = "",          // 站点名称
     val loadTime: Long = System.currentTimeMillis() // 加载时间
@@ -554,7 +385,7 @@ data class VodHomeResult(
     /**
      * 🔍 根据ID查找分类
      */
-    fun findCategory(typeId: String): VodCategory? {
+    fun findCategory(typeId: String): VodClass? {
         return categories.find { it.typeId == typeId }
     }
     

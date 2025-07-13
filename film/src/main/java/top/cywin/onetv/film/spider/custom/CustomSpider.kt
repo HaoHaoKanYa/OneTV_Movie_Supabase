@@ -1,4 +1,4 @@
-package top.cywin.onetv.film.spider.specialized
+package top.cywin.onetv.film.spider.custom
 
 import android.content.Context
 import android.util.Log
@@ -12,9 +12,9 @@ import top.cywin.onetv.film.utils.UrlUtils
 import java.util.regex.Pattern
 
 /**
- * 专用解析器基类
+ * 自定义解析器基类
  * 
- * 基于 FongMi/TV 的专用解析器架构
+ * 基于 FongMi/TV 的自定义解析器架构
  * 为特定站点提供定制化的解析功能
  * 
  * 功能：
@@ -27,10 +27,10 @@ import java.util.regex.Pattern
  * @author OneTV Team
  * @since 2025-07-12
  */
-abstract class SpecializedSpider : Spider() {
+abstract class CustomSpider : Spider() {
     
     companion object {
-        private const val TAG = "ONETV_FILM_SPECIALIZED_SPIDER"
+        private const val TAG = "ONETV_FILM_CUSTOM_SPIDER"
     }
     
     // HTTP 管理器
@@ -44,7 +44,7 @@ abstract class SpecializedSpider : Spider() {
     }
     
     // 站点特定配置
-    protected var siteConfig: SpecializedConfig? = null
+    protected var siteConfig: CustomConfig? = null
     
     // 请求缓存
     protected val requestCache = mutableMapOf<String, String>()
@@ -54,10 +54,10 @@ abstract class SpecializedSpider : Spider() {
         
         try {
             // 解析站点特定配置
-            siteConfig = parseSpecializedConfig(extend)
-            logDebug("✅ 专用解析器配置解析成功")
+            siteConfig = parseCustomConfig(extend)
+            logDebug("✅ 自定义解析器配置解析成功")
         } catch (e: Exception) {
-            logError("❌ 专用解析器配置解析失败", e)
+            logError("❌ 自定义解析器配置解析失败", e)
             siteConfig = createDefaultConfig()
         }
     }
@@ -67,22 +67,22 @@ abstract class SpecializedSpider : Spider() {
     /**
      * 🔧 解析站点特定配置
      */
-    protected abstract fun parseSpecializedConfig(extend: String): SpecializedConfig
+    protected abstract fun parseCustomConfig(extend: String): CustomConfig
     
     /**
      * 🔧 创建默认配置
      */
-    protected abstract fun createDefaultConfig(): SpecializedConfig
+    protected abstract fun createDefaultConfig(): CustomConfig
     
     /**
      * 🌐 获取站点特定的请求头
      */
-    protected abstract fun getSpecializedHeaders(): Map<String, String>
+    protected abstract fun getCustomHeaders(): Map<String, String>
     
     /**
      * 🔗 构建站点特定的 URL
      */
-    protected abstract fun buildSpecializedUrl(path: String, params: Map<String, String> = emptyMap()): String
+    protected abstract fun buildCustomUrl(path: String, params: Map<String, String> = emptyMap()): String
     
     // ========== 通用工具方法 ==========
     
@@ -95,7 +95,7 @@ abstract class SpecializedSpider : Spider() {
             return@withContext requestCache[url]!!
         }
         
-        val headers = getSpecializedHeaders() + siteHeaders
+        val headers = getCustomHeaders() + siteHeaders
         val response = httpManager.getString(url, headers)
         
         if (useCache) {
@@ -113,7 +113,7 @@ abstract class SpecializedSpider : Spider() {
         body: String,
         contentType: String = "application/json"
     ): String = withContext(Dispatchers.IO) {
-        val headers = getSpecializedHeaders() + siteHeaders
+        val headers = getCustomHeaders() + siteHeaders
         httpManager.postString(url, body, headers, contentType)
     }
     
@@ -121,7 +121,7 @@ abstract class SpecializedSpider : Spider() {
      * 📤 发送表单请求
      */
     protected suspend fun postForm(url: String, formData: Map<String, String>): String = withContext(Dispatchers.IO) {
-        val headers = getSpecializedHeaders() + siteHeaders
+        val headers = getCustomHeaders() + siteHeaders
         httpManager.postForm(url, formData, headers)
     }
     
@@ -316,14 +316,14 @@ abstract class SpecializedSpider : Spider() {
     override fun destroy() {
         super.destroy()
         clearCache()
-        logDebug("✅ 专用解析器清理完成")
+        logDebug("✅ 自定义解析器清理完成")
     }
 }
 
 /**
- * 专用解析器配置
+ * 自定义解析器配置
  */
-data class SpecializedConfig(
+data class CustomConfig(
     val siteName: String = "",
     val baseUrl: String = "",
     val apiVersion: String = "1.0",

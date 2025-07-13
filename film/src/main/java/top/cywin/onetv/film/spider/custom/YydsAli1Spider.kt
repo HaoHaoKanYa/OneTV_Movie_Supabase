@@ -24,7 +24,7 @@ import java.net.URLEncoder
  * @author OneTV Team
  * @since 2025-07-12
  */
-class YydsAli1Spider : SpecializedSpider() {
+class YydsAli1Spider : CustomSpider() {
     
     companion object {
         private const val TAG = "ONETV_FILM_YYDS_ALI1_SPIDER"
@@ -46,7 +46,7 @@ class YydsAli1Spider : SpecializedSpider() {
         try {
             logDebug("🏠 YydsAli1 获取首页内容, filter=$filter")
             
-            val homeUrl = buildSpecializedUrl(API_HOME)
+            val homeUrl = buildCustomUrl(API_HOME)
             val response = getWithCache(homeUrl)
             
             val categories = parseYydsCategories(response)
@@ -91,7 +91,7 @@ class YydsAli1Spider : SpecializedSpider() {
                 }
             }
             
-            val categoryUrl = buildSpecializedUrl(API_CATEGORY, params)
+            val categoryUrl = buildCustomUrl(API_CATEGORY, params)
             val response = getWithCache(categoryUrl)
             
             val vodData = parseYydsVideoList(response)
@@ -128,7 +128,7 @@ class YydsAli1Spider : SpecializedSpider() {
             logDebug("🎭 YydsAli1 获取视频详情: vodId=$vodId")
             
             val params = mapOf("id" to vodId)
-            val detailUrl = buildSpecializedUrl(API_DETAIL, params)
+            val detailUrl = buildCustomUrl(API_DETAIL, params)
             val response = getWithCache(detailUrl)
             
             val vodDetail = parseYydsDetail(response)
@@ -168,7 +168,7 @@ class YydsAli1Spider : SpecializedSpider() {
                 "quick" to if (quick) "1" else "0"
             )
             
-            val searchUrl = buildSpecializedUrl(API_SEARCH, params)
+            val searchUrl = buildCustomUrl(API_SEARCH, params)
             val response = getWithCache(searchUrl, useCache = false) // 搜索不使用缓存
             
             val searchData = parseYydsSearchResults(response)
@@ -204,7 +204,7 @@ class YydsAli1Spider : SpecializedSpider() {
                 "id" to id
             )
             
-            val playUrl = buildSpecializedUrl(API_PLAY, params)
+            val playUrl = buildCustomUrl(API_PLAY, params)
             val response = getWithCache(playUrl, useCache = false) // 播放链接不使用缓存
             
             val playData = parseYydsPlayData(response)
@@ -360,8 +360,8 @@ class YydsAli1Spider : SpecializedSpider() {
     
     // ========== 配置和工具方法 ==========
     
-    override fun parseSpecializedConfig(extend: String): SpecializedConfig {
-        return SpecializedConfig(
+    override fun parseCustomConfig(extend: String): CustomConfig {
+        return CustomConfig(
             siteName = "YYDS阿里云盘",
             baseUrl = siteUrl,
             apiVersion = "1.0",
@@ -374,11 +374,11 @@ class YydsAli1Spider : SpecializedSpider() {
         )
     }
     
-    override fun createDefaultConfig(): SpecializedConfig {
-        return parseSpecializedConfig("")
+    override fun createDefaultConfig(): CustomConfig {
+        return parseCustomConfig("")
     }
-    
-    override fun getSpecializedHeaders(): Map<String, String> {
+
+    override fun getCustomHeaders(): Map<String, String> {
         return siteConfig?.customHeaders ?: mapOf(
             "Accept" to "application/json",
             "Content-Type" to "application/json",
@@ -386,7 +386,7 @@ class YydsAli1Spider : SpecializedSpider() {
         )
     }
     
-    override fun buildSpecializedUrl(path: String, params: Map<String, String>): String {
+    override fun buildCustomUrl(path: String, params: Map<String, String>): String {
         var url = UrlUtils.buildUrl(siteUrl, path)
         
         if (params.isNotEmpty()) {
