@@ -26,7 +26,7 @@ class VodContentCache(
         maxMemoryCacheSize = 20 * 1024 * 1024L, // 20MB
         defaultTtl = 1800000L // 30分钟
     )
-) : CacheManager(context, config) {
+) : FilmCacheManager(context, config) {
     
     companion object {
         private const val TAG = "ONETV_FILM_VOD_CONTENT_CACHE"
@@ -257,7 +257,7 @@ class ConfigCache(
         maxMemoryCacheSize = 5 * 1024 * 1024L, // 5MB
         defaultTtl = 3600000L // 1小时
     )
-) : CacheManager(context, config) {
+) : FilmCacheManager(context, config) {
     
     companion object {
         private const val TAG = "ONETV_FILM_CONFIG_CACHE"

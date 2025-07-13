@@ -6,7 +6,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import top.cywin.onetv.film.catvod.SpiderManager
 import top.cywin.onetv.film.catvod.SpiderDebug
-import top.cywin.onetv.film.cache.CacheManager
+import top.cywin.onetv.film.cache.FilmCacheManager
 import top.cywin.onetv.film.cache.SpecializedCaches
 import top.cywin.onetv.film.concurrent.ConcurrentSearcher
 import top.cywin.onetv.film.concurrent.ThreadPoolManager
@@ -127,8 +127,8 @@ object FilmApp {
      * 缓存管理器 - 管理所有缓存
      */
     val cacheManager by lazy {
-        Log.d(TAG, "🏗️ 创建 CacheManager")
-        CacheManager(applicationContext)
+        Log.d(TAG, "🏗️ 创建 FilmCacheManager")
+        FilmCacheManager(applicationContext)
     }
 
     /**

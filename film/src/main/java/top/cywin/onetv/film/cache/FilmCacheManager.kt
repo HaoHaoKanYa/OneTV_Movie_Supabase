@@ -30,7 +30,7 @@ import java.util.concurrent.atomic.AtomicLong
  * @author OneTV Team
  * @since 2025-07-12
  */
-class CacheManager(
+class FilmCacheManager(
     private val context: Context,
     private val config: CacheConfig = CacheConfig()
 ) {

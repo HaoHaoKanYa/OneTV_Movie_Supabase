@@ -19,7 +19,7 @@ import top.cywin.onetv.film.utils.DateTimeUtils
 import top.cywin.onetv.film.concurrent.ConcurrentManager
 import top.cywin.onetv.film.concurrent.TaskType
 import top.cywin.onetv.film.concurrent.ConcurrentUtils
-import top.cywin.onetv.film.cache.CacheManager
+import top.cywin.onetv.film.cache.FilmCacheManager
 import top.cywin.onetv.film.cache.CacheFactory
 import top.cywin.onetv.film.cache.VodContentCache
 import top.cywin.onetv.film.cache.CacheStrategy
