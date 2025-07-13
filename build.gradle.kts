@@ -11,6 +11,8 @@ plugins {
     alias(libs.plugins.compose) apply false
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.kotlin.serialization) apply false
+    // FongMi_TV onevod模块需要的插件 - 使用支持配置缓存的版本
+    id("com.chaquo.python") version "16.0.0" apply false
 }
 
 // 解决Hilt与JavaPoet的版本冲突
