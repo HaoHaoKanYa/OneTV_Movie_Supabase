@@ -6,7 +6,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
 import org.junit.Assert.*
-import top.cywin.onetv.film.spider.specialized.*
+import top.cywin.onetv.film.spider.custom.*
 import top.cywin.onetv.film.spider.special.*
 
 /**

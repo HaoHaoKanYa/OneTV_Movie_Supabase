@@ -1,4 +1,4 @@
-package top.cywin.onetv.film.spider.specialized
+package top.cywin.onetv.film.spider.custom
 
 import android.content.Context
 import android.util.Log
