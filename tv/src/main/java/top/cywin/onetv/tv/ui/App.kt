@@ -55,6 +55,7 @@ import top.cywin.onetv.tv.ui.screens.settings.LocalSettingsCurrent
 import top.cywin.onetv.tv.ui.screens.settings.SettingsViewModel
 import top.cywin.onetv.tv.ui.tooling.PreviewWithLayoutGrids
 import top.cywin.onetv.movie.navigation.movieNavigation
+import top.cywin.onetv.film.navigation.filmNavigation
 
 
 
@@ -105,19 +106,22 @@ fun App(
                             },
                             viewModel = mainViewModel,
                             onNavigateToMovie = {
-                                Log.d("ONETV_MOVIE", "开始导航到点播首页")
+                                Log.d("ONETV_FILM", "开始导航到影视解析系统首页")
                                 try {
-                                    navController.navigate("movie_home")
-                                    Log.d("ONETV_MOVIE", "导航到点播首页成功")
+                                    navController.navigate("film_home")
+                                    Log.d("ONETV_FILM", "导航到影视解析系统首页成功")
                                 } catch (e: Exception) {
-                                    Log.e("ONETV_MOVIE", "导航到点播首页失败", e)
+                                    Log.e("ONETV_FILM", "导航到影视解析系统首页失败", e)
                                 }
                             }
                         )
                     }
 
-                    // Movie模块导航路由
+                    // Movie模块导航路由（保留兼容性）
                     movieNavigation(navController)
+
+                    // Film模块导航路由（新的影视解析系统）
+                    filmNavigation(navController)
                 }
             } else {
                 AgreementScreen(
