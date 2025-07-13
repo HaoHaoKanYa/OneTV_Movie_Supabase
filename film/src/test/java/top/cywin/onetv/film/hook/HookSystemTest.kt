@@ -294,7 +294,7 @@ class HookSystemTest {
             maxCacheSize = 1024 * 1024L // 1MB
         )
         
-        val localProxyServer = LocalProxyServer(context, hookManager, config)
+        val localProxyServer = LocalProxy(context, hookManager, config)
         
         // 测试启动
         val port = localProxyServer.start()
