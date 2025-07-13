@@ -6,7 +6,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.*
 import top.cywin.onetv.film.catvod.Spider
-import top.cywin.onetv.film.network.OkHttpManager
+import top.cywin.onetv.film.network.EnhancedOkHttpManager
 import top.cywin.onetv.film.utils.JsoupUtils
 import top.cywin.onetv.film.utils.UrlUtils
 import java.security.MessageDigest
@@ -37,7 +37,7 @@ abstract class SpecialSpider : Spider() {
     }
     
     // HTTP 管理器
-    protected val httpManager = OkHttpManager()
+    protected val httpManager = EnhancedOkHttpManager()
     
     // JSON 解析器
     protected val json = Json {

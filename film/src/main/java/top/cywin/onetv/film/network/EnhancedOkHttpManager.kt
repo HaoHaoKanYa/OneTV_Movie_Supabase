@@ -25,7 +25,7 @@ import java.util.concurrent.TimeUnit
  * @author OneTV Team
  * @since 2025-07-12
  */
-class OkHttpManager {
+class EnhancedOkHttpManager {
     
     companion object {
         private const val TAG = "ONETV_FILM_HTTP_MANAGER"
