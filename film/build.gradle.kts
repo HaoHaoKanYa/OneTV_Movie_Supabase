@@ -3,7 +3,6 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
-    alias(libs.plugins.room)
 }
 
 android {
@@ -45,7 +44,7 @@ android {
     }
     
     composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
+        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
     }
     
     // NDK 配置
@@ -58,9 +57,7 @@ android {
         }
     }
     
-    room {
-        schemaDirectory("$projectDir/schemas")
-    }
+
 }
 
 dependencies {

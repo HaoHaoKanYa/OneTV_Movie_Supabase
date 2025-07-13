@@ -237,9 +237,9 @@ class SpiderManager(private val context: Context) {
         registerSpider("csp_JavaScript", top.cywin.onetv.film.spider.javascript.JavaScriptSpider::class.java)
 
         // 注册专用 Spider（阶段5：专用和特殊解析器）
-        registerSpider("csp_YydsAli1", top.cywin.onetv.film.spider.specialized.YydsAli1Spider::class.java)
-        registerSpider("csp_Cokemv", top.cywin.onetv.film.spider.specialized.CokemvSpider::class.java)
-        registerSpider("csp_Auete", top.cywin.onetv.film.spider.specialized.AueteSpider::class.java)
+        registerSpider("csp_YydsAli1", top.cywin.onetv.film.spider.custom.YydsAli1Spider::class.java)
+        registerSpider("csp_Cokemv", top.cywin.onetv.film.spider.custom.CokemvSpider::class.java)
+        registerSpider("csp_Auete", top.cywin.onetv.film.spider.custom.AueteSpider::class.java)
 
         // 注册特殊 Spider（阶段5：专用和特殊解析器）
         registerSpider("csp_Thunder", top.cywin.onetv.film.spider.special.ThunderSpider::class.java)
