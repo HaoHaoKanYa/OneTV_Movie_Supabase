@@ -368,7 +368,7 @@ data class ConnectionBandwidth(
 class LocalProxyConnection(
     private val connectionId: String,
     private val clientSocket: Socket,
-    private val server: LocalProxyServer,
+    private val server: LocalProxy,
     private val hookManager: HookManager,
     private val cacheManager: LocalProxyCacheManager,
     private val bandwidthManager: BandwidthManager,

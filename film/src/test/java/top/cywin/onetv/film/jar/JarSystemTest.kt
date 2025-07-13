@@ -21,7 +21,7 @@ class JarSystemTest {
     private lateinit var context: Context
     private lateinit var jarLoader: JarLoader
     private lateinit var jarManager: JarManager
-    private lateinit var jarCacheManager: JarCacheManager
+    private lateinit var jarCacheManager: JarCache
     private lateinit var jarSecurityManager: JarSecurityManager
     private lateinit var jarUpdateManager: JarUpdateManager
     
@@ -30,7 +30,7 @@ class JarSystemTest {
         context = mockk<Context>(relaxed = true)
         jarLoader = JarLoader(context)
         jarManager = JarManager(context)
-        jarCacheManager = JarCacheManager(context)
+        jarCacheManager = JarCache(context)
         jarSecurityManager = JarSecurityManager()
         jarUpdateManager = JarUpdateManager(context, jarManager)
     }

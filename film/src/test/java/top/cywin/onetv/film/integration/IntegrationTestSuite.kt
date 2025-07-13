@@ -12,7 +12,7 @@ import top.cywin.onetv.film.catvod.SpiderManager
 import top.cywin.onetv.film.data.models.*
 import top.cywin.onetv.film.data.repository.FilmRepository
 import top.cywin.onetv.film.concurrent.ConcurrentManager
-import top.cywin.onetv.film.cache.CacheManager
+import top.cywin.onetv.film.cache.FilmCacheManager
 import top.cywin.onetv.film.network.NetworkClient
 import top.cywin.onetv.film.hook.HookManager
 import top.cywin.onetv.film.proxy.ProxyManager

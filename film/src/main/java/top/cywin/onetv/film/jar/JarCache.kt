@@ -26,7 +26,7 @@ import java.util.concurrent.atomic.AtomicLong
  * @author OneTV Team
  * @since 2025-07-12
  */
-class JarCacheManager(
+class JarCache(
     private val context: Context,
     private val maxCacheSize: Long = 500 * 1024 * 1024L // 500MB
 ) {

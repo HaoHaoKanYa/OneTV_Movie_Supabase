@@ -8,9 +8,9 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonArray
-import top.cywin.onetv.film.cache.CacheManager
+import top.cywin.onetv.film.cache.FilmCacheManager
 import top.cywin.onetv.film.jar.JarLoader
-import top.cywin.onetv.film.network.OkHttpManager
+import top.cywin.onetv.film.network.EnhancedOkHttpManager
 import top.cywin.onetv.film.data.models.VodSite
 import top.cywin.onetv.film.data.models.VodConfigResponse
 import top.cywin.onetv.film.utils.JsonUtils

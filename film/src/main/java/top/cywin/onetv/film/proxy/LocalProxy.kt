@@ -28,7 +28,7 @@ import java.util.concurrent.atomic.AtomicLong
  * @author OneTV Team
  * @since 2025-07-12
  */
-class LocalProxyServer(
+class LocalProxy(
     private val context: Context,
     private val hookManager: HookManager,
     private val config: LocalProxyConfig = LocalProxyConfig()
@@ -166,8 +166,8 @@ class LocalProxyServer(
     /**
      * 📊 获取服务器状态
      */
-    fun getStatus(): LocalProxyServerStatus {
-        return LocalProxyServerStatus(
+    fun getStatus(): LocalProxyStatus {
+        return LocalProxyStatus(
             isRunning = isRunning.get(),
             port = actualPort,
             activeConnections = activeConnections.size,
@@ -311,7 +311,7 @@ data class ProxyOptions(
 /**
  * 本地代理服务器状态
  */
-data class LocalProxyServerStatus(
+data class LocalProxyStatus(
     val isRunning: Boolean,
     val port: Int,
     val activeConnections: Int,

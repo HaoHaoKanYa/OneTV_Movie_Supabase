@@ -6,7 +6,7 @@ import top.cywin.onetv.film.hook.HookManager
 import top.cywin.onetv.film.hook.HookPlayerUrl
 import top.cywin.onetv.film.hook.HookRequest
 import top.cywin.onetv.film.hook.HookResponse
-import top.cywin.onetv.film.network.OkHttpManager
+import top.cywin.onetv.film.network.EnhancedOkHttpManager
 import java.io.*
 import java.net.*
 import java.util.concurrent.ConcurrentHashMap
@@ -50,7 +50,7 @@ class ProxyServer(
     private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
     
     // HTTP 客户端
-    private val httpManager = OkHttpManager()
+    private val httpManager = EnhancedOkHttpManager()
     
     // 连接管理
     private val activeConnections = ConcurrentHashMap<String, ProxyConnection>()

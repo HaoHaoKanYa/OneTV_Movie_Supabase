@@ -6,7 +6,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import top.cywin.onetv.film.catvod.SpiderManager
 import top.cywin.onetv.film.catvod.SpiderDebug
-import top.cywin.onetv.film.cache.CacheManager
+import top.cywin.onetv.film.cache.FilmCacheManager
 import top.cywin.onetv.film.cache.SpecializedCaches
 import top.cywin.onetv.film.concurrent.ConcurrentSearcher
 import top.cywin.onetv.film.concurrent.ThreadPoolManager
@@ -14,7 +14,7 @@ import top.cywin.onetv.film.data.repository.FilmRepository
 import top.cywin.onetv.film.engine.EngineManager
 import top.cywin.onetv.film.hook.HookManager
 import top.cywin.onetv.film.jar.JarLoader
-import top.cywin.onetv.film.network.OkHttpManager
+import top.cywin.onetv.film.network.EnhancedOkHttpManager
 
 import top.cywin.onetv.film.proxy.ProxyManager
 import top.cywin.onetv.film.data.datasource.RealDataSourceManager
@@ -119,16 +119,16 @@ object FilmApp {
      * HTTP 管理器 - 处理所有网络请求
      */
     val okHttpManager by lazy {
-        Log.d(TAG, "🏗️ 创建 OkHttpManager")
-        OkHttpManager()
+        Log.d(TAG, "🏗️ 创建 EnhancedOkHttpManager")
+        EnhancedOkHttpManager()
     }
     
     /**
      * 缓存管理器 - 管理所有缓存
      */
     val cacheManager by lazy {
-        Log.d(TAG, "🏗️ 创建 CacheManager")
-        CacheManager(applicationContext)
+        Log.d(TAG, "🏗️ 创建 FilmCacheManager")
+        FilmCacheManager(applicationContext)
     }
 
     /**
