@@ -43,31 +43,23 @@ public class CustomKeyboard implements KeyboardAdapter.OnClickListener {
     public void onIconClick(int resId) {
         StringBuilder sb = new StringBuilder(binding.keyword.getText().toString());
         int cursor = binding.keyword.getSelectionStart();
-        switch (resId) {
-            case R.drawable.ic_setting_home:
-                callback.showDialog();
-                break;
-            case R.drawable.ic_keyboard_remote:
-                callback.onRemote();
-                break;
-            case R.drawable.ic_keyboard_search:
-                callback.onSearch();
-                break;
-            case R.drawable.ic_keyboard_left:
-                binding.keyword.setSelection(--cursor < 0 ? 0 : cursor);
-                break;
-            case R.drawable.ic_keyboard_right:
-                binding.keyword.setSelection(++cursor > binding.keyword.length() ? binding.keyword.length() : cursor);
-                break;
-            case R.drawable.ic_keyboard_back:
-                if (cursor == 0) return;
-                sb.deleteCharAt(cursor - 1);
-                binding.keyword.setText(sb.toString());
-                binding.keyword.setSelection(cursor - 1);
-                break;
-            case R.drawable.ic_keyboard:
-                adapter.toggle();
-                break;
+        if (resId == R.drawable.ic_setting_home) {
+            callback.showDialog();
+        } else if (resId == R.drawable.ic_keyboard_remote) {
+            callback.onRemote();
+        } else if (resId == R.drawable.ic_keyboard_search) {
+            callback.onSearch();
+        } else if (resId == R.drawable.ic_keyboard_left) {
+            binding.keyword.setSelection(--cursor < 0 ? 0 : cursor);
+        } else if (resId == R.drawable.ic_keyboard_right) {
+            binding.keyword.setSelection(++cursor > binding.keyword.length() ? binding.keyword.length() : cursor);
+        } else if (resId == R.drawable.ic_keyboard_back) {
+            if (cursor == 0) return;
+            sb.deleteCharAt(cursor - 1);
+            binding.keyword.setText(sb.toString());
+            binding.keyword.setSelection(cursor - 1);
+        } else if (resId == R.drawable.ic_keyboard) {
+            adapter.toggle();
         }
     }
 

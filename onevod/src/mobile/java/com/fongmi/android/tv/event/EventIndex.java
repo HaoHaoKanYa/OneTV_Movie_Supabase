@@ -60,13 +60,7 @@ public class EventIndex implements SubscriberInfoIndex {
             new SubscriberMethodInfo("onErrorEvent", ErrorEvent.class, ThreadMode.MAIN),
         }));
 
-        putIndex(new SimpleSubscriberInfo(com.fongmi.android.tv.ui.activity.CastActivity.class, true,
-                new SubscriberMethodInfo[] {
-            new SubscriberMethodInfo("onActionEvent", ActionEvent.class, ThreadMode.MAIN),
-            new SubscriberMethodInfo("onRefreshEvent", RefreshEvent.class, ThreadMode.MAIN),
-            new SubscriberMethodInfo("onPlayerEvent", PlayerEvent.class, ThreadMode.MAIN),
-            new SubscriberMethodInfo("onErrorEvent", ErrorEvent.class, ThreadMode.MAIN),
-        }));
+        // CastActivity 不存在于 mobile flavor，故不注册
 
         putIndex(new SimpleSubscriberInfo(com.fongmi.android.tv.ui.dialog.ProxyDialog.class, true,
                 new SubscriberMethodInfo[] {
@@ -93,4 +87,4 @@ public class EventIndex implements SubscriberInfoIndex {
             return null;
         }
     }
-}
+} 

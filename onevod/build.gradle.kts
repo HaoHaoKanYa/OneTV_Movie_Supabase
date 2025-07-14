@@ -1,27 +1,34 @@
+import org.gradle.process.CommandLineArgumentProvider
+
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
-    // id("com.chaquo.python") // 暂时注释掉Python插件
+    // Python插件只在chaquo子模块中使用，避免冲突
 }
 
 android {
     namespace = "com.fongmi.android.tv"
     compileSdk = 35
-    
+
     flavorDimensions += listOf("mode", "api", "abi")
-    
+
     defaultConfig {
         minSdk = 21
-        targetSdk = 28
-        
+        targetSdk = 34
+
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+
+        // 为库模块添加必要的BuildConfig字段
+        buildConfigField("String", "APPLICATION_ID", "\"com.fongmi.android.tv\"")
+        buildConfigField("String", "VERSION_NAME", "\"4.6.8\"")
+        buildConfigField("int", "VERSION_CODE", "468")
         
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments += mapOf(
-                    "room.schemaLocation" to "$projectDir/schemas",
-                    "eventBusIndex" to "com.fongmi.android.tv.event.EventIndex"
+                    "room.schemaLocation" to "$projectDir/schemas"
+                    // EventBus Index只在主应用模块中配置，库模块不需要
                 )
             }
         }
@@ -80,17 +87,21 @@ android {
     
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
-    
+
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
+    }
+
+    buildFeatures {
+        buildConfig = true  // 启用BuildConfig生成
     }
 }
 
 dependencies {
-    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.aar"))))
+    compileOnly(fileTree(mapOf("dir" to "libs", "include" to listOf("*.aar"))))
     
     // 子模块依赖
     implementation(project(":onevod:catvod"))
@@ -182,10 +193,11 @@ dependencies {
         isTransitive = false
     }
     
-    // 注解处理器
+    // 注解处理器 - 库模块只需要Room和Glide，EventBus Index只在主应用模块中生成
     annotationProcessor("androidx.room:room-compiler:2.7.1")
     annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
-    annotationProcessor("org.greenrobot:eventbus-annotation-processor:3.3.1")
+    // EventBus注解处理器只在主应用模块中使用，库模块不需要
+    // annotationProcessor("org.greenrobot:eventbus-annotation-processor:3.3.1")
     
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs_nio:2.1.4")
 }

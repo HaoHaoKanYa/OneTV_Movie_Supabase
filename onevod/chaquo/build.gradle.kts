@@ -11,6 +11,7 @@ android {
 
     defaultConfig {
         minSdk = 24  // Chaquopy 16.0.0要求minSdk 24+
+        targetSdk = 34
         consumerProguardFiles("consumer-rules.pro")
 
         ndk {
@@ -30,8 +31,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 }
 

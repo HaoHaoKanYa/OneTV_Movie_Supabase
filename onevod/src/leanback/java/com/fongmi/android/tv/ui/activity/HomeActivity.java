@@ -1,5 +1,6 @@
 package com.fongmi.android.tv.ui.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.view.KeyEvent;
@@ -367,29 +368,22 @@ public class HomeActivity extends BaseActivity implements CustomTitleView.Listen
     }
 
     @Override
+    @SuppressLint("NonConstantResourceId")
     public void onItemClick(Func item) {
-        switch (item.getResId()) {
-            case R.string.home_vod:
-                VodActivity.start(this, mResult.clear());
-                break;
-            case R.string.home_live:
-                LiveActivity.start(this);
-                break;
-            case R.string.home_search:
-                SearchActivity.start(this);
-                break;
-            case R.string.home_keep:
-                KeepActivity.start(this);
-                break;
-            case R.string.home_push:
-                PushActivity.start(this);
-                break;
-            case R.string.home_cast:
-                CastActivity.start(this);
-                break;
-            case R.string.home_setting:
-                SettingActivity.start(this);
-                break;
+        if (item.getResId() == R.string.home_vod) {
+            VodActivity.start(this, mResult.clear());
+        } else if (item.getResId() == R.string.home_live) {
+            LiveActivity.start(this);
+        } else if (item.getResId() == R.string.home_search) {
+            SearchActivity.start(this);
+        } else if (item.getResId() == R.string.home_keep) {
+            KeepActivity.start(this);
+        } else if (item.getResId() == R.string.home_push) {
+            PushActivity.start(this);
+        } else if (item.getResId() == R.string.home_cast) {
+            CastActivity.start(this);
+        } else if (item.getResId() == R.string.home_setting) {
+            SettingActivity.start(this);
         }
     }
 
