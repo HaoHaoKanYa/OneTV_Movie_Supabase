@@ -16,11 +16,11 @@ android {
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "top.cywin.onetv.mobile"
+        applicationId = project.property("APP_APPLICATION_ID") as String
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
-        versionCode = 2
-        versionName = "2.0.0"
+        versionCode = (project.property("APP_VERSION_CODE") as String).toInt()
+        versionName = project.property("APP_VERSION_NAME") as String
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -30,6 +30,10 @@ android {
         ndk {
             abiFilters.addAll(listOf("arm64-v8a"))
         }
+
+        buildConfigField("String", "APPLICATION_ID", "\"${project.property("APP_APPLICATION_ID")}\"")
+        buildConfigField("String", "VERSION_NAME", "\"${project.property("APP_VERSION_NAME")}\"")
+        buildConfigField("int", "VERSION_CODE", project.property("APP_VERSION_CODE").toString())
     }
 
     buildTypes {
@@ -59,6 +63,7 @@ android {
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 
     composeOptions {

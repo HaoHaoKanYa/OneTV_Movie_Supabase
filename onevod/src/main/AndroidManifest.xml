@@ -14,33 +14,5 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     
-    <application>
-        <!-- 导出的Activity供主应用调用 -->
-        <activity
-            android:name="com.fongmi.android.tv.ui.activity.HomeActivity"
-            android:exported="true"
-            android:theme="@style/AppTheme"
-            android:launchMode="singleTop" />
-            
-        <activity
-            android:name="com.fongmi.android.tv.ui.activity.VodActivity"
-            android:exported="true"
-            android:theme="@style/AppTheme" />
-            
-        <activity
-            android:name="com.fongmi.android.tv.ui.activity.VideoActivity"
-            android:exported="true"
-            android:theme="@style/AppTheme"
-            android:configChanges="orientation|screenSize|keyboardHidden" />
-            
-        <!-- 服务 -->
-        <service
-            android:name="com.fongmi.android.tv.service.PlaybackService"
-            android:exported="false" />
-            
-        <!-- 接收器 -->
-        <receiver
-            android:name="com.fongmi.android.tv.receiver.ActionReceiver"
-            android:exported="false" />
-    </application>
+    <!-- 库模块不需要声明Application和Activity，这些将在主应用中声明 -->
 </manifest>

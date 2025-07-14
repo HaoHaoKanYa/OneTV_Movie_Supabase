@@ -1,4 +1,4 @@
-# FongMi_TV onevod模块 ProGuard规则
+# OneTV onevod模块 ProGuard规则
 
 # 保持所有公共API
 -keep public class com.fongmi.android.tv.** { *; }

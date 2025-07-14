@@ -135,7 +135,35 @@
         </activity>
         -->
 
-        <!-- onevod现在是独立应用，不需要在这里声明Activity -->
+        <!-- onevod模块Activity声明 -->
+        <activity
+            android:name="com.fongmi.android.tv.ui.activity.HomeActivity"
+            android:exported="false"
+            android:theme="@style/AppTheme"
+            android:launchMode="singleTop"
+            android:configChanges="orientation|screenSize|keyboardHidden" />
+
+        <activity
+            android:name="com.fongmi.android.tv.ui.activity.VodActivity"
+            android:exported="false"
+            android:theme="@style/AppTheme"
+            android:configChanges="orientation|screenSize|keyboardHidden" />
+
+        <activity
+            android:name="com.fongmi.android.tv.ui.activity.VideoActivity"
+            android:exported="false"
+            android:theme="@style/AppTheme"
+            android:configChanges="orientation|screenSize|keyboardHidden" />
+
+        <!-- onevod模块服务声明 -->
+        <service
+            android:name="com.fongmi.android.tv.service.PlaybackService"
+            android:exported="false" />
+
+        <!-- onevod模块接收器声明 -->
+        <receiver
+            android:name="com.fongmi.android.tv.receiver.ActionReceiver"
+            android:exported="false" />
 
     </application>
 

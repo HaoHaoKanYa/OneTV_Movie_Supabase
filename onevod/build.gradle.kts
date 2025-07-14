@@ -1,7 +1,7 @@
 import org.gradle.process.CommandLineArgumentProvider
 
 plugins {
-    id("com.android.application")
+    id("com.android.library")
     id("org.jetbrains.kotlin.android")
     // Python插件只在chaquo子模块中使用，避免冲突
 }
@@ -13,13 +13,11 @@ android {
     flavorDimensions += listOf("mode", "api", "abi")
 
     defaultConfig {
-        applicationId = "com.fongmi.android.tv"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
-        versionCode = 468
-        versionName = "4.6.8"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
 
         vectorDrawables {
             useSupportLibrary = true
@@ -36,6 +34,10 @@ android {
                 )
             }
         }
+
+        buildConfigField("String", "APPLICATION_ID", "\"${project.property("APP_APPLICATION_ID")}\"")
+        buildConfigField("String", "VERSION_NAME", "\"${project.property("APP_VERSION_NAME")}\"")
+        buildConfigField("int", "VERSION_CODE", project.property("APP_VERSION_CODE").toString())
     }
     
     productFlavors {

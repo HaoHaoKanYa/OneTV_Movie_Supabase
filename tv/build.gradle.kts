@@ -19,11 +19,11 @@ android {
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "top.cywin.onetv.tv"
+        applicationId = project.property("APP_APPLICATION_ID") as String
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
-        versionCode = 2
-        versionName = "2.0.0"
+        versionCode = (project.property("APP_VERSION_CODE") as String).toInt()
+        versionName = project.property("APP_VERSION_NAME") as String
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -128,8 +128,10 @@ dependencies {
     implementation(project(":core:data"))
     implementation(project(":core:designsystem"))
     implementation(project(":core:util"))
-    implementation(project(":movie"))
-    // onevod现在是独立应用模块，不再作为依赖
+    // 暂时禁用movie模块，只启用onevod模块进行测试
+    // implementation(project(":movie"))
+    // onevod现在是库模块，作为依赖集成到TV应用中
+    implementation(project(":onevod"))
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.aar"))))
 
     androidTestImplementation(platform(libs.androidx.compose.bom))
