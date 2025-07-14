@@ -209,3 +209,5 @@ supabase/migrations/20250711_rename_supabase_service_to_service_role.sql
 TVBOX_ROUTE_LOGIC_FIX.md
 onevod/README.md
 onevod/LICENSE.md
+/movie/
+/film/

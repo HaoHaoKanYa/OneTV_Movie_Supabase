@@ -1,7 +1,7 @@
 import org.gradle.process.CommandLineArgumentProvider
 
 plugins {
-    id("com.android.library")
+    id("com.android.application")
     id("org.jetbrains.kotlin.android")
     // Python插件只在chaquo子模块中使用，避免冲突
 }
@@ -13,22 +13,26 @@ android {
     flavorDimensions += listOf("mode", "api", "abi")
 
     defaultConfig {
-        minSdk = 21
-        targetSdk = 34
+        applicationId = "com.fongmi.android.tv"
+        minSdk = libs.versions.minSdk.get().toInt()
+        targetSdk = libs.versions.targetSdk.get().toInt()
+        versionCode = 468
+        versionName = "4.6.8"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
 
-        // 为库模块添加必要的BuildConfig字段
-        buildConfigField("String", "APPLICATION_ID", "\"com.fongmi.android.tv\"")
-        buildConfigField("String", "VERSION_NAME", "\"4.6.8\"")
-        buildConfigField("int", "VERSION_CODE", "468")
-        
+        vectorDrawables {
+            useSupportLibrary = true
+        }
+
+        ndk {
+            abiFilters.addAll(listOf("armeabi-v7a", "arm64-v8a"))
+        }
+
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments += mapOf(
                     "room.schemaLocation" to "$projectDir/schemas"
-                    // EventBus Index只在主应用模块中配置，库模块不需要
                 )
             }
         }
@@ -76,7 +80,7 @@ android {
         }
     }
     
-    packagingOptions {
+    packaging {
         resources {
             excludes += listOf(
                 "META-INF/beans.xml",
@@ -182,7 +186,7 @@ dependencies {
     }
     
     // Leanback特定依赖
-    "leanbackImplementation"("androidx.leanback:leanback:1.2.0")
+    "leanbackImplementation"("androidx.leanback:leanback:1.0.0")
     "leanbackImplementation"("com.github.JessYanCoding:AndroidAutoSize:1.2.1")
     
     // Mobile特定依赖

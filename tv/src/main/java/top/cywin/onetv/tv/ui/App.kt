@@ -106,12 +106,27 @@ fun App(
                             },
                             viewModel = mainViewModel,
                             onNavigateToMovie = {
-                                Log.d("ONETV_FILM", "开始导航到影视解析系统首页")
+                                Log.d("ONETV_ONEVOD", "开始导航到onevod独立应用")
                                 try {
-                                    navController.navigate("film_home")
-                                    Log.d("ONETV_FILM", "导航到影视解析系统首页成功")
+                                    // 启动onevod独立应用
+                                    val intent = Intent().apply {
+                                        setClassName(
+                                            "com.fongmi.android.tv", // onevod应用包名
+                                            "com.fongmi.android.tv.ui.activity.HomeActivity" // onevod的HomeActivity
+                                        )
+                                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                    }
+                                    context.startActivity(intent)
+                                    Log.d("ONETV_ONEVOD", "成功启动onevod独立应用")
                                 } catch (e: Exception) {
-                                    Log.e("ONETV_FILM", "导航到影视解析系统首页失败", e)
+                                    Log.e("ONETV_ONEVOD", "启动onevod独立应用失败", e)
+                                    // 降级处理：如果onevod启动失败，尝试启动film模块
+                                    try {
+                                        navController.navigate("film_home")
+                                        Log.d("ONETV_ONEVOD", "降级启动film模块成功")
+                                    } catch (fallbackException: Exception) {
+                                        Log.e("ONETV_ONEVOD", "降级启动film模块也失败", fallbackException)
+                                    }
                                 }
                             }
                         )

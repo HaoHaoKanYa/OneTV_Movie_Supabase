@@ -124,7 +124,7 @@
             android:theme="@style/Theme.Transparent" />
         <!-- 暂时注释掉DefaultRedirectActivity
         <activity
-            android:name="io.github.jan.supabase.auth.redirects.DefaultRedirectActivity" 
+            android:name="io.github.jan.supabase.auth.redirects.DefaultRedirectActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -134,6 +134,8 @@
             </intent-filter>
         </activity>
         -->
+
+        <!-- onevod现在是独立应用，不需要在这里声明Activity -->
 
     </application>
 

@@ -129,6 +129,7 @@ dependencies {
     implementation(project(":core:designsystem"))
     implementation(project(":core:util"))
     implementation(project(":movie"))
+    // onevod现在是独立应用模块，不再作为依赖
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.aar"))))
 
     androidTestImplementation(platform(libs.androidx.compose.bom))

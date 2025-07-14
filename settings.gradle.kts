@@ -43,13 +43,13 @@ include(":mobile")
 include(":movie")
 // include(":film") // 暂时移除film模块避免配置冲突
 
-// FongMi_TV集成到onevod模块 - 包含所有功能模块
-include(":onevod")                    // 主模块
-include(":onevod:catvod")            // 爬虫核心引擎
-include(":onevod:chaquo")            // Python引擎
-include(":onevod:quickjs")           // JavaScript引擎
-include(":onevod:hook")              // Hook机制
-include(":onevod:forcetech")         // 解析器模块
-include(":onevod:jianpian")          // 解析器模块
-include(":onevod:thunder")           // 迅雷解析器
-include(":onevod:tvbus")             // 直播解析器
+// onevod影视点播应用模块 - 基于FongMi_TV完整移植
+include(":onevod")                    // onevod主应用模块 (对应原FongMi_TV的app模块)
+include(":onevod:catvod")            // 爬虫核心引擎 (来自FongMi_TV)
+include(":onevod:chaquo")            // Python引擎 (来自FongMi_TV)
+include(":onevod:quickjs")           // JavaScript引擎 (来自FongMi_TV)
+include(":onevod:hook")              // Hook机制 (来自FongMi_TV)
+include(":onevod:forcetech")         // 解析器模块 (来自FongMi_TV)
+include(":onevod:jianpian")          // 解析器模块 (来自FongMi_TV)
+include(":onevod:thunder")           // 迅雷解析器 (来自FongMi_TV)
+include(":onevod:tvbus")             // 直播解析器 (来自FongMi_TV)
