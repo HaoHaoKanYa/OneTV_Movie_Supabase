@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import top.cywin.onetv.tv.App;
 import top.cywin.onetv.tv.Setting;
-import com.fongmi.onetv.tv.databinding.AdapterSearchRecordBinding;
+import top.cywin.onetv.tv.databinding.AdapterSearchRecordBinding;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;

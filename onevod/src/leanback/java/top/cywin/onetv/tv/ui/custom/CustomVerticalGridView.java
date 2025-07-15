@@ -11,7 +11,7 @@ import androidx.leanback.widget.OnChildViewHolderSelectedListener;
 import androidx.leanback.widget.VerticalGridView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.fongmi.onetv.tv.R;
+import top.cywin.onetv.tv.R;
 
 import java.util.Arrays;
 import java.util.List;

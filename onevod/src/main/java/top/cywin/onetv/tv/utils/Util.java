@@ -19,8 +19,8 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
 import top.cywin.onetv.tv.App;
-import com.fongmi.onetv.tv.BuildConfig;
-import com.fongmi.onetv.tv.R;
+import top.cywin.onetv.tv.BuildConfig;
+import top.cywin.onetv.tv.R;
 import top.github.catvod.utils.Shell;
 
 import java.net.NetworkInterface;

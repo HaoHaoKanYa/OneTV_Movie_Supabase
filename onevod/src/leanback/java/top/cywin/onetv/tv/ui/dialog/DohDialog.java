@@ -6,7 +6,7 @@ import android.view.WindowManager;
 
 import androidx.appcompat.app.AlertDialog;
 
-import com.fongmi.onetv.tv.databinding.DialogDohBinding;
+import top.cywin.onetv.tv.databinding.DialogDohBinding;
 import top.cywin.onetv.tv.impl.DohCallback;
 import top.cywin.onetv.tv.ui.adapter.DohAdapter;
 import top.cywin.onetv.tv.ui.custom.SpaceItemDecoration;

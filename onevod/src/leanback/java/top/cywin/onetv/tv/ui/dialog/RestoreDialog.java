@@ -6,7 +6,7 @@ import android.view.WindowManager;
 
 import androidx.appcompat.app.AlertDialog;
 
-import com.fongmi.onetv.tv.databinding.DialogRestoreBinding;
+import top.cywin.onetv.tv.databinding.DialogRestoreBinding;
 import top.cywin.onetv.tv.db.AppDatabase;
 import top.cywin.onetv.tv.impl.Callback;
 import top.cywin.onetv.tv.ui.adapter.RestoreAdapter;

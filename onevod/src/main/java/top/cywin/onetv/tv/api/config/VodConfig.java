@@ -3,7 +3,7 @@ package top.cywin.onetv.tv.api.config;
 import android.text.TextUtils;
 
 import top.cywin.onetv.tv.App;
-import com.fongmi.onetv.tv.R;
+import top.cywin.onetv.tv.R;
 import top.cywin.onetv.tv.api.Decoder;
 import top.cywin.onetv.tv.api.loader.BaseLoader;
 import top.cywin.onetv.tv.bean.Config;

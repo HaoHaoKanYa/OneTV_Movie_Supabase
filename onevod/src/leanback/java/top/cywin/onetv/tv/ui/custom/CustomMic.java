@@ -15,7 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.fragment.app.FragmentActivity;
 
-import com.fongmi.onetv.tv.R;
+import top.cywin.onetv.tv.R;
 import top.cywin.onetv.tv.utils.KeyUtil;
 import top.cywin.onetv.tv.utils.ResUtil;
 import com.github.bassaer.library.MDColor;

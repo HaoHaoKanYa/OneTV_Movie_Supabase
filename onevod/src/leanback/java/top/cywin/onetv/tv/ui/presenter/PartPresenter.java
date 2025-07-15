@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.leanback.widget.Presenter;
 
 import top.cywin.onetv.tv.Product;
-import com.fongmi.onetv.tv.databinding.AdapterPartBinding;
+import top.cywin.onetv.tv.databinding.AdapterPartBinding;
 
 public class PartPresenter extends Presenter {
 

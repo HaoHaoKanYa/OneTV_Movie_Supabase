@@ -7,8 +7,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.leanback.widget.Presenter;
 
-import com.fongmi.onetv.tv.R;
-import com.fongmi.onetv.tv.databinding.AdapterArrayBinding;
+import top.cywin.onetv.tv.R;
+import top.cywin.onetv.tv.databinding.AdapterArrayBinding;
 import top.cywin.onetv.tv.utils.ResUtil;
 
 public class ArrayPresenter extends Presenter {

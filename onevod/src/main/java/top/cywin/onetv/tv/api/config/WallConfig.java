@@ -6,7 +6,7 @@ import android.text.TextUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import top.cywin.onetv.tv.App;
-import com.fongmi.onetv.tv.R;
+import top.cywin.onetv.tv.R;
 import top.cywin.onetv.tv.Setting;
 import top.cywin.onetv.tv.bean.Config;
 import top.cywin.onetv.tv.event.RefreshEvent;

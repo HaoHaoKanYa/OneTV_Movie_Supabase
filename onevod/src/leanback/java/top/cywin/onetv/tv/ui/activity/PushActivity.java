@@ -8,8 +8,8 @@ import android.view.View;
 
 import androidx.viewbinding.ViewBinding;
 
-import com.fongmi.onetv.tv.R;
-import com.fongmi.onetv.tv.databinding.ActivityPushBinding;
+import top.cywin.onetv.tv.R;
+import top.cywin.onetv.tv.databinding.ActivityPushBinding;
 import top.cywin.onetv.tv.server.Server;
 import top.cywin.onetv.tv.ui.base.BaseActivity;
 import top.cywin.onetv.tv.utils.QRCode;

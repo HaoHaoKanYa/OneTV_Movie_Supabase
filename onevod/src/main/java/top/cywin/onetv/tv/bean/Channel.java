@@ -5,7 +5,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import top.cywin.onetv.tv.App;
-import com.fongmi.onetv.tv.R;
+import top.cywin.onetv.tv.R;
 import top.cywin.onetv.tv.utils.ImgUtil;
 import top.cywin.onetv.tv.utils.ResUtil;
 import top.github.catvod.utils.Json;

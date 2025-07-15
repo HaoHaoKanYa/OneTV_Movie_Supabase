@@ -7,7 +7,7 @@ import android.view.WindowManager;
 import androidx.appcompat.app.AlertDialog;
 
 import top.cywin.onetv.tv.bean.Config;
-import com.fongmi.onetv.tv.databinding.DialogHistoryBinding;
+import top.cywin.onetv.tv.databinding.DialogHistoryBinding;
 import top.cywin.onetv.tv.impl.ConfigCallback;
 import top.cywin.onetv.tv.ui.adapter.ConfigAdapter;
 import top.cywin.onetv.tv.ui.custom.SpaceItemDecoration;

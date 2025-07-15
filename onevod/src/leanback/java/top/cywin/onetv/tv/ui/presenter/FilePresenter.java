@@ -6,8 +6,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.leanback.widget.Presenter;
 
-import com.fongmi.onetv.tv.R;
-import com.fongmi.onetv.tv.databinding.AdapterFileBinding;
+import top.cywin.onetv.tv.R;
+import top.cywin.onetv.tv.databinding.AdapterFileBinding;
 
 import java.io.File;
 

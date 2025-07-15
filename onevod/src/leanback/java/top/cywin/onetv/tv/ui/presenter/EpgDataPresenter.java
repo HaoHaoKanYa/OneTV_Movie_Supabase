@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.leanback.widget.Presenter;
 
 import top.cywin.onetv.tv.bean.EpgData;
-import com.fongmi.onetv.tv.databinding.AdapterEpgDataBinding;
+import top.cywin.onetv.tv.databinding.AdapterEpgDataBinding;
 
 public class EpgDataPresenter extends Presenter {
 

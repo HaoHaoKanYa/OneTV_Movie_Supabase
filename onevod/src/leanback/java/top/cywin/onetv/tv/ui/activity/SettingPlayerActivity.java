@@ -7,9 +7,9 @@ import android.view.View;
 
 import androidx.viewbinding.ViewBinding;
 
-import com.fongmi.onetv.tv.R;
+import top.cywin.onetv.tv.R;
 import top.cywin.onetv.tv.Setting;
-import com.fongmi.onetv.tv.databinding.ActivitySettingPlayerBinding;
+import top.cywin.onetv.tv.databinding.ActivitySettingPlayerBinding;
 import top.cywin.onetv.tv.impl.BufferCallback;
 import top.cywin.onetv.tv.impl.SpeedCallback;
 import top.cywin.onetv.tv.impl.UaCallback;

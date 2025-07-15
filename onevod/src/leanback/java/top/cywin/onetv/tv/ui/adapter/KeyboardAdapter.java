@@ -7,10 +7,10 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.fongmi.onetv.tv.R;
+import top.cywin.onetv.tv.R;
 import top.cywin.onetv.tv.Setting;
-import com.fongmi.onetv.tv.databinding.AdapterKeyboardIconBinding;
-import com.fongmi.onetv.tv.databinding.AdapterKeyboardTextBinding;
+import top.cywin.onetv.tv.databinding.AdapterKeyboardIconBinding;
+import top.cywin.onetv.tv.databinding.AdapterKeyboardTextBinding;
 
 import java.util.ArrayList;
 import java.util.Arrays;

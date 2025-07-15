@@ -3,8 +3,8 @@ package top.cywin.onetv.tv.ui.activity;
 import androidx.appcompat.app.AlertDialog;
 import androidx.viewbinding.ViewBinding;
 
-import com.fongmi.onetv.tv.R;
-import com.fongmi.onetv.tv.databinding.ActivityCrashBinding;
+import top.cywin.onetv.tv.R;
+import top.cywin.onetv.tv.databinding.ActivityCrashBinding;
 import top.cywin.onetv.tv.ui.base.BaseActivity;
 
 import java.util.Objects;

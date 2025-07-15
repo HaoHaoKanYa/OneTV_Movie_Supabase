@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.leanback.widget.Presenter;
 
 import top.cywin.onetv.tv.bean.Channel;
-import com.fongmi.onetv.tv.databinding.AdapterChannelBinding;
+import top.cywin.onetv.tv.databinding.AdapterChannelBinding;
 
 public class ChannelPresenter extends Presenter {
 

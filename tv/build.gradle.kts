@@ -86,17 +86,23 @@ android {
         }
     }
 
-  /*
-flavorDimensions += listOf("mode", "api", "abi")
-productFlavors {
-    create("leanback") { dimension = "mode" }
-    create("mobile") { dimension = "mode" }
-    create("java") { dimension = "api" }
-    create("python") { dimension = "api" }
-    create("arm64_v8a") { dimension = "abi" }
-    create("armeabi_v7a") { dimension = "abi" }
-}
-*/
+    flavorDimensions += listOf("mode", "api", "abi")
+    productFlavors {
+        create("leanback") { dimension = "mode" }
+        create("mobile") { dimension = "mode" }
+        create("java") { dimension = "api" }
+        create("arm64_v8a") { dimension = "abi" }
+    }
+
+    variantFilter {
+        val mode = flavors.find { it.dimension == "mode" }?.name
+        val api = flavors.find { it.dimension == "api" }?.name
+        val abi = flavors.find { it.dimension == "abi" }?.name
+        // 只保留 leanback+java+arm64_v8a 和 mobile+java+arm64_v8a
+        if (!((mode == "leanback" || mode == "mobile") && api == "java" && abi == "arm64_v8a")) {
+            ignore = true
+        }
+    }
 
 //    splits {
 //        abi {

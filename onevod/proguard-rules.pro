@@ -1,5 +1,5 @@
 # TV
--keep class com.fongmi.onetv.tv.bean.** { *; }
+-keep class top.cywin.onetv.tv.bean.** { *; }
 
 # Gson
 -keep class com.google.gson.** { *; }

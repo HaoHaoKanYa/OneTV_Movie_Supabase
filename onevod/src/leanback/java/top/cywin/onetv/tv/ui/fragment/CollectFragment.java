@@ -14,11 +14,11 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.viewbinding.ViewBinding;
 
 import top.cywin.onetv.tv.Product;
-import com.fongmi.onetv.tv.R;
+import top.cywin.onetv.tv.R;
 import top.cywin.onetv.tv.bean.Collect;
 import top.cywin.onetv.tv.bean.Result;
 import top.cywin.onetv.tv.bean.Vod;
-import com.fongmi.onetv.tv.databinding.FragmentVodBinding;
+import top.cywin.onetv.tv.databinding.FragmentVodBinding;
 import top.cywin.onetv.tv.model.SiteViewModel;
 import top.cywin.onetv.tv.ui.activity.VideoActivity;
 import top.cywin.onetv.tv.ui.activity.VodActivity;

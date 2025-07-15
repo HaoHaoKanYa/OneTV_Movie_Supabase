@@ -21,7 +21,7 @@ import androidx.media.session.MediaButtonReceiver;
 
 import com.bumptech.glide.Glide;
 import top.cywin.onetv.tv.App;
-import com.fongmi.onetv.tv.R;
+import top.cywin.onetv.tv.R;
 import top.cywin.onetv.tv.event.ActionEvent;
 import top.cywin.onetv.tv.player.Players;
 import top.cywin.onetv.tv.receiver.ActionReceiver;

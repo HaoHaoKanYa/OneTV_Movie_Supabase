@@ -15,10 +15,10 @@ import androidx.media3.common.MimeTypes;
 import androidx.media3.common.Tracks;
 import androidx.viewbinding.ViewBinding;
 
-import com.fongmi.onetv.tv.R;
+import top.cywin.onetv.tv.R;
 import top.cywin.onetv.tv.bean.Sub;
 import top.cywin.onetv.tv.bean.Track;
-import com.fongmi.onetv.tv.databinding.DialogTrackBinding;
+import top.cywin.onetv.tv.databinding.DialogTrackBinding;
 import top.cywin.onetv.tv.player.Players;
 import top.cywin.onetv.tv.player.exo.TrackNameProvider;
 import top.cywin.onetv.tv.ui.adapter.TrackAdapter;

@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.leanback.widget.Presenter;
 
-import com.fongmi.onetv.tv.databinding.AdapterHeaderBinding;
+import top.cywin.onetv.tv.databinding.AdapterHeaderBinding;
 import top.cywin.onetv.tv.utils.ResUtil;
 
 public class HeaderPresenter extends Presenter {

@@ -12,7 +12,7 @@ import androidx.media3.common.util.Util;
 import androidx.media3.ui.DefaultTimeBar;
 import androidx.media3.ui.TimeBar;
 
-import com.fongmi.onetv.tv.R;
+import top.cywin.onetv.tv.R;
 import top.cywin.onetv.tv.player.Players;
 
 import java.util.concurrent.TimeUnit;

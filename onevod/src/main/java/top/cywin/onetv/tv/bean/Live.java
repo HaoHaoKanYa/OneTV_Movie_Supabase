@@ -9,7 +9,7 @@ import androidx.room.PrimaryKey;
 
 import top.cywin.onetv.tv.App;
 import top.cywin.onetv.tv.Constant;
-import com.fongmi.onetv.tv.R;
+import top.cywin.onetv.tv.R;
 import top.cywin.onetv.tv.api.loader.BaseLoader;
 import top.cywin.onetv.tv.db.AppDatabase;
 import top.cywin.onetv.tv.gson.ExtAdapter;

@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import top.cywin.onetv.tv.Product;
 import top.cywin.onetv.tv.bean.Keep;
-import com.fongmi.onetv.tv.databinding.AdapterVodBinding;
+import top.cywin.onetv.tv.databinding.AdapterVodBinding;
 import top.cywin.onetv.tv.utils.ImgUtil;
 import top.cywin.onetv.tv.utils.ResUtil;
 

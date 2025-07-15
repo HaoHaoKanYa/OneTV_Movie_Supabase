@@ -5,7 +5,7 @@ import android.text.TextUtils;
 import androidx.annotation.NonNull;
 
 import top.cywin.onetv.tv.App;
-import com.fongmi.onetv.tv.R;
+import top.cywin.onetv.tv.R;
 import top.cywin.onetv.tv.utils.ResUtil;
 import top.cywin.onetv.tv.utils.UrlUtil;
 import top.github.catvod.utils.Json;

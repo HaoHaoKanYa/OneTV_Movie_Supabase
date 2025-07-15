@@ -2,8 +2,8 @@ package top.cywin.onetv.tv.ui.custom;
 
 import android.annotation.SuppressLint;
 
-import com.fongmi.onetv.tv.R;
-import com.fongmi.onetv.tv.databinding.ActivitySearchBinding;
+import top.cywin.onetv.tv.R;
+import top.cywin.onetv.tv.databinding.ActivitySearchBinding;
 import top.cywin.onetv.tv.ui.adapter.KeyboardAdapter;
 
 public class CustomKeyboard implements KeyboardAdapter.OnClickListener {

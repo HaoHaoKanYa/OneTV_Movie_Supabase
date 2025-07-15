@@ -14,7 +14,7 @@ import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewbinding.ViewBinding;
 
-import com.fongmi.onetv.tv.R;
+import top.cywin.onetv.tv.R;
 import top.cywin.onetv.tv.Setting;
 import top.cywin.onetv.tv.event.RefreshEvent;
 import top.cywin.onetv.tv.utils.FileUtil;

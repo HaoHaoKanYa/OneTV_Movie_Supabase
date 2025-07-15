@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import top.cywin.onetv.tv.Constant;
-import com.fongmi.onetv.tv.R;
+import top.cywin.onetv.tv.R;
 import top.cywin.onetv.tv.api.EpgParser;
 import top.cywin.onetv.tv.api.LiveParser;
 import top.cywin.onetv.tv.api.config.LiveConfig;

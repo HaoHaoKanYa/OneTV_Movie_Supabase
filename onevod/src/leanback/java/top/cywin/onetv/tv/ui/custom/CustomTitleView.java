@@ -11,7 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
 
 import top.cywin.onetv.tv.App;
-import com.fongmi.onetv.tv.R;
+import top.cywin.onetv.tv.R;
 import top.cywin.onetv.tv.api.config.VodConfig;
 import top.cywin.onetv.tv.bean.Site;
 import top.cywin.onetv.tv.impl.SiteCallback;

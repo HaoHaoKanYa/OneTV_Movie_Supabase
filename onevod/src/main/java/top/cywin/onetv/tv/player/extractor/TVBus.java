@@ -4,7 +4,7 @@ import android.net.Uri;
 import android.text.TextUtils;
 
 import top.cywin.onetv.tv.App;
-import com.fongmi.onetv.tv.R;
+import top.cywin.onetv.tv.R;
 import top.cywin.onetv.tv.Setting;
 import top.cywin.onetv.tv.api.config.LiveConfig;
 import top.cywin.onetv.tv.bean.Core;

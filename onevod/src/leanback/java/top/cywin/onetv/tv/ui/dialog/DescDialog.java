@@ -6,7 +6,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 
-import com.fongmi.onetv.tv.databinding.DialogDescBinding;
+import top.cywin.onetv.tv.databinding.DialogDescBinding;
 import top.cywin.onetv.tv.ui.custom.CustomMovement;
 import com.github.bassaer.library.MDColor;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;

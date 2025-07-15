@@ -6,9 +6,9 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.leanback.widget.Presenter;
 
-import com.fongmi.onetv.tv.R;
+import top.cywin.onetv.tv.R;
 import top.cywin.onetv.tv.bean.Class;
-import com.fongmi.onetv.tv.databinding.AdapterTypeBinding;
+import top.cywin.onetv.tv.databinding.AdapterTypeBinding;
 import top.cywin.onetv.tv.utils.ResUtil;
 
 public class TypePresenter extends Presenter {

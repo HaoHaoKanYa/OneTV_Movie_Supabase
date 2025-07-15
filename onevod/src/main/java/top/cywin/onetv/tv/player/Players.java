@@ -31,7 +31,7 @@ import androidx.media3.ui.PlayerView;
 
 import top.cywin.onetv.tv.App;
 import top.cywin.onetv.tv.Constant;
-import com.fongmi.onetv.tv.R;
+import top.cywin.onetv.tv.R;
 import top.cywin.onetv.tv.Setting;
 import top.cywin.onetv.tv.bean.Channel;
 import top.cywin.onetv.tv.bean.Danmaku;

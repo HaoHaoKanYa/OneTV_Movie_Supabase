@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import top.cywin.onetv.tv.Setting;
 import top.cywin.onetv.tv.api.config.VodConfig;
 import top.cywin.onetv.tv.bean.Site;
-import com.fongmi.onetv.tv.databinding.AdapterSiteBinding;
+import top.cywin.onetv.tv.databinding.AdapterSiteBinding;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -3,7 +3,7 @@ package top.cywin.onetv.tv.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.fongmi.onetv.tv.R;
+import top.cywin.onetv.tv.R;
 import top.cywin.onetv.tv.utils.ResUtil;
 
 import java.util.ArrayList;

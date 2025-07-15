@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel;
 
 import top.cywin.onetv.tv.App;
 import top.cywin.onetv.tv.Constant;
-import com.fongmi.onetv.tv.R;
+import top.cywin.onetv.tv.R;
 import top.cywin.onetv.tv.api.config.VodConfig;
 import top.cywin.onetv.tv.bean.Episode;
 import top.cywin.onetv.tv.bean.Flag;

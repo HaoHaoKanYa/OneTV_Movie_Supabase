@@ -1,6 +1,6 @@
 package top.cywin.onetv.tv.event;
 
-import com.fongmi.onetv.tv.BuildConfig;
+import top.cywin.onetv.tv.BuildConfig;
 
 import org.greenrobot.eventbus.EventBus;
 

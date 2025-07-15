@@ -9,7 +9,7 @@ import android.text.TextUtils;
 import androidx.core.content.FileProvider;
 
 import top.cywin.onetv.tv.App;
-import com.fongmi.onetv.tv.R;
+import top.cywin.onetv.tv.R;
 import top.cywin.onetv.tv.impl.Callback;
 import top.github.catvod.utils.Path;
 

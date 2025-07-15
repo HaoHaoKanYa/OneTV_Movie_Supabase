@@ -6,7 +6,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.FragmentActivity;
 
 import top.cywin.onetv.tv.Setting;
-import com.fongmi.onetv.tv.databinding.DialogBufferBinding;
+import top.cywin.onetv.tv.databinding.DialogBufferBinding;
 import top.cywin.onetv.tv.impl.BufferCallback;
 import top.cywin.onetv.tv.utils.KeyUtil;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;

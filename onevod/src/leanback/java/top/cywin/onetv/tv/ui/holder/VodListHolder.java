@@ -5,7 +5,7 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 
 import top.cywin.onetv.tv.bean.Vod;
-import com.fongmi.onetv.tv.databinding.AdapterVodListBinding;
+import top.cywin.onetv.tv.databinding.AdapterVodListBinding;
 import top.cywin.onetv.tv.ui.base.BaseVodHolder;
 import top.cywin.onetv.tv.ui.presenter.VodPresenter;
 import top.cywin.onetv.tv.utils.ImgUtil;

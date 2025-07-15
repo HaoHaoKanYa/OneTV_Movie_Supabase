@@ -10,12 +10,12 @@ import android.view.inputmethod.EditorInfo;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.FragmentActivity;
 
-import com.fongmi.onetv.tv.R;
+import top.cywin.onetv.tv.R;
 import top.cywin.onetv.tv.api.config.LiveConfig;
 import top.cywin.onetv.tv.api.config.VodConfig;
 import top.cywin.onetv.tv.api.config.WallConfig;
 import top.cywin.onetv.tv.bean.Config;
-import com.fongmi.onetv.tv.databinding.DialogConfigBinding;
+import top.cywin.onetv.tv.databinding.DialogConfigBinding;
 import top.cywin.onetv.tv.event.ServerEvent;
 import top.cywin.onetv.tv.impl.ConfigCallback;
 import top.cywin.onetv.tv.server.Server;

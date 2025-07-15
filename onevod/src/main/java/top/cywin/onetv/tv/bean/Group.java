@@ -5,7 +5,7 @@ import android.text.TextUtils;
 import androidx.annotation.StringRes;
 
 import top.cywin.onetv.tv.App;
-import com.fongmi.onetv.tv.R;
+import top.cywin.onetv.tv.R;
 import top.cywin.onetv.tv.utils.ResUtil;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;

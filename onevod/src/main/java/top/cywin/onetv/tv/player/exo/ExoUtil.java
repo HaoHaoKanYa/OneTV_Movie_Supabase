@@ -24,7 +24,7 @@ import androidx.media3.ui.CaptionStyleCompat;
 import androidx.media3.ui.PlayerView;
 
 import top.cywin.onetv.tv.App;
-import com.fongmi.onetv.tv.BuildConfig;
+import top.cywin.onetv.tv.BuildConfig;
 import top.cywin.onetv.tv.Setting;
 import top.cywin.onetv.tv.bean.Drm;
 import top.cywin.onetv.tv.bean.Sub;

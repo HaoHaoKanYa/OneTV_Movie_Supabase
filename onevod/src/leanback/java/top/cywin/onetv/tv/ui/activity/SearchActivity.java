@@ -12,12 +12,12 @@ import androidx.annotation.NonNull;
 import androidx.viewbinding.ViewBinding;
 
 import top.cywin.onetv.tv.App;
-import com.fongmi.onetv.tv.R;
+import top.cywin.onetv.tv.R;
 import top.cywin.onetv.tv.Setting;
 import top.cywin.onetv.tv.bean.Hot;
 import top.cywin.onetv.tv.bean.Site;
 import top.cywin.onetv.tv.bean.Suggest;
-import com.fongmi.onetv.tv.databinding.ActivitySearchBinding;
+import top.cywin.onetv.tv.databinding.ActivitySearchBinding;
 import top.cywin.onetv.tv.impl.Callback;
 import top.cywin.onetv.tv.impl.SiteCallback;
 import top.cywin.onetv.tv.ui.adapter.RecordAdapter;

@@ -19,7 +19,7 @@ import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.signature.ObjectKey;
 import top.cywin.onetv.tv.App;
-import com.fongmi.onetv.tv.R;
+import top.cywin.onetv.tv.R;
 import top.cywin.onetv.tv.Setting;
 import top.github.catvod.utils.Json;
 import com.google.common.net.HttpHeaders;

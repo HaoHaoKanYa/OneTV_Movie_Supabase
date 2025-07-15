@@ -9,11 +9,11 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.fongmi.onetv.tv.R;
+import top.cywin.onetv.tv.R;
 import top.cywin.onetv.tv.Setting;
 import top.cywin.onetv.tv.api.config.VodConfig;
 import top.cywin.onetv.tv.bean.Site;
-import com.fongmi.onetv.tv.databinding.DialogSiteBinding;
+import top.cywin.onetv.tv.databinding.DialogSiteBinding;
 import top.cywin.onetv.tv.impl.SiteCallback;
 import top.cywin.onetv.tv.ui.adapter.SiteAdapter;
 import top.cywin.onetv.tv.ui.custom.SpaceItemDecoration;

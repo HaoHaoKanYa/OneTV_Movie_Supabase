@@ -6,9 +6,9 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.leanback.widget.Presenter;
 
-import com.fongmi.onetv.tv.R;
+import top.cywin.onetv.tv.R;
 import top.cywin.onetv.tv.bean.Flag;
-import com.fongmi.onetv.tv.databinding.AdapterFlagBinding;
+import top.cywin.onetv.tv.databinding.AdapterFlagBinding;
 
 public class FlagPresenter extends Presenter {
 

@@ -8,7 +8,7 @@ import androidx.leanback.widget.Presenter;
 
 import top.cywin.onetv.tv.Product;
 import top.cywin.onetv.tv.bean.Episode;
-import com.fongmi.onetv.tv.databinding.AdapterEpisodeBinding;
+import top.cywin.onetv.tv.databinding.AdapterEpisodeBinding;
 
 public class EpisodePresenter extends Presenter {
 

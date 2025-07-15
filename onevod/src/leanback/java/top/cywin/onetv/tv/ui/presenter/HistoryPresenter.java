@@ -8,9 +8,9 @@ import androidx.annotation.NonNull;
 import androidx.leanback.widget.Presenter;
 
 import top.cywin.onetv.tv.Product;
-import com.fongmi.onetv.tv.R;
+import top.cywin.onetv.tv.R;
 import top.cywin.onetv.tv.bean.History;
-import com.fongmi.onetv.tv.databinding.AdapterVodBinding;
+import top.cywin.onetv.tv.databinding.AdapterVodBinding;
 import top.cywin.onetv.tv.utils.ImgUtil;
 import top.cywin.onetv.tv.utils.ResUtil;
 

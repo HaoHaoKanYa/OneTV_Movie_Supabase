@@ -24,7 +24,7 @@ import top.cywin.onetv.tv.bean.Class;
 import top.cywin.onetv.tv.bean.Filter;
 import top.cywin.onetv.tv.bean.Result;
 import top.cywin.onetv.tv.bean.Site;
-import com.fongmi.onetv.tv.databinding.ActivityVodBinding;
+import top.cywin.onetv.tv.databinding.ActivityVodBinding;
 import top.cywin.onetv.tv.ui.base.BaseActivity;
 import top.cywin.onetv.tv.ui.fragment.VodFragment;
 import top.cywin.onetv.tv.ui.presenter.TypePresenter;

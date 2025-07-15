@@ -1,13 +1,13 @@
 import org.gradle.process.CommandLineArgumentProvider
 
 plugins {
-    id("com.android.library")
-    id("org.jetbrains.kotlin.android")
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
     // Python插件只在chaquo子模块中使用，避免冲突
 }
 
 android {
-    //namespace ="com.fongmi.android.tv"
+    //namespace ="top.cywin.onetv.tv"
     namespace = project.property("APP_APPLICATION_ID") as String
     compileSdk = 35
 
@@ -51,21 +51,21 @@ android {
         create("java") {
             dimension = "api"
         }
-        create("python") {
-            dimension = "api"
-        }
+        // create("python") {
+        //     dimension = "api"
+        // }
         create("arm64_v8a") {
             dimension = "abi"
             ndk {
                 abiFilters += "arm64-v8a"
             }
         }
-        create("armeabi_v7a") {
-            dimension = "abi"
-            ndk {
-                abiFilters += "armeabi-v7a"
-            }
-        }
+        // create("armeabi_v7a") {
+        //     dimension = "abi"
+        //     ndk {
+        //         abiFilters += "armeabi-v7a"
+        //     }
+        // }
     }
     
     buildFeatures {
@@ -104,6 +104,16 @@ android {
 
     buildFeatures {
         buildConfig = true  // 启用BuildConfig生成
+    }
+
+    variantFilter {
+        val mode = flavors.find { it.dimension == "mode" }?.name
+        val api = flavors.find { it.dimension == "api" }?.name
+        val abi = flavors.find { it.dimension == "abi" }?.name
+        // 只保留 leanback+java+arm64_v8a 和 mobile+java+arm64_v8a
+        if (!((mode == "leanback" || mode == "mobile") && api == "java" && abi == "arm64_v8a")) {
+            ignore = true
+        }
     }
 }
 

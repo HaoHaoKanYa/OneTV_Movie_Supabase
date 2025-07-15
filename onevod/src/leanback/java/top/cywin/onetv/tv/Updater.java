@@ -6,7 +6,7 @@ import android.view.View;
 
 import androidx.appcompat.app.AlertDialog;
 
-import com.fongmi.onetv.tv.databinding.DialogUpdateBinding;
+import top.cywin.onetv.tv.databinding.DialogUpdateBinding;
 import top.cywin.onetv.tv.utils.Download;
 import top.cywin.onetv.tv.utils.FileUtil;
 import top.cywin.onetv.tv.utils.Notify;

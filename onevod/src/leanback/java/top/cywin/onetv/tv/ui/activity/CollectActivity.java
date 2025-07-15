@@ -20,12 +20,12 @@ import androidx.viewbinding.ViewBinding;
 import androidx.viewpager.widget.ViewPager;
 
 import top.cywin.onetv.tv.App;
-import com.fongmi.onetv.tv.R;
+import top.cywin.onetv.tv.R;
 import top.cywin.onetv.tv.Setting;
 import top.cywin.onetv.tv.api.config.VodConfig;
 import top.cywin.onetv.tv.bean.Collect;
 import top.cywin.onetv.tv.bean.Site;
-import com.fongmi.onetv.tv.databinding.ActivityCollectBinding;
+import top.cywin.onetv.tv.databinding.ActivityCollectBinding;
 import top.cywin.onetv.tv.model.SiteViewModel;
 import top.cywin.onetv.tv.ui.base.BaseActivity;
 import top.cywin.onetv.tv.ui.fragment.CollectFragment;

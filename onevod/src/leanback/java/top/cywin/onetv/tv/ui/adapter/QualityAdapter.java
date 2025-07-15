@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import top.cywin.onetv.tv.bean.Result;
-import com.fongmi.onetv.tv.databinding.AdapterQualityBinding;
+import top.cywin.onetv.tv.databinding.AdapterQualityBinding;
 
 public class QualityAdapter extends RecyclerView.Adapter<QualityAdapter.ViewHolder> {
 

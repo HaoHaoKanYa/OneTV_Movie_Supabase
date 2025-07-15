@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.leanback.widget.Presenter;
 
 import top.cywin.onetv.tv.bean.Collect;
-import com.fongmi.onetv.tv.databinding.AdapterFilterBinding;
+import top.cywin.onetv.tv.databinding.AdapterFilterBinding;
 
 public class CollectPresenter extends Presenter {
 
