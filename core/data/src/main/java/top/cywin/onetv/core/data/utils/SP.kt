@@ -5,7 +5,7 @@ import android.content.SharedPreferences
 
 object SP {
     private val log = Logger.create(javaClass.simpleName)
-    private const val SP_NAME = "onetv-android"
+    private const val SP_NAME = "onetv-onetv"
     private const val SP_MODE = Context.MODE_PRIVATE
     private lateinit var sp: SharedPreferences
 

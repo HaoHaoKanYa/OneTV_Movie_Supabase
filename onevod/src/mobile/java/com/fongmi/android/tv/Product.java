@@ -1,9 +1,9 @@
-package com.fongmi.android.tv;
+package com.fongmi.onetv.tv;
 
 import android.content.Context;
 
-import com.fongmi.android.tv.bean.Style;
-import com.fongmi.android.tv.utils.ResUtil;
+import com.fongmi.onetv.tv.bean.Style;
+import com.fongmi.onetv.tv.utils.ResUtil;
 
 public class Product {
 

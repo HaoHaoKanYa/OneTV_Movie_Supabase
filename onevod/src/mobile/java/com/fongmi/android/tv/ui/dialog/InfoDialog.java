@@ -1,4 +1,4 @@
-package com.fongmi.android.tv.ui.dialog;
+package com.fongmi.onetv.tv.ui.dialog;
 
 import android.app.Activity;
 import android.text.TextUtils;
@@ -7,8 +7,8 @@ import android.view.View;
 
 import androidx.appcompat.app.AlertDialog;
 
-import com.fongmi.android.tv.databinding.DialogInfoBinding;
-import com.fongmi.android.tv.utils.Util;
+import com.fongmi.onetv.tv.databinding.DialogInfoBinding;
+import com.fongmi.onetv.tv.utils.Util;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.Map;

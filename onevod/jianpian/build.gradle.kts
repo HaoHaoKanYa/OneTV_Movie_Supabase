@@ -1,9 +1,9 @@
 plugins {
-    id("com.android.library")
+    id("com.onetv.library")
 }
 
 android {
-    namespace = "com.jianpian.android"
+    namespace = "com.jianpian.onetv"
     compileSdk = 35
     
     defaultConfig {

@@ -1,5 +1,5 @@
 plugins {
-    id("com.android.library")
+    id("com.onetv.library")
 }
 
 android {
@@ -40,7 +40,7 @@ dependencies {
     api("org.chromium.net:cronet-embedded:76.3809.111")
     
     // Guava工具库
-    api("com.google.guava:guava:33.3.1-android") {
+    api("com.google.guava:guava:33.3.1-onetv") {
         exclude(group = "com.google.code.findbugs", module = "jsr305")
         exclude(group = "org.checkerframework", module = "checker-compat-qual")
         exclude(group = "org.checkerframework", module = "checker-qual")

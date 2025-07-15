@@ -1,4 +1,4 @@
-package com.fongmi.android.tv.utils;
+package com.fongmi.onetv.tv.utils;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -15,10 +15,10 @@ import androidx.annotation.DrawableRes;
 import androidx.annotation.StringRes;
 import androidx.media3.ui.R;
 
-import com.fongmi.android.tv.App;
-import com.fongmi.android.tv.Setting;
-import com.fongmi.android.tv.event.ActionEvent;
-import com.fongmi.android.tv.receiver.ActionReceiver;
+import com.fongmi.onetv.tv.App;
+import com.fongmi.onetv.tv.Setting;
+import com.fongmi.onetv.tv.event.ActionEvent;
+import com.fongmi.onetv.tv.receiver.ActionReceiver;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.fongmi.android.tv.event;
+package com.fongmi.onetv.tv.event;
 
 import org.greenrobot.eventbus.meta.SimpleSubscriberInfo;
 import org.greenrobot.eventbus.meta.SubscriberMethodInfo;
@@ -17,7 +17,7 @@ public class EventIndex implements SubscriberInfoIndex {
     static {
         SUBSCRIBER_INDEX = new HashMap<Class<?>, SubscriberInfo>();
 
-        putIndex(new SimpleSubscriberInfo(com.fongmi.android.tv.ui.activity.VideoActivity.class, true,
+        putIndex(new SimpleSubscriberInfo(com.fongmi.onetv.tv.ui.activity.VideoActivity.class, true,
                 new SubscriberMethodInfo[] {
             new SubscriberMethodInfo("onActionEvent", ActionEvent.class, ThreadMode.MAIN),
             new SubscriberMethodInfo("onRefreshEvent", RefreshEvent.class, ThreadMode.MAIN),
@@ -25,34 +25,34 @@ public class EventIndex implements SubscriberInfoIndex {
             new SubscriberMethodInfo("onErrorEvent", ErrorEvent.class, ThreadMode.MAIN),
         }));
 
-        putIndex(new SimpleSubscriberInfo(com.fongmi.android.tv.ui.activity.HomeActivity.class, true,
+        putIndex(new SimpleSubscriberInfo(com.fongmi.onetv.tv.ui.activity.HomeActivity.class, true,
                 new SubscriberMethodInfo[] {
             new SubscriberMethodInfo("onRefreshEvent", RefreshEvent.class, ThreadMode.MAIN),
             new SubscriberMethodInfo("onServerEvent", ServerEvent.class, ThreadMode.MAIN),
             new SubscriberMethodInfo("onCastEvent", CastEvent.class, ThreadMode.MAIN),
         }));
 
-        putIndex(new SimpleSubscriberInfo(com.fongmi.android.tv.ui.activity.KeepActivity.class, true,
+        putIndex(new SimpleSubscriberInfo(com.fongmi.onetv.tv.ui.activity.KeepActivity.class, true,
                 new SubscriberMethodInfo[] {
             new SubscriberMethodInfo("onRefreshEvent", RefreshEvent.class, ThreadMode.MAIN),
         }));
 
-        putIndex(new SimpleSubscriberInfo(com.fongmi.android.tv.ui.dialog.UaDialog.class, true,
+        putIndex(new SimpleSubscriberInfo(com.fongmi.onetv.tv.ui.dialog.UaDialog.class, true,
                 new SubscriberMethodInfo[] {
             new SubscriberMethodInfo("onServerEvent", ServerEvent.class, ThreadMode.MAIN),
         }));
 
-        putIndex(new SimpleSubscriberInfo(com.fongmi.android.tv.service.PlaybackService.class, true,
+        putIndex(new SimpleSubscriberInfo(com.fongmi.onetv.tv.service.PlaybackService.class, true,
                 new SubscriberMethodInfo[] {
             new SubscriberMethodInfo("onActionEvent", ActionEvent.class, ThreadMode.MAIN),
         }));
 
-        putIndex(new SimpleSubscriberInfo(com.fongmi.android.tv.ui.dialog.ConfigDialog.class, true,
+        putIndex(new SimpleSubscriberInfo(com.fongmi.onetv.tv.ui.dialog.ConfigDialog.class, true,
                 new SubscriberMethodInfo[] {
             new SubscriberMethodInfo("onServerEvent", ServerEvent.class, ThreadMode.MAIN),
         }));
 
-        putIndex(new SimpleSubscriberInfo(com.fongmi.android.tv.ui.activity.LiveActivity.class, true,
+        putIndex(new SimpleSubscriberInfo(com.fongmi.onetv.tv.ui.activity.LiveActivity.class, true,
                 new SubscriberMethodInfo[] {
             new SubscriberMethodInfo("onActionEvent", ActionEvent.class, ThreadMode.MAIN),
             new SubscriberMethodInfo("onRefreshEvent", RefreshEvent.class, ThreadMode.MAIN),
@@ -62,12 +62,12 @@ public class EventIndex implements SubscriberInfoIndex {
 
         // CastActivity 不存在于 mobile flavor，故不注册
 
-        putIndex(new SimpleSubscriberInfo(com.fongmi.android.tv.ui.dialog.ProxyDialog.class, true,
+        putIndex(new SimpleSubscriberInfo(com.fongmi.onetv.tv.ui.dialog.ProxyDialog.class, true,
                 new SubscriberMethodInfo[] {
             new SubscriberMethodInfo("onServerEvent", ServerEvent.class, ThreadMode.MAIN),
         }));
 
-        putIndex(new SimpleSubscriberInfo(com.fongmi.android.tv.ui.base.BaseActivity.class, true,
+        putIndex(new SimpleSubscriberInfo(com.fongmi.onetv.tv.ui.base.BaseActivity.class, true,
                 new SubscriberMethodInfo[] {
             new SubscriberMethodInfo("onRefreshEvent", RefreshEvent.class, ThreadMode.MAIN),
         }));

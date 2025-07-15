@@ -1,4 +1,4 @@
-package com.fongmi.android.tv.ui.fragment;
+package com.fongmi.onetv.tv.ui.fragment;
 
 import android.content.Intent;
 import android.provider.Settings;
@@ -10,17 +10,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.viewbinding.ViewBinding;
 
-import com.fongmi.android.tv.R;
-import com.fongmi.android.tv.Setting;
-import com.fongmi.android.tv.databinding.FragmentSettingPlayerBinding;
-import com.fongmi.android.tv.impl.BufferCallback;
-import com.fongmi.android.tv.impl.SpeedCallback;
-import com.fongmi.android.tv.impl.UaCallback;
-import com.fongmi.android.tv.ui.base.BaseFragment;
-import com.fongmi.android.tv.ui.dialog.BufferDialog;
-import com.fongmi.android.tv.ui.dialog.SpeedDialog;
-import com.fongmi.android.tv.ui.dialog.UaDialog;
-import com.fongmi.android.tv.utils.ResUtil;
+import com.fongmi.onetv.tv.R;
+import com.fongmi.onetv.tv.Setting;
+import com.fongmi.onetv.tv.databinding.FragmentSettingPlayerBinding;
+import com.fongmi.onetv.tv.impl.BufferCallback;
+import com.fongmi.onetv.tv.impl.SpeedCallback;
+import com.fongmi.onetv.tv.impl.UaCallback;
+import com.fongmi.onetv.tv.ui.base.BaseFragment;
+import com.fongmi.onetv.tv.ui.dialog.BufferDialog;
+import com.fongmi.onetv.tv.ui.dialog.SpeedDialog;
+import com.fongmi.onetv.tv.ui.dialog.UaDialog;
+import com.fongmi.onetv.tv.utils.ResUtil;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.text.DecimalFormat;

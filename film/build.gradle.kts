@@ -24,7 +24,7 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
+                getDefaultProguardFile("proguard-onetv-optimize.txt"),
                 "proguard-rules.pro"
             )
         }
@@ -68,7 +68,7 @@ dependencies {
     
     // ========== FongMi/TV 核心依赖 ==========
     // QuickJS JavaScript 引擎
-    implementation("com.github.seven332:quickjs-android:0.9.0")
+    implementation("com.github.seven332:quickjs-onetv:0.9.0")
     
     // HTML 解析
     implementation("org.jsoup:jsoup:1.15.3")
@@ -80,7 +80,7 @@ dependencies {
     // ========== Kotlin 相关 ==========
     // 使用项目统一版本
     implementation("org.jetbrains.kotlin:kotlin-stdlib:${libs.versions.kotlin.get()}")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-onetv:1.6.4")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
     
     // KotlinPoet 代码生成（继续使用现有版本）
@@ -106,7 +106,7 @@ dependencies {
     
     // ========== 依赖注入 ==========
     // 使用 Koin（与项目保持一致）
-    implementation("io.insert-koin:koin-android:3.5.0")
+    implementation("io.insert-koin:koin-onetv:3.5.0")
     implementation("io.insert-koin:koin-androidx-compose:3.5.0")
     
     // ========== 工具库 ==========

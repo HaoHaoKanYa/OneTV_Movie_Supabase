@@ -1,8 +1,8 @@
-package com.fongmi.android.tv.utils;
+package com.fongmi.onetv.tv.utils;
 
 import android.os.CountDownTimer;
 
-import com.fongmi.android.tv.event.ActionEvent;
+import com.fongmi.onetv.tv.event.ActionEvent;
 
 import java.util.concurrent.TimeUnit;
 

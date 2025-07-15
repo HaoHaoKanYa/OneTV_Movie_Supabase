@@ -1,4 +1,4 @@
-package com.fongmi.android.tv.ui.dialog;
+package com.fongmi.onetv.tv.ui.dialog;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,9 +10,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewbinding.ViewBinding;
 
-import com.fongmi.android.tv.databinding.DialogTimerBinding;
-import com.fongmi.android.tv.utils.Timer;
-import com.fongmi.android.tv.utils.Util;
+import com.fongmi.onetv.tv.databinding.DialogTimerBinding;
+import com.fongmi.onetv.tv.utils.Timer;
+import com.fongmi.onetv.tv.utils.Util;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.util.Formatter;

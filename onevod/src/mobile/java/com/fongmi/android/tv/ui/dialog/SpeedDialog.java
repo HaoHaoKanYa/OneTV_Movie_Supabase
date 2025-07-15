@@ -1,4 +1,4 @@
-package com.fongmi.android.tv.ui.dialog;
+package com.fongmi.onetv.tv.ui.dialog;
 
 import android.content.DialogInterface;
 import android.view.LayoutInflater;
@@ -6,10 +6,10 @@ import android.view.LayoutInflater;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
-import com.fongmi.android.tv.R;
-import com.fongmi.android.tv.Setting;
-import com.fongmi.android.tv.databinding.DialogSpeedBinding;
-import com.fongmi.android.tv.impl.SpeedCallback;
+import com.fongmi.onetv.tv.R;
+import com.fongmi.onetv.tv.Setting;
+import com.fongmi.onetv.tv.databinding.DialogSpeedBinding;
+import com.fongmi.onetv.tv.impl.SpeedCallback;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class SpeedDialog {

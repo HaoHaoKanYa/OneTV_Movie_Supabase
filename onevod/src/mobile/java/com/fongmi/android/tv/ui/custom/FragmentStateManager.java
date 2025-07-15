@@ -1,4 +1,4 @@
-package com.fongmi.android.tv.ui.custom;
+package com.fongmi.onetv.tv.ui.custom;
 
 import android.view.ViewGroup;
 
@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.fongmi.android.tv.ui.base.BaseFragment;
+import com.fongmi.onetv.tv.ui.base.BaseFragment;
 
 public abstract class FragmentStateManager {
 
@@ -34,7 +34,7 @@ public abstract class FragmentStateManager {
     }
 
     private String getTag(int position) {
-        return "android:switcher:" + position;
+        return "onetv:switcher:" + position;
     }
 
     public BaseFragment getFragment(int position) {

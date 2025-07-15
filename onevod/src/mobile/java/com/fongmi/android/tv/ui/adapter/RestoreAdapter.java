@@ -1,4 +1,4 @@
-package com.fongmi.android.tv.ui.adapter;
+package com.fongmi.onetv.tv.ui.adapter;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.fongmi.android.tv.databinding.AdapterRestoreBinding;
+import com.fongmi.onetv.tv.databinding.AdapterRestoreBinding;
 import com.github.catvod.utils.Path;
 
 import java.io.File;

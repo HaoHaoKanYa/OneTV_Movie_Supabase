@@ -108,7 +108,7 @@
             android:screenOrientation="fullUser" />
 
         <activity
-            android:name="com.fongmi.android.tv.ui.activity.VideoActivity"
+            android:name="onetv.tv.ui.activity.VideoActivity"
             android:exported="true"
             android:theme="@style/AppTheme.Detail"
             android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout|uiMode"

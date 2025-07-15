@@ -1,9 +1,9 @@
 plugins {
-    id("com.android.library")
+    id("com.onetv.library")
 }
 
 android {
-    namespace = "com.thunder.android"
+    namespace = "com.thunder.onetv"
     compileSdk = 35
     
     defaultConfig {

@@ -1,4 +1,4 @@
-package com.fongmi.android.tv.ui.base;
+package com.fongmi.onetv.tv.ui.base;
 
 import android.app.Activity;
 import android.graphics.Color;
@@ -14,11 +14,11 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewbinding.ViewBinding;
 
-import com.fongmi.android.tv.R;
-import com.fongmi.android.tv.Setting;
-import com.fongmi.android.tv.event.RefreshEvent;
-import com.fongmi.android.tv.utils.FileUtil;
-import com.fongmi.android.tv.utils.ResUtil;
+import com.fongmi.onetv.tv.R;
+import com.fongmi.onetv.tv.Setting;
+import com.fongmi.onetv.tv.event.RefreshEvent;
+import com.fongmi.onetv.tv.utils.FileUtil;
+import com.fongmi.onetv.tv.utils.ResUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;

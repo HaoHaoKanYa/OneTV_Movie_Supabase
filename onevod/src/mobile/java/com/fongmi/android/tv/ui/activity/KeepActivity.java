@@ -1,4 +1,4 @@
-package com.fongmi.android.tv.ui.activity;
+package com.fongmi.onetv.tv.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -8,18 +8,18 @@ import android.view.View;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.viewbinding.ViewBinding;
 
-import com.fongmi.android.tv.Product;
-import com.fongmi.android.tv.R;
-import com.fongmi.android.tv.api.config.VodConfig;
-import com.fongmi.android.tv.bean.Config;
-import com.fongmi.android.tv.bean.Keep;
-import com.fongmi.android.tv.databinding.ActivityKeepBinding;
-import com.fongmi.android.tv.event.RefreshEvent;
-import com.fongmi.android.tv.impl.Callback;
-import com.fongmi.android.tv.ui.adapter.KeepAdapter;
-import com.fongmi.android.tv.ui.base.BaseActivity;
-import com.fongmi.android.tv.ui.dialog.SyncDialog;
-import com.fongmi.android.tv.utils.Notify;
+import com.fongmi.onetv.tv.Product;
+import com.fongmi.onetv.tv.R;
+import com.fongmi.onetv.tv.api.config.VodConfig;
+import com.fongmi.onetv.tv.bean.Config;
+import com.fongmi.onetv.tv.bean.Keep;
+import com.fongmi.onetv.tv.databinding.ActivityKeepBinding;
+import com.fongmi.onetv.tv.event.RefreshEvent;
+import com.fongmi.onetv.tv.impl.Callback;
+import com.fongmi.onetv.tv.ui.adapter.KeepAdapter;
+import com.fongmi.onetv.tv.ui.base.BaseActivity;
+import com.fongmi.onetv.tv.ui.dialog.SyncDialog;
+import com.fongmi.onetv.tv.utils.Notify;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.greenrobot.eventbus.Subscribe;

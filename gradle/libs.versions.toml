@@ -88,7 +88,7 @@ androidx-room-runtime = { group = "androidx.room", name = "room-runtime", versio
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 # KotlinPoet专业重构 - 移除Hilt依赖
-# hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
+# hilt-onetv = { group = "com.google.dagger", name = "hilt-onetv", version.ref = "hilt" }
 # hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
 # androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 # javapoet = { group = "com.squareup", name = "javapoet", version.ref = "javapoet" }
@@ -131,4 +131,4 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 # KotlinPoet专业重构 - 移除Hilt插件
-# hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+# hilt = { id = "com.google.dagger.hilt.onetv", version.ref = "hilt" }

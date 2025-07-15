@@ -180,7 +180,7 @@ private fun MainScreenErrorPreview() {
         PreviewWithLayoutGrids {
             MainScreenError(
                 messageProvider = {
-                    "Caused by: androidx.media3.datasource.HttpDataSource\$HttpDataSourceException:" + " java.io.IOException: unexpected end of stream on com.android.okhttp.Address@2f10c24d"
+                    "Caused by: androidx.media3.datasource.HttpDataSource\$HttpDataSourceException:" + " java.io.IOException: unexpected end of stream on com.onetv.okhttp.Address@2f10c24d"
                 }
             )
         }

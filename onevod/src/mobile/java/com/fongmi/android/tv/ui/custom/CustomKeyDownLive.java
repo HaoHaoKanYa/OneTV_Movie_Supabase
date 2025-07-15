@@ -1,4 +1,4 @@
-package com.fongmi.android.tv.ui.custom;
+package com.fongmi.onetv.tv.ui.custom;
 
 import android.app.Activity;
 import android.content.Context;
@@ -11,9 +11,9 @@ import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 
-import com.fongmi.android.tv.App;
-import com.fongmi.android.tv.utils.ResUtil;
-import com.fongmi.android.tv.utils.Util;
+import com.fongmi.onetv.tv.App;
+import com.fongmi.onetv.tv.utils.ResUtil;
+import com.fongmi.onetv.tv.utils.Util;
 
 public class CustomKeyDownLive extends GestureDetector.SimpleOnGestureListener implements ScaleGestureDetector.OnScaleGestureListener {
 

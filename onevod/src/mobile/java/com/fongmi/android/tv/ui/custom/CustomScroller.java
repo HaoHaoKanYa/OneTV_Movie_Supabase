@@ -1,9 +1,9 @@
-package com.fongmi.android.tv.ui.custom;
+package com.fongmi.onetv.tv.ui.custom;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.fongmi.android.tv.bean.Result;
+import com.fongmi.onetv.tv.bean.Result;
 
 public class CustomScroller extends RecyclerView.OnScrollListener {
 

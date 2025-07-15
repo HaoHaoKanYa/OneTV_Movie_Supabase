@@ -354,7 +354,7 @@ fun SplashVideo(videoResId: Int, isLoading: Boolean) {
             // 设置不循环播放
             repeatMode = Player.REPEAT_MODE_OFF
             // 准备视频资源
-            val uri = Uri.parse("android.resource://${context.packageName}/$videoResId")
+            val uri = Uri.parse("onetv.resource://${context.packageName}/$videoResId")
             val mediaItem = MediaItem.fromUri(uri)
             setMediaItem(mediaItem)
             prepare()

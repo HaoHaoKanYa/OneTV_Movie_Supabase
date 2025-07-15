@@ -79,13 +79,13 @@ allprojects {
                         } else {
                             println("警告: 在 ${keystoreFile.absolutePath} 找不到密钥库文件")
                             // 如果找不到密钥库文件，则使用调试密钥
-                            val debugKeystore = "${System.getProperty("user.home")}/.android/debug.keystore"
+                            val debugKeystore = "${System.getProperty("user.home")}/.onetv/debug.keystore"
                             if (File(debugKeystore).exists()) {
                                 println("使用调试密钥: $debugKeystore")
                                 storeFile = File(debugKeystore)
-                                storePassword = "android"
+                                storePassword = "onetv"
                                 keyAlias = "androiddebugkey"
-                                keyPassword = "android"
+                                keyPassword = "onetv"
                             } else {
                                 println("警告: 找不到调试密钥，构建可能会失败")
                             }
@@ -93,13 +93,13 @@ allprojects {
                     } else {
                         // 3. 如果没有配置，使用调试密钥
                         println("未找到签名配置，使用调试密钥")
-                        val debugKeystore = "${System.getProperty("user.home")}/.android/debug.keystore"
+                        val debugKeystore = "${System.getProperty("user.home")}/.onetv/debug.keystore"
                         if (File(debugKeystore).exists()) {
                             println("使用调试密钥: $debugKeystore")
                             storeFile = File(debugKeystore)
-                            storePassword = "android"
+                            storePassword = "onetv"
                             keyAlias = "androiddebugkey"
-                            keyPassword = "android"
+                            keyPassword = "onetv"
                         } else {
                             println("警告: 找不到调试密钥，构建可能会失败")
                         }
@@ -115,7 +115,7 @@ allprojects {
                     project.extensions.getByType(BaseAppModuleExtension::class.java).defaultConfig.minSdk
                 val abi = filters.find { it.filterType == "ABI" }?.identifier ?: "all"
                 (this as com.android.build.gradle.internal.api.BaseVariantOutputImpl).outputFileName =
-                    "onetv-android-${project.name}-$ver-${abi}-sdk$minSdk.apk"
+                    "onetv-onetv-${project.name}-$ver-${abi}-sdk$minSdk.apk"
             }
         }
     }

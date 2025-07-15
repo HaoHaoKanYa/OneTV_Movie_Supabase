@@ -1,4 +1,4 @@
-package com.fongmi.android.tv.ui.fragment;
+package com.fongmi.onetv.tv.ui.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,22 +12,22 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewbinding.ViewBinding;
 
-import com.fongmi.android.tv.Product;
-import com.fongmi.android.tv.api.config.VodConfig;
-import com.fongmi.android.tv.bean.Page;
-import com.fongmi.android.tv.bean.Result;
-import com.fongmi.android.tv.bean.Site;
-import com.fongmi.android.tv.bean.Style;
-import com.fongmi.android.tv.bean.Value;
-import com.fongmi.android.tv.bean.Vod;
-import com.fongmi.android.tv.databinding.FragmentTypeBinding;
-import com.fongmi.android.tv.model.SiteViewModel;
-import com.fongmi.android.tv.ui.activity.CollectActivity;
-import com.fongmi.android.tv.ui.activity.VideoActivity;
-import com.fongmi.android.tv.ui.adapter.VodAdapter;
-import com.fongmi.android.tv.ui.base.BaseFragment;
-import com.fongmi.android.tv.ui.custom.CustomScroller;
-import com.fongmi.android.tv.utils.Notify;
+import com.fongmi.onetv.tv.Product;
+import com.fongmi.onetv.tv.api.config.VodConfig;
+import com.fongmi.onetv.tv.bean.Page;
+import com.fongmi.onetv.tv.bean.Result;
+import com.fongmi.onetv.tv.bean.Site;
+import com.fongmi.onetv.tv.bean.Style;
+import com.fongmi.onetv.tv.bean.Value;
+import com.fongmi.onetv.tv.bean.Vod;
+import com.fongmi.onetv.tv.databinding.FragmentTypeBinding;
+import com.fongmi.onetv.tv.model.SiteViewModel;
+import com.fongmi.onetv.tv.ui.activity.CollectActivity;
+import com.fongmi.onetv.tv.ui.activity.VideoActivity;
+import com.fongmi.onetv.tv.ui.adapter.VodAdapter;
+import com.fongmi.onetv.tv.ui.base.BaseFragment;
+import com.fongmi.onetv.tv.ui.custom.CustomScroller;
+import com.fongmi.onetv.tv.utils.Notify;
 
 import java.io.Serializable;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package com.fongmi.android.tv.ui.activity;
+package com.fongmi.onetv.tv.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -8,14 +8,14 @@ import android.view.View;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.viewbinding.ViewBinding;
 
-import com.fongmi.android.tv.Product;
-import com.fongmi.android.tv.R;
-import com.fongmi.android.tv.bean.History;
-import com.fongmi.android.tv.databinding.ActivityHistoryBinding;
-import com.fongmi.android.tv.event.RefreshEvent;
-import com.fongmi.android.tv.ui.adapter.HistoryAdapter;
-import com.fongmi.android.tv.ui.base.BaseActivity;
-import com.fongmi.android.tv.ui.dialog.SyncDialog;
+import com.fongmi.onetv.tv.Product;
+import com.fongmi.onetv.tv.R;
+import com.fongmi.onetv.tv.bean.History;
+import com.fongmi.onetv.tv.databinding.ActivityHistoryBinding;
+import com.fongmi.onetv.tv.event.RefreshEvent;
+import com.fongmi.onetv.tv.ui.adapter.HistoryAdapter;
+import com.fongmi.onetv.tv.ui.base.BaseActivity;
+import com.fongmi.onetv.tv.ui.dialog.SyncDialog;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.greenrobot.eventbus.Subscribe;

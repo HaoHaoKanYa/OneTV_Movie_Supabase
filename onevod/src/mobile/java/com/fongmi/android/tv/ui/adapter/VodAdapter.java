@@ -1,4 +1,4 @@
-package com.fongmi.android.tv.ui.adapter;
+package com.fongmi.onetv.tv.ui.adapter;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -6,16 +6,16 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.fongmi.android.tv.bean.Style;
-import com.fongmi.android.tv.bean.Vod;
-import com.fongmi.android.tv.databinding.AdapterVodListBinding;
-import com.fongmi.android.tv.databinding.AdapterVodOvalBinding;
-import com.fongmi.android.tv.databinding.AdapterVodRectBinding;
-import com.fongmi.android.tv.ui.base.BaseVodHolder;
-import com.fongmi.android.tv.ui.base.ViewType;
-import com.fongmi.android.tv.ui.holder.VodListHolder;
-import com.fongmi.android.tv.ui.holder.VodOvalHolder;
-import com.fongmi.android.tv.ui.holder.VodRectHolder;
+import com.fongmi.onetv.tv.bean.Style;
+import com.fongmi.onetv.tv.bean.Vod;
+import com.fongmi.onetv.tv.databinding.AdapterVodListBinding;
+import com.fongmi.onetv.tv.databinding.AdapterVodOvalBinding;
+import com.fongmi.onetv.tv.databinding.AdapterVodRectBinding;
+import com.fongmi.onetv.tv.ui.base.BaseVodHolder;
+import com.fongmi.onetv.tv.ui.base.ViewType;
+import com.fongmi.onetv.tv.ui.holder.VodListHolder;
+import com.fongmi.onetv.tv.ui.holder.VodOvalHolder;
+import com.fongmi.onetv.tv.ui.holder.VodRectHolder;
 
 import java.util.ArrayList;
 import java.util.List;

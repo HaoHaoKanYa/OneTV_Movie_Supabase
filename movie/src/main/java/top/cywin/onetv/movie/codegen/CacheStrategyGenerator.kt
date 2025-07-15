@@ -47,7 +47,7 @@ object CacheStrategyGenerator {
             .build()
         
         return FileSpec.builder(GENERATED_PACKAGE, "GeneratedCacheManager")
-            .addImport("android.util", "Log", "LruCache")
+            .addImport("onetv.util", "Log", "LruCache")
             .addImport("kotlinx.coroutines", "withContext", "Dispatchers", "sync.Mutex", "sync.withLock")
             .addImport("kotlinx.serialization.json", "Json")
             .addImport("top.cywin.onetv.movie.data.cache", "CacheManager")
@@ -106,7 +106,7 @@ object CacheStrategyGenerator {
      */
     private fun generateMemoryCacheProperty(): PropertySpec {
         return PropertySpec.builder("memoryCache", 
-            ClassName("android.util", "LruCache")
+            ClassName("onetv.util", "LruCache")
                 .parameterizedBy(String::class.asClassName(), String::class.asClassName()))
             .addModifiers(KModifier.PRIVATE)
             .initializer(
@@ -340,7 +340,7 @@ object CacheStrategyGenerator {
             .addCode(
                 CodeBlock.builder()
                     .addStatement("val cacheKey = \"image_\${imageUrl.hashCode()}\"")
-                    .addStatement("val imageBase64 = android.util.Base64.encodeToString(imageData, android.util.Base64.DEFAULT)")
+                    .addStatement("val imageBase64 = onetv.util.Base64.encodeToString(imageData, onetv.util.Base64.DEFAULT)")
                     .addStatement("put(cacheKey, imageBase64)")
                     .addStatement("Log.d(\"ONETV_MOVIE\", \"🖼️ 图片缓存成功\")")
                     .build()

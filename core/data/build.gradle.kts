@@ -62,7 +62,7 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
+                getDefaultProguardFile("proguard-onetv-optimize.txt"),
                 "proguard-rules.pro",
             )
 
@@ -129,7 +129,7 @@ dependencies {
 
     // Koin依赖注入
     implementation("io.insert-koin:koin-core:3.5.3")
-    implementation("io.insert-koin:koin-android:3.5.3")
+    implementation("io.insert-koin:koin-onetv:3.5.3")
 
     implementation(libs.qrose)
 }

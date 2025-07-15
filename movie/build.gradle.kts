@@ -22,7 +22,7 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
+                getDefaultProguardFile("proguard-onetv-optimize.txt"),
                 "proguard-rules.pro"
             )
         }
@@ -55,7 +55,7 @@ android {
             pickFirsts.add("**/kotlin-scripting*.jar")
             // 处理META-INF冲突
             pickFirsts.add("META-INF/versions/9/previous-compilation-data.bin")
-            pickFirsts.add("META-INF/com.android.tools/r8-from-*.version")
+            pickFirsts.add("META-INF/com.onetv.tools/r8-from-*.version")
         }
     }
 }

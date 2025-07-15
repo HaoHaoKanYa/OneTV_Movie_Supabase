@@ -1,5 +1,5 @@
 plugins {
-    id("com.android.library")
+    id("com.onetv.library")
     id("com.chaquo.python")
 }
 

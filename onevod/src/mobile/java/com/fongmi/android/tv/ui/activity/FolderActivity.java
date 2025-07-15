@@ -1,4 +1,4 @@
-package com.fongmi.android.tv.ui.activity;
+package com.fongmi.onetv.tv.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -6,12 +6,12 @@ import android.os.Bundle;
 
 import androidx.viewbinding.ViewBinding;
 
-import com.fongmi.android.tv.R;
-import com.fongmi.android.tv.bean.Class;
-import com.fongmi.android.tv.bean.Result;
-import com.fongmi.android.tv.databinding.ActivityFolderBinding;
-import com.fongmi.android.tv.ui.base.BaseActivity;
-import com.fongmi.android.tv.ui.fragment.TypeFragment;
+import com.fongmi.onetv.tv.R;
+import com.fongmi.onetv.tv.bean.Class;
+import com.fongmi.onetv.tv.bean.Result;
+import com.fongmi.onetv.tv.databinding.ActivityFolderBinding;
+import com.fongmi.onetv.tv.ui.base.BaseActivity;
+import com.fongmi.onetv.tv.ui.fragment.TypeFragment;
 
 import java.util.HashMap;
 

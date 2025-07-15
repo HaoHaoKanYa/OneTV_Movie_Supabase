@@ -1,4 +1,4 @@
-package com.fongmi.android.tv.ui.adapter;
+package com.fongmi.onetv.tv.ui.adapter;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -6,10 +6,10 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.fongmi.android.tv.bean.Filter;
-import com.fongmi.android.tv.bean.Value;
-import com.fongmi.android.tv.databinding.AdapterValueBinding;
-import com.fongmi.android.tv.impl.FilterCallback;
+import com.fongmi.onetv.tv.bean.Filter;
+import com.fongmi.onetv.tv.bean.Value;
+import com.fongmi.onetv.tv.databinding.AdapterValueBinding;
+import com.fongmi.onetv.tv.impl.FilterCallback;
 
 import java.util.List;
 

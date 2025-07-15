@@ -66,7 +66,7 @@
             android:textSize="14sp"
             tools:text="硬解" />
 
-        <com.fongmi.android.tv.ui.custom.CustomUpDownView
+        <top.cywin.onetv.tv.ui.custom.CustomUpDownView
             android:id="@+id/speed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -106,7 +106,7 @@
             tools:text="來源 1"
             tools:visibility="visible" />
 
-        <com.fongmi.android.tv.ui.custom.CustomUpDownView
+        <top.cywin.onetv.tv.ui.custom.CustomUpDownView
             android:id="@+id/text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -189,7 +189,7 @@
 
     </LinearLayout>
 
-    <com.fongmi.android.tv.ui.custom.CustomSeekView
+    <top.cywin.onetv.tv.ui.custom.CustomSeekView
         android:id="@+id/seek"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

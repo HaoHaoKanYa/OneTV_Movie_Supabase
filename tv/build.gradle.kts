@@ -38,7 +38,7 @@ android {
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
+                getDefaultProguardFile("proguard-onetv-optimize.txt"),
                 "proguard-rules.pro",
             )
             signingConfig = signingConfigs.getByName("release")
@@ -70,6 +70,8 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "META-INF/beans.xml"
+            excludes += "META-INF/versions/9/OSGI-INF/MANIFEST.MF"
             // 解决Kotlin jar包冲突 - 使用新的语法
             pickFirsts.add("**/kotlin-compiler-embeddable*.jar")
             pickFirsts.add("**/kotlin-stdlib*.jar")
@@ -77,11 +79,21 @@ android {
             pickFirsts.add("**/kotlin-scripting*.jar")
             // 处理META-INF冲突
             pickFirsts.add("META-INF/versions/9/previous-compilation-data.bin")
-            pickFirsts.add("META-INF/com.android.tools/r8-from-*.version")
+            pickFirsts.add("META-INF/com.onetv.tools/r8-from-*.version")
         }
         jniLibs {
             useLegacyPackaging = true
         }
+    }
+
+    flavorDimensions += listOf("mode", "api", "abi")
+    productFlavors {
+        create("leanback") { dimension = "mode" }
+        create("mobile") { dimension = "mode" }
+        create("java") { dimension = "api" }
+        create("python") { dimension = "api" }
+        create("arm64_v8a") { dimension = "abi" }
+        create("armeabi_v7a") { dimension = "abi" }
     }
 
 //    splits {
@@ -118,7 +130,7 @@ dependencies {
 
 
     // KotlinPoet专业重构 - 移除Hilt依赖注入
-    // implementation(libs.hilt.android)
+    // implementation(libs.hilt.onetv)
     // ksp(libs.hilt.compiler)
     // implementation(libs.androidx.hilt.navigation.compose)
 
@@ -138,7 +150,7 @@ dependencies {
     androidTestImplementation(libs.compose.ui.test.junit4)
     debugImplementation(libs.compose.ui.tooling)
     debugImplementation(libs.compose.ui.test.manifest)
-    coreLibraryDesugaring(libs.desugar.jdk)
+    coreLibraryDesugaring("com.onetv.tools:desugar_jdk_libs_nio:2.1.4")
     
     // Compose相关
     implementation(libs.compose.ui)
@@ -181,7 +193,7 @@ dependencies {
     implementation("com.koushikdutta.async:androidasync:${libs.versions.androidasync.get()}")
     
     // RTSP播放器支持
-    implementation("com.github.alexeyvasilyev:rtsp-client-android:1.2.0")
+    implementation("com.github.alexeyvasilyev:rtsp-client-onetv:1.2.0")
     implementation("com.github.pedroSG94:rtmp-rtsp-stream-client-java:2.1.9")
     
     // ViewModel相关

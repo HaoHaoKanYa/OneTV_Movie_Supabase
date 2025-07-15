@@ -57,7 +57,7 @@ import top.cywin.onetv.tv.ui.tooling.PreviewWithLayoutGrids
 // 暂时禁用film和movie模块，只启用onevod模块进行测试
 // import top.cywin.onetv.movie.navigation.movieNavigation
 // import top.cywin.onetv.film.navigation.filmNavigation
-import com.fongmi.android.tv.ui.activity.HomeActivity
+import top.cywin.onetv.tv.ui.activity.HomeActivity
 
 
 
@@ -69,6 +69,7 @@ fun App(
     mainViewModel: MainViewModel = viewModel() // 正确定义参数
 ) {
     val navController = rememberNavController()
+    val context = LocalContext.current
     if (settingsViewModel.iptvSourceCurrent.needExternalStoragePermission()) {
         requestExternalStoragePermission()
     }

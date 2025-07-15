@@ -1,9 +1,9 @@
 plugins {
-    id("com.android.library")
+    id("com.onetv.library")
 }
 
 android {
-    namespace = "com.tvbus.android"
+    namespace = "com.tvbus.onetv"
     compileSdk = 35
     
     defaultConfig {

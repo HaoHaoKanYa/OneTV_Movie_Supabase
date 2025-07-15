@@ -1,7 +1,7 @@
 # OneTV onevod模块 ProGuard规则
 
 # 保持所有公共API
--keep public class com.fongmi.android.tv.** { *; }
+-keep public class com.fongmi.onetv.tv.** { *; }
 
 # 保持爬虫相关类
 -keep class com.github.catvod.** { *; }

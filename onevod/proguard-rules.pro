@@ -1,5 +1,5 @@
 # TV
--keep class com.fongmi.android.tv.bean.** { *; }
+-keep class com.fongmi.onetv.tv.bean.** { *; }
 
 # Gson
 -keep class com.google.gson.** { *; }
@@ -24,9 +24,9 @@
 -keep class okhttp3.** { *; }
 
 # CatVod
--keep class com.github.catvod.Proxy { *; }
+-keep class top.github.catvod.Proxy { *; }
 -keep class com.github.catvod.crawler.** { *; }
--keep class * extends com.github.catvod.crawler.Spider
+-keep class * extends top.github.catvod.crawler.Spider
 
 # Cling
 -dontwarn javax.**

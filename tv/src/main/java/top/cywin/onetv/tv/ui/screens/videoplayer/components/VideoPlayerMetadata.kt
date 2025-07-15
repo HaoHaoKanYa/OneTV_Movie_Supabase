@@ -85,7 +85,7 @@ private fun VideoMetadataPreview() {
                     audioMimeType = "audio/mp4a-latm",  // 音频编码格式
                     audioChannels = 2,  // 音频声道数
                     audioSampleRate = 32000,  // 音频采样率
-                    audioDecoder = "c2.android.aac.decoder",  // 音频解码器
+                    audioDecoder = "c2.onetv.aac.decoder",  // 音频解码器
                 )
             }
         )

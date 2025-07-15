@@ -1,9 +1,9 @@
 plugins {
-    id("com.android.library")
+    id("com.onetv.library")
 }
 
 android {
-    namespace = "com.forcetech.android"
+    namespace = "com.forcetech.onetv"
     compileSdk = 35
     
     defaultConfig {

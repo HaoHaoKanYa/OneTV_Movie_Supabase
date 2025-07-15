@@ -1,4 +1,4 @@
-package com.fongmi.android.tv.ui.base;
+package com.fongmi.onetv.tv.ui.base;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

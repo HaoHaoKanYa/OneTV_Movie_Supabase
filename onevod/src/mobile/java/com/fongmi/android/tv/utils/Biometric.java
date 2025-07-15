@@ -1,4 +1,4 @@
-package com.fongmi.android.tv.utils;
+package com.fongmi.onetv.tv.utils;
 
 import androidx.annotation.NonNull;
 import androidx.biometric.BiometricManager;
@@ -6,8 +6,8 @@ import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
-import com.fongmi.android.tv.App;
-import com.fongmi.android.tv.R;
+import com.fongmi.onetv.tv.App;
+import com.fongmi.onetv.tv.R;
 
 public class Biometric {
 

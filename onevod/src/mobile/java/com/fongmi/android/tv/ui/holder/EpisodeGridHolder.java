@@ -1,11 +1,11 @@
-package com.fongmi.android.tv.ui.holder;
+package com.fongmi.onetv.tv.ui.holder;
 
 import androidx.annotation.NonNull;
 
-import com.fongmi.android.tv.bean.Episode;
-import com.fongmi.android.tv.databinding.AdapterEpisodeGridBinding;
-import com.fongmi.android.tv.ui.adapter.EpisodeAdapter;
-import com.fongmi.android.tv.ui.base.BaseEpisodeHolder;
+import com.fongmi.onetv.tv.bean.Episode;
+import com.fongmi.onetv.tv.databinding.AdapterEpisodeGridBinding;
+import com.fongmi.onetv.tv.ui.adapter.EpisodeAdapter;
+import com.fongmi.onetv.tv.ui.base.BaseEpisodeHolder;
 
 public class EpisodeGridHolder extends BaseEpisodeHolder {
 

@@ -1,8 +1,8 @@
-package com.fongmi.android.tv.bean;
+package com.fongmi.onetv.tv.bean;
 
 import androidx.media3.common.C;
 
-import com.fongmi.android.tv.server.Server;
+import com.fongmi.onetv.tv.server.Server;
 import com.github.catvod.utils.Path;
 import com.github.catvod.utils.Util;
 

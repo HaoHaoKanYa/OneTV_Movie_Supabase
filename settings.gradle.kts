@@ -2,9 +2,12 @@ pluginManagement {
     repositories {
         google {
             content {
-                includeGroupByRegex("com\\.android.*")
+                includeGroupByRegex("com\\.onetv.*")
                 includeGroupByRegex("com\\.google.*")
                 includeGroupByRegex("androidx.*")
+                // 新增以下两行，允许 AGP 插件下载
+                includeGroupByRegex("com\\.android\\..*")
+                includeGroupByRegex("com\\.android\\.tools\\..*")
             }
         }
         mavenCentral()

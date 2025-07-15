@@ -1,5 +1,5 @@
 plugins {
-    id("com.android.library")
+    id("com.onetv.library")
 }
 
 android {
@@ -33,6 +33,6 @@ dependencies {
     implementation(project(":onevod:catvod"))
 
     // FongMi_TV原项目使用的QuickJS依赖 - 使用最新版本
-    implementation("wang.harlon.quickjs:wrapper-android:3.2.3")
-    implementation("net.sourceforge.streamsupport:android-retrofuture:1.7.4")
+    implementation("wang.harlon.quickjs:wrapper-onetv:3.2.3")
+    implementation("net.sourceforge.streamsupport:onetv-retrofuture:1.7.4")
 }

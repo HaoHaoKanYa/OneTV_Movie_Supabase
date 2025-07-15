@@ -43,7 +43,7 @@ object CodeQualityValidator {
         }
         
         // 检查必要的导入
-        if (!content.contains("import android.util.Log")) {
+        if (!content.contains("import onetv.util.Log")) {
             suggestions.add("建议添加Log导入: ${file.name}")
         }
         

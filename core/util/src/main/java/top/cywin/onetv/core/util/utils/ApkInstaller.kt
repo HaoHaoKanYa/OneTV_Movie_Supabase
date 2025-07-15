@@ -28,7 +28,7 @@ object ApkInstaller {
 
             val installIntent = Intent(Intent.ACTION_VIEW).apply {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION
-                setDataAndType(uri, "application/vnd.android.package-archive")
+                setDataAndType(uri, "application/vnd.onetv.package-archive")
             }
 
             context.startActivity(installIntent)

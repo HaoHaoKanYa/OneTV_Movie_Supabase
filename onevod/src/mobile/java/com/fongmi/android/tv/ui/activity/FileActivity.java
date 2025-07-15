@@ -1,4 +1,4 @@
-package com.fongmi.android.tv.ui.activity;
+package com.fongmi.onetv.tv.ui.activity;
 
 import android.Manifest;
 import android.content.Intent;
@@ -7,9 +7,9 @@ import android.os.Bundle;
 
 import androidx.viewbinding.ViewBinding;
 
-import com.fongmi.android.tv.databinding.ActivityFileBinding;
-import com.fongmi.android.tv.ui.adapter.FileAdapter;
-import com.fongmi.android.tv.ui.base.BaseActivity;
+import com.fongmi.onetv.tv.databinding.ActivityFileBinding;
+import com.fongmi.onetv.tv.ui.adapter.FileAdapter;
+import com.fongmi.onetv.tv.ui.base.BaseActivity;
 import com.github.catvod.utils.Path;
 import com.permissionx.guolindev.PermissionX;
 

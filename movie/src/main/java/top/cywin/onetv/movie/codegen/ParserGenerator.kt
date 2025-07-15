@@ -49,7 +49,7 @@ object ParserGenerator {
             .build()
         
         return FileSpec.builder(GENERATED_PACKAGE, className)
-            .addImport("android.util", "Log")
+            .addImport("onetv.util", "Log")
             .addImport("kotlinx.coroutines", "withContext", "Dispatchers", "withTimeoutOrNull")
             .addImport("okhttp3", "OkHttpClient", "Request", "Response")
             .addImport("top.cywin.onetv.movie.data.models", "ParseResult", "VodSite", "VodParse")
@@ -78,7 +78,7 @@ object ParserGenerator {
             .build()
         
         return FileSpec.builder(GENERATED_PACKAGE, "GeneratedParserManager")
-            .addImport("android.util", "Log")
+            .addImport("onetv.util", "Log")
             .addImport("top.cywin.onetv.movie.data.parser", "ParseManager", "VodParserInterface")
             .addImport("top.cywin.onetv.movie.data.models", "VodParse", "ParseResult")
             .addType(managerClass)

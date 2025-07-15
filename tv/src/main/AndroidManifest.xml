@@ -44,7 +44,8 @@
         android:theme="@style/Theme.MyTV"
         android:usesCleartextTraffic="true"
         tools:ignore="DiscouragedApi"
-        tools:targetApi="n">
+        tools:targetApi="n"
+        tools:replace="android:banner">
 
         <activity
             android:name=".LoginActivity"
@@ -124,45 +125,48 @@
             android:theme="@style/Theme.Transparent" />
         <!-- 暂时注释掉DefaultRedirectActivity
         <activity
-            android:name="io.github.jan.supabase.auth.redirects.DefaultRedirectActivity"
-            android:exported="true">
+            onetv:name="io.github.jan.supabase.auth.redirects.DefaultRedirectActivity"
+            onetv:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="io.onetv.app" android:host="auth-callback" />
+                <action onetv:name="onetv.intent.action.VIEW" />
+                <category onetv:name="onetv.intent.category.DEFAULT" />
+                <category onetv:name="onetv.intent.category.BROWSABLE" />
+                <data onetv:scheme="io.onetv.app" onetv:host="auth-callback" />
             </intent-filter>
         </activity>
         -->
 
         <!-- onevod模块Activity声明 -->
         <activity
-            android:name="com.fongmi.android.tv.ui.activity.HomeActivity"
+            android:name=".ui.activity.HomeActivity"
             android:exported="false"
             android:theme="@style/AppTheme"
             android:launchMode="singleTop"
-            android:configChanges="orientation|screenSize|keyboardHidden" />
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            tools:replace="android:configChanges,android:exported" />
 
         <activity
-            android:name="com.fongmi.android.tv.ui.activity.VodActivity"
+            android:name=".ui.activity.VodActivity"
             android:exported="false"
             android:theme="@style/AppTheme"
-            android:configChanges="orientation|screenSize|keyboardHidden" />
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            tools:replace="android:configChanges,android:exported" />
 
         <activity
-            android:name="com.fongmi.android.tv.ui.activity.VideoActivity"
+            android:name=".ui.activity.VideoActivity"
             android:exported="false"
             android:theme="@style/AppTheme"
-            android:configChanges="orientation|screenSize|keyboardHidden" />
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            tools:replace="android:configChanges,android:exported" />
 
         <!-- onevod模块服务声明 -->
         <service
-            android:name="com.fongmi.android.tv.service.PlaybackService"
+            android:name=".service.PlaybackService"
             android:exported="false" />
 
         <!-- onevod模块接收器声明 -->
         <receiver
-            android:name="com.fongmi.android.tv.receiver.ActionReceiver"
+            android:name=".receiver.ActionReceiver"
             android:exported="false" />
 
     </application>

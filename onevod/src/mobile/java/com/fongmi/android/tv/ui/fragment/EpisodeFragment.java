@@ -1,4 +1,4 @@
-package com.fongmi.android.tv.ui.fragment;
+package com.fongmi.onetv.tv.ui.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,12 +10,12 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.viewbinding.ViewBinding;
 
-import com.fongmi.android.tv.bean.Episode;
-import com.fongmi.android.tv.databinding.FragmentEpisodeBinding;
-import com.fongmi.android.tv.model.SiteViewModel;
-import com.fongmi.android.tv.ui.adapter.EpisodeAdapter;
-import com.fongmi.android.tv.ui.base.BaseFragment;
-import com.fongmi.android.tv.ui.base.ViewType;
+import com.fongmi.onetv.tv.bean.Episode;
+import com.fongmi.onetv.tv.databinding.FragmentEpisodeBinding;
+import com.fongmi.onetv.tv.model.SiteViewModel;
+import com.fongmi.onetv.tv.ui.adapter.EpisodeAdapter;
+import com.fongmi.onetv.tv.ui.base.BaseFragment;
+import com.fongmi.onetv.tv.ui.base.ViewType;
 
 import java.util.ArrayList;
 import java.util.List;

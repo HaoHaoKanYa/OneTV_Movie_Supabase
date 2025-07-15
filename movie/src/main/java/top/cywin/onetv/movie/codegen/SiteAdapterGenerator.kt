@@ -50,7 +50,7 @@ object SiteAdapterGenerator {
             .build()
         
         return FileSpec.builder(GENERATED_PACKAGE, className)
-            .addImport("android.util", "Log")
+            .addImport("onetv.util", "Log")
             .addImport("kotlinx.coroutines", "withContext", "Dispatchers", "withTimeoutOrNull")
             .addImport("kotlinx.serialization.json", "Json")
             .addImport("okhttp3", "OkHttpClient", "Request", "Response")
@@ -83,7 +83,7 @@ object SiteAdapterGenerator {
             .build()
         
         return FileSpec.builder(GENERATED_PACKAGE, "GeneratedSiteAdapterManager")
-            .addImport("android.util", "Log")
+            .addImport("onetv.util", "Log")
             .addImport("kotlinx.coroutines", "async", "awaitAll", "coroutineScope")
             .addImport("top.cywin.onetv.movie.data.adapter", "SiteAdapterManager", "VodSiteAdapter")
             .addImport("top.cywin.onetv.movie.data.models", "VodSite", "VodResponse")
