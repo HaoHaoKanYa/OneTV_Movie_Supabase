@@ -50,7 +50,7 @@ include(":movie")
 // include(":film") // 暂时移除film模块避免配置冲突
 
 // onevod影视点播应用模块 - 基于FongMi_TV完整移植
-include(":onevod")                    // onevod主应用模块 (对应原FongMi_TV的app模块)
+include(":vod")                    // onevod主应用模块 (对应原FongMi_TV的app模块)
 include(":onevod:catvod")            // 爬虫核心引擎 (来自FongMi_TV)
 include(":onevod:chaquo")            // Python引擎 (来自FongMi_TV)
 include(":onevod:quickjs")           // JavaScript引擎 (来自FongMi_TV)
