@@ -5,9 +5,11 @@ pluginManagement {
                 includeGroupByRegex("com\\.onetv.*")
                 includeGroupByRegex("com\\.google.*")
                 includeGroupByRegex("androidx.*")
-                // 新增以下两行，允许 AGP 插件下载
-                includeGroupByRegex("com\\.android\\..*")
-                includeGroupByRegex("com\\.android\\.tools\\..*")
+                // 允许 AGP 插件及其所有依赖项下载
+                includeGroupByRegex("com\\.android.*")
+                includeGroupByRegex("com\\.android\\.tools.*")
+                // 添加对 signflinger 和 zipflinger 的支持
+                includeGroup("com.android")
             }
         }
         mavenCentral()
@@ -17,6 +19,7 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
+        // 确保Google仓库没有内容限制
         google()
         mavenCentral()
         jcenter() // FongMi_TV需要

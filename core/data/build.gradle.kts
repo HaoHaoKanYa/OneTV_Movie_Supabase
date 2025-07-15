@@ -9,6 +9,8 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
 }
 
+
+
 // 加载local.properties文件
 val localProperties = Properties().apply {
     val localPropertiesFile = rootProject.file("local.properties")
@@ -62,7 +64,7 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(
-                getDefaultProguardFile("proguard-onetv-optimize.txt"),
+                getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
 
@@ -129,7 +131,8 @@ dependencies {
 
     // Koin依赖注入
     implementation("io.insert-koin:koin-core:3.5.3")
-    implementation("io.insert-koin:koin-onetv:3.5.3")
+    implementation("io.insert-koin:koin-android:3.5.3")
+    implementation("io.insert-koin:koin-androidx-compose:3.5.3")
 
     implementation(libs.qrose)
 }

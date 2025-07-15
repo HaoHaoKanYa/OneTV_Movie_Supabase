@@ -38,7 +38,7 @@ android {
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(
-                getDefaultProguardFile("proguard-onetv-optimize.txt"),
+                getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
             signingConfig = signingConfigs.getByName("release")
@@ -86,15 +86,17 @@ android {
         }
     }
 
-    flavorDimensions += listOf("mode", "api", "abi")
-    productFlavors {
-        create("leanback") { dimension = "mode" }
-        create("mobile") { dimension = "mode" }
-        create("java") { dimension = "api" }
-        create("python") { dimension = "api" }
-        create("arm64_v8a") { dimension = "abi" }
-        create("armeabi_v7a") { dimension = "abi" }
-    }
+  /*
+flavorDimensions += listOf("mode", "api", "abi")
+productFlavors {
+    create("leanback") { dimension = "mode" }
+    create("mobile") { dimension = "mode" }
+    create("java") { dimension = "api" }
+    create("python") { dimension = "api" }
+    create("arm64_v8a") { dimension = "abi" }
+    create("armeabi_v7a") { dimension = "abi" }
+}
+*/
 
 //    splits {
 //        abi {
@@ -150,7 +152,7 @@ dependencies {
     androidTestImplementation(libs.compose.ui.test.junit4)
     debugImplementation(libs.compose.ui.tooling)
     debugImplementation(libs.compose.ui.test.manifest)
-    coreLibraryDesugaring("com.onetv.tools:desugar_jdk_libs_nio:2.1.4")
+    coreLibraryDesugaring(libs.desugar.jdk)
     
     // Compose相关
     implementation(libs.compose.ui)
@@ -193,7 +195,7 @@ dependencies {
     implementation("com.koushikdutta.async:androidasync:${libs.versions.androidasync.get()}")
     
     // RTSP播放器支持
-    implementation("com.github.alexeyvasilyev:rtsp-client-onetv:1.2.0")
+    implementation("com.github.alexeyvasilyev:rtsp-client-android:5.3.5") // 使用正确的库和最新版本
     implementation("com.github.pedroSG94:rtmp-rtsp-stream-client-java:2.1.9")
     
     // ViewModel相关

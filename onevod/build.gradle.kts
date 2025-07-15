@@ -1,14 +1,14 @@
 import org.gradle.process.CommandLineArgumentProvider
 
 plugins {
-    id("com.onetv.library")
-    id("org.jetbrains.kotlin.onetv")
+    id("com.android.library")
+    id("org.jetbrains.kotlin.android")
     // Python插件只在chaquo子模块中使用，避免冲突
 }
 
 android {
-    namespace ="com.fongmi.onetv.tv"
-    //namespace = project.property("APP_APPLICATION_ID") as String
+    //namespace ="com.fongmi.android.tv"
+    namespace = project.property("APP_APPLICATION_ID") as String
     compileSdk = 35
 
     flavorDimensions += listOf("mode", "api", "abi")
@@ -77,7 +77,7 @@ android {
         release {
             isMinifyEnabled = true
             proguardFiles(
-                getDefaultProguardFile("proguard-onetv-optimize.txt"),
+                getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
         }
@@ -124,7 +124,7 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.7.0")
     implementation("androidx.media:media:1.7.0")
     implementation("androidx.room:room-runtime:2.7.1")
-    implementation("com.google.onetv.material:material:1.12.0")
+    implementation("com.google.android.material:material:1.12.0")
     
     // Media3依赖
     implementation("androidx.media3:media3-common:1.6.1")
@@ -153,7 +153,7 @@ dependencies {
     implementation("com.github.bumptech.glide:glide:4.16.0")
     implementation("com.github.bumptech.glide:annotations:4.16.0")
     implementation("com.github.bumptech.glide:avif-integration:4.16.0") {
-        exclude(group = "org.aomedia.avif.onetv", module = "avif")
+        exclude(group = "org.aomedia.avif.android", module = "avif")
     }
     implementation("com.github.bumptech.glide:okhttp3-integration:4.16.0")
     
@@ -164,14 +164,14 @@ dependencies {
     }
     implementation("com.github.bassaer:materialdesigncolors:1.0.0")
     implementation("com.github.jahirfiquitiva:TextDrawable:1.0.3")
-    implementation("com.github.thegrizzlylabs:sardine-onetv:0.9")
+    implementation("com.github.thegrizzlylabs:sardine-android:0.9")
     implementation("com.github.teamnewpipe:NewPipeExtractor:v0.24.6")
     implementation("com.google.zxing:core:3.5.3")
     implementation("com.guolindev.permissionx:permissionx:1.8.0")
     implementation("com.hierynomus:smbj:0.14.0")
     implementation("io.antmedia:rtmp-client:3.2.0")
     implementation("javax.servlet:javax.servlet-api:3.1.0")
-    implementation("org.aomedia.avif.onetv:avif:1.1.1.14d8e3c4")
+    implementation("org.aomedia.avif.android:avif:1.1.1.14d8e3c4")
     implementation("org.eclipse.jetty:jetty-client:8.1.21.v20160908")
     implementation("org.eclipse.jetty:jetty-server:8.1.21.v20160908") {
         exclude(group = "org.eclipse.jetty.orbit", module = "javax.servlet")
@@ -195,8 +195,8 @@ dependencies {
     // Mobile特定依赖
     "mobileImplementation"("androidx.biometric:biometric:1.1.0")
     "mobileImplementation"("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
-    "mobileImplementation"("com.google.onetv.flexbox:flexbox:3.0.0")
-    "mobileImplementation"("com.journeyapps:zxing-onetv-embedded:4.3.0") {
+    "mobileImplementation"("com.google.android.flexbox:flexbox:3.0.0")
+    "mobileImplementation"("com.journeyapps:zxing-android-embedded:4.3.0") {
         isTransitive = false
     }
     
@@ -206,5 +206,5 @@ dependencies {
     // EventBus注解处理器只在主应用模块中使用，库模块不需要
     // annotationProcessor("org.greenrobot:eventbus-annotation-processor:3.3.1")
     
-    coreLibraryDesugaring("com.onetv.tools:desugar_jdk_libs_nio:2.1.4")
+    coreLibraryDesugaring(libs.desugar.jdk)
 }
