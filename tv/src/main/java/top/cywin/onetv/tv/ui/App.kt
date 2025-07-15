@@ -54,10 +54,10 @@ import top.cywin.onetv.tv.ui.screens.settings.LocalSettings
 import top.cywin.onetv.tv.ui.screens.settings.LocalSettingsCurrent
 import top.cywin.onetv.tv.ui.screens.settings.SettingsViewModel
 import top.cywin.onetv.tv.ui.tooling.PreviewWithLayoutGrids
-// 暂时禁用film和movie模块，只启用onevod模块进行测试
+// 暂时禁用film、movie、onevod模块相关代码
 // import top.cywin.onetv.movie.navigation.movieNavigation
 // import top.cywin.onetv.film.navigation.filmNavigation
-import top.cywin.onetv.tv.ui.activity.HomeActivity
+// import top.cywin.onetv.tv.ui.activity.HomeActivity
 
 
 
@@ -108,27 +108,7 @@ fun App(
                                 }
                             },
                             viewModel = mainViewModel,
-                            onNavigateToMovie = {
-                                Log.d("ONETV_ONEVOD", "开始导航到onevod模块")
-                                try {
-                                    // 启动onevod模块的HomeActivity
-                                    val intent = Intent(context, HomeActivity::class.java).apply {
-                                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                    }
-                                    context.startActivity(intent)
-                                    Log.d("ONETV_ONEVOD", "成功启动onevod模块")
-                                } catch (e: Exception) {
-                                    Log.e("ONETV_ONEVOD", "启动onevod模块失败", e)
-                                    // 暂时禁用降级处理，因为film模块已被禁用
-                                    // 降级处理：如果onevod启动失败，尝试启动film模块
-                                    // try {
-                                    //     navController.navigate("film_home")
-                                    //     Log.d("ONETV_ONEVOD", "降级启动film模块成功")
-                                    // } catch (fallbackException: Exception) {
-                                    //     Log.e("ONETV_ONEVOD", "降级启动film模块也失败", fallbackException)
-                                    // }
-                                }
-                            }
+                            // onNavigateToMovie = { /* 暂时禁用onevod相关代码 */ }
                         )
                     }
 

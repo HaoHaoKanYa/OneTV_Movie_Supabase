@@ -12,6 +12,23 @@ android {
     compileSdk = 35
 
     flavorDimensions += listOf("mode", "api", "abi")
+    productFlavors {
+        create("leanback") { dimension = "mode" }
+        // create("mobile") { dimension = "mode" }
+        create("java") { dimension = "api" }
+        // create("python") { dimension = "api" }
+        create("arm64_v8a") { dimension = "abi" }
+        // create("armeabi_v7a") { dimension = "abi" }
+    }
+
+    variantFilter {
+        val mode = flavors.find { it.dimension == "mode" }?.name
+        val api = flavors.find { it.dimension == "api" }?.name
+        val abi = flavors.find { it.dimension == "abi" }?.name
+        if (!(mode == "leanback" && api == "java" && abi == "arm64_v8a")) {
+            ignore = true
+        }
+    }
 
     defaultConfig {
         minSdk = libs.versions.minSdk.get().toInt()
@@ -39,33 +56,6 @@ android {
         buildConfigField("String", "APPLICATION_ID", "\"${project.property("APP_APPLICATION_ID")}\"")
         buildConfigField("String", "VERSION_NAME", "\"${project.property("APP_VERSION_NAME")}\"")
         buildConfigField("int", "VERSION_CODE", project.property("APP_VERSION_CODE").toString())
-    }
-    
-    productFlavors {
-        create("leanback") {
-            dimension = "mode"
-        }
-        create("mobile") {
-            dimension = "mode"
-        }
-        create("java") {
-            dimension = "api"
-        }
-        // create("python") {
-        //     dimension = "api"
-        // }
-        create("arm64_v8a") {
-            dimension = "abi"
-            ndk {
-                abiFilters += "arm64-v8a"
-            }
-        }
-        // create("armeabi_v7a") {
-        //     dimension = "abi"
-        //     ndk {
-        //         abiFilters += "armeabi-v7a"
-        //     }
-        // }
     }
     
     buildFeatures {
@@ -104,16 +94,6 @@ android {
 
     buildFeatures {
         buildConfig = true  // 启用BuildConfig生成
-    }
-
-    variantFilter {
-        val mode = flavors.find { it.dimension == "mode" }?.name
-        val api = flavors.find { it.dimension == "api" }?.name
-        val abi = flavors.find { it.dimension == "abi" }?.name
-        // 只保留 leanback+java+arm64_v8a 和 mobile+java+arm64_v8a
-        if (!((mode == "leanback" || mode == "mobile") && api == "java" && abi == "arm64_v8a")) {
-            ignore = true
-        }
     }
 }
 
@@ -199,16 +179,20 @@ dependencies {
     }
     
     // Leanback特定依赖
-    "leanbackImplementation"("androidx.leanback:leanback:1.0.0")
-    "leanbackImplementation"("com.github.JessYanCoding:AndroidAutoSize:1.2.1")
+    // "leanbackImplementation"("androidx.leanback:leanback:1.0.0")
+    implementation("androidx.leanback:leanback:1.0.0")
+    // "leanbackImplementation"("com.github.JessYanCoding:AndroidAutoSize:1.2.1")
+    implementation("com.github.JessYanCoding:AndroidAutoSize:1.2.1")
     
     // Mobile特定依赖
-    "mobileImplementation"("androidx.biometric:biometric:1.1.0")
-    "mobileImplementation"("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
-    "mobileImplementation"("com.google.android.flexbox:flexbox:3.0.0")
-    "mobileImplementation"("com.journeyapps:zxing-android-embedded:4.3.0") {
-        isTransitive = false
-    }
+    // "mobileImplementation"("androidx.biometric:biometric:1.1.0")
+    implementation("androidx.biometric:biometric:1.1.0")
+    // "mobileImplementation"("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+    // "mobileImplementation"("com.google.android.flexbox:flexbox:3.0.0")
+    implementation("com.google.android.flexbox:flexbox:3.0.0")
+    // "mobileImplementation"("com.journeyapps:zxing-android-embedded:4.3.0") { isTransitive = false }
+    implementation("com.journeyapps:zxing-android-embedded:4.3.0") { isTransitive = false }
     
     // 注解处理器 - 库模块只需要Room和Glide，EventBus Index只在主应用模块中生成
     annotationProcessor("androidx.room:room-compiler:2.7.1")

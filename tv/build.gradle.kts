@@ -86,23 +86,26 @@ android {
         }
     }
 
+    /*
     flavorDimensions += listOf("mode", "api", "abi")
     productFlavors {
         create("leanback") { dimension = "mode" }
-        create("mobile") { dimension = "mode" }
+        // create("mobile") { dimension = "mode" }
         create("java") { dimension = "api" }
+        // create("python") { dimension = "api" }
         create("arm64_v8a") { dimension = "abi" }
+        // create("armeabi_v7a") { dimension = "abi" }
     }
 
     variantFilter {
         val mode = flavors.find { it.dimension == "mode" }?.name
         val api = flavors.find { it.dimension == "api" }?.name
         val abi = flavors.find { it.dimension == "abi" }?.name
-        // 只保留 leanback+java+arm64_v8a 和 mobile+java+arm64_v8a
-        if (!((mode == "leanback" || mode == "mobile") && api == "java" && abi == "arm64_v8a")) {
+        if (!(mode == "leanback" && api == "java" && abi == "arm64_v8a")) {
             ignore = true
         }
     }
+    */
 
 //    splits {
 //        abi {
@@ -151,7 +154,7 @@ dependencies {
     // 暂时禁用movie模块，只启用onevod模块进行测试
     // implementation(project(":movie"))
     // onevod现在是库模块，作为依赖集成到TV应用中
-    implementation(project(":onevod"))
+    // implementation(project(":onevod"))
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.aar"))))
 
     androidTestImplementation(platform(libs.androidx.compose.bom))

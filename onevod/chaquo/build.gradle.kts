@@ -8,18 +8,15 @@ android {
     namespace = "com.fongmi.chaquo"
     compileSdk = 35
 
-    flavorDimensions += listOf("abi")
-
     defaultConfig {
-        minSdk = 24  // Chaquopy 16.0.0要求minSdk 24+
-        targetSdk = 34
-        consumerProguardFiles("consumer-rules.pro")
-
+        minSdk = libs.versions.minSdk.get().toInt()
         ndk {
-            abiFilters += listOf("arm64-v8a", "armeabi-v7a")
+            abiFilters += listOf("arm64-v8a")
         }
     }
 
+    /*
+    flavorDimensions += listOf("abi")
     productFlavors {
         create("arm64_v8a") {
             dimension = "abi"
@@ -30,6 +27,7 @@ android {
             ndk { abiFilters += "armeabi-v7a" }
         }
     }
+    */
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17

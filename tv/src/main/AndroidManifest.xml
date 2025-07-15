@@ -136,38 +136,7 @@
         </activity>
         -->
 
-        <!-- onevod模块Activity声明 -->
-        <activity
-            android:name=".ui.activity.HomeActivity"
-            android:exported="false"
-            android:theme="@style/AppTheme"
-            android:launchMode="singleTop"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            tools:replace="android:configChanges,android:exported" />
-
-        <activity
-            android:name=".ui.activity.VodActivity"
-            android:exported="false"
-            android:theme="@style/AppTheme"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            tools:replace="android:configChanges,android:exported" />
-
-        <activity
-            android:name=".ui.activity.VideoActivity"
-            android:exported="false"
-            android:theme="@style/AppTheme"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            tools:replace="android:configChanges,android:exported" />
-
-        <!-- onevod模块服务声明 -->
-        <service
-            android:name=".service.PlaybackService"
-            android:exported="false" />
-
-        <!-- onevod模块接收器声明 -->
-        <receiver
-            android:name=".receiver.ActionReceiver"
-            android:exported="false" />
+        <!-- onevod模块的组件通过库依赖自动合并 -->
 
     </application>
 
