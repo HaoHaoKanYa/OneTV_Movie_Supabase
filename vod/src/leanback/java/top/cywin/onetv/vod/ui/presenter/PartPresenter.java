@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.leanback.widget.Presenter;
 
 import top.cywin.onetv.vod.Product;
-import top.cywin.onetv.vod.databinding.AdapterPartBinding;
+import top.cywin.onetv.vod.databinding.VodAdapterPartBinding;
 
 public class PartPresenter extends Presenter {
 
@@ -28,7 +28,7 @@ public class PartPresenter extends Presenter {
 
     @Override
     public Presenter.ViewHolder onCreateViewHolder(ViewGroup parent) {
-        return new ViewHolder(AdapterPartBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return new ViewHolder(VodAdapterPartBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
@@ -47,9 +47,9 @@ public class PartPresenter extends Presenter {
 
     public static class ViewHolder extends Presenter.ViewHolder {
 
-        private final AdapterPartBinding binding;
+        private final VodAdapterPartBinding binding;
 
-        public ViewHolder(@NonNull AdapterPartBinding binding) {
+        public ViewHolder(@NonNull VodAdapterPartBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

@@ -6,7 +6,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 
-import top.cywin.onetv.vod.databinding.DialogDescBinding;
+import top.cywin.onetv.vod.databinding.VodDialogDescBinding;
 import top.cywin.onetv.vod.ui.custom.CustomMovement;
 import com.github.bassaer.library.MDColor;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -18,7 +18,7 @@ public class DescDialog {
     }
 
     public void create(Activity activity, CharSequence desc) {
-        DialogDescBinding binding = DialogDescBinding.inflate(LayoutInflater.from(activity));
+        VodDialogDescBinding binding = VodDialogDescBinding.inflate(LayoutInflater.from(activity));
         AlertDialog dialog = new MaterialAlertDialogBuilder(activity).setView(binding.getRoot()).create();
         dialog.getWindow().setDimAmount(0);
         initView(binding.text, desc);

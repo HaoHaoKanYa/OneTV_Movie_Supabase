@@ -64,13 +64,13 @@ public class TVBus implements Source.Extractor, Listener {
     private void change() throws Exception {
         Setting.putBootLive(true);
         App.post(() -> System.exit(0), 100);
-        throw new ExtractException(ResUtil.getString(R.string.error_play_url));
+        throw new ExtractException(ResUtil.getString(R.string.vod_error_play_url));
     }
 
     private String check() throws Exception {
         if (hls == null) return "";
         if (!hls.startsWith("-")) return hls;
-        throw new ExtractException(ResUtil.getString(R.string.error_play_code, hls));
+        throw new ExtractException(ResUtil.getString(R.string.vod_error_play_code, hls));
     }
 
     @Override

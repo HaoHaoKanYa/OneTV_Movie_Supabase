@@ -3,7 +3,7 @@ package top.cywin.onetv.vod.ui.holder;
 import androidx.annotation.NonNull;
 
 import top.cywin.onetv.vod.bean.Vod;
-import top.cywin.onetv.vod.databinding.AdapterVodOvalBinding;
+import top.cywin.onetv.vod.databinding.VodAdapterVodOvalBinding;
 import top.cywin.onetv.vod.ui.base.BaseVodHolder;
 import top.cywin.onetv.vod.ui.presenter.VodPresenter;
 import top.cywin.onetv.vod.utils.ImgUtil;
@@ -11,9 +11,9 @@ import top.cywin.onetv.vod.utils.ImgUtil;
 public class VodOvalHolder extends BaseVodHolder {
 
     private final VodPresenter.OnClickListener listener;
-    private final AdapterVodOvalBinding binding;
+    private final VodAdapterVodOvalBinding binding;
 
-    public VodOvalHolder(@NonNull AdapterVodOvalBinding binding, VodPresenter.OnClickListener listener) {
+    public VodOvalHolder(@NonNull VodAdapterVodOvalBinding binding, VodPresenter.OnClickListener listener) {
         super(binding.getRoot());
         this.binding = binding;
         this.listener = listener;

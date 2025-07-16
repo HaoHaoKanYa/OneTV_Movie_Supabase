@@ -7,13 +7,13 @@ import androidx.annotation.NonNull;
 import androidx.leanback.widget.Presenter;
 
 import top.cywin.onetv.vod.bean.Collect;
-import top.cywin.onetv.vod.databinding.AdapterFilterBinding;
+import top.cywin.onetv.vod.databinding.VodAdapterFilterBinding;
 
 public class CollectPresenter extends Presenter {
 
     @Override
     public Presenter.ViewHolder onCreateViewHolder(ViewGroup parent) {
-        return new ViewHolder(AdapterFilterBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return new ViewHolder(VodAdapterFilterBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
@@ -30,9 +30,9 @@ public class CollectPresenter extends Presenter {
 
     public static class ViewHolder extends Presenter.ViewHolder {
 
-        private final AdapterFilterBinding binding;
+        private final VodAdapterFilterBinding binding;
 
-        public ViewHolder(@NonNull AdapterFilterBinding binding) {
+        public ViewHolder(@NonNull VodAdapterFilterBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

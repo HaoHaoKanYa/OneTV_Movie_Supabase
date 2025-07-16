@@ -11,7 +11,7 @@ import androidx.viewbinding.ViewBinding;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import top.cywin.onetv.vod.bean.Episode;
-import top.cywin.onetv.vod.databinding.DialogEpisodeGridBinding;
+import top.cywin.onetv.vod.databinding.VodDialogEpisodeGridBinding;
 import top.cywin.onetv.vod.ui.fragment.EpisodeFragment;
 import top.cywin.onetv.vod.utils.ResUtil;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -22,7 +22,7 @@ import java.util.List;
 
 public class EpisodeGridDialog extends BaseDialog {
 
-    private DialogEpisodeGridBinding binding;
+    private VodDialogEpisodeGridBinding binding;
     private List<Episode> episodes;
     private final List<String> titles;
     private boolean reverse;
@@ -55,7 +55,7 @@ public class EpisodeGridDialog extends BaseDialog {
 
     @Override
     protected ViewBinding getBinding(@NonNull LayoutInflater inflater, @Nullable ViewGroup container) {
-        return binding = DialogEpisodeGridBinding.inflate(inflater, container, false);
+        return binding = VodDialogEpisodeGridBinding.inflate(inflater, container, false);
     }
 
     @Override

@@ -7,7 +7,7 @@ import android.view.View;
 
 import androidx.appcompat.app.AlertDialog;
 
-import top.cywin.onetv.vod.databinding.DialogInfoBinding;
+import top.cywin.onetv.vod.databinding.VodDialogInfoBinding;
 import top.cywin.onetv.vod.utils.Util;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class InfoDialog {
 
-    private final DialogInfoBinding binding;
+    private final VodDialogInfoBinding binding;
     private final Listener callback;
     private AlertDialog dialog;
     private CharSequence title;
@@ -27,7 +27,7 @@ public class InfoDialog {
     }
 
     public InfoDialog(Activity activity) {
-        this.binding = DialogInfoBinding.inflate(LayoutInflater.from(activity));
+        this.binding = VodDialogInfoBinding.inflate(LayoutInflater.from(activity));
         this.callback = (Listener) activity;
     }
 

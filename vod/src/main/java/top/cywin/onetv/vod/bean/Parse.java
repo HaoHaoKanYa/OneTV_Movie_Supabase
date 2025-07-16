@@ -51,7 +51,7 @@ public class Parse {
 
     public static Parse god() {
         Parse parse = new Parse();
-        parse.setName(ResUtil.getString(R.string.parse_god));
+        parse.setName(ResUtil.getString(R.string.vod_parse_god));
         parse.setType(4);
         return parse;
     }

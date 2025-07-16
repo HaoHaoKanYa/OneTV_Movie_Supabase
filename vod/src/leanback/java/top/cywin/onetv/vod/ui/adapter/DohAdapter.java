@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import top.cywin.onetv.vod.api.config.VodConfig;
-import top.cywin.onetv.vod.databinding.AdapterDohBinding;
+import top.cywin.onetv.vod.databinding.VodAdapterDohBinding;
 import top.github.catvod.bean.Doh;
 
 import java.util.List;
@@ -44,7 +44,7 @@ public class DohAdapter extends RecyclerView.Adapter<DohAdapter.ViewHolder> {
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(AdapterDohBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return new ViewHolder(VodAdapterDohBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
@@ -57,9 +57,9 @@ public class DohAdapter extends RecyclerView.Adapter<DohAdapter.ViewHolder> {
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private final AdapterDohBinding binding;
+        private final VodAdapterDohBinding binding;
 
-        public ViewHolder(@NonNull AdapterDohBinding binding) {
+        public ViewHolder(@NonNull VodAdapterDohBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

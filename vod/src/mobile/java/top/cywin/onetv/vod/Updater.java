@@ -7,7 +7,7 @@ import android.view.View;
 
 import androidx.appcompat.app.AlertDialog;
 
-import top.cywin.onetv.vod.databinding.DialogUpdateBinding;
+import top.cywin.onetv.vod.databinding.VodDialogUpdateBinding;
 import top.cywin.onetv.vod.utils.Download;
 import top.cywin.onetv.vod.utils.FileUtil;
 import top.cywin.onetv.vod.utils.Notify;
@@ -24,7 +24,7 @@ import java.util.Locale;
 
 public class Updater implements Download.Callback {
 
-    private DialogUpdateBinding binding;
+    private VodDialogUpdateBinding binding;
     private final Download download;
     private AlertDialog dialog;
     private boolean dev;
@@ -50,7 +50,7 @@ public class Updater implements Download.Callback {
     }
 
     public Updater force() {
-        Notify.show(R.string.update_check);
+        Notify.show(R.string.vod_update_check);
         Setting.putUpdate(true);
         return this;
     }
@@ -91,15 +91,15 @@ public class Updater implements Download.Callback {
     }
 
     private void show(Activity activity, String version, String desc) {
-        binding = DialogUpdateBinding.inflate(LayoutInflater.from(activity));
-        check().create(activity, ResUtil.getString(R.string.update_version, version)).show();
+        binding = VodDialogUpdateBinding.inflate(LayoutInflater.from(activity));
+        check().create(activity, ResUtil.getString(R.string.vod_update_version, version)).show();
         dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(this::confirm);
         dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setOnClickListener(this::cancel);
         binding.desc.setText(desc);
     }
 
     private AlertDialog create(Activity activity, String title) {
-        return dialog = new MaterialAlertDialogBuilder(activity).setTitle(title).setView(binding.getRoot()).setPositiveButton(R.string.update_confirm, null).setNegativeButton(R.string.dialog_negative, null).setCancelable(false).create();
+        return dialog = new MaterialAlertDialogBuilder(activity).setTitle(title).setView(binding.getRoot()).setPositiveButton(R.string.vod_update_confirm, null).setNegativeButton(R.string.vod_dialog_negative, null).setCancelable(false).create();
     }
 
     private void cancel(View view) {

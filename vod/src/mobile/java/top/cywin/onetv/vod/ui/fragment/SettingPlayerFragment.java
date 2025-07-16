@@ -12,7 +12,7 @@ import androidx.viewbinding.ViewBinding;
 
 import top.cywin.onetv.vod
 import com.fongmi.onetv.tv.Setting;
-import com.fongmi.onetv.tv.databinding.FragmentSettingPlayerBinding;
+import com.fongmi.onetv.tv.databinding.VodFragmentSettingPlayerBinding;
 import com.fongmi.onetv.tv.impl.BufferCallback;
 import com.fongmi.onetv.tv.impl.SpeedCallback;
 import com.fongmi.onetv.tv.impl.UaCallback;
@@ -27,7 +27,7 @@ import java.text.DecimalFormat;
 
 public class SettingPlayerFragment extends BaseFragment implements UaCallback, BufferCallback, SpeedCallback {
 
-    private FragmentSettingPlayerBinding mBinding;
+    private VodFragmentSettingPlayerBinding mBinding;
     private DecimalFormat format;
     private String[] background;
     private String[] caption;
@@ -39,12 +39,12 @@ public class SettingPlayerFragment extends BaseFragment implements UaCallback, B
     }
 
     private String getSwitch(boolean value) {
-        return getString(value ? R.string.setting_on : R.string.setting_off);
+        return getString(value ? R.string.vod_setting_on : R.string.vod_setting_off);
     }
 
     @Override
     protected ViewBinding getBinding(@NonNull LayoutInflater inflater, @Nullable ViewGroup container) {
-        return mBinding = FragmentSettingPlayerBinding.inflate(inflater, container, false);
+        return mBinding = VodFragmentSettingPlayerBinding.inflate(inflater, container, false);
     }
 
     @Override
@@ -58,10 +58,10 @@ public class SettingPlayerFragment extends BaseFragment implements UaCallback, B
         mBinding.audioDecodeText.setText(getSwitch(Setting.isAudioPrefer()));
         mBinding.danmakuLoadText.setText(getSwitch(Setting.isDanmakuLoad()));
         mBinding.caption.setVisibility(Setting.hasCaption() ? View.VISIBLE : View.GONE);
-        mBinding.scaleText.setText((scale = ResUtil.getStringArray(R.array.select_scale))[Setting.getScale()]);
-        mBinding.renderText.setText((render = ResUtil.getStringArray(R.array.select_render))[Setting.getRender()]);
-        mBinding.captionText.setText((caption = ResUtil.getStringArray(R.array.select_caption))[Setting.isCaption() ? 1 : 0]);
-        mBinding.backgroundText.setText((background = ResUtil.getStringArray(R.array.select_background))[Setting.getBackground()]);
+        mBinding.scaleText.setText((scale = ResUtil.getStringArray(R.array.vod_select_scale))[Setting.getScale()]);
+        mBinding.renderText.setText((render = ResUtil.getStringArray(R.array.vod_select_render))[Setting.getRender()]);
+        mBinding.captionText.setText((caption = ResUtil.getStringArray(R.array.vod_select_caption))[Setting.isCaption() ? 1 : 0]);
+        mBinding.backgroundText.setText((background = ResUtil.getStringArray(R.array.vod_select_background))[Setting.getBackground()]);
     }
 
     @Override
@@ -96,7 +96,7 @@ public class SettingPlayerFragment extends BaseFragment implements UaCallback, B
     }
 
     private void onScale(View view) {
-        new MaterialAlertDialogBuilder(getActivity()).setTitle(R.string.player_scale).setNegativeButton(R.string.dialog_negative, null).setSingleChoiceItems(scale, Setting.getScale(), (dialog, which) -> {
+        new MaterialAlertDialogBuilder(getActivity()).setTitle(R.string.vod_player_scale).setNegativeButton(R.string.vod_dialog_negative, null).setSingleChoiceItems(scale, Setting.getScale(), (dialog, which) -> {
             mBinding.scaleText.setText(scale[which]);
             Setting.putScale(which);
             dialog.dismiss();
@@ -147,7 +147,7 @@ public class SettingPlayerFragment extends BaseFragment implements UaCallback, B
     }
 
     private void onBackground(View view) {
-        new MaterialAlertDialogBuilder(getActivity()).setTitle(R.string.player_background).setNegativeButton(R.string.dialog_negative, null).setSingleChoiceItems(background, Setting.getBackground(), (dialog, which) -> {
+        new MaterialAlertDialogBuilder(getActivity()).setTitle(R.string.vod_player_background).setNegativeButton(R.string.vod_dialog_negative, null).setSingleChoiceItems(background, Setting.getBackground(), (dialog, which) -> {
             mBinding.backgroundText.setText(background[which]);
             Setting.putBackground(which);
             dialog.dismiss();

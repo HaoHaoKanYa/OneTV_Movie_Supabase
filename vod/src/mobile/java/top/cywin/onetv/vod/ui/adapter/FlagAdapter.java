@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import top.cywin.onetv.vod.bean.Episode;
 import top.cywin.onetv.vod.bean.Flag;
-import top.cywin.onetv.vod.databinding.AdapterFlagBinding;
+import top.cywin.onetv.vod.databinding.VodAdapterFlagBinding;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -74,7 +74,7 @@ public class FlagAdapter extends RecyclerView.Adapter<FlagAdapter.ViewHolder> {
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(AdapterFlagBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return new ViewHolder(VodAdapterFlagBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
@@ -87,9 +87,9 @@ public class FlagAdapter extends RecyclerView.Adapter<FlagAdapter.ViewHolder> {
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private final AdapterFlagBinding binding;
+        private final VodAdapterFlagBinding binding;
 
-        ViewHolder(@NonNull AdapterFlagBinding binding) {
+        ViewHolder(@NonNull VodAdapterFlagBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

@@ -6,7 +6,7 @@ import android.view.WindowManager;
 
 import androidx.appcompat.app.AlertDialog;
 
-import top.cywin.onetv.vod.databinding.DialogRestoreBinding;
+import top.cywin.onetv.vod.databinding.VodDialogRestoreBinding;
 import top.cywin.onetv.vod.db.AppDatabase;
 import top.cywin.onetv.vod.impl.Callback;
 import top.cywin.onetv.vod.ui.adapter.RestoreAdapter;
@@ -18,7 +18,7 @@ import java.io.File;
 
 public class RestoreDialog implements RestoreAdapter.OnClickListener {
 
-    private final DialogRestoreBinding binding;
+    private final VodDialogRestoreBinding binding;
     private final RestoreAdapter adapter;
     private final AlertDialog dialog;
     private Callback callback;
@@ -28,7 +28,7 @@ public class RestoreDialog implements RestoreAdapter.OnClickListener {
     }
 
     public RestoreDialog(Activity activity) {
-        this.binding = DialogRestoreBinding.inflate(LayoutInflater.from(activity));
+        this.binding = VodDialogRestoreBinding.inflate(LayoutInflater.from(activity));
         this.dialog = new MaterialAlertDialogBuilder(activity).setView(binding.getRoot()).create();
         this.adapter = new RestoreAdapter(this);
     }

@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import top.cywin.onetv.vod.bean.EpgData;
-import top.cywin.onetv.vod.databinding.AdapterEpgDataBinding;
+import top.cywin.onetv.vod.databinding.VodAdapterEpgDataBinding;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +55,7 @@ public class EpgDataAdapter extends RecyclerView.Adapter<EpgDataAdapter.ViewHold
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(AdapterEpgDataBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return new ViewHolder(VodAdapterEpgDataBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
@@ -71,9 +71,9 @@ public class EpgDataAdapter extends RecyclerView.Adapter<EpgDataAdapter.ViewHold
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private final AdapterEpgDataBinding binding;
+        private final VodAdapterEpgDataBinding binding;
 
-        ViewHolder(@NonNull AdapterEpgDataBinding binding) {
+        ViewHolder(@NonNull VodAdapterEpgDataBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

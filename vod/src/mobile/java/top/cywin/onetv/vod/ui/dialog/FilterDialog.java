@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.viewbinding.ViewBinding;
 
 import top.cywin.onetv.vod.bean.Filter;
-import top.cywin.onetv.vod.databinding.DialogFilterBinding;
+import top.cywin.onetv.vod.databinding.VodDialogFilterBinding;
 import top.cywin.onetv.vod.impl.FilterCallback;
 import top.cywin.onetv.vod.ui.adapter.FilterAdapter;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -18,7 +18,7 @@ import java.util.List;
 
 public class FilterDialog extends BaseDialog {
 
-    private DialogFilterBinding binding;
+    private VodDialogFilterBinding binding;
     private FilterCallback callback;
     private List<Filter> filter;
 
@@ -39,7 +39,7 @@ public class FilterDialog extends BaseDialog {
 
     @Override
     protected ViewBinding getBinding(@NonNull LayoutInflater inflater, @Nullable ViewGroup container) {
-        return binding = DialogFilterBinding.inflate(inflater, container, false);
+        return binding = VodDialogFilterBinding.inflate(inflater, container, false);
     }
 
     @Override

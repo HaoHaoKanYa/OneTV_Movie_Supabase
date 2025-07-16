@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import top.cywin.onetv.vod.databinding.AdapterCollectWordBinding;
+import top.cywin.onetv.vod.databinding.VodAdapterCollectWordBinding;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +40,7 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder> {
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(AdapterCollectWordBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return new ViewHolder(VodAdapterCollectWordBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
@@ -52,9 +52,9 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder> {
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private final AdapterCollectWordBinding binding;
+        private final VodAdapterCollectWordBinding binding;
 
-        ViewHolder(@NonNull AdapterCollectWordBinding binding) {
+        ViewHolder(@NonNull VodAdapterCollectWordBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

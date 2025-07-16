@@ -11,7 +11,7 @@ import androidx.viewbinding.ViewBinding;
 import com.fongmi.onetv.tv.Product;
 import top.cywin.onetv.vod
 import com.fongmi.onetv.tv.bean.History;
-import com.fongmi.onetv.tv.databinding.ActivityHistoryBinding;
+import com.fongmi.onetv.tv.databinding.VodActivityHistoryBinding;
 import com.fongmi.onetv.tv.event.RefreshEvent;
 import com.fongmi.onetv.tv.ui.adapter.HistoryAdapter;
 import com.fongmi.onetv.tv.ui.base.BaseActivity;
@@ -23,7 +23,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 public class HistoryActivity extends BaseActivity implements HistoryAdapter.OnClickListener {
 
-    private ActivityHistoryBinding mBinding;
+    private VodActivityHistoryBinding mBinding;
     private HistoryAdapter mAdapter;
 
     public static void start(Activity activity) {
@@ -32,7 +32,7 @@ public class HistoryActivity extends BaseActivity implements HistoryAdapter.OnCl
 
     @Override
     protected ViewBinding getBinding() {
-        return mBinding = ActivityHistoryBinding.inflate(getLayoutInflater());
+        return mBinding = VodActivityHistoryBinding.inflate(getLayoutInflater());
     }
 
     @Override
@@ -66,7 +66,7 @@ public class HistoryActivity extends BaseActivity implements HistoryAdapter.OnCl
 
     private void onDelete(View view) {
         if (mAdapter.isDelete()) {
-            new MaterialAlertDialogBuilder(this).setTitle(R.string.dialog_delete_record).setMessage(R.string.dialog_delete_history).setNegativeButton(R.string.dialog_negative, null).setPositiveButton(R.string.dialog_positive, (dialog, which) -> mAdapter.clear()).show();
+            new MaterialAlertDialogBuilder(this).setTitle(R.string.vod_dialog_delete_record).setMessage(R.string.vod_dialog_delete_history).setNegativeButton(R.string.vod_dialog_negative, null).setPositiveButton(R.string.vod_dialog_positive, (dialog, which) -> mAdapter.clear()).show();
         } else if (mAdapter.getItemCount() > 0) {
             mAdapter.setDelete(true);
         } else {

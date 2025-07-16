@@ -117,7 +117,7 @@ public class LiveConfig {
             parseConfig(Decoder.getJson(UrlUtil.convert(config.getUrl()), "live"), callback);
         } catch (Throwable e) {
             if (TextUtils.isEmpty(config.getUrl())) App.post(() -> callback.error(""));
-            else App.post(() -> callback.error(Notify.getError(R.string.error_config_get, e)));
+            else App.post(() -> callback.error(Notify.getError(R.string.vod_error_config_get, e)));
             e.printStackTrace();
         }
     }

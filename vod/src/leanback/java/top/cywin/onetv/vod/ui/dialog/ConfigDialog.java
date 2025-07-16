@@ -15,7 +15,7 @@ import top.cywin.onetv.vod.api.config.LiveConfig;
 import top.cywin.onetv.vod.api.config.VodConfig;
 import top.cywin.onetv.vod.api.config.WallConfig;
 import top.cywin.onetv.vod.bean.Config;
-import top.cywin.onetv.vod.databinding.DialogConfigBinding;
+import top.cywin.onetv.vod.databinding.VodDialogConfigBinding;
 import top.cywin.onetv.vod.event.ServerEvent;
 import top.cywin.onetv.vod.impl.ConfigCallback;
 import top.cywin.onetv.vod.server.Server;
@@ -31,7 +31,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 public class ConfigDialog implements DialogInterface.OnDismissListener {
 
-    private final DialogConfigBinding binding;
+    private final VodDialogConfigBinding binding;
     private final FragmentActivity activity;
     private final ConfigCallback callback;
     private final AlertDialog dialog;
@@ -57,7 +57,7 @@ public class ConfigDialog implements DialogInterface.OnDismissListener {
     public ConfigDialog(FragmentActivity activity) {
         this.activity = activity;
         this.callback = (ConfigCallback) activity;
-        this.binding = DialogConfigBinding.inflate(LayoutInflater.from(activity));
+        this.binding = VodDialogConfigBinding.inflate(LayoutInflater.from(activity));
         this.dialog = new MaterialAlertDialogBuilder(activity).setView(binding.getRoot()).create();
         this.append = true;
     }
@@ -80,9 +80,9 @@ public class ConfigDialog implements DialogInterface.OnDismissListener {
     private void initView() {
         binding.text.setText(url = getUrl());
         binding.text.setSelection(TextUtils.isEmpty(url) ? 0 : url.length());
-        binding.positive.setText(edit ? R.string.dialog_edit : R.string.dialog_positive);
+        binding.positive.setText(edit ? R.string.vod_dialog_edit : R.string.vod_dialog_positive);
         binding.code.setImageBitmap(QRCode.getBitmap(Server.get().getAddress(3), 200, 0));
-        binding.info.setText(ResUtil.getString(R.string.push_info, Server.get().getAddress()).replace("，", "\n"));
+        binding.info.setText(ResUtil.getString(R.string.vod_push_info, Server.get().getAddress()).replace("，", "\n"));
     }
 
     private void initEvent() {

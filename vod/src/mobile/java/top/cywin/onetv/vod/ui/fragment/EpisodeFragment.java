@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.viewbinding.ViewBinding;
 
 import com.fongmi.onetv.tv.bean.Episode;
-import com.fongmi.onetv.tv.databinding.FragmentEpisodeBinding;
+import com.fongmi.onetv.tv.databinding.VodFragmentEpisodeBinding;
 import com.fongmi.onetv.tv.model.SiteViewModel;
 import com.fongmi.onetv.tv.ui.adapter.EpisodeAdapter;
 import com.fongmi.onetv.tv.ui.base.BaseFragment;
@@ -22,7 +22,7 @@ import java.util.List;
 
 public class EpisodeFragment extends BaseFragment implements EpisodeAdapter.OnClickListener {
 
-    private FragmentEpisodeBinding mBinding;
+    private VodFragmentEpisodeBinding mBinding;
     private SiteViewModel mViewModel;
 
     private int getSpanCount() {
@@ -44,7 +44,7 @@ public class EpisodeFragment extends BaseFragment implements EpisodeAdapter.OnCl
 
     @Override
     protected ViewBinding getBinding(@NonNull LayoutInflater inflater, @Nullable ViewGroup container) {
-        return mBinding = FragmentEpisodeBinding.inflate(inflater, container, false);
+        return mBinding = VodFragmentEpisodeBinding.inflate(inflater, container, false);
     }
 
     @Override

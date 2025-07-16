@@ -53,7 +53,7 @@ import top.cywin.onetv.vod.bean.Site;
 import top.cywin.onetv.vod.bean.Sub;
 import top.cywin.onetv.vod.bean.Track;
 import top.cywin.onetv.vod.bean.Vod;
-import top.cywin.onetv.vod.databinding.ActivityVideoBinding;
+import top.cywin.onetv.vod.databinding.VodActivityVideoBinding;
 import top.cywin.onetv.vod.db.AppDatabase;
 import top.cywin.onetv.vod.event.ActionEvent;
 import top.cywin.onetv.vod.event.CastEvent;
@@ -115,7 +115,7 @@ import java.util.regex.Matcher;
 
 public class VideoActivity extends BaseActivity implements Clock.Callback, CustomKeyDownVod.Listener, TrackDialog.Listener, ControlDialog.Listener, FlagAdapter.OnClickListener, EpisodeAdapter.OnClickListener, QualityAdapter.OnClickListener, QuickAdapter.OnClickListener, ParseAdapter.OnClickListener, CastDialog.Listener, InfoDialog.Listener {
 
-    private ActivityVideoBinding mBinding;
+    private VodActivityVideoBinding mBinding;
     private ViewGroup.LayoutParams mFrameParams;
     private Observer<Result> mObserveDetail;
     private Observer<Result> mObservePlayer;
@@ -262,7 +262,7 @@ public class VideoActivity extends BaseActivity implements Clock.Callback, Custo
 
     @Override
     protected ViewBinding getBinding() {
-        return mBinding = ActivityVideoBinding.inflate(getLayoutInflater());
+        return mBinding = VodActivityVideoBinding.inflate(getLayoutInflater());
     }
 
     @Override
@@ -381,7 +381,7 @@ public class VideoActivity extends BaseActivity implements Clock.Callback, Custo
         if (isPort() && ResUtil.isLand(this)) enterFullscreen();
         mBinding.control.action.decode.setText(mPlayers.getDecodeText());
         mBinding.control.action.danmaku.setVisibility(Setting.isDanmakuLoad() ? View.VISIBLE : View.GONE);
-        mBinding.control.action.reset.setText(ResUtil.getStringArray(R.array.select_reset)[Setting.getReset()]);
+        mBinding.control.action.reset.setText(ResUtil.getStringArray(R.array.vod_select_reset)[Setting.getReset()]);
         mBinding.video.addOnLayoutChangeListener((view, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> mPiP.update(getActivity(), view));
     }
 
@@ -400,7 +400,7 @@ public class VideoActivity extends BaseActivity implements Clock.Callback, Custo
     private void setScale(int scale) {
         mHistory.setScale(scale);
         mBinding.exo.setResizeMode(scale);
-        mBinding.control.action.scale.setText(ResUtil.getStringArray(R.array.select_scale)[scale]);
+        mBinding.control.action.scale.setText(ResUtil.getStringArray(R.array.vod_select_scale)[scale]);
     }
 
     private void setViewModel() {
@@ -457,7 +457,7 @@ public class VideoActivity extends BaseActivity implements Clock.Callback, Custo
     }
 
     private void showEmpty() {
-        showError(getString(R.string.error_detail));
+        showError(getString(R.string.vod_error_detail));
         mBinding.swipeLayout.setEnabled(true);
         mBinding.progressLayout.showEmpty();
         stopSearch();
@@ -468,10 +468,10 @@ public class VideoActivity extends BaseActivity implements Clock.Callback, Custo
         mBinding.video.setTag(item.getVodPic(getPic()));
         mBinding.name.setText(item.getVodName(getName()));
         setText(mBinding.remark, 0, item.getVodRemarks());
-        setText(mBinding.site, R.string.detail_site, getSite().getName());
+        setText(mBinding.site, R.string.vod_detail_site, getSite().getName());
         setText(mBinding.content, 0, Html.fromHtml(item.getVodContent()).toString());
-        setText(mBinding.actor, R.string.detail_actor, Html.fromHtml(item.getVodActor()).toString());
-        setText(mBinding.director, R.string.detail_director, Html.fromHtml(item.getVodDirector()).toString());
+        setText(mBinding.actor, R.string.vod_detail_actor, Html.fromHtml(item.getVodActor()).toString());
+        setText(mBinding.director, R.string.vod_detail_director, Html.fromHtml(item.getVodDirector()).toString());
         mBinding.contentLayout.setVisibility(mBinding.content.getVisibility());
         mFlagAdapter.addAll(item.getVodFlags());
         setOther(mBinding.other, item);
@@ -521,15 +521,15 @@ public class VideoActivity extends BaseActivity implements Clock.Callback, Custo
 
     private void setOther(TextView view, Vod item) {
         StringBuilder sb = new StringBuilder();
-        if (!item.getVodYear().isEmpty()) sb.append(getString(R.string.detail_year, item.getVodYear())).append("  ");
-        if (!item.getVodArea().isEmpty()) sb.append(getString(R.string.detail_area, item.getVodArea())).append("  ");
-        if (!item.getTypeName().isEmpty()) sb.append(getString(R.string.detail_type, item.getTypeName())).append("  ");
+        if (!item.getVodYear().isEmpty()) sb.append(getString(R.string.vod_detail_year, item.getVodYear())).append("  ");
+        if (!item.getVodArea().isEmpty()) sb.append(getString(R.string.vod_detail_area, item.getVodArea())).append("  ");
+        if (!item.getTypeName().isEmpty()) sb.append(getString(R.string.vod_detail_type, item.getTypeName())).append("  ");
         view.setVisibility(sb.length() == 0 ? View.GONE : View.VISIBLE);
         view.setText(Util.substring(sb.toString(), 2));
     }
 
     private void getPlayer(Flag flag, Episode episode, boolean replay) {
-        mBinding.control.title.setText(getString(R.string.detail_title, mBinding.name.getText(), episode.getName()));
+        mBinding.control.title.setText(getString(R.string.vod_detail_title, mBinding.name.getText(), episode.getName()));
         mViewModel.playerContent(getKey(), flag.getFlag(), episode.getUrl());
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         mBinding.control.title.setSelected(true);
@@ -540,7 +540,7 @@ public class VideoActivity extends BaseActivity implements Clock.Callback, Custo
 
     private void setPlayer(Result result) {
         result.getUrl().set(mQualityAdapter.getPosition());
-        if (!result.getDesc().isEmpty()) setText(mBinding.content, R.string.detail_content, Html.fromHtml(result.getDesc()).toString());
+        if (!result.getDesc().isEmpty()) setText(mBinding.content, R.string.vod_detail_content, Html.fromHtml(result.getDesc()).toString());
         setUseParse(VodConfig.hasParse() && ((result.getPlayUrl().isEmpty() && VodConfig.get().getFlags().contains(result.getFlag())) || result.getJx() == 1));
         if (mControlDialog != null && mControlDialog.isVisible()) mControlDialog.setParseVisible(isUseParse());
         mBinding.control.parse.setVisibility(isFullscreen() && isUseParse() ? View.VISIBLE : View.GONE);
@@ -567,7 +567,7 @@ public class VideoActivity extends BaseActivity implements Clock.Callback, Custo
         mFlagAdapter.toggle(item);
         notifyItemChanged(mEpisodeAdapter);
         mBinding.episode.scrollToPosition(mEpisodeAdapter.getPosition());
-        if (isFullscreen()) Notify.show(getString(R.string.play_ready, item.getName()));
+        if (isFullscreen()) Notify.show(getString(R.string.vod_play_ready, item.getName()));
         onRefresh();
     }
 
@@ -630,7 +630,7 @@ public class VideoActivity extends BaseActivity implements Clock.Callback, Custo
 
     private void onName() {
         String name = mBinding.name.getText().toString();
-        Notify.show(getString(R.string.detail_search, name));
+        Notify.show(getString(R.string.vod_detail_search, name));
         initSearch(name, false);
     }
 
@@ -680,7 +680,7 @@ public class VideoActivity extends BaseActivity implements Clock.Callback, Custo
 
     private void onKeep() {
         Keep keep = Keep.find(getHistoryKey());
-        Notify.show(keep != null ? R.string.keep_del : R.string.keep_add);
+        Notify.show(keep != null ? R.string.vod_keep_del : R.string.vod_keep_add);
         if (keep != null) keep.delete();
         else createKeep();
         RefreshEvent.keep();
@@ -702,14 +702,14 @@ public class VideoActivity extends BaseActivity implements Clock.Callback, Custo
         setR1Callback();
         Episode item = mEpisodeAdapter.getNext();
         if (!item.isActivated()) onItemClick(item);
-        else if (notify) Notify.show(R.string.error_play_next);
+        else if (notify) Notify.show(R.string.vod_error_play_next);
     }
 
     private void checkPrev() {
         setR1Callback();
         Episode item = mEpisodeAdapter.getPrev();
         if (!item.isActivated()) onItemClick(item);
-        else Notify.show(R.string.error_play_prev);
+        else Notify.show(R.string.vod_error_play_prev);
     }
 
     private void onSetting() {
@@ -752,7 +752,7 @@ public class VideoActivity extends BaseActivity implements Clock.Callback, Custo
 
     private void onScale() {
         int index = getScale();
-        String[] array = ResUtil.getStringArray(R.array.select_scale);
+        String[] array = ResUtil.getStringArray(R.array.vod_select_scale);
         if (mKeyDown.getScale() != 1.0f) mKeyDown.resetScale();
         else setScale(index == array.length - 1 ? 0 : ++index);
         setR1Callback();
@@ -790,7 +790,7 @@ public class VideoActivity extends BaseActivity implements Clock.Callback, Custo
 
     private boolean onResetToggle() {
         Setting.putReset(Math.abs(Setting.getReset() - 1));
-        mBinding.control.action.reset.setText(ResUtil.getStringArray(R.array.select_reset)[Setting.getReset()]);
+        mBinding.control.action.reset.setText(ResUtil.getStringArray(R.array.vod_select_reset)[Setting.getReset()]);
         return true;
     }
 
@@ -817,7 +817,7 @@ public class VideoActivity extends BaseActivity implements Clock.Callback, Custo
 
     private void setEnding(long ending) {
         mHistory.setEnding(ending);
-        mBinding.control.action.ending.setText(ending <= 0 ? getString(R.string.play_ed) : mPlayers.stringToTime(mHistory.getEnding()));
+        mBinding.control.action.ending.setText(ending <= 0 ? getString(R.string.vod_play_ed) : mPlayers.stringToTime(mHistory.getEnding()));
     }
 
     private void onOpening() {
@@ -837,7 +837,7 @@ public class VideoActivity extends BaseActivity implements Clock.Callback, Custo
 
     private void setOpening(long opening) {
         mHistory.setOpening(opening);
-        mBinding.control.action.opening.setText(opening <= 0 ? getString(R.string.play_op) : mPlayers.stringToTime(mHistory.getOpening()));
+        mBinding.control.action.opening.setText(opening <= 0 ? getString(R.string.vod_play_op) : mPlayers.stringToTime(mHistory.getOpening()));
     }
 
     private void onEpisodes() {
@@ -990,7 +990,7 @@ public class VideoActivity extends BaseActivity implements Clock.Callback, Custo
     }
 
     private void setArtwork(String url) {
-        ImgUtil.load(url, R.drawable.radio, new CustomTarget<>(ResUtil.getScreenWidth(), ResUtil.getScreenHeight()) {
+        ImgUtil.load(url, R.drawable.vod_radio, new CustomTarget<>(ResUtil.getScreenWidth(), ResUtil.getScreenHeight()) {
             @Override
             public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
                 mBinding.exo.setDefaultArtwork(resource);
@@ -1023,8 +1023,8 @@ public class VideoActivity extends BaseActivity implements Clock.Callback, Custo
         mHistory = mHistory == null ? createHistory(item) : mHistory;
         if (!TextUtils.isEmpty(getMark())) mHistory.setVodRemarks(getMark());
         if (Setting.isIncognito() && mHistory.getKey().equals(getHistoryKey())) mHistory.delete();
-        mBinding.control.action.opening.setText(mHistory.getOpening() <= 0 ? getString(R.string.play_op) : mPlayers.stringToTime(mHistory.getOpening()));
-        mBinding.control.action.ending.setText(mHistory.getEnding() <= 0 ? getString(R.string.play_ed) : mPlayers.stringToTime(mHistory.getEnding()));
+        mBinding.control.action.opening.setText(mHistory.getOpening() <= 0 ? getString(R.string.vod_play_op) : mPlayers.stringToTime(mHistory.getOpening()));
+        mBinding.control.action.ending.setText(mHistory.getEnding() <= 0 ? getString(R.string.vod_play_ed) : mPlayers.stringToTime(mHistory.getEnding()));
         mBinding.control.action.speed.setText(mPlayers.setSpeed(mHistory.getSpeed()));
         mHistory.setVodPic(item.getVodPic());
         setScale(getScale());
@@ -1193,7 +1193,7 @@ public class VideoActivity extends BaseActivity implements Clock.Callback, Custo
     private void setMetadata() {
         String title = mHistory.getVodName();
         String episode = getEpisode().getName();
-        String artist = title.equals(episode) ? "" : getString(R.string.play_now, episode);
+        String artist = title.equals(episode) ? "" : getString(R.string.vod_play_now, episode);
         mPlayers.setMetadata(title, artist, mHistory.getVodPic(), mBinding.exo.getDefaultArtwork());
     }
 
@@ -1300,20 +1300,20 @@ public class VideoActivity extends BaseActivity implements Clock.Callback, Custo
 
     private void nextParse(int position) {
         Parse parse = mParseAdapter.get(position + 1);
-        Notify.show(getString(R.string.play_switch_parse, parse.getName()));
+        Notify.show(getString(R.string.vod_play_switch_parse, parse.getName()));
         onItemClick(parse);
     }
 
     private void nextFlag(int position) {
         Flag flag = mFlagAdapter.get(position + 1);
-        Notify.show(getString(R.string.play_switch_flag, flag.getFlag()));
+        Notify.show(getString(R.string.vod_play_switch_flag, flag.getFlag()));
         onItemClick(flag);
     }
 
     private void nextSite() {
         if (mQuickAdapter.isEmpty()) return;
         Vod item = mQuickAdapter.get(0);
-        Notify.show(getString(R.string.play_switch_site, item.getSiteName()));
+        Notify.show(getString(R.string.vod_play_switch_site, item.getSiteName()));
         mQuickAdapter.remove(0);
         mBroken.add(getId());
         setInitAuto(false);
@@ -1431,7 +1431,7 @@ public class VideoActivity extends BaseActivity implements Clock.Callback, Custo
     public void onSpeedUp() {
         if (!mPlayers.isPlaying()) return;
         mBinding.control.action.speed.setText(mPlayers.setSpeed(Setting.getSpeed()));
-        mBinding.widget.speed.startAnimation(ResUtil.getAnim(R.anim.forward));
+        mBinding.widget.speed.startAnimation(ResUtil.getAnim(R.anim.vod_forward));
         mBinding.widget.speed.setVisibility(View.VISIBLE);
     }
 
@@ -1482,7 +1482,7 @@ public class VideoActivity extends BaseActivity implements Clock.Callback, Custo
 
     @Override
     public void onSeek(long time) {
-        mBinding.widget.action.setImageResource(time > 0 ? R.drawable.ic_widget_forward : R.drawable.ic_widget_rewind);
+        mBinding.widget.action.setImageResource(time > 0 ? R.drawable.vod_ic_widget_forward : R.drawable.vod_ic_widget_rewind);
         mBinding.widget.time.setText(mPlayers.getPositionTime(time));
         mBinding.widget.seek.setVisibility(View.VISIBLE);
         hideProgress();

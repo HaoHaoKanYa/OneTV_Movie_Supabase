@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import top.cywin.onetv.vod.bean.Group;
-import top.cywin.onetv.vod.databinding.AdapterGroupBinding;
+import top.cywin.onetv.vod.databinding.VodAdapterGroupBinding;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,7 +76,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(AdapterGroupBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return new ViewHolder(VodAdapterGroupBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
@@ -89,9 +89,9 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private final AdapterGroupBinding binding;
+        private final VodAdapterGroupBinding binding;
 
-        ViewHolder(@NonNull AdapterGroupBinding binding) {
+        ViewHolder(@NonNull VodAdapterGroupBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

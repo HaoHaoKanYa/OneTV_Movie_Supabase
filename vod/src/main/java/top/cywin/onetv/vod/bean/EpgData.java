@@ -85,7 +85,7 @@ public class EpgData {
 
     public String format() {
         if (getTitle().isEmpty()) return "";
-        if (getStart().isEmpty() && getEnd().isEmpty()) return ResUtil.getString(R.string.play_now, getTitle());
+        if (getStart().isEmpty() && getEnd().isEmpty()) return ResUtil.getString(R.string.vod_play_now, getTitle());
         return getStart() + " ~ " + getEnd() + "  " + getTitle();
     }
 

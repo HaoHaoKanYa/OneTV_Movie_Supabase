@@ -38,8 +38,8 @@ public class CustomRecyclerView extends RecyclerView {
     }
 
     private void init(Context context, AttributeSet attrs) {
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CustomRecyclerView);
-        maxHeight = a.getLayoutDimension(R.styleable.CustomRecyclerView_maxHeight, maxHeight);
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.vod_CustomRecyclerView);
+        maxHeight = a.getLayoutDimension(R.styleable.vod_CustomRecyclerView_vod_maxHeight, maxHeight);
         setOverScrollMode(View.OVER_SCROLL_NEVER);
         a.recycle();
     }

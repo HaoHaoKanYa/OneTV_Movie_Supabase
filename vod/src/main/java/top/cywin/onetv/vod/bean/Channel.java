@@ -317,7 +317,7 @@ public class Channel {
         if (getUrls().size() <= 1) return "";
         String[] sp = getUrls().get(getLine()).split("\\$");
         if (sp.length > 1 && !sp[1].isEmpty()) return sp[1];
-        return ResUtil.getString(R.string.live_line, getLine() + 1);
+        return ResUtil.getString(R.string.vod_live_line, getLine() + 1);
     }
 
     public Channel setNumber(int number) {

@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import top.cywin.onetv.vod.App;
 import top.cywin.onetv.vod.Setting;
-import top.cywin.onetv.vod.databinding.AdapterSearchRecordBinding;
+import top.cywin.onetv.vod.databinding.VodAdapterSearchRecordBinding;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
@@ -58,7 +58,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(AdapterSearchRecordBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return new ViewHolder(VodAdapterSearchRecordBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
@@ -68,9 +68,9 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
-        private final AdapterSearchRecordBinding binding;
+        private final VodAdapterSearchRecordBinding binding;
 
-        public ViewHolder(@NonNull AdapterSearchRecordBinding binding) {
+        public ViewHolder(@NonNull VodAdapterSearchRecordBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
             itemView.setOnClickListener(this);

@@ -30,7 +30,7 @@ import top.cywin.onetv.vod.bean.Hot;
 import top.cywin.onetv.vod.bean.Result;
 import top.cywin.onetv.vod.bean.Site;
 import top.cywin.onetv.vod.bean.Value;
-import top.cywin.onetv.vod.databinding.FragmentVodBinding;
+import top.cywin.onetv.vod.databinding.VodFragmentVodBinding;
 import top.cywin.onetv.vod.event.CastEvent;
 import top.cywin.onetv.vod.event.RefreshEvent;
 import top.cywin.onetv.vod.event.StateEvent;
@@ -70,7 +70,7 @@ import okhttp3.Response;
 
 public class VodFragment extends BaseFragment implements SiteCallback, FilterCallback, TypeAdapter.OnClickListener {
 
-    private FragmentVodBinding mBinding;
+    private VodFragmentVodBinding mBinding;
     private SiteViewModel mViewModel;
     private TypeAdapter mAdapter;
     private Runnable mRunnable;
@@ -91,7 +91,7 @@ public class VodFragment extends BaseFragment implements SiteCallback, FilterCal
 
     @Override
     protected ViewBinding getBinding(@NonNull LayoutInflater inflater, @Nullable ViewGroup container) {
-        return mBinding = FragmentVodBinding.inflate(inflater, container, false);
+        return mBinding = VodFragmentVodBinding.inflate(inflater, container, false);
     }
 
     @Override
@@ -257,7 +257,7 @@ public class VodFragment extends BaseFragment implements SiteCallback, FilterCal
     }
 
     private void setLogo() {
-        Glide.with(App.get()).load(UrlUtil.convert(VodConfig.get().getConfig().getLogo())).circleCrop().override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL).error(R.drawable.ic_logo).listener(getListener()).into(mBinding.logo);
+        Glide.with(App.get()).load(UrlUtil.convert(VodConfig.get().getConfig().getLogo())).circleCrop().override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL).error(R.drawable.vod_ic_logo).listener(getListener()).into(mBinding.logo);
     }
 
     private RequestListener<Drawable> getListener() {

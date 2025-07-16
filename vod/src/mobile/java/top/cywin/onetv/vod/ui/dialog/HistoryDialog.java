@@ -6,7 +6,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import top.cywin.onetv.vod.bean.Config;
-import top.cywin.onetv.vod.databinding.DialogHistoryBinding;
+import top.cywin.onetv.vod.databinding.VodDialogHistoryBinding;
 import top.cywin.onetv.vod.impl.ConfigCallback;
 import top.cywin.onetv.vod.ui.adapter.ConfigAdapter;
 import top.cywin.onetv.vod.ui.custom.SpaceItemDecoration;
@@ -14,7 +14,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class HistoryDialog implements ConfigAdapter.OnClickListener {
 
-    private final DialogHistoryBinding binding;
+    private final VodDialogHistoryBinding binding;
     private final ConfigCallback callback;
     private final ConfigAdapter adapter;
     private final AlertDialog dialog;
@@ -31,7 +31,7 @@ public class HistoryDialog implements ConfigAdapter.OnClickListener {
 
     public HistoryDialog(Fragment fragment) {
         this.callback = (ConfigCallback) fragment;
-        this.binding = DialogHistoryBinding.inflate(LayoutInflater.from(fragment.getContext()));
+        this.binding = VodDialogHistoryBinding.inflate(LayoutInflater.from(fragment.getContext()));
         this.dialog = new MaterialAlertDialogBuilder(fragment.getActivity()).setView(binding.getRoot()).create();
         this.adapter = new ConfigAdapter(this);
     }

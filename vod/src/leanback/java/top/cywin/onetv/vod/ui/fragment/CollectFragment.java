@@ -18,7 +18,7 @@ import top.cywin.onetv.vod.R;
 import top.cywin.onetv.vod.bean.Collect;
 import top.cywin.onetv.vod.bean.Result;
 import top.cywin.onetv.vod.bean.Vod;
-import top.cywin.onetv.vod.databinding.FragmentVodBinding;
+import top.cywin.onetv.vod.databinding.VodFragmentVodBinding;
 import top.cywin.onetv.vod.model.SiteViewModel;
 import top.cywin.onetv.vod.ui.activity.VideoActivity;
 import top.cywin.onetv.vod.ui.activity.VodActivity;
@@ -35,7 +35,7 @@ import java.util.List;
 
 public class CollectFragment extends BaseFragment implements CustomScroller.Callback, VodPresenter.OnClickListener {
 
-    private FragmentVodBinding mBinding;
+    private VodFragmentVodBinding mBinding;
     private ArrayObjectAdapter mAdapter;
     private ArrayObjectAdapter mLast;
     private CustomScroller mScroller;
@@ -62,7 +62,7 @@ public class CollectFragment extends BaseFragment implements CustomScroller.Call
 
     @Override
     protected ViewBinding getBinding(@NonNull LayoutInflater inflater, @Nullable ViewGroup container) {
-        return mBinding = FragmentVodBinding.inflate(inflater, container, false);
+        return mBinding = VodFragmentVodBinding.inflate(inflater, container, false);
     }
 
     @Override

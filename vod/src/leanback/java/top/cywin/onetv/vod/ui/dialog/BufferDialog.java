@@ -5,15 +5,16 @@ import android.view.LayoutInflater;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.FragmentActivity;
 
+import top.cywin.onetv.vod.R;
 import top.cywin.onetv.vod.Setting;
-import top.cywin.onetv.vod.databinding.DialogBufferBinding;
+import top.cywin.onetv.vod.databinding.VodDialogBufferBinding;
 import top.cywin.onetv.vod.impl.BufferCallback;
 import top.cywin.onetv.vod.utils.KeyUtil;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class BufferDialog {
 
-    private final DialogBufferBinding binding;
+    private final VodDialogBufferBinding binding;
     private final BufferCallback callback;
     private final AlertDialog dialog;
 
@@ -23,7 +24,7 @@ public class BufferDialog {
 
     public BufferDialog(FragmentActivity activity) {
         this.callback = (BufferCallback) activity;
-        this.binding = DialogBufferBinding.inflate(LayoutInflater.from(activity));
+        this.binding = VodDialogBufferBinding.inflate(LayoutInflater.from(activity));
         this.dialog = new MaterialAlertDialogBuilder(activity).setView(binding.getRoot()).create();
     }
 
@@ -34,7 +35,7 @@ public class BufferDialog {
     }
 
     private void initDialog() {
-        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialog.getWindow().setBackgroundDrawableResource(R.color.vod_transparent);
         dialog.show();
     }
 

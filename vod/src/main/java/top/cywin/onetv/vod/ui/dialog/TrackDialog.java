@@ -18,7 +18,7 @@ import androidx.viewbinding.ViewBinding;
 import top.cywin.onetv.vod.R;
 import top.cywin.onetv.vod.bean.Sub;
 import top.cywin.onetv.vod.bean.Track;
-import top.cywin.onetv.vod.databinding.DialogTrackBinding;
+import top.cywin.onetv.vod.databinding.VodDialogTrackBinding;
 import top.cywin.onetv.vod.player.Players;
 import top.cywin.onetv.vod.player.exo.TrackNameProvider;
 import top.cywin.onetv.vod.ui.adapter.TrackAdapter;
@@ -35,7 +35,7 @@ public final class TrackDialog extends BaseDialog implements TrackAdapter.OnClic
 
     private final TrackNameProvider provider;
     private final TrackAdapter adapter;
-    private DialogTrackBinding binding;
+    private VodDialogTrackBinding binding;
     private Listener listener;
     private Players player;
     private int type;
@@ -67,7 +67,7 @@ public final class TrackDialog extends BaseDialog implements TrackAdapter.OnClic
 
     @Override
     protected ViewBinding getBinding(@NonNull LayoutInflater inflater, @Nullable ViewGroup container) {
-        return binding = DialogTrackBinding.inflate(inflater, container, false);
+        return binding = VodDialogTrackBinding.inflate(inflater, container, false);
     }
 
     @Override
@@ -80,7 +80,7 @@ public final class TrackDialog extends BaseDialog implements TrackAdapter.OnClic
         binding.recycler.setVisibility(adapter.getItemCount() == 0 ? View.GONE : View.VISIBLE);
         binding.choose.setVisibility(type == C.TRACK_TYPE_TEXT && player.isVod() ? View.VISIBLE : View.GONE);
         binding.subtitle.setVisibility(type == C.TRACK_TYPE_TEXT && player.haveTrack(C.TRACK_TYPE_TEXT) ? View.VISIBLE : View.GONE);
-        binding.title.setText(ResUtil.getStringArray(R.array.select_track)[type - 1]);
+        binding.title.setText(ResUtil.getStringArray(R.array.vod_select_track)[type - 1]);
     }
 
     @Override

@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.leanback.widget.Presenter;
 
 import top.cywin.onetv.vod.R;
-import top.cywin.onetv.vod.databinding.AdapterArrayBinding;
+import top.cywin.onetv.vod.databinding.VodAdapterArrayBinding;
 import top.cywin.onetv.vod.utils.ResUtil;
 
 public class ArrayPresenter extends Presenter {
@@ -20,9 +20,9 @@ public class ArrayPresenter extends Presenter {
 
     public ArrayPresenter(OnClickListener listener) {
         this.mListener = listener;
-        this.backward = ResUtil.getString(R.string.play_backward);
-        this.forward = ResUtil.getString(R.string.play_forward);
-        this.reverse = ResUtil.getString(R.string.play_reverse);
+        this.backward = ResUtil.getString(R.string.vod_play_backward);
+        this.forward = ResUtil.getString(R.string.vod_play_forward);
+        this.reverse = ResUtil.getString(R.string.vod_play_reverse);
     }
 
     public interface OnClickListener {
@@ -34,7 +34,7 @@ public class ArrayPresenter extends Presenter {
 
     @Override
     public Presenter.ViewHolder onCreateViewHolder(ViewGroup parent) {
-        return new ViewHolder(AdapterArrayBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return new ViewHolder(VodAdapterArrayBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
@@ -53,9 +53,9 @@ public class ArrayPresenter extends Presenter {
 
     public static class ViewHolder extends Presenter.ViewHolder {
 
-        private final AdapterArrayBinding binding;
+        private final VodAdapterArrayBinding binding;
 
-        public ViewHolder(@NonNull AdapterArrayBinding binding) {
+        public ViewHolder(@NonNull VodAdapterArrayBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

@@ -20,7 +20,7 @@ import top.cywin.onetv.vod.bean.Config;
 import top.cywin.onetv.vod.bean.Device;
 import top.cywin.onetv.vod.bean.History;
 import top.cywin.onetv.vod.bean.Keep;
-import top.cywin.onetv.vod.databinding.DialogDeviceBinding;
+import top.cywin.onetv.vod.databinding.VodDialogDeviceBinding;
 import top.cywin.onetv.vod.event.ScanEvent;
 import top.cywin.onetv.vod.impl.Callback;
 import top.cywin.onetv.vod.ui.activity.ScanActivity;
@@ -50,7 +50,7 @@ public class SyncDialog extends BaseDialog implements DeviceAdapter.OnClickListe
     private final OkHttpClient client;
     private final ScanTask scanTask;
     private final TypedArray mode;
-    private DialogDeviceBinding binding;
+    private VodDialogDeviceBinding binding;
     private DeviceAdapter adapter;
     private String type;
 
@@ -62,7 +62,7 @@ public class SyncDialog extends BaseDialog implements DeviceAdapter.OnClickListe
         body = new FormBody.Builder();
         scanTask = new ScanTask(this);
         client = OkHttp.client(Constant.TIMEOUT_SYNC);
-        mode = ResUtil.getTypedArray(R.array.cast_mode);
+        mode = ResUtil.getTypedArray(R.array.vod_cast_mode);
     }
 
     public SyncDialog history() {
@@ -91,7 +91,7 @@ public class SyncDialog extends BaseDialog implements DeviceAdapter.OnClickListe
 
     @Override
     protected ViewBinding getBinding(@NonNull LayoutInflater inflater, @Nullable ViewGroup container) {
-        return binding = DialogDeviceBinding.inflate(inflater, container, false);
+        return binding = VodDialogDeviceBinding.inflate(inflater, container, false);
     }
 
     @Override

@@ -7,7 +7,7 @@ import android.os.Bundle;
 
 import androidx.viewbinding.ViewBinding;
 
-import top.cywin.onetv.vod.databinding.ActivityFileBinding;
+import top.cywin.onetv.vod.databinding.VodActivityFileBinding;
 import top.cywin.onetv.vod.ui.adapter.FileAdapter;
 import top.cywin.onetv.vod.ui.base.BaseActivity;
 import com.github.catvod.utils.Path;
@@ -17,7 +17,7 @@ import java.io.File;
 
 public class FileActivity extends BaseActivity implements FileAdapter.OnClickListener {
 
-    private ActivityFileBinding mBinding;
+    private VodActivityFileBinding mBinding;
     private FileAdapter mAdapter;
     private File dir;
 
@@ -27,7 +27,7 @@ public class FileActivity extends BaseActivity implements FileAdapter.OnClickLis
 
     @Override
     protected ViewBinding getBinding() {
-        return mBinding = ActivityFileBinding.inflate(getLayoutInflater());
+        return mBinding = VodActivityFileBinding.inflate(getLayoutInflater());
     }
 
     @Override

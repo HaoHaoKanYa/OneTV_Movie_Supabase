@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import top.cywin.onetv.vod.bean.Filter;
 import top.cywin.onetv.vod.bean.Value;
-import top.cywin.onetv.vod.databinding.AdapterValueBinding;
+import top.cywin.onetv.vod.databinding.VodAdapterValueBinding;
 import top.cywin.onetv.vod.impl.FilterCallback;
 
 import java.util.List;
@@ -33,7 +33,7 @@ public class ValueAdapter extends RecyclerView.Adapter<ValueAdapter.ViewHolder> 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(AdapterValueBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return new ViewHolder(VodAdapterValueBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
@@ -52,9 +52,9 @@ public class ValueAdapter extends RecyclerView.Adapter<ValueAdapter.ViewHolder> 
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private final AdapterValueBinding binding;
+        private final VodAdapterValueBinding binding;
 
-        ViewHolder(@NonNull AdapterValueBinding binding) {
+        ViewHolder(@NonNull VodAdapterValueBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

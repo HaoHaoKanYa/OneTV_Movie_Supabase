@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import top.cywin.onetv.vod
 import top.cywin.onetv.vod.api.config.VodConfig;
 import top.cywin.onetv.vod.bean.Site;
-import top.cywin.onetv.vod.databinding.AdapterSiteBinding;
+import top.cywin.onetv.vod.databinding.VodAdapterSiteBinding;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +67,7 @@ public class SiteAdapter extends RecyclerView.Adapter<SiteAdapter.ViewHolder> {
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(AdapterSiteBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return new ViewHolder(VodAdapterSiteBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
@@ -100,9 +100,9 @@ public class SiteAdapter extends RecyclerView.Adapter<SiteAdapter.ViewHolder> {
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private final AdapterSiteBinding binding;
+        private final VodAdapterSiteBinding binding;
 
-        ViewHolder(@NonNull AdapterSiteBinding binding) {
+        ViewHolder(@NonNull VodAdapterSiteBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

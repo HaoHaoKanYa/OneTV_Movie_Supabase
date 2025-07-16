@@ -15,8 +15,8 @@ import top.cywin.onetv.vod.App;
 import top.cywin.onetv.vod
 import top.cywin.onetv.vod.bean.History;
 import top.cywin.onetv.vod.bean.Parse;
-import top.cywin.onetv.vod.databinding.ActivityVideoBinding;
-import top.cywin.onetv.vod.databinding.DialogControlBinding;
+import top.cywin.onetv.vod.databinding.VodActivityVideoBinding;
+import top.cywin.onetv.vod.databinding.VodDialogControlBinding;
 import top.cywin.onetv.vod.player.Players;
 import top.cywin.onetv.vod.ui.adapter.ParseAdapter;
 import top.cywin.onetv.vod.ui.base.ViewType;
@@ -31,8 +31,8 @@ import java.util.List;
 
 public class ControlDialog extends BaseDialog implements ParseAdapter.OnClickListener {
 
-    private DialogControlBinding binding;
-    private ActivityVideoBinding parent;
+    private VodDialogControlBinding binding;
+    private VodActivityVideoBinding parent;
     private FragmentActivity activity;
     private List<TextView> scales;
     private final String[] scale;
@@ -46,10 +46,10 @@ public class ControlDialog extends BaseDialog implements ParseAdapter.OnClickLis
     }
 
     public ControlDialog() {
-        this.scale = ResUtil.getStringArray(R.array.select_scale);
+        this.scale = ResUtil.getStringArray(R.array.vod_select_scale);
     }
 
-    public ControlDialog parent(ActivityVideoBinding parent) {
+    public ControlDialog parent(VodActivityVideoBinding parent) {
         this.parent = parent;
         return this;
     }
@@ -79,7 +79,7 @@ public class ControlDialog extends BaseDialog implements ParseAdapter.OnClickLis
 
     @Override
     protected ViewBinding getBinding(@NonNull LayoutInflater inflater, @Nullable ViewGroup container) {
-        binding = DialogControlBinding.inflate(inflater, container, false);
+        binding = VodDialogControlBinding.inflate(inflater, container, false);
         scales = Arrays.asList(binding.scale0, binding.scale1, binding.scale2, binding.scale3, binding.scale4);
         return binding;
     }

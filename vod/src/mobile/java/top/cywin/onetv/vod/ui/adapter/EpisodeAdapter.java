@@ -7,9 +7,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import top.cywin.onetv.vod.bean.Episode;
-import top.cywin.onetv.vod.databinding.AdapterEpisodeGridBinding;
-import top.cywin.onetv.vod.databinding.AdapterEpisodeHoriBinding;
-import top.cywin.onetv.vod.databinding.AdapterEpisodeVertBinding;
+import top.cywin.onetv.vod.databinding.VodAdapterEpisodeGridBinding;
+import top.cywin.onetv.vod.databinding.VodAdapterEpisodeHoriBinding;
+import top.cywin.onetv.vod.databinding.VodAdapterEpisodeVertBinding;
 import top.cywin.onetv.vod.ui.base.BaseEpisodeHolder;
 import top.cywin.onetv.vod.ui.base.ViewType;
 import top.cywin.onetv.vod.ui.holder.EpisodeGridHolder;
@@ -100,11 +100,11 @@ public class EpisodeAdapter extends RecyclerView.Adapter<BaseEpisodeHolder> {
     public BaseEpisodeHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         switch (viewType) {
             case ViewType.HORI:
-                return new EpisodeHoriHolder(AdapterEpisodeHoriBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false), mListener);
+                return new EpisodeHoriHolder(VodAdapterEpisodeHoriBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false), mListener);
             case ViewType.VERT:
-                return new EpisodeVertHolder(AdapterEpisodeVertBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false), mListener);
+                return new EpisodeVertHolder(VodAdapterEpisodeVertBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false), mListener);
             default:
-                return new EpisodeGridHolder(AdapterEpisodeGridBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false), mListener);
+                return new EpisodeGridHolder(VodAdapterEpisodeGridBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false), mListener);
         }
     }
 }

@@ -3,16 +3,16 @@ package top.cywin.onetv.vod.ui.holder;
 import androidx.annotation.NonNull;
 
 import top.cywin.onetv.vod.bean.Episode;
-import top.cywin.onetv.vod.databinding.AdapterEpisodeGridBinding;
+import top.cywin.onetv.vod.databinding.VodAdapterEpisodeGridBinding;
 import top.cywin.onetv.vod.ui.adapter.EpisodeAdapter;
 import top.cywin.onetv.vod.ui.base.BaseEpisodeHolder;
 
 public class EpisodeGridHolder extends BaseEpisodeHolder {
 
     private final EpisodeAdapter.OnClickListener listener;
-    private final AdapterEpisodeGridBinding binding;
+    private final VodAdapterEpisodeGridBinding binding;
 
-    public EpisodeGridHolder(@NonNull AdapterEpisodeGridBinding binding, EpisodeAdapter.OnClickListener listener) {
+    public EpisodeGridHolder(@NonNull VodAdapterEpisodeGridBinding binding, EpisodeAdapter.OnClickListener listener) {
         super(binding.getRoot());
         this.binding = binding;
         this.listener = listener;

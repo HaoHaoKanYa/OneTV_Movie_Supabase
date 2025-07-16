@@ -8,7 +8,7 @@ import androidx.leanback.widget.Presenter;
 
 import top.cywin.onetv.vod.R;
 import top.cywin.onetv.vod.bean.Class;
-import top.cywin.onetv.vod.databinding.AdapterTypeBinding;
+import top.cywin.onetv.vod.databinding.VodAdapterTypeBinding;
 import top.cywin.onetv.vod.utils.ResUtil;
 
 public class TypePresenter extends Presenter {
@@ -28,7 +28,7 @@ public class TypePresenter extends Presenter {
 
     @Override
     public Presenter.ViewHolder onCreateViewHolder(ViewGroup parent) {
-        return new ViewHolder(AdapterTypeBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return new ViewHolder(VodAdapterTypeBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
@@ -52,9 +52,9 @@ public class TypePresenter extends Presenter {
 
     public static class ViewHolder extends Presenter.ViewHolder {
 
-        private final AdapterTypeBinding binding;
+        private final VodAdapterTypeBinding binding;
 
-        public ViewHolder(@NonNull AdapterTypeBinding binding) {
+        public ViewHolder(@NonNull VodAdapterTypeBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

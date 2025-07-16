@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import top.cywin.onetv.vod.api.config.LiveConfig;
 import top.cywin.onetv.vod.bean.Live;
-import top.cywin.onetv.vod.databinding.AdapterLiveBinding;
+import top.cywin.onetv.vod.databinding.VodAdapterLiveBinding;
 
 import java.util.List;
 
@@ -49,7 +49,7 @@ public class LiveAdapter extends RecyclerView.Adapter<LiveAdapter.ViewHolder> {
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(AdapterLiveBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return new ViewHolder(VodAdapterLiveBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
@@ -71,9 +71,9 @@ public class LiveAdapter extends RecyclerView.Adapter<LiveAdapter.ViewHolder> {
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private final AdapterLiveBinding binding;
+        private final VodAdapterLiveBinding binding;
 
-        public ViewHolder(@NonNull AdapterLiveBinding binding) {
+        public ViewHolder(@NonNull VodAdapterLiveBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

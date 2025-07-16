@@ -8,7 +8,7 @@ import androidx.appcompat.app.AlertDialog;
 
 import top.cywin.onetv.vod.api.config.LiveConfig;
 import top.cywin.onetv.vod.bean.Live;
-import top.cywin.onetv.vod.databinding.DialogLiveBinding;
+import top.cywin.onetv.vod.databinding.VodDialogLiveBinding;
 import top.cywin.onetv.vod.impl.LiveCallback;
 import top.cywin.onetv.vod.ui.adapter.LiveAdapter;
 import top.cywin.onetv.vod.ui.custom.SpaceItemDecoration;
@@ -17,7 +17,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class LiveDialog implements LiveAdapter.OnClickListener {
 
-    private final DialogLiveBinding binding;
+    private final VodDialogLiveBinding binding;
     private final LiveCallback callback;
     private final LiveAdapter adapter;
     private final AlertDialog dialog;
@@ -29,7 +29,7 @@ public class LiveDialog implements LiveAdapter.OnClickListener {
     private LiveDialog(Activity activity) {
         this.adapter = new LiveAdapter(this);
         this.callback = (LiveCallback) activity;
-        this.binding = DialogLiveBinding.inflate(LayoutInflater.from(activity));
+        this.binding = VodDialogLiveBinding.inflate(LayoutInflater.from(activity));
         this.dialog = new MaterialAlertDialogBuilder(activity).setView(binding.getRoot()).create();
     }
 

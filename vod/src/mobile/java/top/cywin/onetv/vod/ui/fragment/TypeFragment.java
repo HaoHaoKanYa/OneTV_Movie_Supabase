@@ -20,7 +20,7 @@ import com.fongmi.onetv.tv.bean.Site;
 import com.fongmi.onetv.tv.bean.Style;
 import com.fongmi.onetv.tv.bean.Value;
 import com.fongmi.onetv.tv.bean.Vod;
-import com.fongmi.onetv.tv.databinding.FragmentTypeBinding;
+import com.fongmi.onetv.tv.databinding.VodFragmentTypeBinding;
 import com.fongmi.onetv.tv.model.SiteViewModel;
 import com.fongmi.onetv.tv.ui.activity.CollectActivity;
 import com.fongmi.onetv.tv.ui.activity.VideoActivity;
@@ -37,7 +37,7 @@ import java.util.List;
 public class TypeFragment extends BaseFragment implements CustomScroller.Callback, VodAdapter.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     private HashMap<String, String> mExtends;
-    private FragmentTypeBinding mBinding;
+    private VodFragmentTypeBinding mBinding;
     private CustomScroller mScroller;
     private SiteViewModel mViewModel;
     private VodAdapter mAdapter;
@@ -95,7 +95,7 @@ public class TypeFragment extends BaseFragment implements CustomScroller.Callbac
 
     @Override
     protected ViewBinding getBinding(@NonNull LayoutInflater inflater, @Nullable ViewGroup container) {
-        return mBinding = FragmentTypeBinding.inflate(inflater, container, false);
+        return mBinding = VodFragmentTypeBinding.inflate(inflater, container, false);
     }
 
     @Override

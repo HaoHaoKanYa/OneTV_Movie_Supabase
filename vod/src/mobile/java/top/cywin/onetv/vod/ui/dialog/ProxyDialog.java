@@ -10,14 +10,14 @@ import androidx.fragment.app.Fragment;
 
 import top.cywin.onetv.vod
 import top.cywin.onetv.vod.Setting;
-import top.cywin.onetv.vod.databinding.DialogProxyBinding;
+import top.cywin.onetv.vod.databinding.VodDialogProxyBinding;
 import top.cywin.onetv.vod.impl.ProxyCallback;
 import top.cywin.onetv.vod.ui.custom.CustomTextListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class ProxyDialog {
 
-    private final DialogProxyBinding binding;
+    private final VodDialogProxyBinding binding;
     private final ProxyCallback callback;
     private AlertDialog dialog;
     private boolean append;
@@ -28,7 +28,7 @@ public class ProxyDialog {
 
     public ProxyDialog(Fragment fragment) {
         this.callback = (ProxyCallback) fragment;
-        this.binding = DialogProxyBinding.inflate(LayoutInflater.from(fragment.getContext()));
+        this.binding = VodDialogProxyBinding.inflate(LayoutInflater.from(fragment.getContext()));
         this.append = true;
     }
 
@@ -39,7 +39,7 @@ public class ProxyDialog {
     }
 
     private void initDialog() {
-        dialog = new MaterialAlertDialogBuilder(binding.getRoot().getContext()).setTitle(R.string.setting_proxy).setView(binding.getRoot()).setPositiveButton(R.string.dialog_positive, this::onPositive).setNegativeButton(R.string.dialog_negative, this::onNegative).create();
+        dialog = new MaterialAlertDialogBuilder(binding.getRoot().getContext()).setTitle(R.string.vod_setting_proxy).setView(binding.getRoot()).setPositiveButton(R.string.vod_dialog_positive, this::onPositive).setNegativeButton(R.string.vod_dialog_negative, this::onNegative).create();
         dialog.getWindow().setDimAmount(0);
         dialog.show();
     }

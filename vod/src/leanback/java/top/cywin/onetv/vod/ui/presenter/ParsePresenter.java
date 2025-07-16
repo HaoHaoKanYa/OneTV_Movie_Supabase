@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.leanback.widget.Presenter;
 
 import top.cywin.onetv.vod.bean.Parse;
-import top.cywin.onetv.vod.databinding.AdapterParseBinding;
+import top.cywin.onetv.vod.databinding.VodAdapterParseBinding;
 
 public class ParsePresenter extends Presenter {
 
@@ -23,7 +23,7 @@ public class ParsePresenter extends Presenter {
 
     @Override
     public Presenter.ViewHolder onCreateViewHolder(ViewGroup parent) {
-        return new ViewHolder(AdapterParseBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return new ViewHolder(VodAdapterParseBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
@@ -41,9 +41,9 @@ public class ParsePresenter extends Presenter {
 
     public static class ViewHolder extends Presenter.ViewHolder {
 
-        private final AdapterParseBinding binding;
+        private final VodAdapterParseBinding binding;
 
-        public ViewHolder(@NonNull AdapterParseBinding binding) {
+        public ViewHolder(@NonNull VodAdapterParseBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

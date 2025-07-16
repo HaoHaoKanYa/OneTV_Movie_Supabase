@@ -12,14 +12,14 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewbinding.ViewBinding;
 
-import top.cywin.onetv.vod.databinding.DialogPassBinding;
+import top.cywin.onetv.vod.databinding.VodDialogPassBinding;
 import top.cywin.onetv.vod.impl.PassCallback;
 import top.cywin.onetv.vod.utils.ResUtil;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 public class PassDialog extends BaseDialog {
 
-    private DialogPassBinding binding;
+    private VodDialogPassBinding binding;
     private PassCallback callback;
 
     public static PassDialog create() {
@@ -34,7 +34,7 @@ public class PassDialog extends BaseDialog {
 
     @Override
     protected ViewBinding getBinding(@NonNull LayoutInflater inflater, @Nullable ViewGroup container) {
-        return binding = DialogPassBinding.inflate(inflater, container, false);
+        return binding = VodDialogPassBinding.inflate(inflater, container, false);
     }
 
     @Override

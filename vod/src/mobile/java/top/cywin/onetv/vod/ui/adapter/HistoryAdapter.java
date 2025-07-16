@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import top.cywin.onetv.vod
 import top.cywin.onetv.vod.api.config.VodConfig;
 import top.cywin.onetv.vod.bean.History;
-import top.cywin.onetv.vod.databinding.AdapterVodBinding;
+import top.cywin.onetv.vod.databinding.VodAdapterVodBinding;
 import top.cywin.onetv.vod.utils.ImgUtil;
 import top.cywin.onetv.vod.utils.ResUtil;
 
@@ -80,7 +80,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        ViewHolder holder = new ViewHolder(AdapterVodBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        ViewHolder holder = new ViewHolder(VodAdapterVodBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
         holder.binding.getRoot().getLayoutParams().width = width;
         holder.binding.getRoot().getLayoutParams().height = height;
         return holder;
@@ -109,9 +109,9 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private final AdapterVodBinding binding;
+        private final VodAdapterVodBinding binding;
 
-        ViewHolder(@NonNull AdapterVodBinding binding) {
+        ViewHolder(@NonNull VodAdapterVodBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

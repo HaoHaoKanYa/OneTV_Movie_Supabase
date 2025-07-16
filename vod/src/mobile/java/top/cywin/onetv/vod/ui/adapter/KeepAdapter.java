@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import top.cywin.onetv.vod.bean.Keep;
-import top.cywin.onetv.vod.databinding.AdapterVodBinding;
+import top.cywin.onetv.vod.databinding.VodAdapterVodBinding;
 import top.cywin.onetv.vod.utils.ImgUtil;
 
 import java.util.ArrayList;
@@ -77,7 +77,7 @@ public class KeepAdapter extends RecyclerView.Adapter<KeepAdapter.ViewHolder> {
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        ViewHolder holder = new ViewHolder(AdapterVodBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        ViewHolder holder = new ViewHolder(VodAdapterVodBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
         holder.binding.getRoot().getLayoutParams().width = width;
         holder.binding.getRoot().getLayoutParams().height = height;
         return holder;
@@ -105,9 +105,9 @@ public class KeepAdapter extends RecyclerView.Adapter<KeepAdapter.ViewHolder> {
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private final AdapterVodBinding binding;
+        private final VodAdapterVodBinding binding;
 
-        ViewHolder(@NonNull AdapterVodBinding binding) {
+        ViewHolder(@NonNull VodAdapterVodBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

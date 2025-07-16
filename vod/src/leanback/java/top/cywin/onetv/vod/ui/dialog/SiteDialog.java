@@ -13,7 +13,7 @@ import top.cywin.onetv.vod.R;
 import top.cywin.onetv.vod.Setting;
 import top.cywin.onetv.vod.api.config.VodConfig;
 import top.cywin.onetv.vod.bean.Site;
-import top.cywin.onetv.vod.databinding.DialogSiteBinding;
+import top.cywin.onetv.vod.databinding.VodDialogSiteBinding;
 import top.cywin.onetv.vod.impl.SiteCallback;
 import top.cywin.onetv.vod.ui.adapter.SiteAdapter;
 import top.cywin.onetv.vod.ui.custom.SpaceItemDecoration;
@@ -23,7 +23,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 public class SiteDialog implements SiteAdapter.OnClickListener {
 
     private RecyclerView.ItemDecoration decoration;
-    private final DialogSiteBinding binding;
+    private final VodDialogSiteBinding binding;
     private final SiteCallback callback;
     private final SiteAdapter adapter;
     private final AlertDialog dialog;
@@ -37,7 +37,7 @@ public class SiteDialog implements SiteAdapter.OnClickListener {
     public SiteDialog(Activity activity) {
         this.adapter = new SiteAdapter(this);
         this.callback = (SiteCallback) activity;
-        this.binding = DialogSiteBinding.inflate(LayoutInflater.from(activity));
+        this.binding = VodDialogSiteBinding.inflate(LayoutInflater.from(activity));
         this.dialog = new MaterialAlertDialogBuilder(activity).setView(binding.getRoot()).create();
     }
 

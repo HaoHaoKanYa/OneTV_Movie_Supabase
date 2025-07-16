@@ -8,9 +8,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import top.cywin.onetv.vod.bean.Style;
 import top.cywin.onetv.vod.bean.Vod;
-import top.cywin.onetv.vod.databinding.AdapterVodListBinding;
-import top.cywin.onetv.vod.databinding.AdapterVodOvalBinding;
-import top.cywin.onetv.vod.databinding.AdapterVodRectBinding;
+import top.cywin.onetv.vod.databinding.VodAdapterVodListBinding;
+import top.cywin.onetv.vod.databinding.VodAdapterVodOvalBinding;
+import top.cywin.onetv.vod.databinding.VodAdapterVodRectBinding;
 import top.cywin.onetv.vod.ui.base.BaseVodHolder;
 import top.cywin.onetv.vod.ui.base.ViewType;
 import top.cywin.onetv.vod.ui.holder.VodListHolder;
@@ -76,11 +76,11 @@ public class VodAdapter extends RecyclerView.Adapter<BaseVodHolder> {
     public BaseVodHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         switch (viewType) {
             case ViewType.LIST:
-                return new VodListHolder(AdapterVodListBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false), mListener);
+                return new VodListHolder(VodAdapterVodListBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false), mListener);
             case ViewType.OVAL:
-                return new VodOvalHolder(AdapterVodOvalBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false), mListener).size(size);
+                return new VodOvalHolder(VodAdapterVodOvalBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false), mListener).size(size);
             default:
-                return new VodRectHolder(AdapterVodRectBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false), mListener).size(size);
+                return new VodRectHolder(VodAdapterVodRectBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false), mListener).size(size);
         }
     }
 }

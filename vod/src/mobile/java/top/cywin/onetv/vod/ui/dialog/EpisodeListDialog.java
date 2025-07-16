@@ -7,7 +7,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import top.cywin.onetv.vod.bean.Episode;
-import top.cywin.onetv.vod.databinding.DialogEpisodeListBinding;
+import top.cywin.onetv.vod.databinding.VodDialogEpisodeListBinding;
 import top.cywin.onetv.vod.model.SiteViewModel;
 import top.cywin.onetv.vod.ui.adapter.EpisodeAdapter;
 import top.cywin.onetv.vod.ui.base.ViewType;
@@ -18,7 +18,7 @@ import java.util.List;
 public class EpisodeListDialog implements EpisodeAdapter.OnClickListener {
 
     private final FragmentActivity activity;
-    private DialogEpisodeListBinding binding;
+    private VodDialogEpisodeListBinding binding;
     private List<Episode> episodes;
     private SiteViewModel viewModel;
     private EpisodeAdapter adapter;
@@ -44,7 +44,7 @@ public class EpisodeListDialog implements EpisodeAdapter.OnClickListener {
     }
 
     private void initDialog() {
-        binding = DialogEpisodeListBinding.inflate(LayoutInflater.from(activity));
+        binding = VodDialogEpisodeListBinding.inflate(LayoutInflater.from(activity));
         dialog = new SideSheetDialog(activity);
         dialog.setContentView(binding.getRoot());
         dialog.getBehavior().setDraggable(false);

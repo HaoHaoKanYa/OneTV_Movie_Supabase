@@ -9,7 +9,7 @@ import androidx.viewbinding.ViewBinding;
 import top.cywin.onetv.vod
 import top.cywin.onetv.vod.bean.Class;
 import top.cywin.onetv.vod.bean.Result;
-import top.cywin.onetv.vod.databinding.ActivityFolderBinding;
+import top.cywin.onetv.vod.databinding.VodActivityFolderBinding;
 import top.cywin.onetv.vod.ui.base.BaseActivity;
 import top.cywin.onetv.vod.ui.fragment.TypeFragment;
 
@@ -17,7 +17,7 @@ import java.util.HashMap;
 
 public class FolderActivity extends BaseActivity {
 
-    private ActivityFolderBinding mBinding;
+    private VodActivityFolderBinding mBinding;
 
     public static void start(Activity activity, String key, Result result) {
         if (result == null || result.getTypes().isEmpty()) return;
@@ -37,7 +37,7 @@ public class FolderActivity extends BaseActivity {
 
     @Override
     protected ViewBinding getBinding() {
-        return mBinding = ActivityFolderBinding.inflate(getLayoutInflater());
+        return mBinding = VodActivityFolderBinding.inflate(getLayoutInflater());
     }
 
     @Override

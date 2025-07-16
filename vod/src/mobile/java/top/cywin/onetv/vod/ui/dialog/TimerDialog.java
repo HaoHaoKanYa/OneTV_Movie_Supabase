@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewbinding.ViewBinding;
 
-import top.cywin.onetv.vod.databinding.DialogTimerBinding;
+import top.cywin.onetv.vod.databinding.VodDialogTimerBinding;
 import top.cywin.onetv.vod.utils.Timer;
 import top.cywin.onetv.vod.utils.Util;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
 
 public class TimerDialog extends BaseDialog implements Timer.Callback {
 
-    private DialogTimerBinding binding;
+    private VodDialogTimerBinding binding;
     private StringBuilder builder;
     private Formatter formatter;
 
@@ -41,7 +41,7 @@ public class TimerDialog extends BaseDialog implements Timer.Callback {
 
     @Override
     protected ViewBinding getBinding(@NonNull LayoutInflater inflater, @Nullable ViewGroup container) {
-        return binding = DialogTimerBinding.inflate(inflater, container, false);
+        return binding = VodDialogTimerBinding.inflate(inflater, container, false);
     }
 
     @Override

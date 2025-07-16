@@ -8,7 +8,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.viewbinding.ViewBinding;
 
-import top.cywin.onetv.vod.databinding.ActivityScanBinding;
+import top.cywin.onetv.vod.databinding.VodActivityScanBinding;
 import top.cywin.onetv.vod.event.ScanEvent;
 import top.cywin.onetv.vod.ui.base.BaseActivity;
 import top.cywin.onetv.vod.utils.Util;
@@ -22,7 +22,7 @@ import java.util.List;
 
 public class ScanActivity extends BaseActivity implements BarcodeCallback {
 
-    private ActivityScanBinding mBinding;
+    private VodActivityScanBinding mBinding;
     private CaptureManager mCapture;
 
     public static void start(Activity activity) {
@@ -31,7 +31,7 @@ public class ScanActivity extends BaseActivity implements BarcodeCallback {
 
     @Override
     protected ViewBinding getBinding() {
-        return mBinding = ActivityScanBinding.inflate(getLayoutInflater());
+        return mBinding = VodActivityScanBinding.inflate(getLayoutInflater());
     }
 
     @Override

@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment;
 
 import top.cywin.onetv.vod
 import top.cywin.onetv.vod.Setting;
-import top.cywin.onetv.vod.databinding.DialogUaBinding;
+import top.cywin.onetv.vod.databinding.VodDialogUaBinding;
 import top.cywin.onetv.vod.impl.UaCallback;
 import top.cywin.onetv.vod.ui.custom.CustomTextListener;
 import com.github.catvod.utils.Util;
@@ -18,7 +18,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class UaDialog {
 
-    private final DialogUaBinding binding;
+    private final VodDialogUaBinding binding;
     private final UaCallback callback;
     private AlertDialog dialog;
     private boolean append;
@@ -29,7 +29,7 @@ public class UaDialog {
 
     public UaDialog(Fragment fragment) {
         this.callback = (UaCallback) fragment;
-        this.binding = DialogUaBinding.inflate(LayoutInflater.from(fragment.getContext()));
+        this.binding = VodDialogUaBinding.inflate(LayoutInflater.from(fragment.getContext()));
         this.append = true;
     }
 
@@ -40,7 +40,7 @@ public class UaDialog {
     }
 
     private void initDialog() {
-        dialog = new MaterialAlertDialogBuilder(binding.getRoot().getContext()).setTitle(R.string.player_ua).setView(binding.getRoot()).setPositiveButton(R.string.dialog_positive, this::onPositive).setNegativeButton(R.string.dialog_negative, this::onNegative).create();
+        dialog = new MaterialAlertDialogBuilder(binding.getRoot().getContext()).setTitle(R.string.vod_player_ua).setView(binding.getRoot()).setPositiveButton(R.string.vod_dialog_positive, this::onPositive).setNegativeButton(R.string.vod_dialog_negative, this::onNegative).create();
         dialog.getWindow().setDimAmount(0);
         dialog.show();
     }

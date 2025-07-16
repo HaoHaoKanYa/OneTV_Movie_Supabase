@@ -9,7 +9,7 @@ import androidx.viewbinding.ViewBinding;
 
 import top.cywin.onetv.vod.R;
 import top.cywin.onetv.vod.Setting;
-import top.cywin.onetv.vod.databinding.ActivitySettingPlayerBinding;
+import top.cywin.onetv.vod.databinding.VodActivitySettingPlayerBinding;
 import top.cywin.onetv.vod.impl.BufferCallback;
 import top.cywin.onetv.vod.impl.SpeedCallback;
 import top.cywin.onetv.vod.impl.UaCallback;
@@ -23,7 +23,7 @@ import java.text.DecimalFormat;
 
 public class SettingPlayerActivity extends BaseActivity implements UaCallback, BufferCallback, SpeedCallback {
 
-    private ActivitySettingPlayerBinding mBinding;
+    private VodActivitySettingPlayerBinding mBinding;
     private DecimalFormat format;
     private String[] caption;
     private String[] render;
@@ -34,12 +34,12 @@ public class SettingPlayerActivity extends BaseActivity implements UaCallback, B
     }
 
     private String getSwitch(boolean value) {
-        return getString(value ? R.string.setting_on : R.string.setting_off);
+        return getString(value ? R.string.vod_setting_on : R.string.vod_setting_off);
     }
 
     @Override
     protected ViewBinding getBinding() {
-        return mBinding = ActivitySettingPlayerBinding.inflate(getLayoutInflater());
+        return mBinding = VodActivitySettingPlayerBinding.inflate(getLayoutInflater());
     }
 
     @Override
@@ -55,9 +55,9 @@ public class SettingPlayerActivity extends BaseActivity implements UaCallback, B
         mBinding.backgroundText.setText(getSwitch(Setting.isBackgroundOn()));
         mBinding.audioDecodeText.setText(getSwitch(Setting.isAudioPrefer()));
         mBinding.danmakuLoadText.setText(getSwitch(Setting.isDanmakuLoad()));
-        mBinding.scaleText.setText((scale = ResUtil.getStringArray(R.array.select_scale))[Setting.getScale()]);
-        mBinding.renderText.setText((render = ResUtil.getStringArray(R.array.select_render))[Setting.getRender()]);
-        mBinding.captionText.setText((caption = ResUtil.getStringArray(R.array.select_caption))[Setting.isCaption() ? 1 : 0]);
+        mBinding.scaleText.setText((scale = ResUtil.getStringArray(R.array.vod_select_scale))[Setting.getScale()]);
+        mBinding.renderText.setText((render = ResUtil.getStringArray(R.array.vod_select_render))[Setting.getRender()]);
+        mBinding.captionText.setText((caption = ResUtil.getStringArray(R.array.vod_select_caption))[Setting.isCaption() ? 1 : 0]);
     }
 
     @Override

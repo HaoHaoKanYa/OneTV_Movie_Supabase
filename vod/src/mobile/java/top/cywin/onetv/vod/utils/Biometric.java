@@ -24,7 +24,7 @@ public class Biometric {
     }
 
     public static void show(FragmentActivity activity) {
-        prompt(activity).authenticate(new BiometricPrompt.PromptInfo.Builder().setTitle(ResUtil.getString(R.string.app_name)).setNegativeButtonText(ResUtil.getString(R.string.dialog_negative)).build());
+        prompt(activity).authenticate(new BiometricPrompt.PromptInfo.Builder().setTitle(ResUtil.getString(R.string.vod_app_name)).setNegativeButtonText(ResUtil.getString(R.string.vod_dialog_negative)).build());
     }
 
     private static BiometricPrompt prompt(FragmentActivity activity) {

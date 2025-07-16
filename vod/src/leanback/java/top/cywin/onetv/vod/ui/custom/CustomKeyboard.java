@@ -3,20 +3,20 @@ package top.cywin.onetv.vod.ui.custom;
 import android.annotation.SuppressLint;
 
 import top.cywin.onetv.vod.R;
-import top.cywin.onetv.vod.databinding.ActivitySearchBinding;
+import top.cywin.onetv.vod.databinding.VodActivitySearchBinding;
 import top.cywin.onetv.vod.ui.adapter.KeyboardAdapter;
 
 public class CustomKeyboard implements KeyboardAdapter.OnClickListener {
 
-    private final ActivitySearchBinding binding;
+    private final VodActivitySearchBinding binding;
     private final Callback callback;
     private KeyboardAdapter adapter;
 
-    public static void init(Callback callback, ActivitySearchBinding binding) {
+    public static void init(Callback callback, VodActivitySearchBinding binding) {
         new CustomKeyboard(callback, binding).initView();
     }
 
-    public CustomKeyboard(Callback callback, ActivitySearchBinding binding) {
+    public CustomKeyboard(Callback callback, VodActivitySearchBinding binding) {
         this.callback = callback;
         this.binding = binding;
     }
@@ -43,7 +43,7 @@ public class CustomKeyboard implements KeyboardAdapter.OnClickListener {
     public void onIconClick(int resId) {
         StringBuilder sb = new StringBuilder(binding.keyword.getText().toString());
         int cursor = binding.keyword.getSelectionStart();
-        if (resId == R.drawable.ic_setting_home) {
+        if (resId == R.drawable.vod_ic_setting_home) {
             callback.showDialog();
         } else if (resId == R.drawable.vod_ic_keyboard_remote) {
             callback.onRemote();

@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import top.cywin.onetv.vod.api.config.VodConfig;
 import top.cywin.onetv.vod.bean.Parse;
-import top.cywin.onetv.vod.databinding.AdapterParseDarkBinding;
-import top.cywin.onetv.vod.databinding.AdapterParseLightBinding;
+import top.cywin.onetv.vod.databinding.VodAdapterParseDarkBinding;
+import top.cywin.onetv.vod.databinding.VodAdapterParseLightBinding;
 import top.cywin.onetv.vod.ui.base.ViewType;
 
 import java.util.List;
@@ -62,8 +62,8 @@ public class ParseAdapter extends RecyclerView.Adapter<ParseAdapter.ViewHolder> 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if (viewType == ViewType.DARK) return new ViewHolder(AdapterParseDarkBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
-        return new ViewHolder(AdapterParseLightBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        if (viewType == ViewType.DARK) return new ViewHolder(VodAdapterParseDarkBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return new ViewHolder(VodAdapterParseLightBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
@@ -75,15 +75,15 @@ public class ParseAdapter extends RecyclerView.Adapter<ParseAdapter.ViewHolder> 
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        private AdapterParseDarkBinding darkBinding;
-        private AdapterParseLightBinding lightBinding;
+        private VodAdapterParseDarkBinding darkBinding;
+        private VodAdapterParseLightBinding lightBinding;
 
-        ViewHolder(@NonNull AdapterParseDarkBinding binding) {
+        ViewHolder(@NonNull VodAdapterParseDarkBinding binding) {
             super(binding.getRoot());
             this.darkBinding = binding;
         }
 
-        ViewHolder(@NonNull AdapterParseLightBinding binding) {
+        ViewHolder(@NonNull VodAdapterParseLightBinding binding) {
             super(binding.getRoot());
             this.lightBinding = binding;
         }

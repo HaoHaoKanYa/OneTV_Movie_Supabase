@@ -17,7 +17,7 @@ import top.cywin.onetv.vod.api.config.WallConfig;
 import top.cywin.onetv.vod.bean.Config;
 import top.cywin.onetv.vod.bean.Live;
 import top.cywin.onetv.vod.bean.Site;
-import top.cywin.onetv.vod.databinding.ActivitySettingBinding;
+import top.cywin.onetv.vod.databinding.VodActivitySettingBinding;
 import top.cywin.onetv.vod.db.AppDatabase;
 import top.cywin.onetv.vod.event.RefreshEvent;
 import top.cywin.onetv.vod.impl.Callback;
@@ -52,7 +52,7 @@ import javax.annotation.Nullable;
 
 public class SettingActivity extends BaseActivity implements ConfigCallback, SiteCallback, LiveCallback, DohCallback, ProxyCallback {
 
-    private ActivitySettingBinding mBinding;
+    private VodActivitySettingBinding mBinding;
     private String[] quality;
     private String[] size;
     private int type;
@@ -62,11 +62,11 @@ public class SettingActivity extends BaseActivity implements ConfigCallback, Sit
     }
 
     private String getSwitch(boolean value) {
-        return getString(value ? R.string.setting_on : R.string.setting_off);
+        return getString(value ? R.string.vod_setting_on : R.string.vod_setting_off);
     }
 
     private String getProxy(String proxy) {
-        return proxy.isEmpty() ? getString(R.string.none) : UrlUtil.scheme(proxy);
+        return proxy.isEmpty() ? getString(R.string.vod_none) : UrlUtil.scheme(proxy);
     }
 
     private int getDohIndex() {
@@ -81,7 +81,7 @@ public class SettingActivity extends BaseActivity implements ConfigCallback, Sit
 
     @Override
     protected ViewBinding getBinding() {
-        return mBinding = ActivitySettingBinding.inflate(getLayoutInflater());
+        return mBinding = VodActivitySettingBinding.inflate(getLayoutInflater());
     }
 
     @Override
@@ -99,8 +99,8 @@ public class SettingActivity extends BaseActivity implements ConfigCallback, Sit
         mBinding.dohText.setText(getDohList()[getDohIndex()]);
         mBinding.proxyText.setText(getProxy(Setting.getProxy()));
         mBinding.incognitoText.setText(getSwitch(Setting.isIncognito()));
-        mBinding.sizeText.setText((size = ResUtil.getStringArray(R.array.select_size))[Setting.getSize()]);
-        mBinding.qualityText.setText((quality = ResUtil.getStringArray(R.array.select_quality))[Setting.getQuality()]);
+        mBinding.sizeText.setText((size = ResUtil.getStringArray(R.array.vod_select_size))[Setting.getSize()]);
+        mBinding.qualityText.setText((quality = ResUtil.getStringArray(R.array.vod_select_quality))[Setting.getQuality()]);
     }
 
     private void setCacheText() {
@@ -359,12 +359,12 @@ public class SettingActivity extends BaseActivity implements ConfigCallback, Sit
         PermissionX.init(this).permissions(Manifest.permission.WRITE_EXTERNAL_STORAGE).request((allGranted, grantedList, deniedList) -> AppDatabase.backup(new Callback() {
             @Override
             public void success() {
-                Notify.show(R.string.backup_success);
+                Notify.show(R.string.vod_backup_success);
             }
 
             @Override
             public void error() {
-                Notify.show(R.string.backup_fail);
+                Notify.show(R.string.vod_backup_fail);
             }
         }));
     }
@@ -373,7 +373,7 @@ public class SettingActivity extends BaseActivity implements ConfigCallback, Sit
         PermissionX.init(this).permissions(Manifest.permission.WRITE_EXTERNAL_STORAGE).request((allGranted, grantedList, deniedList) -> RestoreDialog.create(this).show(new Callback() {
             @Override
             public void success() {
-                Notify.show(R.string.restore_success);
+                Notify.show(R.string.vod_restore_success);
                 Notify.progress(getActivity());
                 setOtherText();
                 initConfig();
@@ -381,7 +381,7 @@ public class SettingActivity extends BaseActivity implements ConfigCallback, Sit
 
             @Override
             public void error() {
-                Notify.show(R.string.restore_fail);
+                Notify.show(R.string.vod_restore_fail);
             }
         }));
     }

@@ -12,7 +12,7 @@ import androidx.fragment.app.FragmentActivity;
 
 import top.cywin.onetv.vod.R;
 import top.cywin.onetv.vod.Setting;
-import top.cywin.onetv.vod.databinding.DialogProxyBinding;
+import top.cywin.onetv.vod.databinding.VodDialogProxyBinding;
 import top.cywin.onetv.vod.event.ServerEvent;
 import top.cywin.onetv.vod.impl.ProxyCallback;
 import top.cywin.onetv.vod.server.Server;
@@ -27,7 +27,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 public class ProxyDialog implements DialogInterface.OnDismissListener {
 
-    private final DialogProxyBinding binding;
+    private final VodDialogProxyBinding binding;
     private final ProxyCallback callback;
     private final AlertDialog dialog;
     private boolean append;
@@ -38,7 +38,7 @@ public class ProxyDialog implements DialogInterface.OnDismissListener {
 
     public ProxyDialog(FragmentActivity activity) {
         this.callback = (ProxyCallback) activity;
-        this.binding = DialogProxyBinding.inflate(LayoutInflater.from(activity));
+        this.binding = VodDialogProxyBinding.inflate(LayoutInflater.from(activity));
         this.dialog = new MaterialAlertDialogBuilder(activity).setView(binding.getRoot()).create();
         this.append = true;
     }
@@ -63,7 +63,7 @@ public class ProxyDialog implements DialogInterface.OnDismissListener {
         binding.text.setText(text);
         binding.text.setSelection(TextUtils.isEmpty(text) ? 0 : text.length());
         binding.code.setImageBitmap(QRCode.getBitmap(Server.get().getAddress(3), 200, 0));
-        binding.info.setText(ResUtil.getString(R.string.push_info, Server.get().getAddress()).replace("，", "\n"));
+        binding.info.setText(ResUtil.getString(R.string.vod_push_info, Server.get().getAddress()).replace("，", "\n"));
     }
 
     private void initEvent() {

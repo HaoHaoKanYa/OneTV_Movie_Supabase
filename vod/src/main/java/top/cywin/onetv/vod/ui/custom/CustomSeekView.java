@@ -44,7 +44,7 @@ public class CustomSeekView extends FrameLayout implements TimeBar.OnScrubListen
 
     public CustomSeekView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        LayoutInflater.from(context).inflate(R.layout.view_control_seek, this);
+        LayoutInflater.from(context).inflate(R.layout.vod_view_control_seek, this);
         init();
         start();
     }

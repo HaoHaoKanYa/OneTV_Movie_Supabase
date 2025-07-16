@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewbinding.ViewBinding;
 
-import top.cywin.onetv.vod.databinding.DialogRestoreBinding;
+import top.cywin.onetv.vod.databinding.VodDialogRestoreBinding;
 import top.cywin.onetv.vod.db.AppDatabase;
 import top.cywin.onetv.vod.impl.Callback;
 import top.cywin.onetv.vod.ui.adapter.RestoreAdapter;
@@ -21,7 +21,7 @@ import java.io.File;
 
 public class RestoreDialog extends BaseDialog implements RestoreAdapter.OnClickListener {
 
-    private DialogRestoreBinding binding;
+    private VodDialogRestoreBinding binding;
     private RestoreAdapter adapter;
     private Callback callback;
 
@@ -37,7 +37,7 @@ public class RestoreDialog extends BaseDialog implements RestoreAdapter.OnClickL
 
     @Override
     protected ViewBinding getBinding(@NonNull LayoutInflater inflater, @Nullable ViewGroup container) {
-        return binding = DialogRestoreBinding.inflate(inflater, container, false);
+        return binding = VodDialogRestoreBinding.inflate(inflater, container, false);
     }
 
     @Override

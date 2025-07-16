@@ -17,7 +17,7 @@ import top.cywin.onetv.vod.Setting;
 import top.cywin.onetv.vod.bean.Hot;
 import top.cywin.onetv.vod.bean.Site;
 import top.cywin.onetv.vod.bean.Suggest;
-import top.cywin.onetv.vod.databinding.ActivitySearchBinding;
+import top.cywin.onetv.vod.databinding.VodActivitySearchBinding;
 import top.cywin.onetv.vod.impl.Callback;
 import top.cywin.onetv.vod.impl.SiteCallback;
 import top.cywin.onetv.vod.ui.adapter.RecordAdapter;
@@ -43,7 +43,7 @@ import okhttp3.Response;
 
 public class SearchActivity extends BaseActivity implements WordAdapter.OnClickListener, RecordAdapter.OnClickListener, CustomKeyboard.Callback, SiteCallback {
 
-    private ActivitySearchBinding mBinding;
+    private VodActivitySearchBinding mBinding;
     private RecordAdapter mRecordAdapter;
     private WordAdapter mWordAdapter;
 
@@ -53,7 +53,7 @@ public class SearchActivity extends BaseActivity implements WordAdapter.OnClickL
 
     @Override
     protected ViewBinding getBinding() {
-        return mBinding = ActivitySearchBinding.inflate(getLayoutInflater());
+        return mBinding = VodActivitySearchBinding.inflate(getLayoutInflater());
     }
 
     @Override
@@ -101,7 +101,7 @@ public class SearchActivity extends BaseActivity implements WordAdapter.OnClickL
     }
 
     private void getHot() {
-        mBinding.hint.setText(R.string.search_hot);
+        mBinding.hint.setText(R.string.vod_search_hot);
         mWordAdapter.addAll(Hot.get(Setting.getHot()));
         OkHttp.newCall("https://api.web.360kan.com/v1/rank?cat=1", Headers.of(HttpHeaders.REFERER, "https://www.360kan.com/rank/general")).enqueue(new Callback() {
             @Override
@@ -114,7 +114,7 @@ public class SearchActivity extends BaseActivity implements WordAdapter.OnClickL
     }
 
     private void getSuggest(String text) {
-        mBinding.hint.setText(R.string.search_suggest);
+        mBinding.hint.setText(R.string.vod_search_suggest);
         OkHttp.newCall("https://suggest.video.iqiyi.com/?if=mobile&key=" + URLEncoder.encode(ZhuToPin.get(text))).enqueue(new Callback() {
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {

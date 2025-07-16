@@ -204,4 +204,21 @@
         <item>Select subtitle track</item>
     </string-array>
 
+    <!-- Home navigation strings -->
+    <string name="vod_home_vod">影视</string>
+    <string name="vod_home_live">直播</string>
+    <string name="vod_home_keep">收藏</string>
+    <string name="vod_home_push">推送</string>
+    <string name="vod_home_cast">投屏</string>
+    <string name="vod_home_search">搜索</string>
+    <string name="vod_home_setting">设置</string>
+    <string name="vod_home_history">历史</string>
+    <string name="vod_home_recommend">推荐</string>
+
+    <!-- Push info string -->
+    <string name="vod_push_info">推送地址：%s，请在同一网络下的设备上访问</string>
+
+    <!-- Default app title -->
+    <string name="vod_app_title">影视点播</string>
+
 </resources>

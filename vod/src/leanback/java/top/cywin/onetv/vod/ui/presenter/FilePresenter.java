@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.leanback.widget.Presenter;
 
 import top.cywin.onetv.vod.R;
-import top.cywin.onetv.vod.databinding.AdapterFileBinding;
+import top.cywin.onetv.vod.databinding.VodAdapterFileBinding;
 
 import java.io.File;
 
@@ -26,7 +26,7 @@ public class FilePresenter extends Presenter {
 
     @Override
     public Presenter.ViewHolder onCreateViewHolder(ViewGroup parent) {
-        return new ViewHolder(AdapterFileBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return new ViewHolder(VodAdapterFileBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
@@ -35,7 +35,7 @@ public class FilePresenter extends Presenter {
         ViewHolder holder = (ViewHolder) viewHolder;
         holder.binding.name.setText(file.getName());
         holder.binding.getRoot().setOnClickListener(v -> mListener.onItemClick(file));
-        holder.binding.image.setImageResource(file.isDirectory() ? R.drawable.ic_folder : R.drawable.ic_file);
+        holder.binding.image.setImageResource(file.isDirectory() ? R.drawable.vod_ic_folder : R.drawable.vod_ic_file);
     }
 
     @Override
@@ -44,9 +44,9 @@ public class FilePresenter extends Presenter {
 
     public static class ViewHolder extends Presenter.ViewHolder {
 
-        private final AdapterFileBinding binding;
+        private final VodAdapterFileBinding binding;
 
-        public ViewHolder(@NonNull AdapterFileBinding binding) {
+        public ViewHolder(@NonNull VodAdapterFileBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

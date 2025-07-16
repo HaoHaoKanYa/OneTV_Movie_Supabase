@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import top.cywin.onetv.vod.bean.Channel;
-import top.cywin.onetv.vod.databinding.AdapterChannelBinding;
+import top.cywin.onetv.vod.databinding.VodAdapterChannelBinding;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +67,7 @@ public class ChannelAdapter extends RecyclerView.Adapter<ChannelAdapter.ViewHold
     @NonNull
     @Override
     public ChannelAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(AdapterChannelBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return new ViewHolder(VodAdapterChannelBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
@@ -83,9 +83,9 @@ public class ChannelAdapter extends RecyclerView.Adapter<ChannelAdapter.ViewHold
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private final AdapterChannelBinding binding;
+        private final VodAdapterChannelBinding binding;
 
-        ViewHolder(@NonNull AdapterChannelBinding binding) {
+        ViewHolder(@NonNull VodAdapterChannelBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

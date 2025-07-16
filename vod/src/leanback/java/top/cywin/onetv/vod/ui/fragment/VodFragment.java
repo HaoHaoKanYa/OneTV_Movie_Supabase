@@ -27,7 +27,7 @@ import top.cywin.onetv.vod.bean.Site;
 import top.cywin.onetv.vod.bean.Style;
 import top.cywin.onetv.vod.bean.Value;
 import top.cywin.onetv.vod.bean.Vod;
-import top.cywin.onetv.vod.databinding.FragmentVodBinding;
+import top.cywin.onetv.vod.databinding.VodFragmentVodBinding;
 import top.cywin.onetv.vod.model.SiteViewModel;
 import top.cywin.onetv.vod.ui.activity.CollectActivity;
 import top.cywin.onetv.vod.ui.activity.VideoActivity;
@@ -50,7 +50,7 @@ import java.util.List;
 public class VodFragment extends BaseFragment implements CustomScroller.Callback, VodPresenter.OnClickListener {
 
     private HashMap<String, String> mExtends;
-    private FragmentVodBinding mBinding;
+    private VodFragmentVodBinding mBinding;
     private ArrayObjectAdapter mAdapter;
     private ArrayObjectAdapter mLast;
     private CustomScroller mScroller;
@@ -107,7 +107,7 @@ public class VodFragment extends BaseFragment implements CustomScroller.Callback
 
     @Override
     protected ViewBinding getBinding(@NonNull LayoutInflater inflater, @Nullable ViewGroup container) {
-        return mBinding = FragmentVodBinding.inflate(inflater, container, false);
+        return mBinding = VodFragmentVodBinding.inflate(inflater, container, false);
     }
 
     @Override
@@ -231,11 +231,11 @@ public class VodFragment extends BaseFragment implements CustomScroller.Callback
     }
 
     private void showProgress() {
-        if (!mOpen) mBinding.progress.getRoot().setVisibility(View.VISIBLE);
+        if (!mOpen) mBinding.progress.setVisibility(View.VISIBLE);
     }
 
     private void hideProgress() {
-        mBinding.progress.getRoot().setVisibility(View.GONE);
+        mBinding.progress.setVisibility(View.GONE);
     }
 
     private void showFilter() {

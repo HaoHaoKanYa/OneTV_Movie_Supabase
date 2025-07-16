@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import top.cywin.onetv.vod.databinding.AdapterRestoreBinding;
+import top.cywin.onetv.vod.databinding.VodAdapterRestoreBinding;
 import top.github.catvod.utils.Path;
 
 import java.io.File;
@@ -57,7 +57,7 @@ public class RestoreAdapter extends RecyclerView.Adapter<RestoreAdapter.ViewHold
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(AdapterRestoreBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return new ViewHolder(VodAdapterRestoreBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
@@ -70,9 +70,9 @@ public class RestoreAdapter extends RecyclerView.Adapter<RestoreAdapter.ViewHold
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private final AdapterRestoreBinding binding;
+        private final VodAdapterRestoreBinding binding;
 
-        public ViewHolder(@NonNull AdapterRestoreBinding binding) {
+        public ViewHolder(@NonNull VodAdapterRestoreBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

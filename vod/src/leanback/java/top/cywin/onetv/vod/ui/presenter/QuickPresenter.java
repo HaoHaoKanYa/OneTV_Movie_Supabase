@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.leanback.widget.Presenter;
 
 import top.cywin.onetv.vod.bean.Vod;
-import top.cywin.onetv.vod.databinding.AdapterQuickBinding;
+import top.cywin.onetv.vod.databinding.VodAdapterQuickBinding;
 import top.cywin.onetv.vod.utils.ResUtil;
 
 public class QuickPresenter extends Presenter {
@@ -33,7 +33,7 @@ public class QuickPresenter extends Presenter {
 
     @Override
     public Presenter.ViewHolder onCreateViewHolder(ViewGroup parent) {
-        ViewHolder holder = new ViewHolder(AdapterQuickBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        ViewHolder holder = new ViewHolder(VodAdapterQuickBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
         holder.binding.getRoot().getLayoutParams().width = width;
         return holder;
     }
@@ -54,9 +54,9 @@ public class QuickPresenter extends Presenter {
 
     public static class ViewHolder extends Presenter.ViewHolder {
 
-        private final AdapterQuickBinding binding;
+        private final VodAdapterQuickBinding binding;
 
-        public ViewHolder(@NonNull AdapterQuickBinding binding) {
+        public ViewHolder(@NonNull VodAdapterQuickBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

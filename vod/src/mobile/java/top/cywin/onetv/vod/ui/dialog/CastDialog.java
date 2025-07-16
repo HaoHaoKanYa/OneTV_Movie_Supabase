@@ -22,7 +22,7 @@ import top.cywin.onetv.vod.bean.CastVideo;
 import top.cywin.onetv.vod.bean.Config;
 import top.cywin.onetv.vod.bean.Device;
 import top.cywin.onetv.vod.bean.History;
-import top.cywin.onetv.vod.databinding.DialogDeviceBinding;
+import top.cywin.onetv.vod.databinding.VodDialogDeviceBinding;
 import top.cywin.onetv.vod.event.ScanEvent;
 import top.cywin.onetv.vod.server.Server;
 import top.cywin.onetv.vod.ui.activity.ScanActivity;
@@ -56,7 +56,7 @@ public class CastDialog extends BaseDialog implements DeviceAdapter.OnClickListe
     private final OkHttpClient client;
     private final ScanTask scanTask;
 
-    private DialogDeviceBinding binding;
+    private VodDialogDeviceBinding binding;
     private DeviceAdapter adapter;
     private DeviceControl control;
     private Listener listener;
@@ -103,7 +103,7 @@ public class CastDialog extends BaseDialog implements DeviceAdapter.OnClickListe
 
     @Override
     protected ViewBinding getBinding(@NonNull LayoutInflater inflater, @Nullable ViewGroup container) {
-        return binding = DialogDeviceBinding.inflate(inflater, container, false);
+        return binding = VodDialogDeviceBinding.inflate(inflater, container, false);
     }
 
     @Override
@@ -178,7 +178,7 @@ public class CastDialog extends BaseDialog implements DeviceAdapter.OnClickListe
 
     @Override
     public void onDisconnected(@NonNull org.fourthline.cling.model.meta.Device<?, ?, ?> device) {
-        Notify.show(R.string.device_offline);
+        Notify.show(R.string.vod_device_offline);
     }
 
     @Override
@@ -201,7 +201,7 @@ public class CastDialog extends BaseDialog implements DeviceAdapter.OnClickListe
     @Override
     public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
         if (response.body().string().equals("OK")) App.post(this::onCasted);
-        else App.post(() -> Notify.show(R.string.device_offline));
+        else App.post(() -> Notify.show(R.string.vod_device_offline));
     }
 
     @Override

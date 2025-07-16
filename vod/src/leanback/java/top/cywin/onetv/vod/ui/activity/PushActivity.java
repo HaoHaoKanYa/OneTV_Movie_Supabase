@@ -9,7 +9,7 @@ import android.view.View;
 import androidx.viewbinding.ViewBinding;
 
 import top.cywin.onetv.vod.R;
-import top.cywin.onetv.vod.databinding.ActivityPushBinding;
+import top.cywin.onetv.vod.databinding.VodActivityPushBinding;
 import top.cywin.onetv.vod.server.Server;
 import top.cywin.onetv.vod.ui.base.BaseActivity;
 import top.cywin.onetv.vod.utils.QRCode;
@@ -19,7 +19,7 @@ import top.cywin.onetv.vod.utils.Util;
 
 public class PushActivity extends BaseActivity {
 
-    private ActivityPushBinding mBinding;
+    private VodActivityPushBinding mBinding;
 
     public static void start(Activity activity) {
         start(activity, 2);
@@ -37,13 +37,13 @@ public class PushActivity extends BaseActivity {
 
     @Override
     protected ViewBinding getBinding() {
-        return mBinding = ActivityPushBinding.inflate(getLayoutInflater());
+        return mBinding = VodActivityPushBinding.inflate(getLayoutInflater());
     }
 
     @Override
     protected void initView() {
         mBinding.code.setImageBitmap(QRCode.getBitmap(Server.get().getAddress(getTab()), 250, 1));
-        mBinding.info.setText(ResUtil.getString(R.string.push_info, Server.get().getAddress()));
+        mBinding.info.setText(ResUtil.getString(R.string.vod_push_info, Server.get().getAddress()));
     }
 
     @Override

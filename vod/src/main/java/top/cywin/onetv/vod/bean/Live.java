@@ -298,11 +298,11 @@ public class Live {
     }
 
     public int getBootIcon() {
-        return isBoot() ? R.drawable.ic_live_boot : R.drawable.ic_live_block;
+        return isBoot() ? R.drawable.vod_ic_live_boot : R.drawable.vod_ic_live_block;
     }
 
     public int getPassIcon() {
-        return isPass() ? R.drawable.ic_live_block : R.drawable.ic_live_pass;
+        return isPass() ? R.drawable.vod_ic_live_block : R.drawable.vod_ic_live_pass;
     }
 
     public Live boot(boolean boot) {

@@ -27,7 +27,7 @@ import top.cywin.onetv.vod.Constant;
 import top.cywin.onetv.vod.R;
 import top.cywin.onetv.vod.Setting;
 import top.cywin.onetv.vod.bean.Sub;
-import top.cywin.onetv.vod.databinding.ActivityCastBinding;
+import top.cywin.onetv.vod.databinding.VodActivityCastBinding;
 import top.cywin.onetv.vod.event.ActionEvent;
 import top.cywin.onetv.vod.event.ErrorEvent;
 import top.cywin.onetv.vod.event.PlayerEvent;
@@ -52,7 +52,7 @@ import java.util.UUID;
 
 public class CastActivity extends BaseActivity implements CustomKeyDownCast.Listener, TrackDialog.Listener, RenderControl, ServiceConnection, Clock.Callback {
 
-    private ActivityCastBinding mBinding;
+    private VodActivityCastBinding mBinding;
     private DLNARendererService mService;
     private CustomKeyDownCast mKeyDown;
     private RenderState mState;
@@ -73,7 +73,7 @@ public class CastActivity extends BaseActivity implements CustomKeyDownCast.List
 
     @Override
     protected ViewBinding getBinding() {
-        return mBinding = ActivityCastBinding.inflate(getLayoutInflater());
+        return mBinding = VodActivityCastBinding.inflate(getLayoutInflater());
     }
 
     @Override
@@ -148,7 +148,7 @@ public class CastActivity extends BaseActivity implements CustomKeyDownCast.List
         findViewById(R.id.timeBar).setNextFocusUpId(R.id.reset);
         mBinding.control.speed.setText(mPlayers.getSpeedText());
         mBinding.control.decode.setText(mPlayers.getDecodeText());
-        mBinding.control.reset.setText(ResUtil.getStringArray(R.array.select_reset)[0]);
+        mBinding.control.reset.setText(ResUtil.getStringArray(R.array.vod_select_reset)[0]);
     }
 
     private void setDecode() {
@@ -157,11 +157,11 @@ public class CastActivity extends BaseActivity implements CustomKeyDownCast.List
 
     private void setScale(int scale) {
         mBinding.exo.setResizeMode(scale);
-        mBinding.control.scale.setText(ResUtil.getStringArray(R.array.select_scale)[scale]);
+        mBinding.control.scale.setText(ResUtil.getStringArray(R.array.vod_select_scale)[scale]);
     }
 
     private void onScale() {
-        String[] array = ResUtil.getStringArray(R.array.select_scale);
+        String[] array = ResUtil.getStringArray(R.array.vod_select_scale);
         scale = scale == array.length - 1 ? 0 : ++scale;
         setScale(scale);
     }
@@ -251,7 +251,7 @@ public class CastActivity extends BaseActivity implements CustomKeyDownCast.List
     }
 
     private void hideControl() {
-        mBinding.control.text.setText(R.string.play_track_text);
+        mBinding.control.text.setText(R.string.vod_play_track_text);
         mBinding.control.getRoot().setVisibility(View.GONE);
         App.removeCallbacks(mR1);
     }
@@ -453,7 +453,7 @@ public class CastActivity extends BaseActivity implements CustomKeyDownCast.List
         mBinding.widget.center.setVisibility(View.VISIBLE);
         mBinding.widget.exoDuration.setText(mPlayers.getDurationTime());
         mBinding.widget.exoPosition.setText(mPlayers.getPositionTime(time));
-        mBinding.widget.action.setImageResource(time > 0 ? R.drawable.ic_widget_forward : R.drawable.ic_widget_rewind);
+        mBinding.widget.action.setImageResource(time > 0 ? R.drawable.vod_ic_widget_forward : R.drawable.vod_ic_widget_rewind);
         hideProgress();
     }
 
@@ -470,7 +470,7 @@ public class CastActivity extends BaseActivity implements CustomKeyDownCast.List
     public void onSpeedUp() {
         if (!mPlayers.isPlaying()) return;
         mBinding.control.speed.setText(mPlayers.setSpeed(Setting.getSpeed()));
-        mBinding.widget.speed.startAnimation(ResUtil.getAnim(R.anim.forward));
+        mBinding.widget.speed.startAnimation(ResUtil.getAnim(R.anim.vod_forward));
         mBinding.widget.speed.setVisibility(View.VISIBLE);
     }
 

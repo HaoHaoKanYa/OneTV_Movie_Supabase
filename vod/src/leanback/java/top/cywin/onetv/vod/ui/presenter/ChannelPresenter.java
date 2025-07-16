@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.leanback.widget.Presenter;
 
 import top.cywin.onetv.vod.bean.Channel;
-import top.cywin.onetv.vod.databinding.AdapterChannelBinding;
+import top.cywin.onetv.vod.databinding.VodAdapterChannelBinding;
 
 public class ChannelPresenter extends Presenter {
 
@@ -28,7 +28,7 @@ public class ChannelPresenter extends Presenter {
 
     @Override
     public Presenter.ViewHolder onCreateViewHolder(ViewGroup parent) {
-        return new ViewHolder(AdapterChannelBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return new ViewHolder(VodAdapterChannelBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
@@ -50,9 +50,9 @@ public class ChannelPresenter extends Presenter {
 
     public static class ViewHolder extends Presenter.ViewHolder {
 
-        private final AdapterChannelBinding binding;
+        private final VodAdapterChannelBinding binding;
 
-        public ViewHolder(@NonNull AdapterChannelBinding binding) {
+        public ViewHolder(@NonNull VodAdapterChannelBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

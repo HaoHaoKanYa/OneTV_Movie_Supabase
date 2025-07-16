@@ -24,7 +24,7 @@ import top.cywin.onetv.vod.bean.Result;
 import top.cywin.onetv.vod.bean.Site;
 import top.cywin.onetv.vod.bean.Suggest;
 import top.cywin.onetv.vod.bean.Vod;
-import top.cywin.onetv.vod.databinding.ActivityCollectBinding;
+import top.cywin.onetv.vod.databinding.VodActivityCollectBinding;
 import top.cywin.onetv.vod.impl.Callback;
 import top.cywin.onetv.vod.impl.SiteCallback;
 import top.cywin.onetv.vod.model.SiteViewModel;
@@ -55,7 +55,7 @@ import okhttp3.Response;
 
 public class CollectActivity extends BaseActivity implements CustomScroller.Callback, SiteCallback, WordAdapter.OnClickListener, RecordAdapter.OnClickListener, CollectAdapter.OnClickListener, VodAdapter.OnClickListener {
 
-    private ActivityCollectBinding mBinding;
+    private VodActivityCollectBinding mBinding;
     private CollectAdapter mCollectAdapter;
     private SearchAdapter mSearchAdapter;
     private RecordAdapter mRecordAdapter;
@@ -85,7 +85,7 @@ public class CollectActivity extends BaseActivity implements CustomScroller.Call
 
     @Override
     protected ViewBinding getBinding() {
-        return mBinding = ActivityCollectBinding.inflate(getLayoutInflater());
+        return mBinding = VodActivityCollectBinding.inflate(getLayoutInflater());
     }
 
     @Override
@@ -202,12 +202,12 @@ public class CollectActivity extends BaseActivity implements CustomScroller.Call
     }
 
     private void getHot() {
-        mBinding.word.setText(R.string.search_hot);
+        mBinding.word.setText(R.string.vod_search_hot);
         mWordAdapter.addAll(Hot.get(Setting.getHot()));
     }
 
     private void getSuggest(String text) {
-        mBinding.word.setText(R.string.search_suggest);
+        mBinding.word.setText(R.string.vod_search_suggest);
         OkHttp.newCall("https://suggest.video.iqiyi.com/?if=mobile&key=" + URLEncoder.encode(text)).enqueue(new Callback() {
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {

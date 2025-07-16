@@ -13,6 +13,6 @@ public class ShortcutReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Notify.show(R.string.shortcut);
+        Notify.show(R.string.vod_shortcut);
     }
 }

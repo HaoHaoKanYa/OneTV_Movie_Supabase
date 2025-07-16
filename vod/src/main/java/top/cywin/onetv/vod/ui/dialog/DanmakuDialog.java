@@ -14,7 +14,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.viewbinding.ViewBinding;
 
 import top.cywin.onetv.vod.bean.Danmaku;
-import top.cywin.onetv.vod.databinding.DialogDanmakuBinding;
+import top.cywin.onetv.vod.databinding.VodDialogDanmakuBinding;
 import top.cywin.onetv.vod.player.Players;
 import top.cywin.onetv.vod.ui.adapter.DanmakuAdapter;
 import top.cywin.onetv.vod.ui.custom.SpaceItemDecoration;
@@ -24,7 +24,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 public final class DanmakuDialog extends BaseDialog implements DanmakuAdapter.OnClickListener {
 
     private final DanmakuAdapter adapter;
-    private DialogDanmakuBinding binding;
+    private VodDialogDanmakuBinding binding;
     private Players player;
 
     public static DanmakuDialog create() {
@@ -47,7 +47,7 @@ public final class DanmakuDialog extends BaseDialog implements DanmakuAdapter.On
 
     @Override
     protected ViewBinding getBinding(@NonNull LayoutInflater inflater, @Nullable ViewGroup container) {
-        return binding = DialogDanmakuBinding.inflate(inflater, container, false);
+        return binding = VodDialogDanmakuBinding.inflate(inflater, container, false);
     }
 
     @Override

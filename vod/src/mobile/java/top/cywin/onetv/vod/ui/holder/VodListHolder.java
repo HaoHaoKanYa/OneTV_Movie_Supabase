@@ -5,7 +5,7 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 
 import top.cywin.onetv.vod.bean.Vod;
-import top.cywin.onetv.vod.databinding.AdapterVodListBinding;
+import top.cywin.onetv.vod.databinding.VodAdapterVodListBinding;
 import top.cywin.onetv.vod.ui.adapter.VodAdapter;
 import top.cywin.onetv.vod.ui.base.BaseVodHolder;
 import top.cywin.onetv.vod.utils.ImgUtil;
@@ -13,9 +13,9 @@ import top.cywin.onetv.vod.utils.ImgUtil;
 public class VodListHolder extends BaseVodHolder {
 
     private final VodAdapter.OnClickListener listener;
-    private final AdapterVodListBinding binding;
+    private final VodAdapterVodListBinding binding;
 
-    public VodListHolder(@NonNull AdapterVodListBinding binding, VodAdapter.OnClickListener listener) {
+    public VodListHolder(@NonNull VodAdapterVodListBinding binding, VodAdapter.OnClickListener listener) {
         super(binding.getRoot());
         this.binding = binding;
         this.listener = listener;

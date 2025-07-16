@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.leanback.widget.Presenter;
 
 import top.cywin.onetv.vod.bean.EpgData;
-import top.cywin.onetv.vod.databinding.AdapterEpgDataBinding;
+import top.cywin.onetv.vod.databinding.VodAdapterEpgDataBinding;
 
 public class EpgDataPresenter extends Presenter {
 
@@ -26,7 +26,7 @@ public class EpgDataPresenter extends Presenter {
 
     @Override
     public Presenter.ViewHolder onCreateViewHolder(ViewGroup parent) {
-        return new ViewHolder(AdapterEpgDataBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return new ViewHolder(VodAdapterEpgDataBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
@@ -48,9 +48,9 @@ public class EpgDataPresenter extends Presenter {
 
     public static class ViewHolder extends Presenter.ViewHolder {
 
-        private final AdapterEpgDataBinding binding;
+        private final VodAdapterEpgDataBinding binding;
 
-        public ViewHolder(@NonNull AdapterEpgDataBinding binding) {
+        public ViewHolder(@NonNull VodAdapterEpgDataBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

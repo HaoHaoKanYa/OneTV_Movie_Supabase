@@ -233,11 +233,11 @@ public class History {
     }
 
     public int getRevPlayText() {
-        return isRevPlay() ? R.string.play_backward : R.string.play_forward;
+        return isRevPlay() ? R.string.vod_play_backward : R.string.vod_play_forward;
     }
 
     public int getRevPlayHint() {
-        return isRevPlay() ? R.string.play_backward_hint : R.string.play_forward_hint;
+        return isRevPlay() ? R.string.vod_play_backward_hint : R.string.vod_play_forward_hint;
     }
 
     public static List<History> get() {

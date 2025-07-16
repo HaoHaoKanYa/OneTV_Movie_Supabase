@@ -83,7 +83,7 @@ public class Util {
         try {
             ClipboardManager manager = (ClipboardManager) App.get().getSystemService(Context.CLIPBOARD_SERVICE);
             manager.setPrimaryClip(ClipData.newPlainText("", text));
-            Notify.show(R.string.copied);
+            Notify.show(R.string.vod_copied);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -8,13 +8,13 @@ import androidx.fragment.app.Fragment;
 
 import top.cywin.onetv.vod
 import top.cywin.onetv.vod.Setting;
-import top.cywin.onetv.vod.databinding.DialogBufferBinding;
+import top.cywin.onetv.vod.databinding.VodDialogBufferBinding;
 import top.cywin.onetv.vod.impl.BufferCallback;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class BufferDialog {
 
-    private final DialogBufferBinding binding;
+    private final VodDialogBufferBinding binding;
     private final BufferCallback callback;
     private int value;
 
@@ -24,7 +24,7 @@ public class BufferDialog {
 
     public BufferDialog(Fragment fragment) {
         this.callback = (BufferCallback) fragment;
-        this.binding = DialogBufferBinding.inflate(LayoutInflater.from(fragment.getContext()));
+        this.binding = VodDialogBufferBinding.inflate(LayoutInflater.from(fragment.getContext()));
     }
 
     public void show() {
@@ -33,7 +33,7 @@ public class BufferDialog {
     }
 
     private void initDialog() {
-        AlertDialog dialog = new MaterialAlertDialogBuilder(binding.getRoot().getContext()).setTitle(R.string.player_buffer).setView(binding.getRoot()).setPositiveButton(R.string.dialog_positive, this::onPositive).setNegativeButton(R.string.dialog_negative, this::onNegative).create();
+        AlertDialog dialog = new MaterialAlertDialogBuilder(binding.getRoot().getContext()).setTitle(R.string.vod_player_buffer).setView(binding.getRoot()).setPositiveButton(R.string.vod_dialog_positive, this::onPositive).setNegativeButton(R.string.vod_dialog_negative, this::onNegative).create();
         dialog.getWindow().setDimAmount(0);
         dialog.show();
     }

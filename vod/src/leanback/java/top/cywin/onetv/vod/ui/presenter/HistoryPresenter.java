@@ -10,7 +10,7 @@ import androidx.leanback.widget.Presenter;
 import top.cywin.onetv.vod.Product;
 import top.cywin.onetv.vod.R;
 import top.cywin.onetv.vod.bean.History;
-import top.cywin.onetv.vod.databinding.AdapterVodBinding;
+import top.cywin.onetv.vod.databinding.VodAdapterVodBinding;
 import top.cywin.onetv.vod.utils.ImgUtil;
 import top.cywin.onetv.vod.utils.ResUtil;
 
@@ -51,7 +51,7 @@ public class HistoryPresenter extends Presenter {
 
     @Override
     public Presenter.ViewHolder onCreateViewHolder(ViewGroup parent) {
-        ViewHolder holder = new ViewHolder(AdapterVodBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        ViewHolder holder = new ViewHolder(VodAdapterVodBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
         holder.binding.getRoot().getLayoutParams().width = width;
         holder.binding.getRoot().getLayoutParams().height = height;
         return holder;
@@ -85,9 +85,9 @@ public class HistoryPresenter extends Presenter {
 
     public static class ViewHolder extends Presenter.ViewHolder {
 
-        private final AdapterVodBinding binding;
+        private final VodAdapterVodBinding binding;
 
-        public ViewHolder(@NonNull AdapterVodBinding binding) {
+        public ViewHolder(@NonNull VodAdapterVodBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

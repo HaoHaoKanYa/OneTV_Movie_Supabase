@@ -11,7 +11,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import top.cywin.onetv.vod
-import top.cywin.onetv.vod.databinding.DialogLinkBinding;
+import top.cywin.onetv.vod.databinding.VodDialogLinkBinding;
 import top.cywin.onetv.vod.ui.activity.VideoActivity;
 import top.cywin.onetv.vod.utils.FileChooser;
 import top.cywin.onetv.vod.utils.Sniffer;
@@ -20,7 +20,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class LinkDialog {
 
-    private final DialogLinkBinding binding;
+    private final VodDialogLinkBinding binding;
     private final Fragment fragment;
     private AlertDialog dialog;
 
@@ -30,7 +30,7 @@ public class LinkDialog {
 
     public LinkDialog(Fragment fragment) {
         this.fragment = fragment;
-        this.binding = DialogLinkBinding.inflate(LayoutInflater.from(fragment.getContext()));
+        this.binding = VodDialogLinkBinding.inflate(LayoutInflater.from(fragment.getContext()));
     }
 
     public void show() {
@@ -40,7 +40,7 @@ public class LinkDialog {
     }
 
     private void initDialog() {
-        dialog = new MaterialAlertDialogBuilder(binding.getRoot().getContext()).setTitle(R.string.play).setView(binding.getRoot()).setPositiveButton(R.string.dialog_positive, this::onPositive).setNegativeButton(R.string.dialog_negative, this::onNegative).create();
+        dialog = new MaterialAlertDialogBuilder(binding.getRoot().getContext()).setTitle(R.string.vod_play).setView(binding.getRoot()).setPositiveButton(R.string.vod_dialog_positive, this::onPositive).setNegativeButton(R.string.vod_dialog_negative, this::onNegative).create();
         dialog.getWindow().setDimAmount(0);
         dialog.show();
     }

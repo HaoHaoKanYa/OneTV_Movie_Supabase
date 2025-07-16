@@ -8,7 +8,7 @@ import androidx.leanback.widget.Presenter;
 
 import top.cywin.onetv.vod.R;
 import top.cywin.onetv.vod.bean.Flag;
-import top.cywin.onetv.vod.databinding.AdapterFlagBinding;
+import top.cywin.onetv.vod.databinding.VodAdapterFlagBinding;
 
 public class FlagPresenter extends Presenter {
 
@@ -30,7 +30,7 @@ public class FlagPresenter extends Presenter {
 
     @Override
     public Presenter.ViewHolder onCreateViewHolder(ViewGroup parent) {
-        return new ViewHolder(AdapterFlagBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return new ViewHolder(VodAdapterFlagBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
@@ -49,9 +49,9 @@ public class FlagPresenter extends Presenter {
 
     public static class ViewHolder extends Presenter.ViewHolder {
 
-        private final AdapterFlagBinding binding;
+        private final VodAdapterFlagBinding binding;
 
-        public ViewHolder(@NonNull AdapterFlagBinding binding) {
+        public ViewHolder(@NonNull VodAdapterFlagBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

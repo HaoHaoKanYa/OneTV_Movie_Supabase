@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.leanback.widget.Presenter;
 
 import top.cywin.onetv.vod.bean.Group;
-import top.cywin.onetv.vod.databinding.AdapterGroupBinding;
+import top.cywin.onetv.vod.databinding.VodAdapterGroupBinding;
 
 public class GroupPresenter extends Presenter {
 
@@ -23,7 +23,7 @@ public class GroupPresenter extends Presenter {
 
     @Override
     public Presenter.ViewHolder onCreateViewHolder(ViewGroup parent) {
-        return new ViewHolder(AdapterGroupBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return new ViewHolder(VodAdapterGroupBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
@@ -40,9 +40,9 @@ public class GroupPresenter extends Presenter {
 
     public static class ViewHolder extends Presenter.ViewHolder {
 
-        private final AdapterGroupBinding binding;
+        private final VodAdapterGroupBinding binding;
 
-        public ViewHolder(@NonNull AdapterGroupBinding binding) {
+        public ViewHolder(@NonNull VodAdapterGroupBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

@@ -78,7 +78,7 @@ public class WallConfig {
             App.post(callback::success);
             config.update();
         } catch (Throwable e) {
-            App.post(() -> callback.error(Notify.getError(R.string.error_config_parse, e)));
+            App.post(() -> callback.error(Notify.getError(R.string.vod_error_config_parse, e)));
             config(Config.find(VodConfig.get().getWall(), 2));
             e.printStackTrace();
         }

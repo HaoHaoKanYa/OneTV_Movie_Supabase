@@ -17,7 +17,7 @@ public class Collect implements Parcelable {
     private int page;
 
     public static Collect all() {
-        Collect item = new Collect(Site.get("all", ResUtil.getString(R.string.all)), new ArrayList<>());
+        Collect item = new Collect(Site.get("all", ResUtil.getString(R.string.vod_all)), new ArrayList<>());
         item.setActivated(true);
         return item;
     }

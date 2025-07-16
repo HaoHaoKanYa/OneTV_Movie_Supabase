@@ -24,7 +24,7 @@ import top.cywin.onetv.vod.bean.Class;
 import top.cywin.onetv.vod.bean.Filter;
 import top.cywin.onetv.vod.bean.Result;
 import top.cywin.onetv.vod.bean.Site;
-import top.cywin.onetv.vod.databinding.ActivityVodBinding;
+import top.cywin.onetv.vod.databinding.VodActivityVodBinding;
 import top.cywin.onetv.vod.ui.base.BaseActivity;
 import top.cywin.onetv.vod.ui.fragment.VodFragment;
 import top.cywin.onetv.vod.ui.presenter.TypePresenter;
@@ -38,7 +38,7 @@ import java.util.Map;
 
 public class VodActivity extends BaseActivity implements TypePresenter.OnClickListener {
 
-    private ActivityVodBinding mBinding;
+    private VodActivityVodBinding mBinding;
     private ArrayObjectAdapter mAdapter;
     private PageAdapter mPageAdapter;
     private boolean coolDown;
@@ -75,7 +75,7 @@ public class VodActivity extends BaseActivity implements TypePresenter.OnClickLi
 
     @Override
     protected ViewBinding getBinding() {
-        return mBinding = ActivityVodBinding.inflate(getLayoutInflater());
+        return mBinding = VodActivityVodBinding.inflate(getLayoutInflater());
     }
 
     @Override

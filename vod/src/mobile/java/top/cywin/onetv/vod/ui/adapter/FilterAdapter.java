@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import top.cywin.onetv.vod.bean.Filter;
-import top.cywin.onetv.vod.databinding.AdapterFilterBinding;
+import top.cywin.onetv.vod.databinding.VodAdapterFilterBinding;
 import top.cywin.onetv.vod.impl.FilterCallback;
 
 import java.util.List;
@@ -30,7 +30,7 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.ViewHolder
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(AdapterFilterBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return new ViewHolder(VodAdapterFilterBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
@@ -43,9 +43,9 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.ViewHolder
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private final AdapterFilterBinding binding;
+        private final VodAdapterFilterBinding binding;
 
-        ViewHolder(@NonNull AdapterFilterBinding binding) {
+        ViewHolder(@NonNull VodAdapterFilterBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

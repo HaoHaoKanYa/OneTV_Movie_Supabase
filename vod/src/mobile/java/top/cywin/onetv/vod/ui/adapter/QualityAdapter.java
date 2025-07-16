@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import top.cywin.onetv.vod.bean.Result;
-import top.cywin.onetv.vod.databinding.AdapterQualityBinding;
+import top.cywin.onetv.vod.databinding.VodAdapterQualityBinding;
 
 public class QualityAdapter extends RecyclerView.Adapter<QualityAdapter.ViewHolder> {
 
@@ -42,7 +42,7 @@ public class QualityAdapter extends RecyclerView.Adapter<QualityAdapter.ViewHold
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(AdapterQualityBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return new ViewHolder(VodAdapterQualityBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
@@ -61,9 +61,9 @@ public class QualityAdapter extends RecyclerView.Adapter<QualityAdapter.ViewHold
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private final AdapterQualityBinding binding;
+        private final VodAdapterQualityBinding binding;
 
-        ViewHolder(@NonNull AdapterQualityBinding binding) {
+        ViewHolder(@NonNull VodAdapterQualityBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

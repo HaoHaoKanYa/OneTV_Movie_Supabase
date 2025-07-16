@@ -21,7 +21,7 @@ import com.fongmi.onetv.tv.api.config.WallConfig;
 import com.fongmi.onetv.tv.bean.Config;
 import com.fongmi.onetv.tv.bean.Live;
 import com.fongmi.onetv.tv.bean.Site;
-import com.fongmi.onetv.tv.databinding.FragmentSettingBinding;
+import com.fongmi.onetv.tv.databinding.VodFragmentSettingBinding;
 import com.fongmi.onetv.tv.db.AppDatabase;
 import com.fongmi.onetv.tv.event.RefreshEvent;
 import com.fongmi.onetv.tv.impl.Callback;
@@ -54,7 +54,7 @@ import java.util.List;
 
 public class SettingFragment extends BaseFragment implements ConfigCallback, SiteCallback, LiveCallback, ProxyCallback {
 
-    private FragmentSettingBinding mBinding;
+    private VodFragmentSettingBinding mBinding;
     private String[] size;
     private int type;
 
@@ -63,11 +63,11 @@ public class SettingFragment extends BaseFragment implements ConfigCallback, Sit
     }
 
     private String getSwitch(boolean value) {
-        return getString(value ? R.string.setting_on : R.string.setting_off);
+        return getString(value ? R.string.vod_setting_on : R.string.vod_setting_off);
     }
 
     private String getProxy(String proxy) {
-        return proxy.isEmpty() ? getString(R.string.none) : UrlUtil.scheme(proxy);
+        return proxy.isEmpty() ? getString(R.string.vod_none) : UrlUtil.scheme(proxy);
     }
 
     private int getDohIndex() {
@@ -86,7 +86,7 @@ public class SettingFragment extends BaseFragment implements ConfigCallback, Sit
 
     @Override
     protected ViewBinding getBinding(@NonNull LayoutInflater inflater, @Nullable ViewGroup container) {
-        return mBinding = FragmentSettingBinding.inflate(inflater, container, false);
+        return mBinding = VodFragmentSettingBinding.inflate(inflater, container, false);
     }
 
     @Override
@@ -103,7 +103,7 @@ public class SettingFragment extends BaseFragment implements ConfigCallback, Sit
         mBinding.dohText.setText(getDohList()[getDohIndex()]);
         mBinding.proxyText.setText(getProxy(Setting.getProxy()));
         mBinding.incognitoText.setText(getSwitch(Setting.isIncognito()));
-        mBinding.sizeText.setText((size = ResUtil.getStringArray(R.array.select_size))[Setting.getSize()]);
+        mBinding.sizeText.setText((size = ResUtil.getStringArray(R.array.vod_select_size))[Setting.getSize()]);
     }
 
     private void setCacheText() {
@@ -307,7 +307,7 @@ public class SettingFragment extends BaseFragment implements ConfigCallback, Sit
     }
 
     private void setSize(View view) {
-        new MaterialAlertDialogBuilder(getActivity()).setTitle(R.string.setting_size).setNegativeButton(R.string.dialog_negative, null).setSingleChoiceItems(size, Setting.getSize(), (dialog, which) -> {
+        new MaterialAlertDialogBuilder(getActivity()).setTitle(R.string.vod_setting_size).setNegativeButton(R.string.vod_dialog_negative, null).setSingleChoiceItems(size, Setting.getSize(), (dialog, which) -> {
             mBinding.sizeText.setText(size[which]);
             Setting.putSize(which);
             RefreshEvent.size();
@@ -316,7 +316,7 @@ public class SettingFragment extends BaseFragment implements ConfigCallback, Sit
     }
 
     private void setDoh(View view) {
-        new MaterialAlertDialogBuilder(getActivity()).setTitle(R.string.setting_doh).setNegativeButton(R.string.dialog_negative, null).setSingleChoiceItems(getDohList(), getDohIndex(), (dialog, which) -> {
+        new MaterialAlertDialogBuilder(getActivity()).setTitle(R.string.vod_setting_doh).setNegativeButton(R.string.vod_dialog_negative, null).setSingleChoiceItems(getDohList(), getDohIndex(), (dialog, which) -> {
             setDoh(VodConfig.get().getDoh().get(which));
             dialog.dismiss();
         }).show();
@@ -359,12 +359,12 @@ public class SettingFragment extends BaseFragment implements ConfigCallback, Sit
         PermissionX.init(this).permissions(Manifest.permission.WRITE_EXTERNAL_STORAGE).request((allGranted, grantedList, deniedList) -> AppDatabase.backup(new Callback() {
             @Override
             public void success() {
-                Notify.show(R.string.backup_success);
+                Notify.show(R.string.vod_backup_success);
             }
 
             @Override
             public void error() {
-                Notify.show(R.string.backup_fail);
+                Notify.show(R.string.vod_backup_fail);
             }
         }));
     }
@@ -373,7 +373,7 @@ public class SettingFragment extends BaseFragment implements ConfigCallback, Sit
         PermissionX.init(this).permissions(Manifest.permission.WRITE_EXTERNAL_STORAGE).request((allGranted, grantedList, deniedList) -> RestoreDialog.create().show(getActivity(), new Callback() {
             @Override
             public void success() {
-                Notify.show(R.string.restore_success);
+                Notify.show(R.string.vod_restore_success);
                 Notify.progress(getActivity());
                 setOtherText();
                 initConfig();
@@ -381,7 +381,7 @@ public class SettingFragment extends BaseFragment implements ConfigCallback, Sit
 
             @Override
             public void error() {
-                Notify.show(R.string.restore_fail);
+                Notify.show(R.string.vod_restore_fail);
             }
         }));
     }

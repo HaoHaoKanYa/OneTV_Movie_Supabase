@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import top.cywin.onetv.vod.Product;
 import top.cywin.onetv.vod.bean.Keep;
-import top.cywin.onetv.vod.databinding.AdapterVodBinding;
+import top.cywin.onetv.vod.databinding.VodAdapterVodBinding;
 import top.cywin.onetv.vod.utils.ImgUtil;
 import top.cywin.onetv.vod.utils.ResUtil;
 
@@ -75,7 +75,7 @@ public class KeepAdapter extends RecyclerView.Adapter<KeepAdapter.ViewHolder> {
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        ViewHolder holder = new ViewHolder(AdapterVodBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        ViewHolder holder = new ViewHolder(VodAdapterVodBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
         holder.binding.getRoot().getLayoutParams().width = width;
         holder.binding.getRoot().getLayoutParams().height = height;
         return holder;
@@ -94,7 +94,7 @@ public class KeepAdapter extends RecyclerView.Adapter<KeepAdapter.ViewHolder> {
         ImgUtil.loadVod(item.getVodName(), item.getVodPic(), holder.binding.image);
     }
 
-    private void setFocusListener(AdapterVodBinding binding) {
+    private void setFocusListener(VodAdapterVodBinding binding) {
         binding.getRoot().setOnFocusChangeListener((v, hasFocus) -> binding.name.setSelected(hasFocus));
     }
 
@@ -108,9 +108,9 @@ public class KeepAdapter extends RecyclerView.Adapter<KeepAdapter.ViewHolder> {
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private final AdapterVodBinding binding;
+        private final VodAdapterVodBinding binding;
 
-        public ViewHolder(@NonNull AdapterVodBinding binding) {
+        public ViewHolder(@NonNull VodAdapterVodBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

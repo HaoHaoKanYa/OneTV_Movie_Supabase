@@ -12,7 +12,7 @@ import androidx.viewbinding.ViewBinding;
 
 import top.cywin.onetv.vod.api.config.VodConfig;
 import top.cywin.onetv.vod.bean.History;
-import top.cywin.onetv.vod.databinding.DialogReceiveBinding;
+import top.cywin.onetv.vod.databinding.VodDialogReceiveBinding;
 import top.cywin.onetv.vod.event.CastEvent;
 import top.cywin.onetv.vod.event.RefreshEvent;
 import top.cywin.onetv.vod.impl.Callback;
@@ -23,7 +23,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 public class ReceiveDialog extends BaseDialog {
 
-    private DialogReceiveBinding binding;
+    private VodDialogReceiveBinding binding;
     private CastEvent event;
 
     public static ReceiveDialog create() {
@@ -47,7 +47,7 @@ public class ReceiveDialog extends BaseDialog {
 
     @Override
     protected ViewBinding getBinding(@NonNull LayoutInflater inflater, @Nullable ViewGroup container) {
-        return binding = DialogReceiveBinding.inflate(inflater, container, false);
+        return binding = VodDialogReceiveBinding.inflate(inflater, container, false);
     }
 
     @Override

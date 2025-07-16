@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import top.cywin.onetv.vod.api.config.LiveConfig;
 import top.cywin.onetv.vod.api.config.VodConfig;
 import top.cywin.onetv.vod.bean.Config;
-import top.cywin.onetv.vod.databinding.AdapterConfigBinding;
+import top.cywin.onetv.vod.databinding.VodAdapterConfigBinding;
 
 import java.util.List;
 
@@ -52,7 +52,7 @@ public class ConfigAdapter extends RecyclerView.Adapter<ConfigAdapter.ViewHolder
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(AdapterConfigBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return new ViewHolder(VodAdapterConfigBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
@@ -65,9 +65,9 @@ public class ConfigAdapter extends RecyclerView.Adapter<ConfigAdapter.ViewHolder
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private final AdapterConfigBinding binding;
+        private final VodAdapterConfigBinding binding;
 
-        public ViewHolder(@NonNull AdapterConfigBinding binding) {
+        public ViewHolder(@NonNull VodAdapterConfigBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

@@ -8,13 +8,13 @@ import androidx.fragment.app.Fragment;
 
 import top.cywin.onetv.vod
 import top.cywin.onetv.vod.Setting;
-import top.cywin.onetv.vod.databinding.DialogSpeedBinding;
+import top.cywin.onetv.vod.databinding.VodDialogSpeedBinding;
 import top.cywin.onetv.vod.impl.SpeedCallback;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class SpeedDialog {
 
-    private final DialogSpeedBinding binding;
+    private final VodDialogSpeedBinding binding;
     private final SpeedCallback callback;
     private float value;
 
@@ -24,7 +24,7 @@ public class SpeedDialog {
 
     public SpeedDialog(Fragment fragment) {
         this.callback = (SpeedCallback) fragment;
-        this.binding = DialogSpeedBinding.inflate(LayoutInflater.from(fragment.getContext()));
+        this.binding = VodDialogSpeedBinding.inflate(LayoutInflater.from(fragment.getContext()));
     }
 
     public void show() {
@@ -33,7 +33,7 @@ public class SpeedDialog {
     }
 
     private void initDialog() {
-        AlertDialog dialog = new MaterialAlertDialogBuilder(binding.getRoot().getContext()).setTitle(R.string.player_speed).setView(binding.getRoot()).setPositiveButton(R.string.dialog_positive, this::onPositive).setNegativeButton(R.string.dialog_negative, this::onNegative).create();
+        AlertDialog dialog = new MaterialAlertDialogBuilder(binding.getRoot().getContext()).setTitle(R.string.vod_player_speed).setView(binding.getRoot()).setPositiveButton(R.string.vod_dialog_positive, this::onPositive).setNegativeButton(R.string.vod_dialog_negative, this::onNegative).create();
         dialog.getWindow().setDimAmount(0);
         dialog.show();
     }

@@ -6,7 +6,7 @@ import android.view.WindowManager;
 
 import androidx.appcompat.app.AlertDialog;
 
-import top.cywin.onetv.vod.databinding.DialogDohBinding;
+import top.cywin.onetv.vod.databinding.VodDialogDohBinding;
 import top.cywin.onetv.vod.impl.DohCallback;
 import top.cywin.onetv.vod.ui.adapter.DohAdapter;
 import top.cywin.onetv.vod.ui.custom.SpaceItemDecoration;
@@ -16,7 +16,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class DohDialog implements DohAdapter.OnClickListener {
 
-    private final DialogDohBinding binding;
+    private final VodDialogDohBinding binding;
     private final DohCallback callback;
     private final AlertDialog dialog;
     private final DohAdapter adapter;
@@ -32,7 +32,7 @@ public class DohDialog implements DohAdapter.OnClickListener {
 
     public DohDialog(Activity activity) {
         this.callback = (DohCallback) activity;
-        this.binding = DialogDohBinding.inflate(LayoutInflater.from(activity));
+        this.binding = VodDialogDohBinding.inflate(LayoutInflater.from(activity));
         this.dialog = new MaterialAlertDialogBuilder(activity).setView(binding.getRoot()).create();
         this.adapter = new DohAdapter(this);
     }

@@ -33,7 +33,7 @@ import top.cywin.onetv.vod.bean.Group;
 import top.cywin.onetv.vod.bean.Keep;
 import top.cywin.onetv.vod.bean.Live;
 import top.cywin.onetv.vod.bean.Track;
-import top.cywin.onetv.vod.databinding.ActivityLiveBinding;
+import top.cywin.onetv.vod.databinding.VodActivityLiveBinding;
 import top.cywin.onetv.vod.event.ActionEvent;
 import top.cywin.onetv.vod.event.ErrorEvent;
 import top.cywin.onetv.vod.event.PlayerEvent;
@@ -73,7 +73,7 @@ import java.util.UUID;
 
 public class LiveActivity extends BaseActivity implements GroupPresenter.OnClickListener, ChannelPresenter.OnClickListener, EpgDataPresenter.OnClickListener, CustomKeyDownLive.Listener, CustomLiveListView.Callback, TrackDialog.Listener, PassCallback, LiveCallback {
 
-    private ActivityLiveBinding mBinding;
+    private VodActivityLiveBinding mBinding;
     private ArrayObjectAdapter mChannelAdapter;
     private ArrayObjectAdapter mEpgDataAdapter;
     private ArrayObjectAdapter mGroupAdapter;
@@ -123,7 +123,7 @@ public class LiveActivity extends BaseActivity implements GroupPresenter.OnClick
 
     @Override
     protected ViewBinding getBinding() {
-        return mBinding = ActivityLiveBinding.inflate(getLayoutInflater());
+        return mBinding = VodActivityLiveBinding.inflate(getLayoutInflater());
     }
 
     @Override
@@ -209,7 +209,7 @@ public class LiveActivity extends BaseActivity implements GroupPresenter.OnClick
 
     private void setScale(int scale) {
         mBinding.exo.setResizeMode(scale);
-        mBinding.control.scale.setText(ResUtil.getStringArray(R.array.select_scale)[scale]);
+        mBinding.control.scale.setText(ResUtil.getStringArray(R.array.vod_select_scale)[scale]);
     }
 
     private void setViewModel() {
@@ -248,7 +248,7 @@ public class LiveActivity extends BaseActivity implements GroupPresenter.OnClick
     }
 
     private void getLive() {
-        mBinding.control.home.setText(LiveConfig.isOnly() ? getString(R.string.live_refresh) : getHome().getName());
+        mBinding.control.home.setText(LiveConfig.isOnly() ? getString(R.string.vod_live_refresh) : getHome().getName());
         mViewModel.getLive(getHome());
         showProgress();
     }
@@ -346,7 +346,7 @@ public class LiveActivity extends BaseActivity implements GroupPresenter.OnClick
 
     private void onScale() {
         int index = Setting.getLiveScale();
-        String[] array = ResUtil.getStringArray(R.array.select_scale);
+        String[] array = ResUtil.getStringArray(R.array.vod_select_scale);
         Setting.putLiveScale(index = index == array.length - 1 ? 0 : ++index);
         setScale(index);
     }
@@ -508,7 +508,7 @@ public class LiveActivity extends BaseActivity implements GroupPresenter.OnClick
     }
 
     private void setArtwork(String url) {
-        ImgUtil.load(url, R.drawable.radio, new CustomTarget<>(ResUtil.getScreenWidth(), ResUtil.getScreenHeight()) {
+        ImgUtil.load(url, R.drawable.vod_radio, new CustomTarget<>(ResUtil.getScreenWidth(), ResUtil.getScreenHeight()) {
             @Override
             public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
                 mBinding.exo.setDefaultArtwork(resource);
@@ -550,7 +550,7 @@ public class LiveActivity extends BaseActivity implements GroupPresenter.OnClick
     public boolean onLongClick(Channel item) {
         if (mGroup.isHidden()) return false;
         boolean exist = Keep.exist(item.getName());
-        Notify.show(exist ? R.string.keep_del : R.string.keep_add);
+        Notify.show(exist ? R.string.vod_keep_del : R.string.vod_keep_add);
         if (exist) delKeep(item);
         else addKeep(item);
         return true;
@@ -561,8 +561,8 @@ public class LiveActivity extends BaseActivity implements GroupPresenter.OnClick
         if (item.isSelected()) {
             fetch(item);
         } else if (mChannel.hasCatchup()) {
-            mBinding.widget.title.setText(getString(R.string.detail_title, mChannel.getName(), item.getTitle()));
-            Notify.show(getString(R.string.play_ready, item.getTitle()));
+            mBinding.widget.title.setText(getString(R.string.vod_detail_title, mChannel.getName(), item.getTitle()));
+            Notify.show(getString(R.string.vod_play_ready, item.getTitle()));
             setActivated(item);
             fetch(item);
         }
@@ -608,7 +608,7 @@ public class LiveActivity extends BaseActivity implements GroupPresenter.OnClick
         EpgData data = mChannel.getData().getEpgData();
         boolean hasTitle = !data.getTitle().isEmpty();
         mEpgDataAdapter.setItems(mChannel.getData().getList(), null);
-        if (hasTitle) mBinding.widget.title.setText(getString(R.string.detail_title, mChannel.getName(), data.getTitle()));
+        if (hasTitle) mBinding.widget.title.setText(getString(R.string.vod_detail_title, mChannel.getName(), data.getTitle()));
         mBinding.widget.name.setMaxEms(hasTitle ? 12 : 48);
         mBinding.widget.play.setText(data.format());
         setWidth(mChannel.getData());
@@ -646,7 +646,7 @@ public class LiveActivity extends BaseActivity implements GroupPresenter.OnClick
 
     private void checkPlayImg() {
         ActionEvent.update();
-        mBinding.control.action.setText(mPlayers.isPlaying() ? R.string.pause : R.string.play);
+        mBinding.control.action.setText(mPlayers.isPlaying() ? R.string.vod_pause : R.string.vod_play);
     }
 
     private void resetAdapter() {
@@ -912,7 +912,7 @@ public class LiveActivity extends BaseActivity implements GroupPresenter.OnClick
         mBinding.widget.center.setVisibility(View.VISIBLE);
         mBinding.widget.exoDuration.setText(mPlayers.getDurationTime());
         mBinding.widget.exoPosition.setText(mPlayers.getPositionTime(time));
-        mBinding.widget.action.setImageResource(time > 0 ? R.drawable.ic_widget_forward : R.drawable.ic_widget_rewind);
+        mBinding.widget.action.setImageResource(time > 0 ? R.drawable.vod_ic_widget_forward : R.drawable.vod_ic_widget_rewind);
         hideProgress();
     }
 

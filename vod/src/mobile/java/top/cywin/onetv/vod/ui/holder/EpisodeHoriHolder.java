@@ -4,16 +4,16 @@ import androidx.annotation.NonNull;
 
 import top.cywin.onetv.vod.Product;
 import top.cywin.onetv.vod.bean.Episode;
-import top.cywin.onetv.vod.databinding.AdapterEpisodeHoriBinding;
+import top.cywin.onetv.vod.databinding.VodAdapterEpisodeHoriBinding;
 import top.cywin.onetv.vod.ui.adapter.EpisodeAdapter;
 import top.cywin.onetv.vod.ui.base.BaseEpisodeHolder;
 
 public class EpisodeHoriHolder extends BaseEpisodeHolder {
 
     private final EpisodeAdapter.OnClickListener listener;
-    private final AdapterEpisodeHoriBinding binding;
+    private final VodAdapterEpisodeHoriBinding binding;
 
-    public EpisodeHoriHolder(@NonNull AdapterEpisodeHoriBinding binding, EpisodeAdapter.OnClickListener listener) {
+    public EpisodeHoriHolder(@NonNull VodAdapterEpisodeHoriBinding binding, EpisodeAdapter.OnClickListener listener) {
         super(binding.getRoot());
         this.binding = binding;
         this.listener = listener;

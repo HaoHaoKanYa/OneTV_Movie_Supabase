@@ -125,8 +125,8 @@ public class SiteViewModel extends ViewModel {
                 Vod vod = new Vod();
                 vod.setVodId(id);
                 vod.setVodName(id);
-                vod.setVodPic(ResUtil.getString(R.string.push_image));
-                vod.setVodFlags(Flag.create(ResUtil.getString(R.string.push), id));
+                vod.setVodPic(ResUtil.getString(R.string.vod_push_image));
+                vod.setVodFlags(Flag.create(ResUtil.getString(R.string.vod_push), id));
                 Source.get().parse(vod.getVodFlags());
                 return Result.vod(vod);
             } else {

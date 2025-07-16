@@ -14,7 +14,7 @@ import top.cywin.onetv.vod.api.config.LiveConfig;
 import top.cywin.onetv.vod.api.config.VodConfig;
 import top.cywin.onetv.vod.api.config.WallConfig;
 import top.cywin.onetv.vod.bean.Config;
-import top.cywin.onetv.vod.databinding.DialogConfigBinding;
+import top.cywin.onetv.vod.databinding.VodDialogConfigBinding;
 import top.cywin.onetv.vod.impl.ConfigCallback;
 import top.cywin.onetv.vod.ui.custom.CustomTextListener;
 import top.cywin.onetv.vod.utils.FileChooser;
@@ -22,7 +22,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class ConfigDialog {
 
-    private final DialogConfigBinding binding;
+    private final VodDialogConfigBinding binding;
     private final ConfigCallback callback;
     private final Fragment fragment;
     private AlertDialog dialog;
@@ -48,7 +48,7 @@ public class ConfigDialog {
     public ConfigDialog(Fragment fragment) {
         this.fragment = fragment;
         this.callback = (ConfigCallback) fragment;
-        this.binding = DialogConfigBinding.inflate(LayoutInflater.from(fragment.getContext()));
+        this.binding = VodDialogConfigBinding.inflate(LayoutInflater.from(fragment.getContext()));
         this.append = true;
     }
 
@@ -59,7 +59,7 @@ public class ConfigDialog {
     }
 
     private void initDialog() {
-        dialog = new MaterialAlertDialogBuilder(binding.getRoot().getContext()).setTitle(type == 0 ? R.string.setting_vod : type == 1 ? R.string.setting_live : R.string.setting_wall).setView(binding.getRoot()).setPositiveButton(edit ? R.string.dialog_edit : R.string.dialog_positive, this::onPositive).setNegativeButton(R.string.dialog_negative, this::onNegative).create();
+        dialog = new MaterialAlertDialogBuilder(binding.getRoot().getContext()).setTitle(type == 0 ? R.string.vod_setting_vod : type == 1 ? R.string.vod_setting_live : R.string.vod_setting_wall).setView(binding.getRoot()).setPositiveButton(edit ? R.string.vod_dialog_edit : R.string.vod_dialog_positive, this::onPositive).setNegativeButton(R.string.vod_dialog_negative, this::onNegative).create();
         dialog.getWindow().setDimAmount(0);
         dialog.show();
     }

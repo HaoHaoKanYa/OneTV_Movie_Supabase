@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment;
 
 import top.cywin.onetv.vod.api.config.VodConfig;
 import top.cywin.onetv.vod.bean.Site;
-import top.cywin.onetv.vod.databinding.DialogSiteBinding;
+import top.cywin.onetv.vod.databinding.VodDialogSiteBinding;
 import top.cywin.onetv.vod.impl.SiteCallback;
 import top.cywin.onetv.vod.ui.adapter.SiteAdapter;
 import top.cywin.onetv.vod.ui.custom.SpaceItemDecoration;
@@ -17,7 +17,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 public class SiteDialog implements SiteAdapter.OnClickListener {
 
     private final SiteCallback callback;
-    private DialogSiteBinding binding;
+    private VodDialogSiteBinding binding;
     private SiteAdapter adapter;
     private AlertDialog dialog;
 
@@ -40,7 +40,7 @@ public class SiteDialog implements SiteAdapter.OnClickListener {
     }
 
     private void init(Activity activity) {
-        this.binding = DialogSiteBinding.inflate(LayoutInflater.from(activity));
+        this.binding = VodDialogSiteBinding.inflate(LayoutInflater.from(activity));
         this.dialog = new MaterialAlertDialogBuilder(activity).setView(binding.getRoot()).create();
         this.adapter = new SiteAdapter(this);
     }

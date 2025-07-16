@@ -10,7 +10,7 @@ import top.cywin.onetv.vod.Product;
 import top.cywin.onetv.vod.api.config.VodConfig;
 import top.cywin.onetv.vod.bean.Config;
 import top.cywin.onetv.vod.bean.Keep;
-import top.cywin.onetv.vod.databinding.ActivityKeepBinding;
+import top.cywin.onetv.vod.databinding.VodActivityKeepBinding;
 import top.cywin.onetv.vod.event.RefreshEvent;
 import top.cywin.onetv.vod.impl.Callback;
 import top.cywin.onetv.vod.ui.adapter.KeepAdapter;
@@ -23,7 +23,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 public class KeepActivity extends BaseActivity implements KeepAdapter.OnClickListener {
 
-    private ActivityKeepBinding mBinding;
+    private VodActivityKeepBinding mBinding;
     private KeepAdapter mAdapter;
 
     public static void start(Activity activity) {
@@ -32,7 +32,7 @@ public class KeepActivity extends BaseActivity implements KeepAdapter.OnClickLis
 
     @Override
     protected ViewBinding getBinding() {
-        return mBinding = ActivityKeepBinding.inflate(getLayoutInflater());
+        return mBinding = VodActivityKeepBinding.inflate(getLayoutInflater());
     }
 
     @Override

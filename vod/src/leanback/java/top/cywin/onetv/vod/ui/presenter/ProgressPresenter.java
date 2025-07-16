@@ -6,13 +6,13 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.leanback.widget.Presenter;
 
-import top.cywin.onetv.vod.databinding.AdapterProgressBinding;
+import top.cywin.onetv.vod.databinding.VodAdapterProgressBinding;
 
 public class ProgressPresenter extends Presenter {
 
     @Override
     public Presenter.ViewHolder onCreateViewHolder(ViewGroup parent) {
-        return new ViewHolder(AdapterProgressBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return new ViewHolder(VodAdapterProgressBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
@@ -25,7 +25,7 @@ public class ProgressPresenter extends Presenter {
 
     public static class ViewHolder extends Presenter.ViewHolder {
 
-        public ViewHolder(@NonNull AdapterProgressBinding binding) {
+        public ViewHolder(@NonNull VodAdapterProgressBinding binding) {
             super(binding.getRoot());
         }
     }

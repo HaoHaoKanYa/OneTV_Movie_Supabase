@@ -35,7 +35,7 @@ import top.cywin.onetv.vod.bean.Result;
 import top.cywin.onetv.vod.bean.Site;
 import top.cywin.onetv.vod.bean.Style;
 import top.cywin.onetv.vod.bean.Vod;
-import top.cywin.onetv.vod.databinding.ActivityHomeBinding;
+import top.cywin.onetv.vod.databinding.VodActivityHomeBinding;
 import top.cywin.onetv.vod.db.AppDatabase;
 import top.cywin.onetv.vod.event.CastEvent;
 import top.cywin.onetv.vod.event.RefreshEvent;
@@ -70,7 +70,7 @@ import java.util.List;
 
 public class HomeActivity extends BaseActivity implements CustomTitleView.Listener, VodPresenter.OnClickListener, FuncPresenter.OnClickListener, HistoryPresenter.OnClickListener {
 
-    private ActivityHomeBinding mBinding;
+    private VodActivityHomeBinding mBinding;
     private ArrayObjectAdapter mHistoryAdapter;
     private HistoryPresenter mPresenter;
     private ArrayObjectAdapter mAdapter;
@@ -85,7 +85,7 @@ public class HomeActivity extends BaseActivity implements CustomTitleView.Listen
 
     @Override
     protected ViewBinding getBinding() {
-        return mBinding = ActivityHomeBinding.inflate(getLayoutInflater());
+        return mBinding = VodActivityHomeBinding.inflate(getLayoutInflater());
     }
 
     @Override
@@ -153,8 +153,8 @@ public class HomeActivity extends BaseActivity implements CustomTitleView.Listen
 
     private void setAdapter() {
         mAdapter.add(getFuncRow());
-        mAdapter.add(R.string.home_history);
-        mAdapter.add(R.string.home_recommend);
+        mAdapter.add(R.string.vod_home_history);
+        mAdapter.add(R.string.vod_home_recommend);
         mHistoryAdapter = new ArrayObjectAdapter(mPresenter = new HistoryPresenter(this));
     }
 
@@ -212,7 +212,7 @@ public class HomeActivity extends BaseActivity implements CustomTitleView.Listen
         mResult = Result.empty();
         int index = getRecommendIndex();
         String title = getHome().getName();
-        mBinding.title.setText(title.isEmpty() ? "影视点播" : title);
+        mBinding.title.setText(title.isEmpty() ? ResUtil.getString(R.string.vod_app_title) : title);
         if (mAdapter.size() > index) mAdapter.removeItems(index, mAdapter.size() - index);
         if (getHome().getKey().isEmpty()) return;
         mViewModel.homeContent();
@@ -230,13 +230,13 @@ public class HomeActivity extends BaseActivity implements CustomTitleView.Listen
 
     private ListRow getFuncRow() {
         ArrayObjectAdapter adapter = new ArrayObjectAdapter(new FuncPresenter(this));
-        adapter.add(Func.create(R.string.home_vod));
-        adapter.add(Func.create(R.string.home_live));
-        adapter.add(Func.create(R.string.home_search));
-        adapter.add(Func.create(R.string.home_keep));
-        adapter.add(Func.create(R.string.home_push));
-        adapter.add(Func.create(R.string.home_cast));
-        adapter.add(Func.create(R.string.home_setting));
+        adapter.add(Func.create(R.string.vod_home_vod));
+        adapter.add(Func.create(R.string.vod_home_live));
+        adapter.add(Func.create(R.string.vod_home_search));
+        adapter.add(Func.create(R.string.vod_home_keep));
+        adapter.add(Func.create(R.string.vod_home_push));
+        adapter.add(Func.create(R.string.vod_home_cast));
+        adapter.add(Func.create(R.string.vod_home_setting));
         return new ListRow(adapter);
     }
 
@@ -268,12 +268,12 @@ public class HomeActivity extends BaseActivity implements CustomTitleView.Listen
     }
 
     private int getHistoryIndex() {
-        for (int i = 0; i < mAdapter.size(); i++) if (mAdapter.get(i).equals(R.string.home_history)) return i + 1;
+        for (int i = 0; i < mAdapter.size(); i++) if (mAdapter.get(i).equals(R.string.vod_home_history)) return i + 1;
         return -1;
     }
 
     private int getRecommendIndex() {
-        for (int i = 0; i < mAdapter.size(); i++) if (mAdapter.get(i).equals(R.string.home_recommend)) return i + 1;
+        for (int i = 0; i < mAdapter.size(); i++) if (mAdapter.get(i).equals(R.string.vod_home_recommend)) return i + 1;
         return -1;
     }
 
@@ -370,19 +370,19 @@ public class HomeActivity extends BaseActivity implements CustomTitleView.Listen
     @Override
     @SuppressLint("NonConstantResourceId")
     public void onItemClick(Func item) {
-        if (item.getResId() == R.string.home_vod) {
+        if (item.getResId() == R.string.vod_home_vod) {
             VodActivity.start(this, mResult.clear());
-        } else if (item.getResId() == R.string.home_live) {
+        } else if (item.getResId() == R.string.vod_home_live) {
             LiveActivity.start(this);
-        } else if (item.getResId() == R.string.home_search) {
+        } else if (item.getResId() == R.string.vod_home_search) {
             SearchActivity.start(this);
-        } else if (item.getResId() == R.string.home_keep) {
+        } else if (item.getResId() == R.string.vod_home_keep) {
             KeepActivity.start(this);
-        } else if (item.getResId() == R.string.home_push) {
+        } else if (item.getResId() == R.string.vod_home_push) {
             PushActivity.start(this);
-        } else if (item.getResId() == R.string.home_cast) {
+        } else if (item.getResId() == R.string.vod_home_cast) {
             CastActivity.start(this);
-        } else if (item.getResId() == R.string.home_setting) {
+        } else if (item.getResId() == R.string.vod_home_setting) {
             SettingActivity.start(this);
         }
     }

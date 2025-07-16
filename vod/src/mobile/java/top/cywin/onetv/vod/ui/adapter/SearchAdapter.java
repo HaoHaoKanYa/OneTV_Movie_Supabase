@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import top.cywin.onetv.vod.Setting;
 import top.cywin.onetv.vod.bean.Vod;
-import top.cywin.onetv.vod.databinding.AdapterVodOneBinding;
-import top.cywin.onetv.vod.databinding.AdapterVodRectBinding;
+import top.cywin.onetv.vod.databinding.VodAdapterVodOneBinding;
+import top.cywin.onetv.vod.databinding.VodAdapterVodRectBinding;
 import top.cywin.onetv.vod.ui.base.BaseVodHolder;
 import top.cywin.onetv.vod.ui.base.ViewType;
 import top.cywin.onetv.vod.ui.holder.VodOneHolder;
@@ -86,7 +86,7 @@ public class SearchAdapter extends RecyclerView.Adapter<BaseVodHolder> {
     @NonNull
     @Override
     public BaseVodHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if (viewType == ViewType.LIST) return new VodOneHolder(AdapterVodOneBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false), mListener);
-        else return new VodRectHolder(AdapterVodRectBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false), mListener).size(size);
+        if (viewType == ViewType.LIST) return new VodOneHolder(VodAdapterVodOneBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false), mListener);
+        else return new VodRectHolder(VodAdapterVodRectBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false), mListener).size(size);
     }
 }

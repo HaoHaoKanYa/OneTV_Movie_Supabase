@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import top.cywin.onetv.vod
-import top.cywin.onetv.vod.databinding.AdapterFileBinding;
+import top.cywin.onetv.vod.databinding.VodAdapterFileBinding;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -42,7 +42,7 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder> {
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(AdapterFileBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return new ViewHolder(VodAdapterFileBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
@@ -50,14 +50,14 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder> {
         File file = mItems.get(position);
         holder.binding.name.setText(file.getName());
         holder.binding.getRoot().setOnClickListener(v -> mListener.onItemClick(file));
-        holder.binding.image.setImageResource(file.isDirectory() ? R.drawable.ic_folder : R.drawable.ic_file);
+        holder.binding.image.setImageResource(file.isDirectory() ? R.drawable.vod_ic_folder : R.drawable.vod_ic_file);
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private final AdapterFileBinding binding;
+        private final VodAdapterFileBinding binding;
 
-        ViewHolder(@NonNull AdapterFileBinding binding) {
+        ViewHolder(@NonNull VodAdapterFileBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

@@ -13,7 +13,7 @@ import top.cywin.onetv.vod
 import top.cywin.onetv.vod.api.config.VodConfig;
 import top.cywin.onetv.vod.bean.Config;
 import top.cywin.onetv.vod.bean.Keep;
-import top.cywin.onetv.vod.databinding.ActivityKeepBinding;
+import top.cywin.onetv.vod.databinding.VodActivityKeepBinding;
 import top.cywin.onetv.vod.event.RefreshEvent;
 import top.cywin.onetv.vod.impl.Callback;
 import top.cywin.onetv.vod.ui.adapter.KeepAdapter;
@@ -27,7 +27,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 public class KeepActivity extends BaseActivity implements KeepAdapter.OnClickListener {
 
-    private ActivityKeepBinding mBinding;
+    private VodActivityKeepBinding mBinding;
     private KeepAdapter mAdapter;
 
     public static void start(Activity activity) {
@@ -36,7 +36,7 @@ public class KeepActivity extends BaseActivity implements KeepAdapter.OnClickLis
 
     @Override
     protected ViewBinding getBinding() {
-        return mBinding = ActivityKeepBinding.inflate(getLayoutInflater());
+        return mBinding = VodActivityKeepBinding.inflate(getLayoutInflater());
     }
 
     @Override
@@ -70,7 +70,7 @@ public class KeepActivity extends BaseActivity implements KeepAdapter.OnClickLis
 
     private void onDelete(View view) {
         if (mAdapter.isDelete()) {
-            new MaterialAlertDialogBuilder(this).setTitle(R.string.dialog_delete_record).setMessage(R.string.dialog_delete_keep).setNegativeButton(R.string.dialog_negative, null).setPositiveButton(R.string.dialog_positive, (dialog, which) -> mAdapter.clear()).show();
+            new MaterialAlertDialogBuilder(this).setTitle(R.string.vod_dialog_delete_record).setMessage(R.string.vod_dialog_delete_keep).setNegativeButton(R.string.vod_dialog_negative, null).setPositiveButton(R.string.vod_dialog_positive, (dialog, which) -> mAdapter.clear()).show();
         } else if (mAdapter.getItemCount() > 0) {
             mAdapter.setDelete(true);
         } else {

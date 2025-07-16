@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import top.cywin.onetv.vod.bean.Vod;
-import top.cywin.onetv.vod.databinding.AdapterQuickBinding;
+import top.cywin.onetv.vod.databinding.VodAdapterQuickBinding;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,7 +59,7 @@ public class QuickAdapter extends RecyclerView.Adapter<QuickAdapter.ViewHolder> 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(AdapterQuickBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return new ViewHolder(VodAdapterQuickBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
@@ -73,9 +73,9 @@ public class QuickAdapter extends RecyclerView.Adapter<QuickAdapter.ViewHolder> 
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private final AdapterQuickBinding binding;
+        private final VodAdapterQuickBinding binding;
 
-        ViewHolder(@NonNull AdapterQuickBinding binding) {
+        ViewHolder(@NonNull VodAdapterQuickBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

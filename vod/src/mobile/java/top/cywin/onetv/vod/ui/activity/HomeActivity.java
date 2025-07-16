@@ -21,7 +21,7 @@ import top.cywin.onetv.vod.api.config.LiveConfig;
 import top.cywin.onetv.vod.api.config.VodConfig;
 import top.cywin.onetv.vod.api.config.WallConfig;
 import top.cywin.onetv.vod.bean.Config;
-import top.cywin.onetv.vod.databinding.ActivityHomeBinding;
+import top.cywin.onetv.vod.databinding.VodActivityHomeBinding;
 import top.cywin.onetv.vod.db.AppDatabase;
 import top.cywin.onetv.vod.event.RefreshEvent;
 import top.cywin.onetv.vod.event.ServerEvent;
@@ -47,12 +47,12 @@ import org.greenrobot.eventbus.ThreadMode;
 public class HomeActivity extends BaseActivity implements NavigationBarView.OnItemSelectedListener {
 
     private FragmentStateManager mManager;
-    private ActivityHomeBinding mBinding;
+    private VodActivityHomeBinding mBinding;
     private int orientation;
 
     @Override
     protected ViewBinding getBinding() {
-        return mBinding = ActivityHomeBinding.inflate(getLayoutInflater());
+        return mBinding = VodActivityHomeBinding.inflate(getLayoutInflater());
     }
 
     @Override
@@ -151,7 +151,7 @@ public class HomeActivity extends BaseActivity implements NavigationBarView.OnIt
     }
 
     private boolean addShortcut(View view) {
-        ShortcutInfoCompat info = new ShortcutInfoCompat.Builder(this, getString(R.string.nav_live)).setIcon(IconCompat.createWithResource(this, R.mipmap.ic_launcher)).setIntent(new Intent(Intent.ACTION_VIEW, null, this, LiveActivity.class)).setShortLabel(getString(R.string.nav_live)).build();
+        ShortcutInfoCompat info = new ShortcutInfoCompat.Builder(this, getString(R.string.vod_nav_live)).setIcon(IconCompat.createWithResource(this, R.mipmap.vod_ic_launcher)).setIntent(new Intent(Intent.ACTION_VIEW, null, this, LiveActivity.class)).setShortLabel(getString(R.string.vod_nav_live)).build();
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, new Intent(this, ShortcutReceiver.class).setAction(ShortcutReceiver.ACTION), PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         ShortcutManagerCompat.requestPinShortcut(this, info, pendingIntent.getIntentSender());
         return true;

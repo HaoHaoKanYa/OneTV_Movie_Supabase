@@ -25,7 +25,7 @@ import top.cywin.onetv.vod.Setting;
 import top.cywin.onetv.vod.api.config.VodConfig;
 import top.cywin.onetv.vod.bean.Collect;
 import top.cywin.onetv.vod.bean.Site;
-import top.cywin.onetv.vod.databinding.ActivityCollectBinding;
+import top.cywin.onetv.vod.databinding.VodActivityCollectBinding;
 import top.cywin.onetv.vod.model.SiteViewModel;
 import top.cywin.onetv.vod.ui.base.BaseActivity;
 import top.cywin.onetv.vod.ui.fragment.CollectFragment;
@@ -39,7 +39,7 @@ import java.util.List;
 
 public class CollectActivity extends BaseActivity {
 
-    private ActivityCollectBinding mBinding;
+    private VodActivityCollectBinding mBinding;
     private ArrayObjectAdapter mAdapter;
     private SiteViewModel mViewModel;
     private PauseExecutor mExecutor;
@@ -62,7 +62,7 @@ public class CollectActivity extends BaseActivity {
 
     @Override
     protected ViewBinding getBinding() {
-        return mBinding = ActivityCollectBinding.inflate(getLayoutInflater());
+        return mBinding = VodActivityCollectBinding.inflate(getLayoutInflater());
     }
 
     @Override

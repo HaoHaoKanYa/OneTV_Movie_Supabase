@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import top.cywin.onetv.vod
 import top.cywin.onetv.vod.bean.Class;
 import top.cywin.onetv.vod.bean.Result;
-import top.cywin.onetv.vod.databinding.AdapterTypeBinding;
+import top.cywin.onetv.vod.databinding.VodAdapterTypeBinding;
 import top.cywin.onetv.vod.utils.ResUtil;
 
 import java.util.ArrayList;
@@ -67,7 +67,7 @@ public class TypeAdapter extends RecyclerView.Adapter<TypeAdapter.ViewHolder> {
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(AdapterTypeBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return new ViewHolder(VodAdapterTypeBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
@@ -80,9 +80,9 @@ public class TypeAdapter extends RecyclerView.Adapter<TypeAdapter.ViewHolder> {
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private final AdapterTypeBinding binding;
+        private final VodAdapterTypeBinding binding;
 
-        ViewHolder(@NonNull AdapterTypeBinding binding) {
+        ViewHolder(@NonNull VodAdapterTypeBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

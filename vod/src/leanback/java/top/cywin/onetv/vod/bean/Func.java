@@ -33,19 +33,19 @@ public class Func {
 
     @SuppressLint("NonConstantResourceId")
     public void setDrawable() {
-        if (resId == R.string.home_vod) {
+        if (resId == R.string.vod_home_vod) {
             this.drawable = R.drawable.vod_ic_home_vod;
-        } else if (resId == R.string.home_live) {
+        } else if (resId == R.string.vod_home_live) {
             this.drawable = R.drawable.vod_ic_home_live;
-        } else if (resId == R.string.home_keep) {
+        } else if (resId == R.string.vod_home_keep) {
             this.drawable = R.drawable.vod_ic_home_keep;
-        } else if (resId == R.string.home_push) {
+        } else if (resId == R.string.vod_home_push) {
             this.drawable = R.drawable.vod_ic_home_push;
-        } else if (resId == R.string.home_cast) {
+        } else if (resId == R.string.vod_home_cast) {
             this.drawable = R.drawable.vod_ic_home_cast;
-        } else if (resId == R.string.home_search) {
+        } else if (resId == R.string.vod_home_search) {
             this.drawable = R.drawable.vod_ic_home_search;
-        } else if (resId == R.string.home_setting) {
+        } else if (resId == R.string.vod_home_setting) {
             this.drawable = R.drawable.vod_ic_home_setting;
         }
     }

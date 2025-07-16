@@ -33,7 +33,7 @@ import com.fongmi.onetv.tv.bean.Group;
 import com.fongmi.onetv.tv.bean.Keep;
 import com.fongmi.onetv.tv.bean.Live;
 import com.fongmi.onetv.tv.bean.Track;
-import com.fongmi.onetv.tv.databinding.ActivityLiveBinding;
+import com.fongmi.onetv.tv.databinding.VodActivityLiveBinding;
 import com.fongmi.onetv.tv.event.ActionEvent;
 import com.fongmi.onetv.tv.event.ErrorEvent;
 import com.fongmi.onetv.tv.event.PlayerEvent;
@@ -76,7 +76,7 @@ import java.util.UUID;
 
 public class LiveActivity extends BaseActivity implements CustomKeyDownLive.Listener, TrackDialog.Listener, Biometric.Callback, PassCallback, LiveCallback, GroupAdapter.OnClickListener, ChannelAdapter.OnClickListener, EpgDataAdapter.OnClickListener, CastDialog.Listener, InfoDialog.Listener {
 
-    private ActivityLiveBinding mBinding;
+    private VodActivityLiveBinding mBinding;
     private ChannelAdapter mChannelAdapter;
     private EpgDataAdapter mEpgDataAdapter;
     private Observer<Channel> mObserveUrl;
@@ -126,7 +126,7 @@ public class LiveActivity extends BaseActivity implements CustomKeyDownLive.List
 
     @Override
     protected ViewBinding getBinding() {
-        return mBinding = ActivityLiveBinding.inflate(getLayoutInflater());
+        return mBinding = VodActivityLiveBinding.inflate(getLayoutInflater());
     }
 
     @Override
@@ -215,7 +215,7 @@ public class LiveActivity extends BaseActivity implements CustomKeyDownLive.List
     private void setScale(int scale) {
         Setting.putLiveScale(scale);
         mBinding.exo.setResizeMode(scale);
-        mBinding.control.action.scale.setText(ResUtil.getStringArray(R.array.select_scale)[scale]);
+        mBinding.control.action.scale.setText(ResUtil.getStringArray(R.array.vod_select_scale)[scale]);
     }
 
     private void setViewModel() {
@@ -254,7 +254,7 @@ public class LiveActivity extends BaseActivity implements CustomKeyDownLive.List
     }
 
     private void getLive() {
-        mBinding.control.action.home.setText(LiveConfig.isOnly() ? getString(R.string.live_refresh) : getHome().getName());
+        mBinding.control.action.home.setText(LiveConfig.isOnly() ? getString(R.string.vod_live_refresh) : getHome().getName());
         mViewModel.getLive(getHome());
         showProgress();
     }
@@ -358,7 +358,7 @@ public class LiveActivity extends BaseActivity implements CustomKeyDownLive.List
 
     private void onScale() {
         int index = Setting.getLiveScale();
-        String[] array = ResUtil.getStringArray(R.array.select_scale);
+        String[] array = ResUtil.getStringArray(R.array.vod_select_scale);
         if (mKeyDown.getScale() != 1.0f) mKeyDown.resetScale();
         else setScale(index == array.length - 1 ? 0 : ++index);
         setR1Callback();
@@ -524,7 +524,7 @@ public class LiveActivity extends BaseActivity implements CustomKeyDownLive.List
     }
 
     private void setArtwork(String url) {
-        ImgUtil.load(url, R.drawable.radio, new CustomTarget<>(ResUtil.getScreenWidth(), ResUtil.getScreenHeight()) {
+        ImgUtil.load(url, R.drawable.vod_radio, new CustomTarget<>(ResUtil.getScreenWidth(), ResUtil.getScreenHeight()) {
             @Override
             public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
                 mBinding.exo.setDefaultArtwork(resource);
@@ -571,7 +571,7 @@ public class LiveActivity extends BaseActivity implements CustomKeyDownLive.List
     public boolean onLongClick(Channel item) {
         if (mGroup.isHidden()) return false;
         boolean exist = Keep.exist(item.getName());
-        Notify.show(exist ? R.string.keep_del : R.string.keep_add);
+        Notify.show(exist ? R.string.vod_keep_del : R.string.vod_keep_add);
         if (exist) delKeep(item);
         else addKeep(item);
         return true;
@@ -582,8 +582,8 @@ public class LiveActivity extends BaseActivity implements CustomKeyDownLive.List
         if (item.isSelected()) {
             fetch(item);
         } else if (mChannel.hasCatchup()) {
-            mBinding.control.title.setText(getString(R.string.detail_title, mChannel.getName(), item.getTitle()));
-            Notify.show(getString(R.string.play_ready, item.getTitle()));
+            mBinding.control.title.setText(getString(R.string.vod_detail_title, mChannel.getName(), item.getTitle()));
+            Notify.show(getString(R.string.vod_play_ready, item.getTitle()));
             mEpgDataAdapter.setSelected(item);
             fetch(item);
         }
@@ -623,7 +623,7 @@ public class LiveActivity extends BaseActivity implements CustomKeyDownLive.List
         EpgData data = mChannel.getData().getEpgData();
         boolean hasTitle = !data.getTitle().isEmpty();
         mEpgDataAdapter.addAll(mChannel.getData().getList());
-        if (hasTitle) mBinding.control.title.setText(getString(R.string.detail_title, mChannel.getName(), data.getTitle()));
+        if (hasTitle) mBinding.control.title.setText(getString(R.string.vod_detail_title, mChannel.getName(), data.getTitle()));
         mBinding.widget.name.setMaxEms(hasTitle ? 12 : 48);
         mBinding.widget.play.setText(data.format());
         setWidth(mChannel.getData());
@@ -935,7 +935,7 @@ public class LiveActivity extends BaseActivity implements CustomKeyDownLive.List
     public void onSpeedUp() {
         if (mPlayers.isLive() || !mPlayers.isPlaying()) return;
         mBinding.control.action.speed.setText(mPlayers.setSpeed(Setting.getSpeed()));
-        mBinding.widget.speed.startAnimation(ResUtil.getAnim(R.anim.forward));
+        mBinding.widget.speed.startAnimation(ResUtil.getAnim(R.anim.vod_forward));
         mBinding.widget.speed.setVisibility(View.VISIBLE);
     }
 
@@ -999,7 +999,7 @@ public class LiveActivity extends BaseActivity implements CustomKeyDownLive.List
     @Override
     public void onSeek(long time) {
         if (mPlayers.isLive()) return;
-        mBinding.widget.action.setImageResource(time > 0 ? R.drawable.ic_widget_forward : R.drawable.ic_widget_rewind);
+        mBinding.widget.action.setImageResource(time > 0 ? R.drawable.vod_ic_widget_forward : R.drawable.vod_ic_widget_rewind);
         mBinding.widget.time.setText(mPlayers.getPositionTime(time));
         mBinding.widget.seek.setVisibility(View.VISIBLE);
         hideProgress();

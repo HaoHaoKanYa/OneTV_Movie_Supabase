@@ -5,15 +5,16 @@ import android.view.LayoutInflater;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.FragmentActivity;
 
+import top.cywin.onetv.vod.R;
 import top.cywin.onetv.vod.Setting;
-import top.cywin.onetv.vod.databinding.DialogSpeedBinding;
+import top.cywin.onetv.vod.databinding.VodDialogSpeedBinding;
 import top.cywin.onetv.vod.impl.SpeedCallback;
 import top.cywin.onetv.vod.utils.KeyUtil;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class SpeedDialog {
 
-    private final DialogSpeedBinding binding;
+    private final VodDialogSpeedBinding binding;
     private final SpeedCallback callback;
     private final AlertDialog dialog;
 
@@ -23,7 +24,7 @@ public class SpeedDialog {
 
     public SpeedDialog(FragmentActivity activity) {
         this.callback = (SpeedCallback) activity;
-        this.binding = DialogSpeedBinding.inflate(LayoutInflater.from(activity));
+        this.binding = VodDialogSpeedBinding.inflate(LayoutInflater.from(activity));
         this.dialog = new MaterialAlertDialogBuilder(activity).setView(binding.getRoot()).create();
     }
 
@@ -34,7 +35,7 @@ public class SpeedDialog {
     }
 
     private void initDialog() {
-        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialog.getWindow().setBackgroundDrawableResource(R.color.vod_transparent);
         dialog.show();
     }
 
