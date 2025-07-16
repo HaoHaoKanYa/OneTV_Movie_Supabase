@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="CustomRecyclerView">
-        <attr name="maxHeight" format="dimension" />
+    <declare-styleable name="vod_CustomRecyclerView">
+        <attr name="vod_maxHeight" format="dimension" />
     </declare-styleable>
 </resources>

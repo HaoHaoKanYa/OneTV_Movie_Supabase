@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <integer-array name="cast_mode">
+    <integer-array name="vod_cast_mode">
         <item>@drawable/vod_ic_sync_two</item>
         <item>@drawable/vod_ic_sync_upload</item>
         <item>@drawable/vod_ic_sync_download</item>

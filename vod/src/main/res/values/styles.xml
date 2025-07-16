@@ -1,24 +1,24 @@
 <resources>
 
-    <style name="Vod">
+    <style name="vod_Vod">
         <item name="cornerFamily">rounded</item>
     </style>
 
-    <style name="Vod.Grid">
+    <style name="vod_Vod.Grid">
         <item name="cornerSize">8dp</item>
     </style>
 
-    <style name="Vod.Circle">
+    <style name="vod_Vod.Circle">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
     </style>
 
-    <style name="Vod.List">
+    <style name="vod_Vod.List">
         <item name="cornerSizeTopLeft">8dp</item>
         <item name="cornerSizeBottomLeft">8dp</item>
     </style>
 
-    <style name="Player">
+    <style name="vod_Player">
         <item name="auto_show">false</item>
         <item name="resize_mode">fit</item>
         <item name="use_artwork">true</item>
@@ -27,11 +27,11 @@
         <item name="default_artwork">@drawable/vod_radio</item>
     </style>
 
-    <style name="Player.Vod">
+    <style name="vod_Player.Vod">
         <item name="keep_content_on_player_reset">false</item>
     </style>
 
-    <style name="Player.Live">
+    <style name="vod_Player.Live">
         <item name="keep_content_on_player_reset">true</item>
     </style>
 

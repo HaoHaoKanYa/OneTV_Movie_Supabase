@@ -1,37 +1,37 @@
 <resources>
 
-    <color name="transparent">#00000000</color>
-    <color name="black">#000000</color>
-    <color name="black_05">#0D000000</color>
-    <color name="black_10">#1A000000</color>
-    <color name="black_15">#26000000</color>
-    <color name="black_20">#33000000</color>
-    <color name="black_30">#4D000000</color>
-    <color name="black_40">#66000000</color>
-    <color name="black_50">#80000000</color>
-    <color name="black_60">#99000000</color>
-    <color name="black_70">#B3000000</color>
-    <color name="black_80">#CC000000</color>
-    <color name="black_90">#E6000000</color>
-    <color name="white">#FFFFFF</color>
-    <color name="white_05">#0DFFFFFF</color>
-    <color name="white_15">#26FFFFFF</color>
-    <color name="white_10">#1AFFFFFF</color>
-    <color name="white_20">#33FFFFFF</color>
-    <color name="white_30">#4DFFFFFF</color>
-    <color name="white_40">#66FFFFFF</color>
-    <color name="white_50">#80FFFFFF</color>
-    <color name="white_60">#99FFFFFF</color>
-    <color name="white_70">#B3FFFFFF</color>
-    <color name="white_80">#CCFFFFFF</color>
-    <color name="white_90">#E6FFFFFF</color>
+    <color name="vod_transparent">#00000000</color>
+    <color name="vod_black">#000000</color>
+    <color name="vod_black_05">#0D000000</color>
+    <color name="vod_black_10">#1A000000</color>
+    <color name="vod_black_15">#26000000</color>
+    <color name="vod_black_20">#33000000</color>
+    <color name="vod_black_30">#4D000000</color>
+    <color name="vod_black_40">#66000000</color>
+    <color name="vod_black_50">#80000000</color>
+    <color name="vod_black_60">#99000000</color>
+    <color name="vod_black_70">#B3000000</color>
+    <color name="vod_black_80">#CC000000</color>
+    <color name="vod_black_90">#E6000000</color>
+    <color name="vod_white">#FFFFFF</color>
+    <color name="vod_white_05">#0DFFFFFF</color>
+    <color name="vod_white_15">#26FFFFFF</color>
+    <color name="vod_white_10">#1AFFFFFF</color>
+    <color name="vod_white_20">#33FFFFFF</color>
+    <color name="vod_white_30">#4DFFFFFF</color>
+    <color name="vod_white_40">#66FFFFFF</color>
+    <color name="vod_white_50">#80FFFFFF</color>
+    <color name="vod_white_60">#99FFFFFF</color>
+    <color name="vod_white_70">#B3FFFFFF</color>
+    <color name="vod_white_80">#CCFFFFFF</color>
+    <color name="vod_white_90">#E6FFFFFF</color>
 
     <!-- Material Design Colors - 添加缺失的颜色定义 -->
-    <color name="blue_500">#2196F3</color>
-    <color name="blue_700">#1976D2</color>
-    <color name="light_blue_500">#03A9F4</color>
-    <color name="light_blue_700">#0288D1</color>
-    <color name="yellow_500">#FFEB3B</color>
-    <color name="green_400">#66BB6A</color>
+    <color name="vod_blue_500">#2196F3</color>
+    <color name="vod_blue_700">#1976D2</color>
+    <color name="vod_light_blue_500">#03A9F4</color>
+    <color name="vod_light_blue_700">#0288D1</color>
+    <color name="vod_yellow_500">#FFEB3B</color>
+    <color name="vod_green_400">#66BB6A</color>
 
 </resources>

@@ -1,0 +1,46 @@
+
+VOD模块完整资源前缀处理报告
+============================
+
+处理时间: 2025-07-16 19:19:53
+
+统计信息:
+- 处理文件数: 10
+- 更新引用数: 19
+- 错误数量: 0
+
+处理的文件:
+  重命名: ic_launcher.xml -> vod_ic_launcher.xml
+  重命名: ic_launcher_round.xml -> vod_ic_launcher_round.xml
+  重命名: ic_local.svg -> vod_ic_local.svg
+  重命名: ic_push.svg -> vod_ic_push.svg
+  重命名: ic_search.svg -> vod_ic_search.svg
+  重命名: ic_setting.svg -> vod_ic_setting.svg
+  重命名: favicon.ico -> vod_favicon.ico
+  重命名: icon.png -> vod_icon.png
+  重命名: logo-1.png -> vod_logo-1.png
+  重命名: logo-2.png -> vod_logo-2.png
+
+更新的引用:
+  vod\src\main\assets\index.html
+  vod\src\main\assets\parse.html
+  vod\src\main\res\values\attrs.xml
+  vod\src\main\res\values\colors.xml
+  vod\src\main\res\values\strings.xml
+  vod\src\main\res\values\styles.xml
+  vod\src\main\res\values-zh-rCN\strings.xml
+  vod\src\main\res\values-zh-rTW\strings.xml
+  vod\src\mobile\res\values\arrays.xml
+  vod\src\mobile\res\values\colors.xml
+  vod\src\mobile\res\values\strings.xml
+  vod\src\mobile\res\values\styles.xml
+  vod\src\mobile\res\values-night\colors.xml
+  vod\src\mobile\res\values-v27\styles.xml
+  vod\src\mobile\res\values-zh-rCN\strings.xml
+  vod\src\mobile\res\values-zh-rTW\strings.xml
+  vod\catvod\src\main\res\values\strings.xml
+  vod\catvod\src\main\res\values-zh-rCN\strings.xml
+  vod\catvod\src\main\res\values-zh-rTW\strings.xml
+
+错误信息:
+
