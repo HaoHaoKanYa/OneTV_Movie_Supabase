@@ -9,13 +9,21 @@ plugins {
 android {
     namespace ="top.cywin.onetv.vod"
     //namespace = project.property("APP_APPLICATION_ID") as String
-    compileSdk = 35
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     flavorDimensions += listOf("mode", "api", "abi")
     productFlavors {
-        create("leanback") { dimension = "mode" }
+        create("leanback") {
+            dimension = "mode"
+            buildConfigField("boolean", "FLAVOR_LEANBACK", "true")
+            buildConfigField("boolean", "FLAVOR_MOBILE", "false")
+        }
         // create("mobile") { dimension = "mode" }
-        create("java") { dimension = "api" }
+        create("java") {
+            dimension = "api"
+            buildConfigField("boolean", "FLAVOR_JAVA", "true")
+            buildConfigField("boolean", "FLAVOR_PYTHON", "false")
+        }
         // create("python") { dimension = "api" }
         create("arm64_v8a") { dimension = "abi" }
         // create("armeabi_v7a") { dimension = "abi" }
@@ -53,9 +61,9 @@ android {
             }
         }
 
-        buildConfigField("String", "APPLICATION_ID", "\"${project.property("APP_APPLICATION_ID")}\"")
-        buildConfigField("String", "VERSION_NAME", "\"${project.property("APP_VERSION_NAME")}\"")
-        buildConfigField("int", "VERSION_CODE", project.property("APP_VERSION_CODE").toString())
+        // 库模块：移除应用级BuildConfig字段，使用库模块专用配置
+        // 库模块不需要APPLICATION_ID、VERSION_NAME、VERSION_CODE
+        // 这些信息将由主应用(TV模块)提供
     }
     
     buildFeatures {

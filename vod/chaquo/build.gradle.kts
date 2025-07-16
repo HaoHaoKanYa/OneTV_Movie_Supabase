@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.fongmi.chaquo"
-    compileSdk = 35
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
         minSdk = libs.versions.minSdk.get().toInt()

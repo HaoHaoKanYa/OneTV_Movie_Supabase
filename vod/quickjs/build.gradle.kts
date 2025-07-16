@@ -5,11 +5,11 @@ plugins {
 
 android {
     namespace = "com.script"
-    compileSdk = 35
-    
+    compileSdk = libs.versions.compileSdk.get().toInt()
+
     defaultConfig {
-        minSdk = 24
-        targetSdk = 34
+        minSdk = libs.versions.minSdk.get().toInt()
+        targetSdk = libs.versions.targetSdk.get().toInt()
         consumerProguardFiles("consumer-rules.pro")
     }
     
