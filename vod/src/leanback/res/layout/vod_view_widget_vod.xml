@@ -65,7 +65,7 @@
         android:layout_gravity="center"
         android:orientation="vertical">
 
-        <include layout="@layout/view_progress" />
+        <include layout="@layout/vod_view_progress" />
 
         <TextView
             android:id="@+id/traffic"
@@ -95,7 +95,7 @@
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/ic_widget_error" />
+            android:src="@drawable/vod_ic_widget_error" />
 
         <TextView
             android:id="@+id/text"
@@ -167,7 +167,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="top|center"
         android:layout_marginTop="24dp"
-        android:src="@drawable/ic_widget_forward"
+        android:src="@drawable/vod_ic_widget_forward"
         android:visibility="gone" />
 
 </FrameLayout>

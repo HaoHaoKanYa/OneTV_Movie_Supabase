@@ -6,6 +6,6 @@
     android:layout_height="wrap_content"
     android:background="@drawable/vod_shape_item"
     android:gravity="center"
-    android:textColor="@color/text"
+    android:textColor="@color/vod_text"
     android:textSize="14sp"
     tools:text="泥巴" />

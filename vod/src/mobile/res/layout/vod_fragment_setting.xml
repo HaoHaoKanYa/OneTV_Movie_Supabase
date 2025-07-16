@@ -8,10 +8,10 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/transparent"
+        android:background="@color/vod_transparent"
         android:elevation="0dp"
         app:elevation="0dp"
-        app:liftOnScrollColor="@color/transparent">
+        app:liftOnScrollColor="@color/vod_transparent">
 
         <TextView
             android:layout_width="wrap_content"
@@ -62,7 +62,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="16dp"
-                        android:text="@string/setting_vod"
+                        android:text="@string/vod_setting_vod"
                         android:textColor="@color/white"
                         android:textSize="16sp" />
 
@@ -87,7 +87,7 @@
                     android:background="@drawable/vod_shape_item"
                     android:padding="7dp"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/ic_setting_home" />
+                    android:src="@drawable/vod_ic_setting_home" />
 
                 <ImageView
                     android:id="@+id/vodHistory"
@@ -96,7 +96,7 @@
                     android:background="@drawable/vod_shape_item"
                     android:padding="7dp"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/ic_setting_history" />
+                    android:src="@drawable/vod_ic_setting_history" />
 
             </LinearLayout>
 
@@ -120,7 +120,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="16dp"
-                        android:text="@string/setting_live"
+                        android:text="@string/vod_setting_live"
                         android:textColor="@color/white"
                         android:textSize="16sp" />
 
@@ -145,7 +145,7 @@
                     android:background="@drawable/vod_shape_item"
                     android:padding="7dp"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/ic_setting_home" />
+                    android:src="@drawable/vod_ic_setting_home" />
 
                 <ImageView
                     android:id="@+id/liveHistory"
@@ -154,7 +154,7 @@
                     android:background="@drawable/vod_shape_item"
                     android:padding="7dp"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/ic_setting_history" />
+                    android:src="@drawable/vod_ic_setting_history" />
 
             </LinearLayout>
 
@@ -178,7 +178,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="16dp"
-                        android:text="@string/setting_wall"
+                        android:text="@string/vod_setting_wall"
                         android:textColor="@color/white"
                         android:textSize="16sp" />
 
@@ -203,7 +203,7 @@
                     android:background="@drawable/vod_shape_item"
                     android:padding="7dp"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/ic_setting_home" />
+                    android:src="@drawable/vod_ic_setting_home" />
 
                 <ImageView
                     android:id="@+id/wallRefresh"
@@ -212,7 +212,7 @@
                     android:background="@drawable/vod_shape_item"
                     android:padding="7dp"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/ic_setting_refresh" />
+                    android:src="@drawable/vod_ic_setting_refresh" />
 
             </LinearLayout>
 
@@ -227,7 +227,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/setting_player"
+                    android:text="@string/vod_setting_player"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
 
@@ -245,7 +245,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
-                    android:text="@string/setting_incognito"
+                    android:text="@string/vod_setting_incognito"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
 
@@ -272,7 +272,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
-                    android:text="@string/setting_size"
+                    android:text="@string/vod_setting_size"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
 
@@ -299,7 +299,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
-                    android:text="@string/setting_doh"
+                    android:text="@string/vod_setting_doh"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
 
@@ -326,7 +326,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
-                    android:text="@string/setting_proxy"
+                    android:text="@string/vod_setting_proxy"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
 
@@ -353,7 +353,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
-                    android:text="@string/setting_cache"
+                    android:text="@string/vod_setting_cache"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
 
@@ -386,7 +386,7 @@
                     android:paddingTop="8dp"
                     android:paddingEnd="12dp"
                     android:paddingBottom="8dp"
-                    android:text="@string/setting_backup"
+                    android:text="@string/vod_setting_backup"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
 
@@ -401,7 +401,7 @@
                     android:paddingTop="8dp"
                     android:paddingEnd="12dp"
                     android:paddingBottom="8dp"
-                    android:text="@string/setting_restore"
+                    android:text="@string/vod_setting_restore"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
 
@@ -419,7 +419,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
-                    android:text="@string/setting_version"
+                    android:text="@string/vod_setting_version"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
 

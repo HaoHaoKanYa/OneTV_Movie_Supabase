@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="32dp"
         android:layout_marginTop="8dp"
-        android:background="@color/transparent"
+        android:background="@color/vod_transparent"
         app:tabIndicatorAnimationMode="elastic"
         app:tabIndicatorColor="?attr/colorControlActivated"
         app:tabIndicatorFullWidth="false"

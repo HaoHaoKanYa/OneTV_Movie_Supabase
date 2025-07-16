@@ -15,35 +15,35 @@
 
         <TextView
             android:id="@+id/player"
-            style="@style/Control.Action"
+            style="@style/vod_Control.Action"
             android:text="@string/play_exo" />
 
         <TextView
             android:id="@+id/decode"
-            style="@style/Control.Action"
+            style="@style/vod_Control.Action"
             tools:text="硬解" />
 
         <TextView
             android:id="@+id/speed"
-            style="@style/Control.Action"
+            style="@style/vod_Control.Action"
             tools:text="速度" />
 
         <TextView
             android:id="@+id/scale"
-            style="@style/Control.Action"
+            style="@style/vod_Control.Action"
             tools:text="縮放" />
 
         <TextView
             android:id="@+id/reset"
-            style="@style/Control.Action"
-            android:textColor="@color/text"
+            style="@style/vod_Control.Action"
+            android:textColor="@color/vod_text"
             tools:text="刷新" />
 
         <TextView
             android:id="@+id/loop"
-            style="@style/Control.Action"
+            style="@style/vod_Control.Action"
             android:text="@string/play_loop"
-            android:textColor="@color/text" />
+            android:textColor="@color/vod_text" />
 
         <View
             android:layout_width="0dp"
@@ -52,7 +52,7 @@
 
         <TextView
             android:id="@+id/text"
-            style="@style/Control.Action"
+            style="@style/vod_Control.Action"
             android:tag="3"
             android:text="@string/play_track_text"
             android:visibility="gone"
@@ -60,7 +60,7 @@
 
         <TextView
             android:id="@+id/audio"
-            style="@style/Control.Action"
+            style="@style/vod_Control.Action"
             android:tag="1"
             android:text="@string/play_track_audio"
             android:visibility="gone"
@@ -68,7 +68,7 @@
 
         <TextView
             android:id="@+id/video"
-            style="@style/Control.Action"
+            style="@style/vod_Control.Action"
             android:tag="2"
             android:text="@string/play_track_video"
             android:visibility="gone"
@@ -76,24 +76,24 @@
 
         <TextView
             android:id="@+id/opening"
-            style="@style/Control.Action"
+            style="@style/vod_Control.Action"
             tools:text="片頭" />
 
         <TextView
             android:id="@+id/ending"
-            style="@style/Control.Action"
+            style="@style/vod_Control.Action"
             tools:text="片尾" />
 
         <TextView
             android:id="@+id/danmaku"
-            style="@style/Control.Action"
+            style="@style/vod_Control.Action"
             android:text="@string/danmaku"
             android:visibility="gone"
             tools:visibility="visible" />
 
         <TextView
             android:id="@+id/episodes"
-            style="@style/Control.Action"
+            style="@style/vod_Control.Action"
             android:text="@string/detail_episode" />
 
     </LinearLayout>

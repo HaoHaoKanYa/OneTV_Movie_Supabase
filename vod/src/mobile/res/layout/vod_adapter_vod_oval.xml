@@ -11,10 +11,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:background="@color/black_20"
+        android:background="@color/vod_black_20"
         android:foreground="@drawable/vod_shape_vod_oval"
         android:scaleType="center"
-        app:shapeAppearanceOverlay="@style/Vod.Circle"
+        app:shapeAppearanceOverlay="@style/vod_Vod.Circle"
         tools:src="@drawable/ic_img_loading" />
 
     <TextView

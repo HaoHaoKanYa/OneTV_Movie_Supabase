@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@null"
-            android:hint="@string/search_keyword"
+            android:hint="@string/vod_search_keyword"
             android:imeOptions="actionDone"
             android:inputType="textCapWords|textAutoCorrect|textAutoComplete"
             android:letterSpacing="0.02"
@@ -29,7 +29,7 @@
             android:singleLine="true"
             android:textColor="@color/white"
             android:textColorHint="@color/white"
-            android:textCursorDrawable="@drawable/shape_cursor"
+            android:textCursorDrawable="@drawable/vod_shape_cursor"
             android:textSize="20sp" />
 
         <ImageView
@@ -69,7 +69,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
-                android:text="@string/search_record"
+                android:text="@string/vod_search_record"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
 
@@ -95,7 +95,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
-                android:text="@string/search_hot"
+                android:text="@string/vod_search_hot"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
 

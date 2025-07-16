@@ -8,10 +8,10 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/transparent"
+        android:background="@color/vod_transparent"
         android:elevation="0dp"
         app:elevation="0dp"
-        app:liftOnScrollColor="@color/transparent">
+        app:liftOnScrollColor="@color/vod_transparent">
 
         <TextView
             android:layout_width="wrap_content"
@@ -19,7 +19,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:text="@string/setting_player"
+            android:text="@string/vod_setting_player"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -52,7 +52,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
-                    android:text="@string/player_render"
+                    android:text="@string/vod_player_render"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
 
@@ -79,7 +79,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
-                    android:text="@string/player_scale"
+                    android:text="@string/vod_player_scale"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
 
@@ -106,7 +106,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
-                    android:text="@string/player_caption"
+                    android:text="@string/vod_player_caption"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
 
@@ -135,7 +135,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
-                    android:text="@string/player_buffer"
+                    android:text="@string/vod_player_buffer"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
 
@@ -153,7 +153,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
-                    android:text="@string/times"
+                    android:text="@string/vod_times"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
 
@@ -171,7 +171,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
-                    android:text="@string/player_speed"
+                    android:text="@string/vod_player_speed"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
 
@@ -189,7 +189,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
-                    android:text="@string/times"
+                    android:text="@string/vod_times"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
 
@@ -207,7 +207,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
-                    android:text="@string/player_tunnel"
+                    android:text="@string/vod_player_tunnel"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
 
@@ -234,7 +234,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
-                    android:text="@string/player_audio_decode"
+                    android:text="@string/vod_player_audio_decode"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
 
@@ -261,7 +261,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
-                    android:text="@string/player_aac_track"
+                    android:text="@string/vod_player_aac_track"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
 
@@ -288,7 +288,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
-                    android:text="@string/player_danmaku_load"
+                    android:text="@string/vod_player_danmaku_load"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
 
@@ -315,7 +315,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
-                    android:text="@string/player_background"
+                    android:text="@string/vod_player_background"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
 
@@ -342,7 +342,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
-                    android:text="@string/player_ua"
+                    android:text="@string/vod_player_ua"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
 

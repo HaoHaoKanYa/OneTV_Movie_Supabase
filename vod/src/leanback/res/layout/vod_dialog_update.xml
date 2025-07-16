@@ -55,7 +55,7 @@
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:gravity="center"
-            android:text="@string/update_confirm"
+            android:text="@string/vod_update_confirm"
             android:textColor="@color/white" />
 
         <TextView
@@ -67,7 +67,7 @@
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:gravity="center"
-            android:text="@string/dialog_negative"
+            android:text="@string/vod_dialog_negative"
             android:textColor="@color/white" />
 
     </LinearLayout>

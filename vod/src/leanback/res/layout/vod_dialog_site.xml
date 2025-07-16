@@ -36,7 +36,7 @@
             android:nextFocusDown="@id/change"
             android:padding="8dp"
             android:src="@drawable/vod_ic_site_search"
-            app:tint="@color/text" />
+            app:tint="@color/vod_text" />
 
         <ImageView
             android:id="@+id/change"
@@ -50,7 +50,7 @@
             android:nextFocusDown="@id/select"
             android:padding="8dp"
             android:src="@drawable/vod_ic_site_change"
-            app:tint="@color/text" />
+            app:tint="@color/vod_text" />
 
         <ImageView
             android:id="@+id/select"

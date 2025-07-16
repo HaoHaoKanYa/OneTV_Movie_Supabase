@@ -19,7 +19,7 @@
 
     <include
         android:id="@+id/progress"
-        layout="@layout/view_progress"
+        layout="@layout/vod_view_progress"
         android:visibility="gone" />
 
 </FrameLayout>

@@ -4,6 +4,6 @@
 
     <corners android:radius="8dp" />
 
-    <solid android:color="@color/black_20" />
+    <solid android:color="@color/vod_black_20" />
 
 </shape>

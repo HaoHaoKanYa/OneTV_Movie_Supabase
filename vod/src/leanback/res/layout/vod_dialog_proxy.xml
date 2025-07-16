@@ -61,7 +61,7 @@
             android:focusableInTouchMode="true"
             android:gravity="center"
             android:singleLine="true"
-            android:text="@string/dialog_positive"
+            android:text="@string/vod_dialog_positive"
             android:textColor="@color/white"
             android:textSize="14sp" />
 
@@ -75,7 +75,7 @@
             android:focusableInTouchMode="true"
             android:gravity="center"
             android:singleLine="true"
-            android:text="@string/dialog_negative"
+            android:text="@string/vod_dialog_negative"
             android:textColor="@color/white"
             android:textSize="14sp" />
 

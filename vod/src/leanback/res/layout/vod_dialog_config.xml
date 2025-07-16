@@ -40,7 +40,7 @@
         android:layout_above="@+id/bottom"
         android:layout_alignStart="@+id/info"
         android:layout_marginBottom="10dp"
-        android:hint="@string/dialog_config_hint"
+        android:hint="@string/vod_dialog_config_hint"
         android:imeOptions="actionDone"
         android:importantForAutofill="no"
         android:inputType="text"
@@ -67,7 +67,7 @@
             android:focusableInTouchMode="true"
             android:gravity="center"
             android:singleLine="true"
-            android:text="@string/setting_choose"
+            android:text="@string/vod_setting_choose"
             android:textColor="@color/white"
             android:textSize="14sp" />
 
@@ -82,7 +82,7 @@
             android:focusableInTouchMode="true"
             android:gravity="center"
             android:singleLine="true"
-            android:text="@string/dialog_positive"
+            android:text="@string/vod_dialog_positive"
             android:textColor="@color/white"
             android:textSize="14sp" />
 
@@ -96,7 +96,7 @@
             android:focusableInTouchMode="true"
             android:gravity="center"
             android:singleLine="true"
-            android:text="@string/dialog_negative"
+            android:text="@string/vod_dialog_negative"
             android:textColor="@color/white"
             android:textSize="14sp" />
 

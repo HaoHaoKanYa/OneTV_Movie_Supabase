@@ -22,7 +22,7 @@
 
         <androidx.media3.ui.PlayerView
             android:id="@+id/exo"
-            style="@style/Player.Vod"
+            style="@style/vod_Player.Vod"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:surface_type="surface_view" />
@@ -189,7 +189,7 @@
             android:gravity="center"
             android:nextFocusDown="@id/flag"
             android:singleLine="true"
-            android:text="@string/detail_desc"
+            android:text="@string/vod_detail_desc"
             android:textColor="@color/white"
             android:textSize="16sp"
             app:drawableStartCompat="@drawable/vod_ic_detail_desc" />
@@ -206,7 +206,7 @@
             android:gravity="center"
             android:nextFocusDown="@id/flag"
             android:singleLine="true"
-            android:text="@string/keep"
+            android:text="@string/vod_keep"
             android:textColor="@color/white"
             android:textSize="16sp"
             app:drawableStartCompat="@drawable/vod_ic_detail_keep_off" />
@@ -223,7 +223,7 @@
             android:nextFocusRight="@id/change1"
             android:nextFocusDown="@id/flag"
             android:singleLine="true"
-            android:text="@string/play_change"
+            android:text="@string/vod_play_change"
             android:textColor="@color/white"
             android:textSize="16sp"
             app:drawableStartCompat="@drawable/vod_ic_detail_change" />

@@ -231,11 +231,11 @@ public class VodFragment extends BaseFragment implements CustomScroller.Callback
     }
 
     private void showProgress() {
-        if (!mOpen) mBinding.progress.setVisibility(View.VISIBLE);
+        if (!mOpen) mBinding.progress.getRoot().setVisibility(View.VISIBLE);
     }
 
     private void hideProgress() {
-        mBinding.progress.setVisibility(View.GONE);
+        mBinding.progress.getRoot().setVisibility(View.GONE);
     }
 
     private void showFilter() {

@@ -6,6 +6,6 @@
         android:bottomLeftRadius="8dp"
         android:bottomRightRadius="8dp" />
 
-    <solid android:color="@color/black_60" />
+    <solid android:color="@color/vod_black_60" />
 
 </shape>

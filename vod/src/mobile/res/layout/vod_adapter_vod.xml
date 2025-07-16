@@ -11,20 +11,20 @@
         android:id="@+id/image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/black_20"
+        android:background="@color/vod_black_20"
         android:scaleType="center"
-        app:shapeAppearanceOverlay="@style/Vod.Grid"
+        app:shapeAppearanceOverlay="@style/vod_Vod.Grid"
         tools:src="@drawable/ic_img_loading" />
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/delete"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/black_50"
+        android:background="@color/vod_black_50"
         android:scaleType="center"
         android:src="@drawable/vod_ic_action_delete"
         android:visibility="gone"
-        app:shapeAppearanceOverlay="@style/Vod.Grid"
+        app:shapeAppearanceOverlay="@style/vod_Vod.Grid"
         tools:visibility="visible" />
 
     <TextView

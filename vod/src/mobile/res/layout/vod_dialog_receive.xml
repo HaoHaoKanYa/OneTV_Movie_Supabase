@@ -18,12 +18,12 @@
             android:layout_height="120dp"
             android:background="@color/black_10"
             android:scaleType="center"
-            app:shapeAppearanceOverlay="@style/Vod.Grid"
+            app:shapeAppearanceOverlay="@style/vod_Vod.Grid"
             tools:src="@drawable/ic_img_loading" />
 
         <include
             android:id="@+id/progress"
-            layout="@layout/view_progress"
+            layout="@layout/vod_view_progress"
             android:visibility="gone" />
 
         <FrameLayout

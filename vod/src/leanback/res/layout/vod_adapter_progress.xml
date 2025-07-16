@@ -6,7 +6,7 @@
     android:padding="16dp">
 
     <include
-        layout="@layout/view_progress"
+        layout="@layout/vod_view_progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center" />

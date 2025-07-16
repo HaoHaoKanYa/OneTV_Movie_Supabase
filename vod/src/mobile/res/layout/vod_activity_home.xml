@@ -16,9 +16,9 @@
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_alignParentBottom="true"
-        android:background="@color/transparent"
+        android:background="@color/vod_transparent"
         app:elevation="0dp"
-        app:itemActiveIndicatorStyle="@style/Indicator"
+        app:itemActiveIndicatorStyle="@style/vod_Indicator"
         app:itemIconTint="@color/vod_nav"
         app:labelVisibilityMode="unlabeled"
         app:menu="@menu/vod_menu_nav" />

@@ -3,7 +3,7 @@
     android:color="?attr/colorControlHighlight">
     <item android:id="@android:id/background">
         <shape android:shape="rectangle">
-            <solid android:color="@color/black_20" />
+            <solid android:color="@color/vod_black_20" />
             <corners android:radius="4dp" />
             <padding
                 android:bottom="8dp"

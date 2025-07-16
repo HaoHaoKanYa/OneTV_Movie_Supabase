@@ -38,7 +38,7 @@
             android:background="@drawable/vod_selector_text"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:text="@string/play"
+            android:text="@string/vod_play"
             android:textColor="@color/white"
             android:textSize="14sp" />
 
@@ -50,7 +50,7 @@
             android:background="@drawable/vod_selector_text"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:text="@string/play_exo"
+            android:text="@string/vod_play_exo"
             android:textColor="@color/white"
             android:textSize="14sp" />
 
@@ -115,7 +115,7 @@
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:tag="3"
-            android:text="@string/play_track_text"
+            android:text="@string/vod_play_track_text"
             android:textColor="@color/white"
             android:textSize="14sp"
             android:visibility="gone"
@@ -130,7 +130,7 @@
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:tag="1"
-            android:text="@string/play_track_audio"
+            android:text="@string/vod_play_track_audio"
             android:textColor="@color/white"
             android:textSize="14sp"
             android:visibility="gone"
@@ -145,7 +145,7 @@
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:tag="2"
-            android:text="@string/play_track_video"
+            android:text="@string/vod_play_track_video"
             android:textColor="@color/white"
             android:textSize="14sp"
             android:visibility="gone"
@@ -159,8 +159,8 @@
             android:background="@drawable/vod_selector_text"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:text="@string/play_invert"
-            android:textColor="@color/text"
+            android:text="@string/vod_play_invert"
+            android:textColor="@color/vod_text"
             android:textSize="14sp" />
 
         <TextView
@@ -171,8 +171,8 @@
             android:background="@drawable/vod_selector_text"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:text="@string/play_across"
-            android:textColor="@color/text"
+            android:text="@string/vod_play_across"
+            android:textColor="@color/vod_text"
             android:textSize="14sp" />
 
         <TextView
@@ -183,8 +183,8 @@
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:nextFocusRight="@id/home"
-            android:text="@string/play_change"
-            android:textColor="@color/text"
+            android:text="@string/vod_play_change"
+            android:textColor="@color/vod_text"
             android:textSize="14sp" />
 
     </LinearLayout>

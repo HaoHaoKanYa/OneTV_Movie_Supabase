@@ -1,655 +1,195 @@
-Executing tasks: [:tv:assembleDebug] in project D:\apk\OneTV_Movie_Supabase
+FAILURE: Build failed with an exception.
 
-[OneTV-Build] 根项目名称: 壹来电视
-[OneTV-Build] 包含VOD模块 (库模块) - 优先构建
-[OneTV-Build] :vod -> android.library
-[OneTV-Build] 包含TV模块 (主应用) - 后构建
-[OneTV-Build] :tv -> android.application
+* What went wrong:
+Execution failed for task ':vod:packageLeanbackJavaArm64_v8aDebugResources'.
+> D:\apk\OneTV_Movie_Supabase\vod\src\leanback\res\layout\vod_view_empty.xml:1:2: Error: 文件提前结束。
 
-> Configure project :
-[OneTV-Build] 配置构建顺序：VOD -> TV
-已加载签名配置文件: key.properties
+* Try:
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
 
-> Configure project :mobile
-使用key.properties中的签名配置: D:\apk\OneTV_Movie_Supabase\OneTV_Supabase_Key\OneTV_Supabase.jks
+* Exception is:
+org.gradle.api.tasks.TaskExecutionException: Execution failed for task ':vod:packageLeanbackJavaArm64_v8aDebugResources'.
+	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.lambda$executeIfValid$1(ExecuteActionsTaskExecuter.java:130)
+	at org.gradle.internal.Try$Failure.ifSuccessfulOrElse(Try.java:282)
+	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.executeIfValid(ExecuteActionsTaskExecuter.java:128)
+	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.execute(ExecuteActionsTaskExecuter.java:116)
+	at org.gradle.api.internal.tasks.execution.FinalizePropertiesTaskExecuter.execute(FinalizePropertiesTaskExecuter.java:46)
+	at org.gradle.api.internal.tasks.execution.ResolveTaskExecutionModeExecuter.execute(ResolveTaskExecutionModeExecuter.java:51)
+	at org.gradle.api.internal.tasks.execution.SkipTaskWithNoActionsExecuter.execute(SkipTaskWithNoActionsExecuter.java:57)
+	at org.gradle.api.internal.tasks.execution.SkipOnlyIfTaskExecuter.execute(SkipOnlyIfTaskExecuter.java:74)
+	at org.gradle.api.internal.tasks.execution.CatchExceptionTaskExecuter.execute(CatchExceptionTaskExecuter.java:36)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.executeTask(EventFiringTaskExecuter.java:77)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.call(EventFiringTaskExecuter.java:55)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.call(EventFiringTaskExecuter.java:52)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:200)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:195)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:157)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:53)
+	at org.gradle.internal.operations.DefaultBuildOperationExecutor.call(DefaultBuildOperationExecutor.java:73)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter.execute(EventFiringTaskExecuter.java:52)
+	at org.gradle.execution.plan.LocalTaskNodeExecutor.execute(LocalTaskNodeExecutor.java:42)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$InvokeNodeExecutorsAction.execute(DefaultTaskExecutionGraph.java:331)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$InvokeNodeExecutorsAction.execute(DefaultTaskExecutionGraph.java:318)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.lambda$execute$0(DefaultTaskExecutionGraph.java:314)
+	at org.gradle.internal.operations.CurrentBuildOperationRef.with(CurrentBuildOperationRef.java:80)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.execute(DefaultTaskExecutionGraph.java:314)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.execute(DefaultTaskExecutionGraph.java:303)
+	at org.gradle.execution.plan.DefaultPlanExecutor$ExecutorWorker.execute(DefaultPlanExecutor.java:463)
+	at org.gradle.execution.plan.DefaultPlanExecutor$ExecutorWorker.run(DefaultPlanExecutor.java:380)
+	at org.gradle.internal.concurrent.ExecutorPolicy$CatchAndRecordFailures.onExecute(ExecutorPolicy.java:64)
+	at org.gradle.internal.concurrent.AbstractManagedExecutor$1.run(AbstractManagedExecutor.java:47)
+Caused by: com.android.build.gradle.tasks.ResourceException: D:\apk\OneTV_Movie_Supabase\vod\src\leanback\res\layout\vod_view_empty.xml:1:2: Error: 文件提前结束。
+	at com.android.build.gradle.tasks.MergeResources.doTaskAction(MergeResources.kt:441)
+	at com.android.build.gradle.internal.tasks.NewIncrementalTask$taskAction$$inlined$recordTaskAction$1.invoke(BaseTask.kt:70)
+	at com.android.build.gradle.internal.tasks.Blocks.recordSpan(Blocks.java:51)
+	at com.android.build.gradle.internal.tasks.NewIncrementalTask.taskAction(NewIncrementalTask.kt:46)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(Unknown Source)
+	at org.gradle.internal.reflect.JavaMethod.invoke(JavaMethod.java:125)
+	at org.gradle.api.internal.project.taskfactory.IncrementalTaskAction.doExecute(IncrementalTaskAction.java:45)
+	at org.gradle.api.internal.project.taskfactory.StandardTaskAction.execute(StandardTaskAction.java:51)
+	at org.gradle.api.internal.project.taskfactory.IncrementalTaskAction.execute(IncrementalTaskAction.java:26)
+	at org.gradle.api.internal.project.taskfactory.StandardTaskAction.execute(StandardTaskAction.java:29)
+	at org.gradle.api.internal.tasks.execution.TaskExecution$3.run(TaskExecution.java:244)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$1.execute(DefaultBuildOperationRunner.java:29)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$1.execute(DefaultBuildOperationRunner.java:26)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:157)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.run(DefaultBuildOperationRunner.java:47)
+	at org.gradle.internal.operations.DefaultBuildOperationExecutor.run(DefaultBuildOperationExecutor.java:68)
+	at org.gradle.api.internal.tasks.execution.TaskExecution.executeAction(TaskExecution.java:229)
+	at org.gradle.api.internal.tasks.execution.TaskExecution.executeActions(TaskExecution.java:212)
+	at org.gradle.api.internal.tasks.execution.TaskExecution.executeWithPreviousOutputFiles(TaskExecution.java:195)
+	at org.gradle.api.internal.tasks.execution.TaskExecution.execute(TaskExecution.java:162)
+	at org.gradle.internal.execution.steps.ExecuteStep.executeInternal(ExecuteStep.java:105)
+	at org.gradle.internal.execution.steps.ExecuteStep.access$000(ExecuteStep.java:44)
+	at org.gradle.internal.execution.steps.ExecuteStep$1.call(ExecuteStep.java:59)
+	at org.gradle.internal.execution.steps.ExecuteStep$1.call(ExecuteStep.java:56)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:200)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:195)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:157)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:53)
+	at org.gradle.internal.operations.DefaultBuildOperationExecutor.call(DefaultBuildOperationExecutor.java:73)
+	at org.gradle.internal.execution.steps.ExecuteStep.execute(ExecuteStep.java:56)
+	at org.gradle.internal.execution.steps.ExecuteStep.execute(ExecuteStep.java:44)
+	at org.gradle.internal.execution.steps.CancelExecutionStep.execute(CancelExecutionStep.java:41)
+	at org.gradle.internal.execution.steps.TimeoutStep.executeWithoutTimeout(TimeoutStep.java:74)
+	at org.gradle.internal.execution.steps.TimeoutStep.execute(TimeoutStep.java:55)
+	at org.gradle.internal.execution.steps.PreCreateOutputParentsStep.execute(PreCreateOutputParentsStep.java:50)
+	at org.gradle.internal.execution.steps.PreCreateOutputParentsStep.execute(PreCreateOutputParentsStep.java:28)
+	at org.gradle.internal.execution.steps.RemovePreviousOutputsStep.execute(RemovePreviousOutputsStep.java:67)
+	at org.gradle.internal.execution.steps.RemovePreviousOutputsStep.execute(RemovePreviousOutputsStep.java:37)
+	at org.gradle.internal.execution.steps.BroadcastChangingOutputsStep.execute(BroadcastChangingOutputsStep.java:61)
+	at org.gradle.internal.execution.steps.BroadcastChangingOutputsStep.execute(BroadcastChangingOutputsStep.java:26)
+	at org.gradle.internal.execution.steps.CaptureOutputsAfterExecutionStep.execute(CaptureOutputsAfterExecutionStep.java:67)
+	at org.gradle.internal.execution.steps.CaptureOutputsAfterExecutionStep.execute(CaptureOutputsAfterExecutionStep.java:45)
+	at org.gradle.internal.execution.steps.ResolveInputChangesStep.execute(ResolveInputChangesStep.java:40)
+	at org.gradle.internal.execution.steps.ResolveInputChangesStep.execute(ResolveInputChangesStep.java:29)
+	at org.gradle.internal.execution.steps.BuildCacheStep.executeWithoutCache(BuildCacheStep.java:189)
+	at org.gradle.internal.execution.steps.BuildCacheStep.lambda$execute$1(BuildCacheStep.java:75)
+	at org.gradle.internal.Either$Right.fold(Either.java:175)
+	at org.gradle.internal.execution.caching.CachingState.fold(CachingState.java:62)
+	at org.gradle.internal.execution.steps.BuildCacheStep.execute(BuildCacheStep.java:73)
+	at org.gradle.internal.execution.steps.BuildCacheStep.execute(BuildCacheStep.java:48)
+	at org.gradle.internal.execution.steps.StoreExecutionStateStep.execute(StoreExecutionStateStep.java:46)
+	at org.gradle.internal.execution.steps.StoreExecutionStateStep.execute(StoreExecutionStateStep.java:35)
+	at org.gradle.internal.execution.steps.SkipUpToDateStep.executeBecause(SkipUpToDateStep.java:76)
+	at org.gradle.internal.execution.steps.SkipUpToDateStep.lambda$execute$2(SkipUpToDateStep.java:54)
+	at org.gradle.internal.execution.steps.SkipUpToDateStep.execute(SkipUpToDateStep.java:54)
+	at org.gradle.internal.execution.steps.SkipUpToDateStep.execute(SkipUpToDateStep.java:36)
+	at org.gradle.internal.execution.steps.legacy.MarkSnapshottingInputsFinishedStep.execute(MarkSnapshottingInputsFinishedStep.java:37)
+	at org.gradle.internal.execution.steps.legacy.MarkSnapshottingInputsFinishedStep.execute(MarkSnapshottingInputsFinishedStep.java:27)
+	at org.gradle.internal.execution.steps.ResolveIncrementalCachingStateStep.executeDelegate(ResolveIncrementalCachingStateStep.java:49)
+	at org.gradle.internal.execution.steps.ResolveIncrementalCachingStateStep.executeDelegate(ResolveIncrementalCachingStateStep.java:27)
+	at org.gradle.internal.execution.steps.AbstractResolveCachingStateStep.execute(AbstractResolveCachingStateStep.java:71)
+	at org.gradle.internal.execution.steps.AbstractResolveCachingStateStep.execute(AbstractResolveCachingStateStep.java:39)
+	at org.gradle.internal.execution.steps.ResolveChangesStep.execute(ResolveChangesStep.java:65)
+	at org.gradle.internal.execution.steps.ResolveChangesStep.execute(ResolveChangesStep.java:36)
+	at org.gradle.internal.execution.steps.ValidateStep.execute(ValidateStep.java:106)
+	at org.gradle.internal.execution.steps.ValidateStep.execute(ValidateStep.java:55)
+	at org.gradle.internal.execution.steps.AbstractCaptureStateBeforeExecutionStep.execute(AbstractCaptureStateBeforeExecutionStep.java:64)
+	at org.gradle.internal.execution.steps.AbstractCaptureStateBeforeExecutionStep.execute(AbstractCaptureStateBeforeExecutionStep.java:43)
+	at org.gradle.internal.execution.steps.AbstractSkipEmptyWorkStep.executeWithNonEmptySources(AbstractSkipEmptyWorkStep.java:125)
+	at org.gradle.internal.execution.steps.AbstractSkipEmptyWorkStep.execute(AbstractSkipEmptyWorkStep.java:56)
+	at org.gradle.internal.execution.steps.AbstractSkipEmptyWorkStep.execute(AbstractSkipEmptyWorkStep.java:36)
+	at org.gradle.internal.execution.steps.legacy.MarkSnapshottingInputsStartedStep.execute(MarkSnapshottingInputsStartedStep.java:38)
+	at org.gradle.internal.execution.steps.LoadPreviousExecutionStateStep.execute(LoadPreviousExecutionStateStep.java:36)
+	at org.gradle.internal.execution.steps.LoadPreviousExecutionStateStep.execute(LoadPreviousExecutionStateStep.java:23)
+	at org.gradle.internal.execution.steps.HandleStaleOutputsStep.execute(HandleStaleOutputsStep.java:75)
+	at org.gradle.internal.execution.steps.HandleStaleOutputsStep.execute(HandleStaleOutputsStep.java:41)
+	at org.gradle.internal.execution.steps.AssignMutableWorkspaceStep.lambda$execute$0(AssignMutableWorkspaceStep.java:35)
+	at org.gradle.api.internal.tasks.execution.TaskExecution$4.withWorkspace(TaskExecution.java:289)
+	at org.gradle.internal.execution.steps.AssignMutableWorkspaceStep.execute(AssignMutableWorkspaceStep.java:31)
+	at org.gradle.internal.execution.steps.AssignMutableWorkspaceStep.execute(AssignMutableWorkspaceStep.java:22)
+	at org.gradle.internal.execution.steps.ChoosePipelineStep.execute(ChoosePipelineStep.java:40)
+	at org.gradle.internal.execution.steps.ChoosePipelineStep.execute(ChoosePipelineStep.java:23)
+	at org.gradle.internal.execution.steps.ExecuteWorkBuildOperationFiringStep.lambda$execute$2(ExecuteWorkBuildOperationFiringStep.java:67)
+	at org.gradle.internal.execution.steps.ExecuteWorkBuildOperationFiringStep.execute(ExecuteWorkBuildOperationFiringStep.java:67)
+	at org.gradle.internal.execution.steps.ExecuteWorkBuildOperationFiringStep.execute(ExecuteWorkBuildOperationFiringStep.java:39)
+	at org.gradle.internal.execution.steps.IdentityCacheStep.execute(IdentityCacheStep.java:46)
+	at org.gradle.internal.execution.steps.IdentityCacheStep.execute(IdentityCacheStep.java:34)
+	at org.gradle.internal.execution.steps.IdentifyStep.execute(IdentifyStep.java:48)
+	at org.gradle.internal.execution.steps.IdentifyStep.execute(IdentifyStep.java:35)
+	at org.gradle.internal.execution.impl.DefaultExecutionEngine$1.execute(DefaultExecutionEngine.java:61)
+	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.executeIfValid(ExecuteActionsTaskExecuter.java:127)
+	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.execute(ExecuteActionsTaskExecuter.java:116)
+	at org.gradle.api.internal.tasks.execution.FinalizePropertiesTaskExecuter.execute(FinalizePropertiesTaskExecuter.java:46)
+	at org.gradle.api.internal.tasks.execution.ResolveTaskExecutionModeExecuter.execute(ResolveTaskExecutionModeExecuter.java:51)
+	at org.gradle.api.internal.tasks.execution.SkipTaskWithNoActionsExecuter.execute(SkipTaskWithNoActionsExecuter.java:57)
+	at org.gradle.api.internal.tasks.execution.SkipOnlyIfTaskExecuter.execute(SkipOnlyIfTaskExecuter.java:74)
+	at org.gradle.api.internal.tasks.execution.CatchExceptionTaskExecuter.execute(CatchExceptionTaskExecuter.java:36)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.executeTask(EventFiringTaskExecuter.java:77)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.call(EventFiringTaskExecuter.java:55)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.call(EventFiringTaskExecuter.java:52)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:200)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:195)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:157)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:53)
+	at org.gradle.internal.operations.DefaultBuildOperationExecutor.call(DefaultBuildOperationExecutor.java:73)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter.execute(EventFiringTaskExecuter.java:52)
+	at org.gradle.execution.plan.LocalTaskNodeExecutor.execute(LocalTaskNodeExecutor.java:42)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$InvokeNodeExecutorsAction.execute(DefaultTaskExecutionGraph.java:331)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$InvokeNodeExecutorsAction.execute(DefaultTaskExecutionGraph.java:318)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.lambda$execute$0(DefaultTaskExecutionGraph.java:314)
+	at org.gradle.internal.operations.CurrentBuildOperationRef.with(CurrentBuildOperationRef.java:80)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.execute(DefaultTaskExecutionGraph.java:314)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.execute(DefaultTaskExecutionGraph.java:303)
+	at org.gradle.execution.plan.DefaultPlanExecutor$ExecutorWorker.execute(DefaultPlanExecutor.java:463)
+	at org.gradle.execution.plan.DefaultPlanExecutor$ExecutorWorker.run(DefaultPlanExecutor.java:380)
+	at org.gradle.internal.concurrent.ExecutorPolicy$CatchAndRecordFailures.onExecute(ExecutorPolicy.java:64)
+	at org.gradle.internal.concurrent.AbstractManagedExecutor$1.run(AbstractManagedExecutor.java:47)
+Caused by: D:\apk\OneTV_Movie_Supabase\vod\src\leanback\res\layout\vod_view_empty.xml:1:2: Error: 文件提前结束。
+	at com.android.ide.common.resources.MergedResourceWriter.end(MergedResourceWriter.java:308)
+	at com.android.ide.common.resources.DataMerger.mergeData(DataMerger.java:299)
+	at com.android.ide.common.resources.ResourceMerger.mergeData(ResourceMerger.java:391)
+	at com.android.build.gradle.tasks.MergeResources.doTaskAction(MergeResources.kt:426)
+	... 125 more
+Caused by: D:\apk\OneTV_Movie_Supabase\vod\src\leanback\res\layout\vod_view_empty.xml:1:2: Error: 文件提前结束。
+	at com.android.ide.common.resources.MergingException$Builder.build(MergingException.java:152)
+	at com.android.ide.common.resources.MergedResourceWriter.end(MergedResourceWriter.java:304)
+	... 128 more
+Caused by: org.xml.sax.SAXParseException; systemId: file:/D:/apk/OneTV_Movie_Supabase/vod/src/leanback/res/layout/vod_view_empty.xml; lineNumber: 1; columnNumber: 2; 文件提前结束。
+	at java.xml/com.sun.org.apache.xerces.internal.parsers.DOMParser.parse(Unknown Source)
+	at java.xml/com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderImpl.parse(Unknown Source)
+	at android.databinding.tool.store.LayoutFileParser.stripFile(LayoutFileParser.java:469)
+	at android.databinding.tool.store.LayoutFileParser.parseXml(LayoutFileParser.java:97)
+	at android.databinding.tool.LayoutXmlProcessor.processSingleFile(LayoutXmlProcessor.java:161)
+	at com.android.build.gradle.tasks.MergeResources$maybeCreateLayoutProcessor$1.processSingleFile(MergeResources.kt:595)
+	at com.android.ide.common.resources.MergedResourceWriter.end(MergedResourceWriter.java:243)
+	... 128 more
 
-> Configure project :tv
-[OneTV-Build] TV模块构建开始
-[OneTV-Build] TV模块类型: android.application
-[OneTV-Build] TV模块名称: tv
-[OneTV-Build] TV模块路径: :tv
-[OneTV-Build] TV是否为根项目: false
-使用key.properties中的签名配置: D:\apk\OneTV_Movie_Supabase\OneTV_Supabase_Key\OneTV_Supabase.jks
-[OneTV-Build] TV Android配置:
-[OneTV-Build]   namespace: top.cywin.onetv.tv
-[OneTV-Build]   compileSdk: 35
-[OneTV-Build]   插件类型: com.android.application
-[OneTV-Build] TV defaultConfig:
-[OneTV-Build]   applicationId: top.cywin.onetv.tv
-[OneTV-Build]   这是主应用配置!
-
-> Configure project :vod
-[OneTV-Build] VOD模块构建开始
-[OneTV-Build] VOD模块类型: android.library
-[OneTV-Build] VOD模块名称: vod
-[OneTV-Build] VOD模块路径: :vod
-[OneTV-Build] VOD是否为根项目: false
-[OneTV-Build] VOD Android配置:
-[OneTV-Build]   namespace: top.cywin.onetv.vod
-[OneTV-Build]   compileSdk: 35
-[OneTV-Build]   插件类型: com.android.library
-
-> Configure project :core:data
-从local.properties获取 BOOTSTRAP_URL: https://sj...
-从local.properties获取 BOOTSTRAP_KEY: eyJhbGciOi...
-从local.properties获取 BOOTSTRAP_URL: https://sj...
-从local.properties获取 BOOTSTRAP_KEY: eyJhbGciOi...
-从local.properties获取 BOOTSTRAP_URL: https://sj...
-从local.properties获取 BOOTSTRAP_KEY: eyJhbGciOi...
-[OneTV-Build] TV构建任务依赖VOD构建任务: assembleDebug
-
-> Task :tv:preBuild UP-TO-DATE
-> Task :tv:preDebugBuild UP-TO-DATE
-> Task :tv:mergeDebugNativeDebugMetadata NO-SOURCE
-> Task :tv:checkKotlinGradlePluginConfigurationErrors SKIPPED
-> Task :vod:preBuild UP-TO-DATE
-> Task :vod:preLeanbackJavaArm64_v8aDebugBuild UP-TO-DATE
-> Task :vod:writeLeanbackJavaArm64_v8aDebugAarMetadata UP-TO-DATE
-> Task :core:data:preBuild UP-TO-DATE
-> Task :core:data:preDebugBuild UP-TO-DATE
-> Task :core:data:writeDebugAarMetadata UP-TO-DATE
-> Task :core:designsystem:preBuild UP-TO-DATE
-> Task :core:designsystem:preDebugBuild UP-TO-DATE
-> Task :core:designsystem:writeDebugAarMetadata UP-TO-DATE
-> Task :core:util:preBuild UP-TO-DATE
-> Task :core:util:preDebugBuild UP-TO-DATE
-> Task :core:util:writeDebugAarMetadata UP-TO-DATE
-> Task :vod:catvod:preBuild UP-TO-DATE
-> Task :vod:catvod:preDebugBuild UP-TO-DATE
-> Task :vod:catvod:writeDebugAarMetadata UP-TO-DATE
-> Task :vod:chaquo:preBuild UP-TO-DATE
-> Task :vod:chaquo:preDebugBuild UP-TO-DATE
-> Task :vod:chaquo:writeDebugAarMetadata UP-TO-DATE
-> Task :vod:forcetech:preBuild UP-TO-DATE
-> Task :vod:forcetech:preDebugBuild UP-TO-DATE
-> Task :vod:forcetech:writeDebugAarMetadata UP-TO-DATE
-> Task :vod:hook:preBuild UP-TO-DATE
-> Task :vod:hook:preDebugBuild UP-TO-DATE
-> Task :vod:hook:writeDebugAarMetadata UP-TO-DATE
-> Task :vod:jianpian:preBuild UP-TO-DATE
-> Task :vod:jianpian:preDebugBuild UP-TO-DATE
-> Task :vod:jianpian:writeDebugAarMetadata UP-TO-DATE
-> Task :vod:quickjs:preBuild UP-TO-DATE
-> Task :vod:quickjs:preDebugBuild UP-TO-DATE
-> Task :vod:quickjs:writeDebugAarMetadata UP-TO-DATE
-> Task :vod:thunder:preBuild UP-TO-DATE
-> Task :vod:thunder:preDebugBuild UP-TO-DATE
-> Task :vod:thunder:writeDebugAarMetadata UP-TO-DATE
-> Task :vod:tvbus:preBuild UP-TO-DATE
-> Task :vod:tvbus:preDebugBuild UP-TO-DATE
-> Task :vod:tvbus:writeDebugAarMetadata UP-TO-DATE
-> Task :tv:checkDebugAarMetadata UP-TO-DATE
-> Task :tv:generateDebugResValues UP-TO-DATE
-> Task :vod:generateLeanbackJavaArm64_v8aDebugResValues UP-TO-DATE
-> Task :vod:generateLeanbackJavaArm64_v8aDebugResources UP-TO-DATE
-> Task :vod:packageLeanbackJavaArm64_v8aDebugResources UP-TO-DATE
-> Task :core:data:generateDebugResValues UP-TO-DATE
-> Task :core:data:generateDebugResources UP-TO-DATE
-> Task :core:data:packageDebugResources UP-TO-DATE
-> Task :core:designsystem:generateDebugResValues UP-TO-DATE
-> Task :core:designsystem:generateDebugResources UP-TO-DATE
-> Task :core:designsystem:packageDebugResources UP-TO-DATE
-> Task :core:util:generateDebugResValues UP-TO-DATE
-> Task :core:util:generateDebugResources UP-TO-DATE
-> Task :core:util:packageDebugResources UP-TO-DATE
-> Task :vod:catvod:generateDebugResValues UP-TO-DATE
-> Task :vod:catvod:generateDebugResources UP-TO-DATE
-> Task :vod:catvod:packageDebugResources UP-TO-DATE
-> Task :vod:chaquo:generateDebugResValues UP-TO-DATE
-> Task :vod:chaquo:generateDebugResources UP-TO-DATE
-> Task :vod:chaquo:packageDebugResources UP-TO-DATE
-> Task :vod:forcetech:generateDebugResValues UP-TO-DATE
-> Task :vod:forcetech:generateDebugResources UP-TO-DATE
-> Task :vod:forcetech:packageDebugResources UP-TO-DATE
-> Task :vod:hook:generateDebugResValues UP-TO-DATE
-> Task :vod:hook:generateDebugResources UP-TO-DATE
-> Task :vod:hook:packageDebugResources UP-TO-DATE
-> Task :vod:jianpian:generateDebugResValues UP-TO-DATE
-> Task :vod:jianpian:generateDebugResources UP-TO-DATE
-> Task :vod:jianpian:packageDebugResources UP-TO-DATE
-> Task :vod:quickjs:generateDebugResValues UP-TO-DATE
-> Task :vod:quickjs:generateDebugResources UP-TO-DATE
-> Task :vod:quickjs:packageDebugResources UP-TO-DATE
-> Task :vod:thunder:generateDebugResValues UP-TO-DATE
-> Task :vod:thunder:generateDebugResources UP-TO-DATE
-> Task :vod:thunder:packageDebugResources UP-TO-DATE
-> Task :vod:tvbus:generateDebugResValues UP-TO-DATE
-> Task :vod:tvbus:generateDebugResources UP-TO-DATE
-> Task :vod:tvbus:packageDebugResources UP-TO-DATE
-> Task :tv:mapDebugSourceSetPaths UP-TO-DATE
-> Task :tv:generateDebugResources UP-TO-DATE
-> Task :tv:mergeDebugResources UP-TO-DATE
-> Task :tv:packageDebugResources UP-TO-DATE
-> Task :tv:parseDebugLocalResources UP-TO-DATE
-> Task :tv:createDebugCompatibleScreenManifests UP-TO-DATE
-> Task :tv:extractDeepLinksDebug UP-TO-DATE
-> Task :vod:extractDeepLinksLeanbackJavaArm64_v8aDebug UP-TO-DATE
-> Task :vod:processLeanbackJavaArm64_v8aDebugManifest UP-TO-DATE
-> Task :core:data:extractDeepLinksDebug UP-TO-DATE
-> Task :core:data:processDebugManifest UP-TO-DATE
-> Task :core:designsystem:extractDeepLinksDebug UP-TO-DATE
-> Task :core:designsystem:processDebugManifest UP-TO-DATE
-> Task :core:util:extractDeepLinksDebug UP-TO-DATE
-> Task :core:util:processDebugManifest UP-TO-DATE
-> Task :vod:catvod:extractDeepLinksDebug UP-TO-DATE
-> Task :vod:catvod:processDebugManifest UP-TO-DATE
-> Task :vod:chaquo:extractDeepLinksDebug UP-TO-DATE
-> Task :vod:chaquo:processDebugManifest UP-TO-DATE
-> Task :vod:forcetech:extractDeepLinksDebug UP-TO-DATE
-> Task :vod:forcetech:processDebugManifest UP-TO-DATE
-> Task :vod:hook:extractDeepLinksDebug UP-TO-DATE
-> Task :vod:hook:processDebugManifest UP-TO-DATE
-> Task :vod:jianpian:extractDeepLinksDebug UP-TO-DATE
-> Task :vod:jianpian:processDebugManifest UP-TO-DATE
-> Task :vod:quickjs:extractDeepLinksDebug UP-TO-DATE
-> Task :vod:quickjs:processDebugManifest UP-TO-DATE
-> Task :vod:thunder:extractDeepLinksDebug UP-TO-DATE
-> Task :vod:thunder:processDebugManifest UP-TO-DATE
-> Task :vod:tvbus:extractDeepLinksDebug UP-TO-DATE
-> Task :vod:tvbus:processDebugManifest UP-TO-DATE
-> Task :tv:processDebugMainManifest UP-TO-DATE
-> Task :tv:processDebugManifest UP-TO-DATE
-> Task :tv:processDebugManifestForPackage UP-TO-DATE
-> Task :vod:compileLeanbackJavaArm64_v8aDebugLibraryResources UP-TO-DATE
-> Task :vod:parseLeanbackJavaArm64_v8aDebugLocalResources UP-TO-DATE
-> Task :vod:generateLeanbackJavaArm64_v8aDebugRFile UP-TO-DATE
-> Task :core:data:compileDebugLibraryResources UP-TO-DATE
-> Task :core:data:parseDebugLocalResources UP-TO-DATE
-> Task :core:data:generateDebugRFile UP-TO-DATE
-> Task :core:designsystem:compileDebugLibraryResources UP-TO-DATE
-> Task :core:designsystem:parseDebugLocalResources UP-TO-DATE
-> Task :core:designsystem:generateDebugRFile UP-TO-DATE
-> Task :core:util:compileDebugLibraryResources UP-TO-DATE
-> Task :core:util:parseDebugLocalResources UP-TO-DATE
-> Task :core:util:generateDebugRFile UP-TO-DATE
-> Task :vod:catvod:compileDebugLibraryResources UP-TO-DATE
-> Task :vod:catvod:parseDebugLocalResources UP-TO-DATE
-> Task :vod:catvod:generateDebugRFile UP-TO-DATE
-> Task :vod:chaquo:compileDebugLibraryResources UP-TO-DATE
-> Task :vod:chaquo:parseDebugLocalResources UP-TO-DATE
-> Task :vod:chaquo:generateDebugRFile UP-TO-DATE
-> Task :vod:forcetech:compileDebugLibraryResources UP-TO-DATE
-> Task :vod:forcetech:parseDebugLocalResources UP-TO-DATE
-> Task :vod:forcetech:generateDebugRFile UP-TO-DATE
-> Task :vod:hook:compileDebugLibraryResources UP-TO-DATE
-> Task :vod:hook:parseDebugLocalResources UP-TO-DATE
-> Task :vod:hook:generateDebugRFile UP-TO-DATE
-> Task :vod:jianpian:compileDebugLibraryResources UP-TO-DATE
-> Task :vod:jianpian:parseDebugLocalResources UP-TO-DATE
-> Task :vod:jianpian:generateDebugRFile UP-TO-DATE
-> Task :vod:quickjs:compileDebugLibraryResources UP-TO-DATE
-> Task :vod:quickjs:parseDebugLocalResources UP-TO-DATE
-> Task :vod:quickjs:generateDebugRFile UP-TO-DATE
-> Task :vod:thunder:compileDebugLibraryResources UP-TO-DATE
-> Task :vod:thunder:parseDebugLocalResources UP-TO-DATE
-> Task :vod:thunder:generateDebugRFile UP-TO-DATE
-> Task :vod:tvbus:compileDebugLibraryResources UP-TO-DATE
-> Task :vod:tvbus:parseDebugLocalResources UP-TO-DATE
-> Task :vod:tvbus:generateDebugRFile UP-TO-DATE
-> Task :tv:processDebugResources UP-TO-DATE
-> Task :vod:checkKotlinGradlePluginConfigurationErrors SKIPPED
-> Task :vod:dataBindingMergeDependencyArtifactsLeanbackJavaArm64_v8aDebug UP-TO-DATE
-> Task :vod:dataBindingGenBaseClassesLeanbackJavaArm64_v8aDebug UP-TO-DATE
-> Task :vod:generateLeanbackJavaArm64_v8aDebugBuildConfig UP-TO-DATE
-> Task :vod:catvod:checkKotlinGradlePluginConfigurationErrors SKIPPED
-> Task :vod:catvod:generateDebugBuildConfig UP-TO-DATE
-> Task :vod:catvod:compileDebugKotlin NO-SOURCE
-> Task :vod:catvod:javaPreCompileDebug UP-TO-DATE
-> Task :vod:catvod:compileDebugJavaWithJavac UP-TO-DATE
-> Task :vod:catvod:bundleLibCompileToJarDebug UP-TO-DATE
-> Task :vod:chaquo:checkKotlinGradlePluginConfigurationErrors SKIPPED
-> Task :vod:chaquo:extractDebugPythonBuildPackages UP-TO-DATE
-> Task :vod:chaquo:generateDebugPythonRequirements UP-TO-DATE
-> Task :vod:chaquo:mergeDebugPythonSources UP-TO-DATE
-> Task :vod:chaquo:generateDebugPythonProxies UP-TO-DATE
-> Task :vod:chaquo:compileDebugKotlin NO-SOURCE
-> Task :vod:chaquo:javaPreCompileDebug UP-TO-DATE
-> Task :vod:chaquo:compileDebugJavaWithJavac UP-TO-DATE
-> Task :vod:chaquo:bundleLibCompileToJarDebug UP-TO-DATE
-> Task :vod:forcetech:checkKotlinGradlePluginConfigurationErrors SKIPPED
-> Task :vod:forcetech:compileDebugKotlin NO-SOURCE
-> Task :vod:forcetech:javaPreCompileDebug UP-TO-DATE
-> Task :vod:forcetech:compileDebugJavaWithJavac UP-TO-DATE
-> Task :vod:forcetech:bundleLibCompileToJarDebug UP-TO-DATE
-> Task :vod:hook:checkKotlinGradlePluginConfigurationErrors SKIPPED
-> Task :vod:hook:compileDebugKotlin NO-SOURCE
-> Task :vod:hook:javaPreCompileDebug UP-TO-DATE
-> Task :vod:hook:compileDebugJavaWithJavac UP-TO-DATE
-> Task :vod:hook:bundleLibCompileToJarDebug UP-TO-DATE
-> Task :vod:jianpian:checkKotlinGradlePluginConfigurationErrors SKIPPED
-> Task :vod:jianpian:compileDebugKotlin NO-SOURCE
-> Task :vod:jianpian:javaPreCompileDebug UP-TO-DATE
-> Task :vod:jianpian:compileDebugJavaWithJavac UP-TO-DATE
-> Task :vod:jianpian:bundleLibCompileToJarDebug UP-TO-DATE
-> Task :vod:quickjs:checkKotlinGradlePluginConfigurationErrors SKIPPED
-> Task :vod:quickjs:generateDebugBuildConfig UP-TO-DATE
-> Task :vod:quickjs:compileDebugKotlin NO-SOURCE
-> Task :vod:quickjs:javaPreCompileDebug UP-TO-DATE
-> Task :vod:quickjs:compileDebugJavaWithJavac UP-TO-DATE
-> Task :vod:quickjs:bundleLibCompileToJarDebug UP-TO-DATE
-> Task :vod:thunder:checkKotlinGradlePluginConfigurationErrors SKIPPED
-> Task :vod:thunder:compileDebugKotlin NO-SOURCE
-> Task :vod:thunder:javaPreCompileDebug UP-TO-DATE
-> Task :vod:thunder:compileDebugJavaWithJavac UP-TO-DATE
-> Task :vod:thunder:bundleLibCompileToJarDebug UP-TO-DATE
-> Task :vod:tvbus:checkKotlinGradlePluginConfigurationErrors SKIPPED
-> Task :vod:tvbus:compileDebugKotlin NO-SOURCE
-> Task :vod:tvbus:javaPreCompileDebug UP-TO-DATE
-> Task :vod:tvbus:compileDebugJavaWithJavac UP-TO-DATE
-> Task :vod:tvbus:bundleLibCompileToJarDebug UP-TO-DATE
-> Task :vod:compileLeanbackJavaArm64_v8aDebugKotlin NO-SOURCE
-> Task :vod:javaPreCompileLeanbackJavaArm64_v8aDebug UP-TO-DATE
-> Task :vod:compileLeanbackJavaArm64_v8aDebugJavaWithJavac UP-TO-DATE
-> Task :vod:bundleLibCompileToJarLeanbackJavaArm64_v8aDebug UP-TO-DATE
-> Task :core:data:checkKotlinGradlePluginConfigurationErrors SKIPPED
-> Task :core:data:generateDebugBuildConfig UP-TO-DATE
-> Task :core:data:compileDebugKotlin UP-TO-DATE
-> Task :core:data:javaPreCompileDebug UP-TO-DATE
-> Task :core:data:compileDebugJavaWithJavac UP-TO-DATE
-> Task :core:data:bundleLibCompileToJarDebug UP-TO-DATE
-> Task :core:designsystem:checkKotlinGradlePluginConfigurationErrors SKIPPED
-> Task :core:designsystem:compileDebugKotlin UP-TO-DATE
-> Task :core:designsystem:javaPreCompileDebug UP-TO-DATE
-> Task :core:designsystem:compileDebugJavaWithJavac NO-SOURCE
-> Task :core:designsystem:bundleLibCompileToJarDebug UP-TO-DATE
-> Task :core:util:checkKotlinGradlePluginConfigurationErrors SKIPPED
-> Task :core:util:compileDebugKotlin UP-TO-DATE
-> Task :core:util:javaPreCompileDebug UP-TO-DATE
-> Task :core:util:compileDebugJavaWithJavac NO-SOURCE
-> Task :core:util:bundleLibCompileToJarDebug UP-TO-DATE
-> Task :tv:compileDebugKotlin UP-TO-DATE
-> Task :tv:javaPreCompileDebug UP-TO-DATE
-> Task :tv:compileDebugJavaWithJavac NO-SOURCE
-> Task :tv:mergeDebugShaders UP-TO-DATE
-> Task :tv:compileDebugShaders NO-SOURCE
-> Task :tv:generateDebugAssets UP-TO-DATE
-> Task :vod:mergeLeanbackJavaArm64_v8aDebugShaders UP-TO-DATE
-> Task :vod:compileLeanbackJavaArm64_v8aDebugShaders NO-SOURCE
-> Task :vod:generateLeanbackJavaArm64_v8aDebugAssets UP-TO-DATE
-> Task :vod:packageLeanbackJavaArm64_v8aDebugAssets UP-TO-DATE
-> Task :core:data:mergeDebugShaders UP-TO-DATE
-> Task :core:data:compileDebugShaders NO-SOURCE
-> Task :core:data:generateDebugAssets UP-TO-DATE
-> Task :core:data:packageDebugAssets UP-TO-DATE
-> Task :core:designsystem:mergeDebugShaders UP-TO-DATE
-> Task :core:designsystem:compileDebugShaders NO-SOURCE
-> Task :core:designsystem:generateDebugAssets UP-TO-DATE
-> Task :core:designsystem:packageDebugAssets UP-TO-DATE
-> Task :core:util:mergeDebugShaders UP-TO-DATE
-> Task :core:util:compileDebugShaders NO-SOURCE
-> Task :core:util:generateDebugAssets UP-TO-DATE
-> Task :core:util:packageDebugAssets UP-TO-DATE
-> Task :vod:catvod:mergeDebugShaders UP-TO-DATE
-> Task :vod:catvod:compileDebugShaders NO-SOURCE
-> Task :vod:catvod:generateDebugAssets UP-TO-DATE
-> Task :vod:catvod:packageDebugAssets UP-TO-DATE
-> Task :vod:chaquo:mergeDebugShaders UP-TO-DATE
-> Task :vod:chaquo:compileDebugShaders NO-SOURCE
-> Task :vod:chaquo:generateDebugAssets UP-TO-DATE
-> Task :vod:chaquo:generateDebugPythonMiscAssets UP-TO-DATE
-> Task :vod:chaquo:generateDebugPythonRequirementsAssets UP-TO-DATE
-> Task :vod:chaquo:generateDebugPythonSourceAssets UP-TO-DATE
-> Task :vod:chaquo:generateDebugPythonBuildAssets UP-TO-DATE
-> Task :vod:chaquo:packageDebugAssets UP-TO-DATE
-> Task :vod:forcetech:mergeDebugShaders UP-TO-DATE
-> Task :vod:forcetech:compileDebugShaders NO-SOURCE
-> Task :vod:forcetech:generateDebugAssets UP-TO-DATE
-> Task :vod:forcetech:packageDebugAssets UP-TO-DATE
-> Task :vod:hook:mergeDebugShaders UP-TO-DATE
-> Task :vod:hook:compileDebugShaders NO-SOURCE
-> Task :vod:hook:generateDebugAssets UP-TO-DATE
-> Task :vod:hook:packageDebugAssets UP-TO-DATE
-> Task :vod:jianpian:mergeDebugShaders UP-TO-DATE
-> Task :vod:jianpian:compileDebugShaders NO-SOURCE
-> Task :vod:jianpian:generateDebugAssets UP-TO-DATE
-> Task :vod:jianpian:packageDebugAssets UP-TO-DATE
-> Task :vod:quickjs:mergeDebugShaders UP-TO-DATE
-> Task :vod:quickjs:compileDebugShaders NO-SOURCE
-> Task :vod:quickjs:generateDebugAssets UP-TO-DATE
-> Task :vod:quickjs:packageDebugAssets UP-TO-DATE
-> Task :vod:thunder:mergeDebugShaders UP-TO-DATE
-> Task :vod:thunder:compileDebugShaders NO-SOURCE
-> Task :vod:thunder:generateDebugAssets UP-TO-DATE
-> Task :vod:thunder:packageDebugAssets UP-TO-DATE
-> Task :vod:tvbus:mergeDebugShaders UP-TO-DATE
-> Task :vod:tvbus:compileDebugShaders NO-SOURCE
-> Task :vod:tvbus:generateDebugAssets UP-TO-DATE
-> Task :vod:tvbus:packageDebugAssets UP-TO-DATE
-> Task :tv:mergeDebugAssets UP-TO-DATE
-> Task :tv:compressDebugAssets UP-TO-DATE
-> Task :tv:l8DexDesugarLibDebug UP-TO-DATE
-> Task :tv:processDebugJavaRes UP-TO-DATE
-> Task :vod:processLeanbackJavaArm64_v8aDebugJavaRes UP-TO-DATE
-> Task :core:data:processDebugJavaRes UP-TO-DATE
-> Task :core:designsystem:processDebugJavaRes UP-TO-DATE
-> Task :core:util:processDebugJavaRes UP-TO-DATE
-> Task :vod:catvod:processDebugJavaRes NO-SOURCE
-> Task :vod:chaquo:processDebugJavaRes NO-SOURCE
-> Task :vod:forcetech:processDebugJavaRes NO-SOURCE
-> Task :vod:hook:processDebugJavaRes NO-SOURCE
-> Task :vod:jianpian:processDebugJavaRes NO-SOURCE
-> Task :vod:quickjs:processDebugJavaRes NO-SOURCE
-> Task :vod:thunder:processDebugJavaRes NO-SOURCE
-> Task :vod:tvbus:processDebugJavaRes NO-SOURCE
-> Task :tv:mergeDebugJavaResource UP-TO-DATE
-> Task :tv:checkDebugDuplicateClasses UP-TO-DATE
-> Task :tv:desugarDebugFileDependencies UP-TO-DATE
-> Task :tv:mergeExtDexDebug UP-TO-DATE
-> Task :core:data:bundleLibRuntimeToDirDebug UP-TO-DATE
-> Task :core:designsystem:bundleLibRuntimeToDirDebug UP-TO-DATE
-> Task :core:util:bundleLibRuntimeToDirDebug UP-TO-DATE
-> Task :vod:bundleLibRuntimeToDirLeanbackJavaArm64_v8aDebug UP-TO-DATE
-> Task :vod:chaquo:bundleLibRuntimeToDirDebug UP-TO-DATE
-> Task :vod:quickjs:bundleLibRuntimeToDirDebug UP-TO-DATE
-> Task :vod:hook:bundleLibRuntimeToDirDebug UP-TO-DATE
-> Task :vod:forcetech:bundleLibRuntimeToDirDebug UP-TO-DATE
-> Task :vod:jianpian:bundleLibRuntimeToDirDebug UP-TO-DATE
-> Task :vod:thunder:bundleLibRuntimeToDirDebug UP-TO-DATE
-> Task :vod:tvbus:bundleLibRuntimeToDirDebug UP-TO-DATE
-> Task :vod:catvod:bundleLibRuntimeToDirDebug UP-TO-DATE
-> Task :tv:dexBuilderDebug UP-TO-DATE
-> Task :tv:mergeProjectDexDebug UP-TO-DATE
-> Task :tv:mergeLibDexDebug UP-TO-DATE
-> Task :tv:mergeDebugJniLibFolders UP-TO-DATE
-> Task :vod:mergeLeanbackJavaArm64_v8aDebugJniLibFolders UP-TO-DATE
-> Task :vod:mergeLeanbackJavaArm64_v8aDebugNativeLibs NO-SOURCE
-> Task :vod:copyLeanbackJavaArm64_v8aDebugJniLibsProjectOnly UP-TO-DATE
-> Task :core:data:mergeDebugJniLibFolders UP-TO-DATE
-> Task :core:data:mergeDebugNativeLibs NO-SOURCE
-> Task :core:data:copyDebugJniLibsProjectOnly UP-TO-DATE
-> Task :core:designsystem:mergeDebugJniLibFolders UP-TO-DATE
-> Task :core:designsystem:mergeDebugNativeLibs NO-SOURCE
-> Task :core:designsystem:copyDebugJniLibsProjectOnly UP-TO-DATE
-> Task :core:util:mergeDebugJniLibFolders UP-TO-DATE
-> Task :core:util:mergeDebugNativeLibs NO-SOURCE
-> Task :core:util:copyDebugJniLibsProjectOnly UP-TO-DATE
-> Task :vod:catvod:mergeDebugJniLibFolders UP-TO-DATE
-> Task :vod:catvod:mergeDebugNativeLibs NO-SOURCE
-> Task :vod:catvod:copyDebugJniLibsProjectOnly UP-TO-DATE
-> Task :vod:chaquo:generateDebugPythonJniLibs UP-TO-DATE
-> Task :vod:chaquo:mergeDebugJniLibFolders UP-TO-DATE
-> Task :vod:chaquo:mergeDebugNativeLibs UP-TO-DATE
-> Task :vod:chaquo:copyDebugJniLibsProjectOnly UP-TO-DATE
-> Task :vod:forcetech:mergeDebugJniLibFolders UP-TO-DATE
-> Task :vod:forcetech:mergeDebugNativeLibs UP-TO-DATE
-> Task :vod:forcetech:copyDebugJniLibsProjectOnly UP-TO-DATE
-> Task :vod:hook:mergeDebugJniLibFolders UP-TO-DATE
-> Task :vod:hook:mergeDebugNativeLibs NO-SOURCE
-> Task :vod:hook:copyDebugJniLibsProjectOnly UP-TO-DATE
-> Task :vod:jianpian:mergeDebugJniLibFolders UP-TO-DATE
-> Task :vod:jianpian:mergeDebugNativeLibs UP-TO-DATE
-> Task :vod:jianpian:copyDebugJniLibsProjectOnly UP-TO-DATE
-> Task :vod:quickjs:mergeDebugJniLibFolders UP-TO-DATE
-> Task :vod:quickjs:mergeDebugNativeLibs NO-SOURCE
-> Task :vod:quickjs:copyDebugJniLibsProjectOnly UP-TO-DATE
-> Task :vod:thunder:mergeDebugJniLibFolders UP-TO-DATE
-> Task :vod:thunder:mergeDebugNativeLibs UP-TO-DATE
-> Task :vod:thunder:copyDebugJniLibsProjectOnly UP-TO-DATE
-> Task :vod:tvbus:mergeDebugJniLibFolders UP-TO-DATE
-> Task :vod:tvbus:mergeDebugNativeLibs NO-SOURCE
-> Task :vod:tvbus:copyDebugJniLibsProjectOnly UP-TO-DATE
-> Task :tv:mergeDebugNativeLibs UP-TO-DATE
-> Task :tv:stripDebugDebugSymbols UP-TO-DATE
-> Task :tv:validateSigningDebug UP-TO-DATE
-> Task :tv:writeDebugAppMetadata UP-TO-DATE
-> Task :tv:writeDebugSigningConfigVersions UP-TO-DATE
-> Task :tv:packageDebug UP-TO-DATE
-> Task :tv:createDebugApkListingFileRedirect UP-TO-DATE
-> Task :vod:stripLeanbackJavaArm64_v8aDebugDebugSymbols NO-SOURCE
-> Task :vod:copyLeanbackJavaArm64_v8aDebugJniLibsProjectAndLocalJars UP-TO-DATE
-> Task :vod:extractDeepLinksForAarLeanbackJavaArm64_v8aDebug UP-TO-DATE
-> Task :vod:extractLeanbackJavaArm64_v8aDebugAnnotations UP-TO-DATE
-> Task :vod:mergeLeanbackJavaArm64_v8aDebugGeneratedProguardFiles UP-TO-DATE
-> Task :vod:mergeLeanbackJavaArm64_v8aDebugConsumerProguardFiles UP-TO-DATE
-> Task :vod:prepareLeanbackJavaArm64_v8aDebugArtProfile UP-TO-DATE
-> Task :vod:prepareLintJarForPublish UP-TO-DATE
-> Task :vod:mergeLeanbackJavaArm64_v8aDebugJavaResource UP-TO-DATE
-> Task :vod:syncLeanbackJavaArm64_v8aDebugLibJars UP-TO-DATE
-> Task :vod:bundleLeanbackJavaArm64_v8aDebugAar UP-TO-DATE
-> Task :vod:assembleLeanbackJavaArm64_v8aDebug UP-TO-DATE
-> Task :vod:preLeanbackJavaArm64_v8aReleaseBuild UP-TO-DATE
-> Task :vod:mergeLeanbackJavaArm64_v8aReleaseJniLibFolders UP-TO-DATE
-> Task :vod:mergeLeanbackJavaArm64_v8aReleaseNativeLibs NO-SOURCE
-> Task :vod:stripLeanbackJavaArm64_v8aReleaseDebugSymbols NO-SOURCE
-> Task :vod:copyLeanbackJavaArm64_v8aReleaseJniLibsProjectAndLocalJars UP-TO-DATE
-> Task :vod:generateLeanbackJavaArm64_v8aReleaseResValues UP-TO-DATE
-> Task :vod:extractDeepLinksForAarLeanbackJavaArm64_v8aRelease UP-TO-DATE
-> Task :vod:dataBindingMergeDependencyArtifactsLeanbackJavaArm64_v8aRelease UP-TO-DATE
-> Task :vod:generateLeanbackJavaArm64_v8aReleaseResources UP-TO-DATE
-> Task :vod:packageLeanbackJavaArm64_v8aReleaseResources UP-TO-DATE
-> Task :vod:parseLeanbackJavaArm64_v8aReleaseLocalResources UP-TO-DATE
-> Task :vod:catvod:preReleaseBuild UP-TO-DATE
-> Task :vod:catvod:generateReleaseResValues UP-TO-DATE
-> Task :vod:catvod:generateReleaseResources UP-TO-DATE
-> Task :vod:catvod:packageReleaseResources UP-TO-DATE
-> Task :vod:catvod:parseReleaseLocalResources UP-TO-DATE
-> Task :vod:catvod:generateReleaseRFile UP-TO-DATE
-> Task :vod:chaquo:preReleaseBuild UP-TO-DATE
-> Task :vod:chaquo:generateReleaseResValues UP-TO-DATE
-> Task :vod:chaquo:generateReleaseResources UP-TO-DATE
-> Task :vod:chaquo:packageReleaseResources UP-TO-DATE
-> Task :vod:chaquo:parseReleaseLocalResources UP-TO-DATE
-> Task :vod:chaquo:generateReleaseRFile UP-TO-DATE
-> Task :vod:forcetech:preReleaseBuild UP-TO-DATE
-> Task :vod:forcetech:generateReleaseResValues UP-TO-DATE
-> Task :vod:forcetech:generateReleaseResources UP-TO-DATE
-> Task :vod:forcetech:packageReleaseResources UP-TO-DATE
-> Task :vod:forcetech:parseReleaseLocalResources UP-TO-DATE
-> Task :vod:forcetech:generateReleaseRFile UP-TO-DATE
-> Task :vod:hook:preReleaseBuild UP-TO-DATE
-> Task :vod:hook:generateReleaseResValues UP-TO-DATE
-> Task :vod:hook:generateReleaseResources UP-TO-DATE
-> Task :vod:hook:packageReleaseResources UP-TO-DATE
-> Task :vod:hook:parseReleaseLocalResources UP-TO-DATE
-> Task :vod:hook:generateReleaseRFile UP-TO-DATE
-> Task :vod:jianpian:preReleaseBuild UP-TO-DATE
-> Task :vod:jianpian:generateReleaseResValues UP-TO-DATE
-> Task :vod:jianpian:generateReleaseResources UP-TO-DATE
-> Task :vod:jianpian:packageReleaseResources UP-TO-DATE
-> Task :vod:jianpian:parseReleaseLocalResources UP-TO-DATE
-> Task :vod:jianpian:generateReleaseRFile UP-TO-DATE
-> Task :vod:quickjs:preReleaseBuild UP-TO-DATE
-> Task :vod:quickjs:generateReleaseResValues UP-TO-DATE
-> Task :vod:quickjs:generateReleaseResources UP-TO-DATE
-> Task :vod:quickjs:packageReleaseResources UP-TO-DATE
-> Task :vod:quickjs:parseReleaseLocalResources UP-TO-DATE
-> Task :vod:quickjs:generateReleaseRFile UP-TO-DATE
-> Task :vod:thunder:preReleaseBuild UP-TO-DATE
-> Task :vod:thunder:generateReleaseResValues UP-TO-DATE
-> Task :vod:thunder:generateReleaseResources UP-TO-DATE
-> Task :vod:thunder:packageReleaseResources UP-TO-DATE
-> Task :vod:thunder:parseReleaseLocalResources UP-TO-DATE
-> Task :vod:thunder:generateReleaseRFile UP-TO-DATE
-> Task :vod:tvbus:preReleaseBuild UP-TO-DATE
-> Task :vod:tvbus:generateReleaseResValues UP-TO-DATE
-> Task :vod:tvbus:generateReleaseResources UP-TO-DATE
-> Task :vod:tvbus:packageReleaseResources UP-TO-DATE
-> Task :vod:tvbus:parseReleaseLocalResources UP-TO-DATE
-> Task :vod:tvbus:generateReleaseRFile UP-TO-DATE
-> Task :vod:dataBindingGenBaseClassesLeanbackJavaArm64_v8aRelease UP-TO-DATE
-> Task :vod:generateLeanbackJavaArm64_v8aReleaseBuildConfig UP-TO-DATE
-> Task :vod:generateLeanbackJavaArm64_v8aReleaseRFile UP-TO-DATE
-> Task :vod:catvod:generateReleaseBuildConfig UP-TO-DATE
-> Task :vod:catvod:compileReleaseKotlin NO-SOURCE
-> Task :vod:catvod:javaPreCompileRelease UP-TO-DATE
-> Task :vod:catvod:compileReleaseJavaWithJavac UP-TO-DATE
-> Task :vod:catvod:bundleLibCompileToJarRelease UP-TO-DATE
-> Task :vod:chaquo:extractReleasePythonBuildPackages UP-TO-DATE
-> Task :vod:chaquo:generateReleasePythonRequirements UP-TO-DATE
-> Task :vod:chaquo:mergeReleasePythonSources UP-TO-DATE
-> Task :vod:chaquo:generateReleasePythonProxies UP-TO-DATE
-> Task :vod:chaquo:compileReleaseKotlin NO-SOURCE
-> Task :vod:chaquo:javaPreCompileRelease UP-TO-DATE
-> Task :vod:chaquo:compileReleaseJavaWithJavac UP-TO-DATE
-> Task :vod:chaquo:bundleLibCompileToJarRelease UP-TO-DATE
-> Task :vod:forcetech:compileReleaseKotlin NO-SOURCE
-> Task :vod:forcetech:javaPreCompileRelease UP-TO-DATE
-> Task :vod:forcetech:compileReleaseJavaWithJavac UP-TO-DATE
-> Task :vod:forcetech:bundleLibCompileToJarRelease UP-TO-DATE
-> Task :vod:hook:compileReleaseKotlin NO-SOURCE
-> Task :vod:hook:javaPreCompileRelease UP-TO-DATE
-> Task :vod:hook:compileReleaseJavaWithJavac UP-TO-DATE
-> Task :vod:hook:bundleLibCompileToJarRelease UP-TO-DATE
-> Task :vod:jianpian:compileReleaseKotlin NO-SOURCE
-> Task :vod:jianpian:javaPreCompileRelease UP-TO-DATE
-> Task :vod:jianpian:compileReleaseJavaWithJavac UP-TO-DATE
-> Task :vod:jianpian:bundleLibCompileToJarRelease UP-TO-DATE
-> Task :vod:quickjs:generateReleaseBuildConfig UP-TO-DATE
-> Task :vod:quickjs:compileReleaseKotlin NO-SOURCE
-> Task :vod:quickjs:javaPreCompileRelease UP-TO-DATE
-> Task :vod:quickjs:compileReleaseJavaWithJavac UP-TO-DATE
-> Task :vod:quickjs:bundleLibCompileToJarRelease UP-TO-DATE
-> Task :vod:thunder:compileReleaseKotlin NO-SOURCE
-> Task :vod:thunder:javaPreCompileRelease UP-TO-DATE
-> Task :vod:thunder:compileReleaseJavaWithJavac UP-TO-DATE
-> Task :vod:thunder:bundleLibCompileToJarRelease UP-TO-DATE
-> Task :vod:tvbus:compileReleaseKotlin NO-SOURCE
-> Task :vod:tvbus:javaPreCompileRelease UP-TO-DATE
-> Task :vod:tvbus:compileReleaseJavaWithJavac UP-TO-DATE
-> Task :vod:tvbus:bundleLibCompileToJarRelease UP-TO-DATE
-> Task :vod:compileLeanbackJavaArm64_v8aReleaseKotlin NO-SOURCE
-> Task :vod:extractLeanbackJavaArm64_v8aReleaseAnnotations UP-TO-DATE
-> Task :vod:javaPreCompileLeanbackJavaArm64_v8aRelease UP-TO-DATE
-> Task :vod:compileLeanbackJavaArm64_v8aReleaseJavaWithJavac UP-TO-DATE
-> Task :vod:mergeLeanbackJavaArm64_v8aReleaseGeneratedProguardFiles UP-TO-DATE
-> Task :vod:mergeLeanbackJavaArm64_v8aReleaseConsumerProguardFiles UP-TO-DATE
-> Task :vod:mergeLeanbackJavaArm64_v8aReleaseShaders UP-TO-DATE
-> Task :vod:compileLeanbackJavaArm64_v8aReleaseShaders NO-SOURCE
-> Task :vod:generateLeanbackJavaArm64_v8aReleaseAssets UP-TO-DATE
-> Task :vod:packageLeanbackJavaArm64_v8aReleaseAssets UP-TO-DATE
-> Task :vod:prepareLeanbackJavaArm64_v8aReleaseArtProfile UP-TO-DATE
-> Task :vod:processLeanbackJavaArm64_v8aReleaseManifest UP-TO-DATE
-> Task :vod:chaquo:mergeReleaseGeneratedProguardFiles UP-TO-DATE
-> Task :vod:chaquo:exportReleaseConsumerProguardFiles UP-TO-DATE
-> Task :vod:quickjs:mergeReleaseGeneratedProguardFiles UP-TO-DATE
-> Task :vod:quickjs:exportReleaseConsumerProguardFiles UP-TO-DATE
-> Task :vod:hook:mergeReleaseGeneratedProguardFiles UP-TO-DATE
-> Task :vod:hook:exportReleaseConsumerProguardFiles UP-TO-DATE
-> Task :vod:forcetech:mergeReleaseGeneratedProguardFiles UP-TO-DATE
-> Task :vod:forcetech:exportReleaseConsumerProguardFiles UP-TO-DATE
-> Task :vod:jianpian:mergeReleaseGeneratedProguardFiles UP-TO-DATE
-> Task :vod:jianpian:exportReleaseConsumerProguardFiles UP-TO-DATE
-> Task :vod:thunder:mergeReleaseGeneratedProguardFiles UP-TO-DATE
-> Task :vod:thunder:exportReleaseConsumerProguardFiles UP-TO-DATE
-> Task :vod:tvbus:mergeReleaseGeneratedProguardFiles UP-TO-DATE
-> Task :vod:tvbus:exportReleaseConsumerProguardFiles UP-TO-DATE
-> Task :vod:catvod:mergeReleaseGeneratedProguardFiles UP-TO-DATE
-> Task :vod:catvod:exportReleaseConsumerProguardFiles UP-TO-DATE
-> Task :vod:extractProguardFiles UP-TO-DATE
-> Task :vod:generateLeanbackJavaArm64_v8aReleaseLibraryProguardRules UP-TO-DATE
-> Task :vod:processLeanbackJavaArm64_v8aReleaseJavaRes UP-TO-DATE
-> Task :vod:mergeLeanbackJavaArm64_v8aReleaseJavaResource UP-TO-DATE
-> Task :vod:catvod:bundleLibRuntimeToJarRelease UP-TO-DATE
-> Task :vod:catvod:processReleaseJavaRes NO-SOURCE
-> Task :vod:chaquo:bundleLibRuntimeToJarRelease UP-TO-DATE
-> Task :vod:chaquo:processReleaseJavaRes NO-SOURCE
-> Task :vod:forcetech:bundleLibRuntimeToJarRelease UP-TO-DATE
-> Task :vod:forcetech:processReleaseJavaRes NO-SOURCE
-> Task :vod:hook:bundleLibRuntimeToJarRelease UP-TO-DATE
-> Task :vod:hook:processReleaseJavaRes NO-SOURCE
-> Task :vod:jianpian:bundleLibRuntimeToJarRelease UP-TO-DATE
-> Task :vod:jianpian:processReleaseJavaRes NO-SOURCE
-> Task :vod:quickjs:bundleLibRuntimeToJarRelease UP-TO-DATE
-> Task :vod:quickjs:processReleaseJavaRes NO-SOURCE
-> Task :vod:thunder:bundleLibRuntimeToJarRelease UP-TO-DATE
-> Task :vod:thunder:processReleaseJavaRes NO-SOURCE
-> Task :vod:tvbus:bundleLibRuntimeToJarRelease UP-TO-DATE
-> Task :vod:tvbus:processReleaseJavaRes NO-SOURCE
-> Task :vod:minifyLeanbackJavaArm64_v8aReleaseWithR8 UP-TO-DATE
-> Task :vod:syncLeanbackJavaArm64_v8aReleaseLibJars UP-TO-DATE
-> Task :vod:writeLeanbackJavaArm64_v8aReleaseAarMetadata UP-TO-DATE
-> Task :vod:bundleLeanbackJavaArm64_v8aReleaseAar UP-TO-DATE
-> Task :vod:mapLeanbackJavaArm64_v8aReleaseSourceSetPaths UP-TO-DATE
-> Task :vod:mergeLeanbackJavaArm64_v8aReleaseResources UP-TO-DATE
-> Task :vod:catvod:compileReleaseLibraryResources UP-TO-DATE
-> Task :vod:chaquo:compileReleaseLibraryResources UP-TO-DATE
-> Task :vod:forcetech:compileReleaseLibraryResources UP-TO-DATE
-> Task :vod:hook:compileReleaseLibraryResources UP-TO-DATE
-> Task :vod:jianpian:compileReleaseLibraryResources UP-TO-DATE
-> Task :vod:quickjs:compileReleaseLibraryResources UP-TO-DATE
-> Task :vod:thunder:compileReleaseLibraryResources UP-TO-DATE
-> Task :vod:tvbus:compileReleaseLibraryResources UP-TO-DATE
-> Task :vod:verifyLeanbackJavaArm64_v8aReleaseResources UP-TO-DATE
-> Task :vod:assembleLeanbackJavaArm64_v8aRelease UP-TO-DATE
-> Task :vod:assembleArm64_v8a UP-TO-DATE
-> Task :vod:assembleDebug UP-TO-DATE
-> Task :vod:assembleJava UP-TO-DATE
-> Task :vod:assembleLeanback UP-TO-DATE
-> Task :vod:assembleLeanbackJavaArm64_v8a UP-TO-DATE
-> Task :vod:assembleRelease UP-TO-DATE
-> Task :vod:assemble UP-TO-DATE
-> Task :vod:preLeanbackJavaArm64_v8aDebugAndroidTestBuild UP-TO-DATE
-> Task :vod:dataBindingMergeDependencyArtifactsLeanbackJavaArm64_v8aDebugAndroidTest UP-TO-DATE
-> Task :vod:generateLeanbackJavaArm64_v8aDebugAndroidTestResValues UP-TO-DATE
-> Task :vod:generateLeanbackJavaArm64_v8aDebugAndroidTestResources UP-TO-DATE
-> Task :vod:mergeLeanbackJavaArm64_v8aDebugAndroidTestResources UP-TO-DATE
-> Task :vod:dataBindingGenBaseClassesLeanbackJavaArm64_v8aDebugAndroidTest UP-TO-DATE
-> Task :vod:processLeanbackJavaArm64_v8aDebugAndroidTestManifest UP-TO-DATE
-> Task :vod:generateLeanbackJavaArm64_v8aDebugAndroidTestBuildConfig UP-TO-DATE
-> Task :vod:checkLeanbackJavaArm64_v8aDebugAndroidTestAarMetadata UP-TO-DATE
-> Task :vod:mapLeanbackJavaArm64_v8aDebugAndroidTestSourceSetPaths UP-TO-DATE
-> Task :vod:processLeanbackJavaArm64_v8aDebugAndroidTestResources UP-TO-DATE
-> Task :vod:compileLeanbackJavaArm64_v8aDebugAndroidTestKotlin NO-SOURCE
-> Task :vod:javaPreCompileLeanbackJavaArm64_v8aDebugAndroidTest UP-TO-DATE
-> Task :vod:compileLeanbackJavaArm64_v8aDebugAndroidTestJavaWithJavac UP-TO-DATE
-> Task :vod:mergeLeanbackJavaArm64_v8aDebugAndroidTestShaders UP-TO-DATE
-> Task :vod:compileLeanbackJavaArm64_v8aDebugAndroidTestShaders NO-SOURCE
-> Task :vod:generateLeanbackJavaArm64_v8aDebugAndroidTestAssets UP-TO-DATE
-> Task :vod:mergeLeanbackJavaArm64_v8aDebugAndroidTestAssets UP-TO-DATE
-> Task :vod:compressLeanbackJavaArm64_v8aDebugAndroidTestAssets UP-TO-DATE
-> Task :vod:l8DexDesugarLibLeanbackJavaArm64_v8aDebugAndroidTest UP-TO-DATE
-> Task :vod:checkLeanbackJavaArm64_v8aDebugAndroidTestDuplicateClasses UP-TO-DATE
-> Task :vod:desugarLeanbackJavaArm64_v8aDebugAndroidTestFileDependencies UP-TO-DATE
-> Task :vod:mergeExtDexLeanbackJavaArm64_v8aDebugAndroidTest UP-TO-DATE
-> Task :vod:bundleLibRuntimeToJarLeanbackJavaArm64_v8aDebug UP-TO-DATE
-> Task :vod:chaquo:bundleLibRuntimeToJarDebug UP-TO-DATE
-> Task :vod:quickjs:bundleLibRuntimeToJarDebug UP-TO-DATE
-> Task :vod:hook:bundleLibRuntimeToJarDebug UP-TO-DATE
-> Task :vod:forcetech:bundleLibRuntimeToJarDebug UP-TO-DATE
-> Task :vod:jianpian:bundleLibRuntimeToJarDebug UP-TO-DATE
-> Task :vod:thunder:bundleLibRuntimeToJarDebug UP-TO-DATE
-> Task :vod:tvbus:bundleLibRuntimeToJarDebug UP-TO-DATE
-> Task :vod:catvod:bundleLibRuntimeToJarDebug UP-TO-DATE
-> Task :vod:dexBuilderLeanbackJavaArm64_v8aDebugAndroidTest UP-TO-DATE
-> Task :vod:mergeLeanbackJavaArm64_v8aDebugAndroidTestGlobalSynthetics UP-TO-DATE
-> Task :vod:processLeanbackJavaArm64_v8aDebugAndroidTestJavaRes NO-SOURCE
-> Task :vod:mergeLeanbackJavaArm64_v8aDebugAndroidTestJavaResource UP-TO-DATE
-> Task :vod:mergeLibDexLeanbackJavaArm64_v8aDebugAndroidTest UP-TO-DATE
-> Task :vod:mergeProjectDexLeanbackJavaArm64_v8aDebugAndroidTest UP-TO-DATE
-> Task :vod:mergeLeanbackJavaArm64_v8aDebugAndroidTestJniLibFolders UP-TO-DATE
-> Task :vod:mergeLeanbackJavaArm64_v8aDebugAndroidTestNativeLibs UP-TO-DATE
-> Task :vod:stripLeanbackJavaArm64_v8aDebugAndroidTestDebugSymbols UP-TO-DATE
-> Task :vod:validateSigningLeanbackJavaArm64_v8aDebugAndroidTest UP-TO-DATE
-> Task :vod:writeLeanbackJavaArm64_v8aDebugAndroidTestSigningConfigVersions UP-TO-DATE
-> Task :vod:packageLeanbackJavaArm64_v8aDebugAndroidTest UP-TO-DATE
-> Task :vod:createLeanbackJavaArm64_v8aDebugAndroidTestApkListingFileRedirect UP-TO-DATE
-> Task :vod:assembleLeanbackJavaArm64_v8aDebugAndroidTest UP-TO-DATE
-> Task :vod:assembleAndroidTest UP-TO-DATE
-> Task :vod:preLeanbackJavaArm64_v8aDebugUnitTestBuild UP-TO-DATE
-> Task :vod:generateLeanbackJavaArm64_v8aDebugUnitTestStubRFile UP-TO-DATE
-> Task :vod:compileLeanbackJavaArm64_v8aDebugUnitTestKotlin NO-SOURCE
-> Task :vod:javaPreCompileLeanbackJavaArm64_v8aDebugUnitTest UP-TO-DATE
-> Task :vod:compileLeanbackJavaArm64_v8aDebugUnitTestJavaWithJavac NO-SOURCE
-> Task :vod:assembleLeanbackJavaArm64_v8aDebugUnitTest UP-TO-DATE
-> Task :vod:bundleLibCompileToJarLeanbackJavaArm64_v8aRelease UP-TO-DATE
-> Task :vod:preLeanbackJavaArm64_v8aReleaseUnitTestBuild UP-TO-DATE
-> Task :vod:generateLeanbackJavaArm64_v8aReleaseUnitTestStubRFile UP-TO-DATE
-> Task :vod:compileLeanbackJavaArm64_v8aReleaseUnitTestKotlin NO-SOURCE
-> Task :vod:javaPreCompileLeanbackJavaArm64_v8aReleaseUnitTest UP-TO-DATE
-> Task :vod:compileLeanbackJavaArm64_v8aReleaseUnitTestJavaWithJavac NO-SOURCE
-> Task :vod:assembleLeanbackJavaArm64_v8aReleaseUnitTest UP-TO-DATE
-> Task :vod:assembleUnitTest UP-TO-DATE
-> Task :tv:assembleDebug UP-TO-DATE
 
 Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
 
@@ -657,7 +197,5 @@ You can use '--warning-mode all' to show the individual deprecation warnings and
 
 For more on this, please refer to https://docs.gradle.org/8.7/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
 
-BUILD SUCCESSFUL in 12s
-451 actionable tasks: 451 up-to-date
-
-Build Analyzer results available
+BUILD FAILED in 5s
+245 actionable tasks: 3 executed, 242 up-to-date
