@@ -40,17 +40,24 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "壹来电视"
+println("[OneTV-Build] 根项目名称: 壹来电视")
 
 include(":core:data")
 include(":core:util")
 include(":core:designsystem")
+
+// 恢复正确的构建顺序：TV主应用模块优先
+println("[OneTV-Build] 包含TV模块 (主应用)")
 include(":tv")
+println("[OneTV-Build] :tv -> android.application")
 include(":mobile")
-include(":movie")
+//include(":movie")
 // include(":film") // 暂时移除film模块避免配置冲突
 
 // vod影视点播应用模块 - 基于FongMi_TV完整移植
+println("[OneTV-Build] 包含VOD模块 (库模块)")
 include(":vod")                    // vod主应用模块 (对应原FongMi_TV的app模块)
+println("[OneTV-Build] :vod -> android.library")
 include(":vod:catvod")            // 爬虫核心引擎 (来自FongMi_TV)
 include(":vod:chaquo")            // Python引擎 (来自FongMi_TV)
 include(":vod:quickjs")           // JavaScript引擎 (来自FongMi_TV)

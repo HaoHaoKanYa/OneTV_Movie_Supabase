@@ -199,6 +199,7 @@ GIT_GUIDE.md
 /filmMD/
 /film/
 /onevodMD/
+/vodMD/
 
 # 点播功能设计文档 - 不进行版本控制
 /movieMD/
@@ -211,3 +212,5 @@ onevod/README.md
 onevod/LICENSE.md
 /movie/
 /film/
+vodMD/00_日志.txt
+vodMD/00_日志.txt

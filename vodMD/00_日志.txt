@@ -1,407 +1,663 @@
-A problem occurred configuring project ':onevod:chaquo'.
-> Variant 'debug': Chaquopy requires ndk.abiFilters: you may want to add it to android.defaultConfig.
+Executing tasks: [:tv:assembleDebug] in project D:\apk\OneTV_Movie_Supabase
 
-* Try:
-> Run with --info or --debug option to get more log output.
-> Run with --scan to get full insights.
-> Get more help at https://help.gradle.org.
+[OneTV-Build] 根项目名称: 壹来电视
+[OneTV-Build] 包含VOD模块 (库模块) - 优先构建
+[OneTV-Build] :vod -> android.library
+[OneTV-Build] 包含TV模块 (主应用) - 后构建
+[OneTV-Build] :tv -> android.application
 
-* Exception is:
-org.gradle.api.ProjectConfigurationException: A problem occurred configuring project ':onevod:chaquo'.
-	at org.gradle.configuration.project.LifecycleProjectEvaluator.wrapException(LifecycleProjectEvaluator.java:84)
-	at org.gradle.configuration.project.LifecycleProjectEvaluator.addConfigurationFailure(LifecycleProjectEvaluator.java:77)
-	at org.gradle.configuration.project.LifecycleProjectEvaluator.access$500(LifecycleProjectEvaluator.java:55)
-	at org.gradle.configuration.project.LifecycleProjectEvaluator$NotifyAfterEvaluate.run(LifecycleProjectEvaluator.java:255)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$1.execute(DefaultBuildOperationRunner.java:29)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$1.execute(DefaultBuildOperationRunner.java:26)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:157)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.run(DefaultBuildOperationRunner.java:47)
-	at org.gradle.internal.operations.DefaultBuildOperationExecutor.run(DefaultBuildOperationExecutor.java:68)
-	at org.gradle.configuration.project.LifecycleProjectEvaluator$EvaluateProject.lambda$run$0(LifecycleProjectEvaluator.java:114)
-	at org.gradle.api.internal.project.DefaultProjectStateRegistry$ProjectStateImpl.lambda$applyToMutableState$1(DefaultProjectStateRegistry.java:407)
-	at org.gradle.api.internal.project.DefaultProjectStateRegistry$ProjectStateImpl.lambda$fromMutableState$2(DefaultProjectStateRegistry.java:430)
-	at org.gradle.internal.work.DefaultWorkerLeaseService.withReplacedLocks(DefaultWorkerLeaseService.java:360)
-	at org.gradle.api.internal.project.DefaultProjectStateRegistry$ProjectStateImpl.fromMutableState(DefaultProjectStateRegistry.java:430)
-	at org.gradle.api.internal.project.DefaultProjectStateRegistry$ProjectStateImpl.applyToMutableState(DefaultProjectStateRegistry.java:406)
-	at org.gradle.configuration.project.LifecycleProjectEvaluator$EvaluateProject.run(LifecycleProjectEvaluator.java:100)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$1.execute(DefaultBuildOperationRunner.java:29)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$1.execute(DefaultBuildOperationRunner.java:26)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:157)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.run(DefaultBuildOperationRunner.java:47)
-	at org.gradle.internal.operations.DefaultBuildOperationExecutor.run(DefaultBuildOperationExecutor.java:68)
-	at org.gradle.configuration.project.LifecycleProjectEvaluator.evaluate(LifecycleProjectEvaluator.java:72)
-	at org.gradle.api.internal.project.DefaultProject.evaluate(DefaultProject.java:785)
-	at org.gradle.api.internal.project.DefaultProject.evaluate(DefaultProject.java:155)
-	at org.gradle.api.internal.project.ProjectLifecycleController.lambda$ensureSelfConfigured$2(ProjectLifecycleController.java:84)
-	at org.gradle.internal.model.StateTransitionController.lambda$doTransition$14(StateTransitionController.java:255)
-	at org.gradle.internal.model.StateTransitionController.doTransition(StateTransitionController.java:266)
-	at org.gradle.internal.model.StateTransitionController.doTransition(StateTransitionController.java:254)
-	at org.gradle.internal.model.StateTransitionController.lambda$maybeTransitionIfNotCurrentlyTransitioning$10(StateTransitionController.java:199)
-	at org.gradle.internal.work.DefaultSynchronizer.withLock(DefaultSynchronizer.java:34)
-	at org.gradle.internal.model.StateTransitionController.maybeTransitionIfNotCurrentlyTransitioning(StateTransitionController.java:195)
-	at org.gradle.api.internal.project.ProjectLifecycleController.ensureSelfConfigured(ProjectLifecycleController.java:84)
-	at org.gradle.api.internal.project.DefaultProjectStateRegistry$ProjectStateImpl.ensureConfigured(DefaultProjectStateRegistry.java:381)
-	at org.gradle.execution.TaskPathProjectEvaluator.configure(TaskPathProjectEvaluator.java:34)
-	at org.gradle.execution.TaskPathProjectEvaluator.configureHierarchy(TaskPathProjectEvaluator.java:50)
-	at org.gradle.configuration.DefaultProjectsPreparer.prepareProjects(DefaultProjectsPreparer.java:42)
-	at org.gradle.configuration.BuildTreePreparingProjectsPreparer.prepareProjects(BuildTreePreparingProjectsPreparer.java:65)
-	at org.gradle.configuration.BuildOperationFiringProjectsPreparer$ConfigureBuild.run(BuildOperationFiringProjectsPreparer.java:52)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$1.execute(DefaultBuildOperationRunner.java:29)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$1.execute(DefaultBuildOperationRunner.java:26)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:157)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.run(DefaultBuildOperationRunner.java:47)
-	at org.gradle.internal.operations.DefaultBuildOperationExecutor.run(DefaultBuildOperationExecutor.java:68)
-	at org.gradle.configuration.BuildOperationFiringProjectsPreparer.prepareProjects(BuildOperationFiringProjectsPreparer.java:40)
-	at org.gradle.initialization.VintageBuildModelController.lambda$prepareProjects$2(VintageBuildModelController.java:84)
-	at org.gradle.internal.model.StateTransitionController.lambda$doTransition$14(StateTransitionController.java:255)
-	at org.gradle.internal.model.StateTransitionController.doTransition(StateTransitionController.java:266)
-	at org.gradle.internal.model.StateTransitionController.doTransition(StateTransitionController.java:254)
-	at org.gradle.internal.model.StateTransitionController.lambda$transitionIfNotPreviously$11(StateTransitionController.java:213)
-	at org.gradle.internal.work.DefaultSynchronizer.withLock(DefaultSynchronizer.java:34)
-	at org.gradle.internal.model.StateTransitionController.transitionIfNotPreviously(StateTransitionController.java:209)
-	at org.gradle.initialization.VintageBuildModelController.prepareProjects(VintageBuildModelController.java:84)
-	at org.gradle.initialization.VintageBuildModelController.getConfiguredModel(VintageBuildModelController.java:64)
-	at org.gradle.internal.build.DefaultBuildLifecycleController.lambda$withProjectsConfigured$1(DefaultBuildLifecycleController.java:133)
-	at org.gradle.internal.model.StateTransitionController.lambda$notInState$3(StateTransitionController.java:132)
-	at org.gradle.internal.work.DefaultSynchronizer.withLock(DefaultSynchronizer.java:44)
-	at org.gradle.internal.model.StateTransitionController.notInState(StateTransitionController.java:128)
-	at org.gradle.internal.build.DefaultBuildLifecycleController.withProjectsConfigured(DefaultBuildLifecycleController.java:133)
-	at org.gradle.internal.build.DefaultBuildToolingModelController.locateBuilderForTarget(DefaultBuildToolingModelController.java:58)
-	at org.gradle.internal.buildtree.DefaultBuildTreeModelCreator$DefaultBuildTreeModelController.lambda$locateBuilderForTarget$0(DefaultBuildTreeModelCreator.java:64)
-	at org.gradle.internal.build.DefaultBuildLifecycleController.withToolingModels(DefaultBuildLifecycleController.java:327)
-	at org.gradle.internal.build.AbstractBuildState.withToolingModels(AbstractBuildState.java:146)
-	at org.gradle.internal.buildtree.DefaultBuildTreeModelCreator$DefaultBuildTreeModelController.locateBuilderForTarget(DefaultBuildTreeModelCreator.java:64)
-	at org.gradle.internal.buildtree.DefaultBuildTreeModelCreator$DefaultBuildTreeModelController.locateBuilderForDefaultTarget(DefaultBuildTreeModelCreator.java:59)
-	at org.gradle.tooling.internal.provider.runner.DefaultBuildController.getTarget(DefaultBuildController.java:136)
-	at org.gradle.tooling.internal.provider.runner.DefaultBuildController.getModel(DefaultBuildController.java:107)
-	at org.gradle.tooling.internal.consumer.connection.ParameterAwareBuildControllerAdapter.getModel(ParameterAwareBuildControllerAdapter.java:40)
-	at org.gradle.tooling.internal.consumer.connection.UnparameterizedBuildController.getModel(UnparameterizedBuildController.java:116)
-	at org.gradle.tooling.internal.consumer.connection.NestedActionAwareBuildControllerAdapter.getModel(NestedActionAwareBuildControllerAdapter.java:32)
-	at org.gradle.tooling.internal.consumer.connection.UnparameterizedBuildController.getModel(UnparameterizedBuildController.java:79)
-	at org.gradle.tooling.internal.consumer.connection.NestedActionAwareBuildControllerAdapter.getModel(NestedActionAwareBuildControllerAdapter.java:32)
-	at org.gradle.tooling.internal.consumer.connection.UnparameterizedBuildController.getModel(UnparameterizedBuildController.java:64)
-	at org.gradle.tooling.internal.consumer.connection.NestedActionAwareBuildControllerAdapter.getModel(NestedActionAwareBuildControllerAdapter.java:32)
-	at com.intellij.gradle.toolingExtension.impl.modelAction.GradleModelFetchAction.lambda$initAction$6(GradleModelFetchAction.java:184)
-	at com.intellij.gradle.toolingExtension.impl.telemetry.GradleOpenTelemetry.callWithSpan(GradleOpenTelemetry.java:73)
-	at com.intellij.gradle.toolingExtension.impl.telemetry.GradleOpenTelemetry.callWithSpan(GradleOpenTelemetry.java:61)
-	at com.intellij.gradle.toolingExtension.impl.modelAction.GradleModelFetchAction.initAction(GradleModelFetchAction.java:183)
-	at com.intellij.gradle.toolingExtension.impl.modelAction.GradleModelFetchAction.doExecute(GradleModelFetchAction.java:138)
-	at com.intellij.gradle.toolingExtension.impl.modelAction.GradleModelFetchAction.lambda$execute$1(GradleModelFetchAction.java:103)
-	at com.intellij.gradle.toolingExtension.impl.telemetry.GradleOpenTelemetry.callWithSpan(GradleOpenTelemetry.java:73)
-	at com.intellij.gradle.toolingExtension.impl.telemetry.GradleOpenTelemetry.callWithSpan(GradleOpenTelemetry.java:61)
-	at com.intellij.gradle.toolingExtension.impl.modelAction.GradleModelFetchAction.lambda$execute$2(GradleModelFetchAction.java:102)
-	at com.intellij.gradle.toolingExtension.impl.modelAction.GradleModelFetchAction.withOpenTelemetry(GradleModelFetchAction.java:113)
-	at com.intellij.gradle.toolingExtension.impl.modelAction.GradleModelFetchAction.lambda$execute$3(GradleModelFetchAction.java:101)
-	at com.intellij.gradle.toolingExtension.impl.util.GradleExecutorServiceUtil.withSingleThreadExecutor(GradleExecutorServiceUtil.java:18)
-	at com.intellij.gradle.toolingExtension.impl.modelAction.GradleModelFetchAction.execute(GradleModelFetchAction.java:100)
-	at com.intellij.gradle.toolingExtension.impl.modelAction.GradleModelFetchAction.execute(GradleModelFetchAction.java:36)
-	at org.gradle.tooling.internal.consumer.connection.InternalBuildActionAdapter.execute(InternalBuildActionAdapter.java:65)
-	at org.gradle.tooling.internal.provider.runner.AbstractClientProvidedBuildActionRunner$ActionAdapter.runAction(AbstractClientProvidedBuildActionRunner.java:131)
-	at org.gradle.tooling.internal.provider.runner.AbstractClientProvidedBuildActionRunner$ActionAdapter.beforeTasks(AbstractClientProvidedBuildActionRunner.java:99)
-	at org.gradle.internal.buildtree.DefaultBuildTreeModelCreator.beforeTasks(DefaultBuildTreeModelCreator.java:43)
-	at org.gradle.internal.buildtree.DefaultBuildTreeLifecycleController.lambda$fromBuildModel$2(DefaultBuildTreeLifecycleController.java:83)
-	at org.gradle.internal.buildtree.DefaultBuildTreeLifecycleController.lambda$runBuild$4(DefaultBuildTreeLifecycleController.java:120)
-	at org.gradle.internal.model.StateTransitionController.lambda$transition$6(StateTransitionController.java:169)
-	at org.gradle.internal.model.StateTransitionController.doTransition(StateTransitionController.java:266)
-	at org.gradle.internal.model.StateTransitionController.lambda$transition$7(StateTransitionController.java:169)
-	at org.gradle.internal.work.DefaultSynchronizer.withLock(DefaultSynchronizer.java:44)
-	at org.gradle.internal.model.StateTransitionController.transition(StateTransitionController.java:169)
-	at org.gradle.internal.buildtree.DefaultBuildTreeLifecycleController.runBuild(DefaultBuildTreeLifecycleController.java:117)
-	at org.gradle.internal.buildtree.DefaultBuildTreeLifecycleController.fromBuildModel(DefaultBuildTreeLifecycleController.java:82)
-	at org.gradle.tooling.internal.provider.runner.AbstractClientProvidedBuildActionRunner.runClientAction(AbstractClientProvidedBuildActionRunner.java:43)
-	at org.gradle.tooling.internal.provider.runner.ClientProvidedPhasedActionRunner.run(ClientProvidedPhasedActionRunner.java:53)
-	at org.gradle.launcher.exec.ChainingBuildActionRunner.run(ChainingBuildActionRunner.java:35)
-	at org.gradle.internal.buildtree.ProblemReportingBuildActionRunner.run(ProblemReportingBuildActionRunner.java:49)
-	at org.gradle.launcher.exec.BuildOutcomeReportingBuildActionRunner.run(BuildOutcomeReportingBuildActionRunner.java:65)
-	at org.gradle.tooling.internal.provider.FileSystemWatchingBuildActionRunner.run(FileSystemWatchingBuildActionRunner.java:140)
-	at org.gradle.launcher.exec.BuildCompletionNotifyingBuildActionRunner.run(BuildCompletionNotifyingBuildActionRunner.java:41)
-	at org.gradle.launcher.exec.RootBuildLifecycleBuildActionExecutor.lambda$execute$0(RootBuildLifecycleBuildActionExecutor.java:40)
-	at org.gradle.composite.internal.DefaultRootBuildState.run(DefaultRootBuildState.java:123)
-	at org.gradle.launcher.exec.RootBuildLifecycleBuildActionExecutor.execute(RootBuildLifecycleBuildActionExecutor.java:40)
-	at org.gradle.internal.buildtree.InitDeprecationLoggingActionExecutor.execute(InitDeprecationLoggingActionExecutor.java:66)
-	at org.gradle.internal.buildtree.InitProblems.execute(InitProblems.java:36)
-	at org.gradle.internal.buildtree.DefaultBuildTreeContext.execute(DefaultBuildTreeContext.java:40)
-	at org.gradle.launcher.exec.BuildTreeLifecycleBuildActionExecutor.lambda$execute$0(BuildTreeLifecycleBuildActionExecutor.java:71)
-	at org.gradle.internal.buildtree.BuildTreeState.run(BuildTreeState.java:60)
-	at org.gradle.launcher.exec.BuildTreeLifecycleBuildActionExecutor.execute(BuildTreeLifecycleBuildActionExecutor.java:71)
-	at org.gradle.launcher.exec.RunAsBuildOperationBuildActionExecutor$3.call(RunAsBuildOperationBuildActionExecutor.java:61)
-	at org.gradle.launcher.exec.RunAsBuildOperationBuildActionExecutor$3.call(RunAsBuildOperationBuildActionExecutor.java:57)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:200)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:195)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:157)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:53)
-	at org.gradle.internal.operations.DefaultBuildOperationExecutor.call(DefaultBuildOperationExecutor.java:73)
-	at org.gradle.launcher.exec.RunAsBuildOperationBuildActionExecutor.execute(RunAsBuildOperationBuildActionExecutor.java:57)
-	at org.gradle.launcher.exec.RunAsWorkerThreadBuildActionExecutor.lambda$execute$0(RunAsWorkerThreadBuildActionExecutor.java:36)
-	at org.gradle.internal.work.DefaultWorkerLeaseService.withLocks(DefaultWorkerLeaseService.java:264)
-	at org.gradle.internal.work.DefaultWorkerLeaseService.runAsWorkerThread(DefaultWorkerLeaseService.java:128)
-	at org.gradle.launcher.exec.RunAsWorkerThreadBuildActionExecutor.execute(RunAsWorkerThreadBuildActionExecutor.java:36)
-	at org.gradle.tooling.internal.provider.continuous.ContinuousBuildActionExecutor.execute(ContinuousBuildActionExecutor.java:110)
-	at org.gradle.tooling.internal.provider.SubscribableBuildActionExecutor.execute(SubscribableBuildActionExecutor.java:64)
-	at org.gradle.internal.session.DefaultBuildSessionContext.execute(DefaultBuildSessionContext.java:46)
-	at org.gradle.tooling.internal.provider.BuildSessionLifecycleBuildActionExecuter$ActionImpl.apply(BuildSessionLifecycleBuildActionExecuter.java:92)
-	at org.gradle.tooling.internal.provider.BuildSessionLifecycleBuildActionExecuter$ActionImpl.apply(BuildSessionLifecycleBuildActionExecuter.java:80)
-	at org.gradle.internal.session.BuildSessionState.run(BuildSessionState.java:71)
-	at org.gradle.tooling.internal.provider.BuildSessionLifecycleBuildActionExecuter.execute(BuildSessionLifecycleBuildActionExecuter.java:62)
-	at org.gradle.tooling.internal.provider.BuildSessionLifecycleBuildActionExecuter.execute(BuildSessionLifecycleBuildActionExecuter.java:41)
-	at org.gradle.tooling.internal.provider.StartParamsValidatingActionExecuter.execute(StartParamsValidatingActionExecuter.java:64)
-	at org.gradle.tooling.internal.provider.StartParamsValidatingActionExecuter.execute(StartParamsValidatingActionExecuter.java:32)
-	at org.gradle.tooling.internal.provider.SessionFailureReportingActionExecuter.execute(SessionFailureReportingActionExecuter.java:51)
-	at org.gradle.tooling.internal.provider.SessionFailureReportingActionExecuter.execute(SessionFailureReportingActionExecuter.java:39)
-	at org.gradle.tooling.internal.provider.SetupLoggingActionExecuter.execute(SetupLoggingActionExecuter.java:47)
-	at org.gradle.tooling.internal.provider.SetupLoggingActionExecuter.execute(SetupLoggingActionExecuter.java:31)
-	at org.gradle.launcher.daemon.server.exec.ExecuteBuild.doBuild(ExecuteBuild.java:65)
-	at org.gradle.launcher.daemon.server.exec.BuildCommandOnly.execute(BuildCommandOnly.java:37)
-	at org.gradle.launcher.daemon.server.api.DaemonCommandExecution.proceed(DaemonCommandExecution.java:104)
-	at org.gradle.launcher.daemon.server.exec.WatchForDisconnection.execute(WatchForDisconnection.java:39)
-	at org.gradle.launcher.daemon.server.api.DaemonCommandExecution.proceed(DaemonCommandExecution.java:104)
-	at org.gradle.launcher.daemon.server.exec.ResetDeprecationLogger.execute(ResetDeprecationLogger.java:29)
-	at org.gradle.launcher.daemon.server.api.DaemonCommandExecution.proceed(DaemonCommandExecution.java:104)
-	at org.gradle.launcher.daemon.server.exec.RequestStopIfSingleUsedDaemon.execute(RequestStopIfSingleUsedDaemon.java:35)
-	at org.gradle.launcher.daemon.server.api.DaemonCommandExecution.proceed(DaemonCommandExecution.java:104)
-	at org.gradle.launcher.daemon.server.exec.ForwardClientInput$2.create(ForwardClientInput.java:78)
-	at org.gradle.launcher.daemon.server.exec.ForwardClientInput$2.create(ForwardClientInput.java:75)
-	at org.gradle.util.internal.Swapper.swap(Swapper.java:38)
-	at org.gradle.launcher.daemon.server.exec.ForwardClientInput.execute(ForwardClientInput.java:75)
-	at org.gradle.launcher.daemon.server.api.DaemonCommandExecution.proceed(DaemonCommandExecution.java:104)
-	at org.gradle.launcher.daemon.server.exec.LogAndCheckHealth.execute(LogAndCheckHealth.java:64)
-	at org.gradle.launcher.daemon.server.api.DaemonCommandExecution.proceed(DaemonCommandExecution.java:104)
-	at org.gradle.launcher.daemon.server.exec.LogToClient.doBuild(LogToClient.java:63)
-	at org.gradle.launcher.daemon.server.exec.BuildCommandOnly.execute(BuildCommandOnly.java:37)
-	at org.gradle.launcher.daemon.server.api.DaemonCommandExecution.proceed(DaemonCommandExecution.java:104)
-	at org.gradle.launcher.daemon.server.exec.EstablishBuildEnvironment.doBuild(EstablishBuildEnvironment.java:84)
-	at org.gradle.launcher.daemon.server.exec.BuildCommandOnly.execute(BuildCommandOnly.java:37)
-	at org.gradle.launcher.daemon.server.api.DaemonCommandExecution.proceed(DaemonCommandExecution.java:104)
-	at org.gradle.launcher.daemon.server.exec.StartBuildOrRespondWithBusy$1.run(StartBuildOrRespondWithBusy.java:52)
-	at org.gradle.launcher.daemon.server.DaemonStateCoordinator$1.run(DaemonStateCoordinator.java:297)
-	at org.gradle.internal.concurrent.ExecutorPolicy$CatchAndRecordFailures.onExecute(ExecutorPolicy.java:64)
-	at org.gradle.internal.concurrent.AbstractManagedExecutor$1.run(AbstractManagedExecutor.java:47)
-Caused by: org.gradle.api.GradleException: Variant 'debug': Chaquopy requires ndk.abiFilters: you may want to add it to android.defaultConfig.
-	at com.chaquo.python.PythonPlugin.getAbis(PythonPlugin.kt:247)
-	at com.chaquo.python.PythonPlugin.afterVariant(PythonPlugin.kt:228)
-	at com.chaquo.python.PythonPlugin$apply$2$3.execute(PythonPlugin.kt:83)
-	at com.chaquo.python.PythonPlugin$apply$2$3.execute(PythonPlugin.kt:19)
-	at org.gradle.internal.code.DefaultUserCodeApplicationContext$CurrentApplication$1.execute(DefaultUserCodeApplicationContext.java:122)
-	at org.gradle.configuration.internal.DefaultListenerBuildOperationDecorator$BuildOperationEmittingAction$1.run(DefaultListenerBuildOperationDecorator.java:173)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$1.execute(DefaultBuildOperationRunner.java:29)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$1.execute(DefaultBuildOperationRunner.java:26)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:157)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.run(DefaultBuildOperationRunner.java:47)
-	at org.gradle.internal.operations.DefaultBuildOperationExecutor.run(DefaultBuildOperationExecutor.java:68)
-	at org.gradle.configuration.internal.DefaultListenerBuildOperationDecorator$BuildOperationEmittingAction.execute(DefaultListenerBuildOperationDecorator.java:170)
-	at org.gradle.internal.event.BroadcastDispatch$ActionInvocationHandler.dispatch(BroadcastDispatch.java:99)
-	at org.gradle.internal.event.BroadcastDispatch$ActionInvocationHandler.dispatch(BroadcastDispatch.java:87)
-	at org.gradle.internal.event.AbstractBroadcastDispatch.dispatch(AbstractBroadcastDispatch.java:43)
-	at org.gradle.internal.event.BroadcastDispatch$SingletonDispatch.dispatch(BroadcastDispatch.java:268)
-	at org.gradle.internal.event.BroadcastDispatch$SingletonDispatch.dispatch(BroadcastDispatch.java:170)
-	at org.gradle.internal.event.AbstractBroadcastDispatch.dispatch(AbstractBroadcastDispatch.java:83)
-	at org.gradle.internal.event.AbstractBroadcastDispatch.dispatch(AbstractBroadcastDispatch.java:69)
-	at org.gradle.internal.event.BroadcastDispatch$CompositeDispatch.dispatch(BroadcastDispatch.java:381)
-	at org.gradle.internal.event.BroadcastDispatch$CompositeDispatch.dispatch(BroadcastDispatch.java:272)
-	at org.gradle.internal.event.ListenerBroadcast.dispatch(ListenerBroadcast.java:148)
-	at org.gradle.internal.event.ListenerBroadcast.dispatch(ListenerBroadcast.java:37)
-	at org.gradle.internal.dispatch.ProxyDispatchAdapter$DispatchingInvocationHandler.invoke(ProxyDispatchAdapter.java:94)
-	at jdk.proxy1/jdk.proxy1.$Proxy64.afterEvaluate(Unknown Source)
-	at org.gradle.configuration.project.LifecycleProjectEvaluator$NotifyAfterEvaluate$1.execute(LifecycleProjectEvaluator.java:247)
-	at org.gradle.configuration.project.LifecycleProjectEvaluator$NotifyAfterEvaluate$1.execute(LifecycleProjectEvaluator.java:244)
-	at org.gradle.api.internal.project.DefaultProject.stepEvaluationListener(DefaultProject.java:1492)
-	at org.gradle.configuration.project.LifecycleProjectEvaluator$NotifyAfterEvaluate.run(LifecycleProjectEvaluator.java:253)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$1.execute(DefaultBuildOperationRunner.java:29)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$1.execute(DefaultBuildOperationRunner.java:26)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:157)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.run(DefaultBuildOperationRunner.java:47)
-	at org.gradle.internal.operations.DefaultBuildOperationExecutor.run(DefaultBuildOperationExecutor.java:68)
-	at org.gradle.configuration.project.LifecycleProjectEvaluator$EvaluateProject.lambda$run$0(LifecycleProjectEvaluator.java:114)
-	at org.gradle.api.internal.project.DefaultProjectStateRegistry$ProjectStateImpl.lambda$applyToMutableState$1(DefaultProjectStateRegistry.java:407)
-	at org.gradle.api.internal.project.DefaultProjectStateRegistry$ProjectStateImpl.lambda$fromMutableState$2(DefaultProjectStateRegistry.java:430)
-	at org.gradle.internal.work.DefaultWorkerLeaseService.withReplacedLocks(DefaultWorkerLeaseService.java:360)
-	at org.gradle.api.internal.project.DefaultProjectStateRegistry$ProjectStateImpl.fromMutableState(DefaultProjectStateRegistry.java:430)
-	at org.gradle.api.internal.project.DefaultProjectStateRegistry$ProjectStateImpl.applyToMutableState(DefaultProjectStateRegistry.java:406)
-	at org.gradle.configuration.project.LifecycleProjectEvaluator$EvaluateProject.run(LifecycleProjectEvaluator.java:100)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$1.execute(DefaultBuildOperationRunner.java:29)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$1.execute(DefaultBuildOperationRunner.java:26)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:157)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.run(DefaultBuildOperationRunner.java:47)
-	at org.gradle.internal.operations.DefaultBuildOperationExecutor.run(DefaultBuildOperationExecutor.java:68)
-	at org.gradle.configuration.project.LifecycleProjectEvaluator.evaluate(LifecycleProjectEvaluator.java:72)
-	at org.gradle.api.internal.project.DefaultProject.evaluate(DefaultProject.java:785)
-	at org.gradle.api.internal.project.DefaultProject.evaluate(DefaultProject.java:155)
-	at org.gradle.api.internal.project.ProjectLifecycleController.lambda$ensureSelfConfigured$2(ProjectLifecycleController.java:84)
-	at org.gradle.internal.model.StateTransitionController.lambda$doTransition$14(StateTransitionController.java:255)
-	at org.gradle.internal.model.StateTransitionController.doTransition(StateTransitionController.java:266)
-	at org.gradle.internal.model.StateTransitionController.doTransition(StateTransitionController.java:254)
-	at org.gradle.internal.model.StateTransitionController.lambda$maybeTransitionIfNotCurrentlyTransitioning$10(StateTransitionController.java:199)
-	at org.gradle.internal.work.DefaultSynchronizer.withLock(DefaultSynchronizer.java:34)
-	at org.gradle.internal.model.StateTransitionController.maybeTransitionIfNotCurrentlyTransitioning(StateTransitionController.java:195)
-	at org.gradle.api.internal.project.ProjectLifecycleController.ensureSelfConfigured(ProjectLifecycleController.java:84)
-	at org.gradle.api.internal.project.DefaultProjectStateRegistry$ProjectStateImpl.ensureConfigured(DefaultProjectStateRegistry.java:381)
-	at org.gradle.execution.TaskPathProjectEvaluator.configure(TaskPathProjectEvaluator.java:34)
-	at org.gradle.execution.TaskPathProjectEvaluator.configureHierarchy(TaskPathProjectEvaluator.java:50)
-	at org.gradle.configuration.DefaultProjectsPreparer.prepareProjects(DefaultProjectsPreparer.java:42)
-	at org.gradle.configuration.BuildTreePreparingProjectsPreparer.prepareProjects(BuildTreePreparingProjectsPreparer.java:65)
-	at org.gradle.configuration.BuildOperationFiringProjectsPreparer$ConfigureBuild.run(BuildOperationFiringProjectsPreparer.java:52)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$1.execute(DefaultBuildOperationRunner.java:29)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$1.execute(DefaultBuildOperationRunner.java:26)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:157)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.run(DefaultBuildOperationRunner.java:47)
-	at org.gradle.internal.operations.DefaultBuildOperationExecutor.run(DefaultBuildOperationExecutor.java:68)
-	at org.gradle.configuration.BuildOperationFiringProjectsPreparer.prepareProjects(BuildOperationFiringProjectsPreparer.java:40)
-	at org.gradle.initialization.VintageBuildModelController.lambda$prepareProjects$2(VintageBuildModelController.java:84)
-	at org.gradle.internal.model.StateTransitionController.lambda$doTransition$14(StateTransitionController.java:255)
-	at org.gradle.internal.model.StateTransitionController.doTransition(StateTransitionController.java:266)
-	at org.gradle.internal.model.StateTransitionController.doTransition(StateTransitionController.java:254)
-	at org.gradle.internal.model.StateTransitionController.lambda$transitionIfNotPreviously$11(StateTransitionController.java:213)
-	at org.gradle.internal.work.DefaultSynchronizer.withLock(DefaultSynchronizer.java:34)
-	at org.gradle.internal.model.StateTransitionController.transitionIfNotPreviously(StateTransitionController.java:209)
-	at org.gradle.initialization.VintageBuildModelController.prepareProjects(VintageBuildModelController.java:84)
-	at org.gradle.initialization.VintageBuildModelController.getConfiguredModel(VintageBuildModelController.java:64)
-	at org.gradle.internal.build.DefaultBuildLifecycleController.lambda$withProjectsConfigured$1(DefaultBuildLifecycleController.java:133)
-	at org.gradle.internal.model.StateTransitionController.lambda$notInState$3(StateTransitionController.java:132)
-	at org.gradle.internal.work.DefaultSynchronizer.withLock(DefaultSynchronizer.java:44)
-	at org.gradle.internal.model.StateTransitionController.notInState(StateTransitionController.java:128)
-	at org.gradle.internal.build.DefaultBuildLifecycleController.withProjectsConfigured(DefaultBuildLifecycleController.java:133)
-	at org.gradle.internal.build.DefaultBuildToolingModelController.locateBuilderForTarget(DefaultBuildToolingModelController.java:58)
-	at org.gradle.internal.buildtree.DefaultBuildTreeModelCreator$DefaultBuildTreeModelController.lambda$locateBuilderForTarget$0(DefaultBuildTreeModelCreator.java:64)
-	at org.gradle.internal.build.DefaultBuildLifecycleController.withToolingModels(DefaultBuildLifecycleController.java:327)
-	at org.gradle.internal.build.AbstractBuildState.withToolingModels(AbstractBuildState.java:146)
-	at org.gradle.internal.buildtree.DefaultBuildTreeModelCreator$DefaultBuildTreeModelController.locateBuilderForTarget(DefaultBuildTreeModelCreator.java:64)
-	at org.gradle.internal.buildtree.DefaultBuildTreeModelCreator$DefaultBuildTreeModelController.locateBuilderForDefaultTarget(DefaultBuildTreeModelCreator.java:59)
-	at org.gradle.tooling.internal.provider.runner.DefaultBuildController.getTarget(DefaultBuildController.java:136)
-	at org.gradle.tooling.internal.provider.runner.DefaultBuildController.getModel(DefaultBuildController.java:107)
-	at org.gradle.tooling.internal.consumer.connection.ParameterAwareBuildControllerAdapter.getModel(ParameterAwareBuildControllerAdapter.java:40)
-	at org.gradle.tooling.internal.consumer.connection.UnparameterizedBuildController.getModel(UnparameterizedBuildController.java:116)
-	at org.gradle.tooling.internal.consumer.connection.NestedActionAwareBuildControllerAdapter.getModel(NestedActionAwareBuildControllerAdapter.java:32)
-	at org.gradle.tooling.internal.consumer.connection.UnparameterizedBuildController.getModel(UnparameterizedBuildController.java:79)
-	at org.gradle.tooling.internal.consumer.connection.NestedActionAwareBuildControllerAdapter.getModel(NestedActionAwareBuildControllerAdapter.java:32)
-	at org.gradle.tooling.internal.consumer.connection.UnparameterizedBuildController.getModel(UnparameterizedBuildController.java:64)
-	at org.gradle.tooling.internal.consumer.connection.NestedActionAwareBuildControllerAdapter.getModel(NestedActionAwareBuildControllerAdapter.java:32)
-	at com.intellij.gradle.toolingExtension.impl.modelAction.GradleModelFetchAction.lambda$initAction$6(GradleModelFetchAction.java:184)
-	at com.intellij.gradle.toolingExtension.impl.telemetry.GradleOpenTelemetry.callWithSpan(GradleOpenTelemetry.java:73)
-	at com.intellij.gradle.toolingExtension.impl.telemetry.GradleOpenTelemetry.callWithSpan(GradleOpenTelemetry.java:61)
-	at com.intellij.gradle.toolingExtension.impl.modelAction.GradleModelFetchAction.initAction(GradleModelFetchAction.java:183)
-	at com.intellij.gradle.toolingExtension.impl.modelAction.GradleModelFetchAction.doExecute(GradleModelFetchAction.java:138)
-	at com.intellij.gradle.toolingExtension.impl.modelAction.GradleModelFetchAction.lambda$execute$1(GradleModelFetchAction.java:103)
-	at com.intellij.gradle.toolingExtension.impl.telemetry.GradleOpenTelemetry.callWithSpan(GradleOpenTelemetry.java:73)
-	at com.intellij.gradle.toolingExtension.impl.telemetry.GradleOpenTelemetry.callWithSpan(GradleOpenTelemetry.java:61)
-	at com.intellij.gradle.toolingExtension.impl.modelAction.GradleModelFetchAction.lambda$execute$2(GradleModelFetchAction.java:102)
-	at com.intellij.gradle.toolingExtension.impl.modelAction.GradleModelFetchAction.withOpenTelemetry(GradleModelFetchAction.java:113)
-	at com.intellij.gradle.toolingExtension.impl.modelAction.GradleModelFetchAction.lambda$execute$3(GradleModelFetchAction.java:101)
-	at com.intellij.gradle.toolingExtension.impl.util.GradleExecutorServiceUtil.withSingleThreadExecutor(GradleExecutorServiceUtil.java:18)
-	at com.intellij.gradle.toolingExtension.impl.modelAction.GradleModelFetchAction.execute(GradleModelFetchAction.java:100)
-	at com.intellij.gradle.toolingExtension.impl.modelAction.GradleModelFetchAction.execute(GradleModelFetchAction.java:36)
-	at org.gradle.tooling.internal.consumer.connection.InternalBuildActionAdapter.execute(InternalBuildActionAdapter.java:65)
-	at org.gradle.tooling.internal.provider.runner.AbstractClientProvidedBuildActionRunner$ActionAdapter.runAction(AbstractClientProvidedBuildActionRunner.java:131)
-	at org.gradle.tooling.internal.provider.runner.AbstractClientProvidedBuildActionRunner$ActionAdapter.beforeTasks(AbstractClientProvidedBuildActionRunner.java:99)
-	at org.gradle.internal.buildtree.DefaultBuildTreeModelCreator.beforeTasks(DefaultBuildTreeModelCreator.java:43)
-	at org.gradle.internal.buildtree.DefaultBuildTreeLifecycleController.lambda$fromBuildModel$2(DefaultBuildTreeLifecycleController.java:83)
-	at org.gradle.internal.buildtree.DefaultBuildTreeLifecycleController.lambda$runBuild$4(DefaultBuildTreeLifecycleController.java:120)
-	at org.gradle.internal.model.StateTransitionController.lambda$transition$6(StateTransitionController.java:169)
-	at org.gradle.internal.model.StateTransitionController.doTransition(StateTransitionController.java:266)
-	at org.gradle.internal.model.StateTransitionController.lambda$transition$7(StateTransitionController.java:169)
-	at org.gradle.internal.work.DefaultSynchronizer.withLock(DefaultSynchronizer.java:44)
-	at org.gradle.internal.model.StateTransitionController.transition(StateTransitionController.java:169)
-	at org.gradle.internal.buildtree.DefaultBuildTreeLifecycleController.runBuild(DefaultBuildTreeLifecycleController.java:117)
-	at org.gradle.internal.buildtree.DefaultBuildTreeLifecycleController.fromBuildModel(DefaultBuildTreeLifecycleController.java:82)
-	at org.gradle.tooling.internal.provider.runner.AbstractClientProvidedBuildActionRunner.runClientAction(AbstractClientProvidedBuildActionRunner.java:43)
-	at org.gradle.tooling.internal.provider.runner.ClientProvidedPhasedActionRunner.run(ClientProvidedPhasedActionRunner.java:53)
-	at org.gradle.launcher.exec.ChainingBuildActionRunner.run(ChainingBuildActionRunner.java:35)
-	at org.gradle.internal.buildtree.ProblemReportingBuildActionRunner.run(ProblemReportingBuildActionRunner.java:49)
-	at org.gradle.launcher.exec.BuildOutcomeReportingBuildActionRunner.run(BuildOutcomeReportingBuildActionRunner.java:65)
-	at org.gradle.tooling.internal.provider.FileSystemWatchingBuildActionRunner.run(FileSystemWatchingBuildActionRunner.java:140)
-	at org.gradle.launcher.exec.BuildCompletionNotifyingBuildActionRunner.run(BuildCompletionNotifyingBuildActionRunner.java:41)
-	at org.gradle.launcher.exec.RootBuildLifecycleBuildActionExecutor.lambda$execute$0(RootBuildLifecycleBuildActionExecutor.java:40)
-	at org.gradle.composite.internal.DefaultRootBuildState.run(DefaultRootBuildState.java:123)
-	at org.gradle.launcher.exec.RootBuildLifecycleBuildActionExecutor.execute(RootBuildLifecycleBuildActionExecutor.java:40)
-	at org.gradle.internal.buildtree.InitDeprecationLoggingActionExecutor.execute(InitDeprecationLoggingActionExecutor.java:66)
-	at org.gradle.internal.buildtree.InitProblems.execute(InitProblems.java:36)
-	at org.gradle.internal.buildtree.DefaultBuildTreeContext.execute(DefaultBuildTreeContext.java:40)
-	at org.gradle.launcher.exec.BuildTreeLifecycleBuildActionExecutor.lambda$execute$0(BuildTreeLifecycleBuildActionExecutor.java:71)
-	at org.gradle.internal.buildtree.BuildTreeState.run(BuildTreeState.java:60)
-	at org.gradle.launcher.exec.BuildTreeLifecycleBuildActionExecutor.execute(BuildTreeLifecycleBuildActionExecutor.java:71)
-	at org.gradle.launcher.exec.RunAsBuildOperationBuildActionExecutor$3.call(RunAsBuildOperationBuildActionExecutor.java:61)
-	at org.gradle.launcher.exec.RunAsBuildOperationBuildActionExecutor$3.call(RunAsBuildOperationBuildActionExecutor.java:57)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:200)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:195)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:157)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:53)
-	at org.gradle.internal.operations.DefaultBuildOperationExecutor.call(DefaultBuildOperationExecutor.java:73)
-	at org.gradle.launcher.exec.RunAsBuildOperationBuildActionExecutor.execute(RunAsBuildOperationBuildActionExecutor.java:57)
-	at org.gradle.launcher.exec.RunAsWorkerThreadBuildActionExecutor.lambda$execute$0(RunAsWorkerThreadBuildActionExecutor.java:36)
-	at org.gradle.internal.work.DefaultWorkerLeaseService.withLocks(DefaultWorkerLeaseService.java:264)
-	at org.gradle.internal.work.DefaultWorkerLeaseService.runAsWorkerThread(DefaultWorkerLeaseService.java:128)
-	at org.gradle.launcher.exec.RunAsWorkerThreadBuildActionExecutor.execute(RunAsWorkerThreadBuildActionExecutor.java:36)
-	at org.gradle.tooling.internal.provider.continuous.ContinuousBuildActionExecutor.execute(ContinuousBuildActionExecutor.java:110)
-	at org.gradle.tooling.internal.provider.SubscribableBuildActionExecutor.execute(SubscribableBuildActionExecutor.java:64)
-	at org.gradle.internal.session.DefaultBuildSessionContext.execute(DefaultBuildSessionContext.java:46)
-	at org.gradle.tooling.internal.provider.BuildSessionLifecycleBuildActionExecuter$ActionImpl.apply(BuildSessionLifecycleBuildActionExecuter.java:92)
-	at org.gradle.tooling.internal.provider.BuildSessionLifecycleBuildActionExecuter$ActionImpl.apply(BuildSessionLifecycleBuildActionExecuter.java:80)
-	at org.gradle.internal.session.BuildSessionState.run(BuildSessionState.java:71)
-	at org.gradle.tooling.internal.provider.BuildSessionLifecycleBuildActionExecuter.execute(BuildSessionLifecycleBuildActionExecuter.java:62)
-	at org.gradle.tooling.internal.provider.BuildSessionLifecycleBuildActionExecuter.execute(BuildSessionLifecycleBuildActionExecuter.java:41)
-	at org.gradle.tooling.internal.provider.StartParamsValidatingActionExecuter.execute(StartParamsValidatingActionExecuter.java:64)
-	at org.gradle.tooling.internal.provider.StartParamsValidatingActionExecuter.execute(StartParamsValidatingActionExecuter.java:32)
-	at org.gradle.tooling.internal.provider.SessionFailureReportingActionExecuter.execute(SessionFailureReportingActionExecuter.java:51)
-	at org.gradle.tooling.internal.provider.SessionFailureReportingActionExecuter.execute(SessionFailureReportingActionExecuter.java:39)
-	at org.gradle.tooling.internal.provider.SetupLoggingActionExecuter.execute(SetupLoggingActionExecuter.java:47)
-	at org.gradle.tooling.internal.provider.SetupLoggingActionExecuter.execute(SetupLoggingActionExecuter.java:31)
-	at org.gradle.launcher.daemon.server.exec.ExecuteBuild.doBuild(ExecuteBuild.java:65)
-	at org.gradle.launcher.daemon.server.exec.BuildCommandOnly.execute(BuildCommandOnly.java:37)
-	at org.gradle.launcher.daemon.server.api.DaemonCommandExecution.proceed(DaemonCommandExecution.java:104)
-	at org.gradle.launcher.daemon.server.exec.WatchForDisconnection.execute(WatchForDisconnection.java:39)
-	at org.gradle.launcher.daemon.server.api.DaemonCommandExecution.proceed(DaemonCommandExecution.java:104)
-	at org.gradle.launcher.daemon.server.exec.ResetDeprecationLogger.execute(ResetDeprecationLogger.java:29)
-	at org.gradle.launcher.daemon.server.api.DaemonCommandExecution.proceed(DaemonCommandExecution.java:104)
-	at org.gradle.launcher.daemon.server.exec.RequestStopIfSingleUsedDaemon.execute(RequestStopIfSingleUsedDaemon.java:35)
-	at org.gradle.launcher.daemon.server.api.DaemonCommandExecution.proceed(DaemonCommandExecution.java:104)
-	at org.gradle.launcher.daemon.server.exec.ForwardClientInput$2.create(ForwardClientInput.java:78)
-	at org.gradle.launcher.daemon.server.exec.ForwardClientInput$2.create(ForwardClientInput.java:75)
-	at org.gradle.util.internal.Swapper.swap(Swapper.java:38)
-	at org.gradle.launcher.daemon.server.exec.ForwardClientInput.execute(ForwardClientInput.java:75)
-	at org.gradle.launcher.daemon.server.api.DaemonCommandExecution.proceed(DaemonCommandExecution.java:104)
-	at org.gradle.launcher.daemon.server.exec.LogAndCheckHealth.execute(LogAndCheckHealth.java:64)
-	at org.gradle.launcher.daemon.server.api.DaemonCommandExecution.proceed(DaemonCommandExecution.java:104)
-	at org.gradle.launcher.daemon.server.exec.LogToClient.doBuild(LogToClient.java:63)
-	at org.gradle.launcher.daemon.server.exec.BuildCommandOnly.execute(BuildCommandOnly.java:37)
-	at org.gradle.launcher.daemon.server.api.DaemonCommandExecution.proceed(DaemonCommandExecution.java:104)
-	at org.gradle.launcher.daemon.server.exec.EstablishBuildEnvironment.doBuild(EstablishBuildEnvironment.java:84)
-	at org.gradle.launcher.daemon.server.exec.BuildCommandOnly.execute(BuildCommandOnly.java:37)
-	at org.gradle.launcher.daemon.server.api.DaemonCommandExecution.proceed(DaemonCommandExecution.java:104)
-	at org.gradle.launcher.daemon.server.exec.StartBuildOrRespondWithBusy$1.run(StartBuildOrRespondWithBusy.java:52)
-	at org.gradle.launcher.daemon.server.DaemonStateCoordinator$1.run(DaemonStateCoordinator.java:297)
-	at org.gradle.internal.concurrent.ExecutorPolicy$CatchAndRecordFailures.onExecute(ExecutorPolicy.java:64)
-	at org.gradle.internal.concurrent.AbstractManagedExecutor$1.run(AbstractManagedExecutor.java:47)
+> Configure project :
+[OneTV-Build] 配置构建顺序：VOD -> TV
+已加载签名配置文件: key.properties
 
+> Configure project :mobile
+使用key.properties中的签名配置: D:\apk\OneTV_Movie_Supabase\OneTV_Supabase_Key\OneTV_Supabase.jks
+
+> Configure project :tv
+[OneTV-Build] TV模块构建开始
+[OneTV-Build] TV模块类型: android.application
+[OneTV-Build] TV模块名称: tv
+[OneTV-Build] TV模块路径: :tv
+[OneTV-Build] TV是否为根项目: false
+使用key.properties中的签名配置: D:\apk\OneTV_Movie_Supabase\OneTV_Supabase_Key\OneTV_Supabase.jks
+[OneTV-Build] TV Android配置:
+[OneTV-Build]   namespace: top.cywin.onetv.tv
+[OneTV-Build]   compileSdk: 35
+[OneTV-Build]   插件类型: com.android.application
+[OneTV-Build] TV defaultConfig:
+[OneTV-Build]   applicationId: top.cywin.onetv.tv
+[OneTV-Build]   这是主应用配置!
+
+> Configure project :vod
+[OneTV-Build] VOD模块构建开始
+[OneTV-Build] VOD模块类型: android.library
+[OneTV-Build] VOD模块名称: vod
+[OneTV-Build] VOD模块路径: :vod
+[OneTV-Build] VOD是否为根项目: false
+[OneTV-Build] VOD Android配置:
+[OneTV-Build]   namespace: top.cywin.onetv.vod
+[OneTV-Build]   compileSdk: 35
+[OneTV-Build]   插件类型: com.android.library
+
+> Configure project :core:data
+从local.properties获取 BOOTSTRAP_URL: https://sj...
+从local.properties获取 BOOTSTRAP_KEY: eyJhbGciOi...
+从local.properties获取 BOOTSTRAP_URL: https://sj...
+从local.properties获取 BOOTSTRAP_KEY: eyJhbGciOi...
+从local.properties获取 BOOTSTRAP_URL: https://sj...
+从local.properties获取 BOOTSTRAP_KEY: eyJhbGciOi...
+[OneTV-Build] TV构建任务依赖VOD构建任务: assembleDebug
+
+> Task :tv:preBuild UP-TO-DATE
+> Task :tv:preDebugBuild UP-TO-DATE
+> Task :tv:mergeDebugNativeDebugMetadata NO-SOURCE
+> Task :tv:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :vod:preBuild UP-TO-DATE
+> Task :vod:preLeanbackJavaArm64_v8aDebugBuild UP-TO-DATE
+> Task :vod:writeLeanbackJavaArm64_v8aDebugAarMetadata UP-TO-DATE
+> Task :core:data:preBuild UP-TO-DATE
+> Task :core:data:preDebugBuild UP-TO-DATE
+> Task :core:data:writeDebugAarMetadata UP-TO-DATE
+> Task :core:designsystem:preBuild UP-TO-DATE
+> Task :core:designsystem:preDebugBuild UP-TO-DATE
+> Task :core:designsystem:writeDebugAarMetadata UP-TO-DATE
+> Task :core:util:preBuild UP-TO-DATE
+> Task :core:util:preDebugBuild UP-TO-DATE
+> Task :core:util:writeDebugAarMetadata UP-TO-DATE
+> Task :vod:catvod:preBuild UP-TO-DATE
+> Task :vod:catvod:preDebugBuild UP-TO-DATE
+> Task :vod:catvod:writeDebugAarMetadata UP-TO-DATE
+> Task :vod:chaquo:preBuild UP-TO-DATE
+> Task :vod:chaquo:preDebugBuild UP-TO-DATE
+> Task :vod:chaquo:writeDebugAarMetadata UP-TO-DATE
+> Task :vod:forcetech:preBuild UP-TO-DATE
+> Task :vod:forcetech:preDebugBuild UP-TO-DATE
+> Task :vod:forcetech:writeDebugAarMetadata UP-TO-DATE
+> Task :vod:hook:preBuild UP-TO-DATE
+> Task :vod:hook:preDebugBuild UP-TO-DATE
+> Task :vod:hook:writeDebugAarMetadata UP-TO-DATE
+> Task :vod:jianpian:preBuild UP-TO-DATE
+> Task :vod:jianpian:preDebugBuild UP-TO-DATE
+> Task :vod:jianpian:writeDebugAarMetadata UP-TO-DATE
+> Task :vod:quickjs:preBuild UP-TO-DATE
+> Task :vod:quickjs:preDebugBuild UP-TO-DATE
+> Task :vod:quickjs:writeDebugAarMetadata UP-TO-DATE
+> Task :vod:thunder:preBuild UP-TO-DATE
+> Task :vod:thunder:preDebugBuild UP-TO-DATE
+> Task :vod:thunder:writeDebugAarMetadata UP-TO-DATE
+> Task :vod:tvbus:preBuild UP-TO-DATE
+> Task :vod:tvbus:preDebugBuild UP-TO-DATE
+> Task :vod:tvbus:writeDebugAarMetadata UP-TO-DATE
+> Task :tv:checkDebugAarMetadata UP-TO-DATE
+> Task :tv:generateDebugResValues UP-TO-DATE
+> Task :vod:generateLeanbackJavaArm64_v8aDebugResValues UP-TO-DATE
+> Task :vod:generateLeanbackJavaArm64_v8aDebugResources UP-TO-DATE
+> Task :vod:packageLeanbackJavaArm64_v8aDebugResources UP-TO-DATE
+> Task :core:data:generateDebugResValues UP-TO-DATE
+> Task :core:data:generateDebugResources UP-TO-DATE
+> Task :core:data:packageDebugResources UP-TO-DATE
+> Task :core:designsystem:generateDebugResValues UP-TO-DATE
+> Task :core:designsystem:generateDebugResources UP-TO-DATE
+> Task :core:designsystem:packageDebugResources UP-TO-DATE
+> Task :core:util:generateDebugResValues UP-TO-DATE
+> Task :core:util:generateDebugResources UP-TO-DATE
+> Task :core:util:packageDebugResources UP-TO-DATE
+> Task :vod:catvod:generateDebugResValues UP-TO-DATE
+> Task :vod:catvod:generateDebugResources UP-TO-DATE
+> Task :vod:catvod:packageDebugResources UP-TO-DATE
+> Task :vod:chaquo:generateDebugResValues UP-TO-DATE
+> Task :vod:chaquo:generateDebugResources UP-TO-DATE
+> Task :vod:chaquo:packageDebugResources UP-TO-DATE
+> Task :vod:forcetech:generateDebugResValues UP-TO-DATE
+> Task :vod:forcetech:generateDebugResources UP-TO-DATE
+> Task :vod:forcetech:packageDebugResources UP-TO-DATE
+> Task :vod:hook:generateDebugResValues UP-TO-DATE
+> Task :vod:hook:generateDebugResources UP-TO-DATE
+> Task :vod:hook:packageDebugResources UP-TO-DATE
+> Task :vod:jianpian:generateDebugResValues UP-TO-DATE
+> Task :vod:jianpian:generateDebugResources UP-TO-DATE
+> Task :vod:jianpian:packageDebugResources UP-TO-DATE
+> Task :vod:quickjs:generateDebugResValues UP-TO-DATE
+> Task :vod:quickjs:generateDebugResources UP-TO-DATE
+> Task :vod:quickjs:packageDebugResources UP-TO-DATE
+> Task :vod:thunder:generateDebugResValues UP-TO-DATE
+> Task :vod:thunder:generateDebugResources UP-TO-DATE
+> Task :vod:thunder:packageDebugResources UP-TO-DATE
+> Task :vod:tvbus:generateDebugResValues UP-TO-DATE
+> Task :vod:tvbus:generateDebugResources UP-TO-DATE
+> Task :vod:tvbus:packageDebugResources UP-TO-DATE
+> Task :tv:mapDebugSourceSetPaths UP-TO-DATE
+> Task :tv:generateDebugResources UP-TO-DATE
+> Task :tv:mergeDebugResources UP-TO-DATE
+> Task :tv:packageDebugResources UP-TO-DATE
+> Task :tv:parseDebugLocalResources UP-TO-DATE
+> Task :tv:createDebugCompatibleScreenManifests UP-TO-DATE
+> Task :tv:extractDeepLinksDebug UP-TO-DATE
+> Task :vod:extractDeepLinksLeanbackJavaArm64_v8aDebug UP-TO-DATE
+> Task :vod:processLeanbackJavaArm64_v8aDebugManifest UP-TO-DATE
+> Task :core:data:extractDeepLinksDebug UP-TO-DATE
+> Task :core:data:processDebugManifest UP-TO-DATE
+> Task :core:designsystem:extractDeepLinksDebug UP-TO-DATE
+> Task :core:designsystem:processDebugManifest UP-TO-DATE
+> Task :core:util:extractDeepLinksDebug UP-TO-DATE
+> Task :core:util:processDebugManifest UP-TO-DATE
+> Task :vod:catvod:extractDeepLinksDebug UP-TO-DATE
+> Task :vod:catvod:processDebugManifest UP-TO-DATE
+> Task :vod:chaquo:extractDeepLinksDebug UP-TO-DATE
+> Task :vod:chaquo:processDebugManifest UP-TO-DATE
+> Task :vod:forcetech:extractDeepLinksDebug UP-TO-DATE
+> Task :vod:forcetech:processDebugManifest UP-TO-DATE
+> Task :vod:hook:extractDeepLinksDebug UP-TO-DATE
+> Task :vod:hook:processDebugManifest UP-TO-DATE
+> Task :vod:jianpian:extractDeepLinksDebug UP-TO-DATE
+> Task :vod:jianpian:processDebugManifest UP-TO-DATE
+> Task :vod:quickjs:extractDeepLinksDebug UP-TO-DATE
+> Task :vod:quickjs:processDebugManifest UP-TO-DATE
+> Task :vod:thunder:extractDeepLinksDebug UP-TO-DATE
+> Task :vod:thunder:processDebugManifest UP-TO-DATE
+> Task :vod:tvbus:extractDeepLinksDebug UP-TO-DATE
+> Task :vod:tvbus:processDebugManifest UP-TO-DATE
+> Task :tv:processDebugMainManifest UP-TO-DATE
+> Task :tv:processDebugManifest UP-TO-DATE
+> Task :tv:processDebugManifestForPackage UP-TO-DATE
+> Task :vod:compileLeanbackJavaArm64_v8aDebugLibraryResources UP-TO-DATE
+> Task :vod:parseLeanbackJavaArm64_v8aDebugLocalResources UP-TO-DATE
+> Task :vod:generateLeanbackJavaArm64_v8aDebugRFile UP-TO-DATE
+> Task :core:data:compileDebugLibraryResources UP-TO-DATE
+> Task :core:data:parseDebugLocalResources UP-TO-DATE
+> Task :core:data:generateDebugRFile UP-TO-DATE
+> Task :core:designsystem:compileDebugLibraryResources UP-TO-DATE
+> Task :core:designsystem:parseDebugLocalResources UP-TO-DATE
+> Task :core:designsystem:generateDebugRFile UP-TO-DATE
+> Task :core:util:compileDebugLibraryResources UP-TO-DATE
+> Task :core:util:parseDebugLocalResources UP-TO-DATE
+> Task :core:util:generateDebugRFile UP-TO-DATE
+> Task :vod:catvod:compileDebugLibraryResources UP-TO-DATE
+> Task :vod:catvod:parseDebugLocalResources UP-TO-DATE
+> Task :vod:catvod:generateDebugRFile UP-TO-DATE
+> Task :vod:chaquo:compileDebugLibraryResources UP-TO-DATE
+> Task :vod:chaquo:parseDebugLocalResources UP-TO-DATE
+> Task :vod:chaquo:generateDebugRFile UP-TO-DATE
+> Task :vod:forcetech:compileDebugLibraryResources UP-TO-DATE
+> Task :vod:forcetech:parseDebugLocalResources UP-TO-DATE
+> Task :vod:forcetech:generateDebugRFile UP-TO-DATE
+> Task :vod:hook:compileDebugLibraryResources UP-TO-DATE
+> Task :vod:hook:parseDebugLocalResources UP-TO-DATE
+> Task :vod:hook:generateDebugRFile UP-TO-DATE
+> Task :vod:jianpian:compileDebugLibraryResources UP-TO-DATE
+> Task :vod:jianpian:parseDebugLocalResources UP-TO-DATE
+> Task :vod:jianpian:generateDebugRFile UP-TO-DATE
+> Task :vod:quickjs:compileDebugLibraryResources UP-TO-DATE
+> Task :vod:quickjs:parseDebugLocalResources UP-TO-DATE
+> Task :vod:quickjs:generateDebugRFile UP-TO-DATE
+> Task :vod:thunder:compileDebugLibraryResources UP-TO-DATE
+> Task :vod:thunder:parseDebugLocalResources UP-TO-DATE
+> Task :vod:thunder:generateDebugRFile UP-TO-DATE
+> Task :vod:tvbus:compileDebugLibraryResources UP-TO-DATE
+> Task :vod:tvbus:parseDebugLocalResources UP-TO-DATE
+> Task :vod:tvbus:generateDebugRFile UP-TO-DATE
+> Task :tv:processDebugResources UP-TO-DATE
+> Task :vod:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :vod:dataBindingMergeDependencyArtifactsLeanbackJavaArm64_v8aDebug UP-TO-DATE
+> Task :vod:dataBindingGenBaseClassesLeanbackJavaArm64_v8aDebug UP-TO-DATE
+> Task :vod:generateLeanbackJavaArm64_v8aDebugBuildConfig UP-TO-DATE
+> Task :vod:catvod:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :vod:catvod:generateDebugBuildConfig UP-TO-DATE
+> Task :vod:catvod:compileDebugKotlin NO-SOURCE
+> Task :vod:catvod:javaPreCompileDebug UP-TO-DATE
+> Task :vod:catvod:compileDebugJavaWithJavac UP-TO-DATE
+> Task :vod:catvod:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :vod:chaquo:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :vod:chaquo:extractDebugPythonBuildPackages UP-TO-DATE
+> Task :vod:chaquo:generateDebugPythonRequirements UP-TO-DATE
+> Task :vod:chaquo:mergeDebugPythonSources UP-TO-DATE
+> Task :vod:chaquo:generateDebugPythonProxies UP-TO-DATE
+> Task :vod:chaquo:compileDebugKotlin NO-SOURCE
+> Task :vod:chaquo:javaPreCompileDebug UP-TO-DATE
+> Task :vod:chaquo:compileDebugJavaWithJavac UP-TO-DATE
+> Task :vod:chaquo:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :vod:forcetech:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :vod:forcetech:compileDebugKotlin NO-SOURCE
+> Task :vod:forcetech:javaPreCompileDebug UP-TO-DATE
+> Task :vod:forcetech:compileDebugJavaWithJavac UP-TO-DATE
+> Task :vod:forcetech:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :vod:hook:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :vod:hook:compileDebugKotlin NO-SOURCE
+> Task :vod:hook:javaPreCompileDebug UP-TO-DATE
+> Task :vod:hook:compileDebugJavaWithJavac UP-TO-DATE
+> Task :vod:hook:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :vod:jianpian:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :vod:jianpian:compileDebugKotlin NO-SOURCE
+> Task :vod:jianpian:javaPreCompileDebug UP-TO-DATE
+> Task :vod:jianpian:compileDebugJavaWithJavac UP-TO-DATE
+> Task :vod:jianpian:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :vod:quickjs:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :vod:quickjs:generateDebugBuildConfig UP-TO-DATE
+> Task :vod:quickjs:compileDebugKotlin NO-SOURCE
+> Task :vod:quickjs:javaPreCompileDebug UP-TO-DATE
+> Task :vod:quickjs:compileDebugJavaWithJavac UP-TO-DATE
+> Task :vod:quickjs:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :vod:thunder:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :vod:thunder:compileDebugKotlin NO-SOURCE
+> Task :vod:thunder:javaPreCompileDebug UP-TO-DATE
+> Task :vod:thunder:compileDebugJavaWithJavac UP-TO-DATE
+> Task :vod:thunder:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :vod:tvbus:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :vod:tvbus:compileDebugKotlin NO-SOURCE
+> Task :vod:tvbus:javaPreCompileDebug UP-TO-DATE
+> Task :vod:tvbus:compileDebugJavaWithJavac UP-TO-DATE
+> Task :vod:tvbus:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :vod:compileLeanbackJavaArm64_v8aDebugKotlin NO-SOURCE
+> Task :vod:javaPreCompileLeanbackJavaArm64_v8aDebug UP-TO-DATE
+> Task :vod:compileLeanbackJavaArm64_v8aDebugJavaWithJavac UP-TO-DATE
+> Task :vod:bundleLibCompileToJarLeanbackJavaArm64_v8aDebug UP-TO-DATE
+> Task :core:data:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:data:generateDebugBuildConfig UP-TO-DATE
+> Task :core:data:compileDebugKotlin UP-TO-DATE
+> Task :core:data:javaPreCompileDebug UP-TO-DATE
+> Task :core:data:compileDebugJavaWithJavac UP-TO-DATE
+> Task :core:data:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :core:designsystem:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:designsystem:compileDebugKotlin UP-TO-DATE
+> Task :core:designsystem:javaPreCompileDebug UP-TO-DATE
+> Task :core:designsystem:compileDebugJavaWithJavac NO-SOURCE
+> Task :core:designsystem:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :core:util:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:util:compileDebugKotlin UP-TO-DATE
+> Task :core:util:javaPreCompileDebug UP-TO-DATE
+> Task :core:util:compileDebugJavaWithJavac NO-SOURCE
+> Task :core:util:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :tv:compileDebugKotlin UP-TO-DATE
+> Task :tv:javaPreCompileDebug UP-TO-DATE
+> Task :tv:compileDebugJavaWithJavac NO-SOURCE
+> Task :tv:mergeDebugShaders UP-TO-DATE
+> Task :tv:compileDebugShaders NO-SOURCE
+> Task :tv:generateDebugAssets UP-TO-DATE
+> Task :vod:mergeLeanbackJavaArm64_v8aDebugShaders UP-TO-DATE
+> Task :vod:compileLeanbackJavaArm64_v8aDebugShaders NO-SOURCE
+> Task :vod:generateLeanbackJavaArm64_v8aDebugAssets UP-TO-DATE
+> Task :vod:packageLeanbackJavaArm64_v8aDebugAssets UP-TO-DATE
+> Task :core:data:mergeDebugShaders UP-TO-DATE
+> Task :core:data:compileDebugShaders NO-SOURCE
+> Task :core:data:generateDebugAssets UP-TO-DATE
+> Task :core:data:packageDebugAssets UP-TO-DATE
+> Task :core:designsystem:mergeDebugShaders UP-TO-DATE
+> Task :core:designsystem:compileDebugShaders NO-SOURCE
+> Task :core:designsystem:generateDebugAssets UP-TO-DATE
+> Task :core:designsystem:packageDebugAssets UP-TO-DATE
+> Task :core:util:mergeDebugShaders UP-TO-DATE
+> Task :core:util:compileDebugShaders NO-SOURCE
+> Task :core:util:generateDebugAssets UP-TO-DATE
+> Task :core:util:packageDebugAssets UP-TO-DATE
+> Task :vod:catvod:mergeDebugShaders UP-TO-DATE
+> Task :vod:catvod:compileDebugShaders NO-SOURCE
+> Task :vod:catvod:generateDebugAssets UP-TO-DATE
+> Task :vod:catvod:packageDebugAssets UP-TO-DATE
+> Task :vod:chaquo:mergeDebugShaders UP-TO-DATE
+> Task :vod:chaquo:compileDebugShaders NO-SOURCE
+> Task :vod:chaquo:generateDebugAssets UP-TO-DATE
+> Task :vod:chaquo:generateDebugPythonMiscAssets UP-TO-DATE
+> Task :vod:chaquo:generateDebugPythonRequirementsAssets UP-TO-DATE
+> Task :vod:chaquo:generateDebugPythonSourceAssets UP-TO-DATE
+> Task :vod:chaquo:generateDebugPythonBuildAssets UP-TO-DATE
+> Task :vod:chaquo:packageDebugAssets UP-TO-DATE
+> Task :vod:forcetech:mergeDebugShaders UP-TO-DATE
+> Task :vod:forcetech:compileDebugShaders NO-SOURCE
+> Task :vod:forcetech:generateDebugAssets UP-TO-DATE
+> Task :vod:forcetech:packageDebugAssets UP-TO-DATE
+> Task :vod:hook:mergeDebugShaders UP-TO-DATE
+> Task :vod:hook:compileDebugShaders NO-SOURCE
+> Task :vod:hook:generateDebugAssets UP-TO-DATE
+> Task :vod:hook:packageDebugAssets UP-TO-DATE
+> Task :vod:jianpian:mergeDebugShaders UP-TO-DATE
+> Task :vod:jianpian:compileDebugShaders NO-SOURCE
+> Task :vod:jianpian:generateDebugAssets UP-TO-DATE
+> Task :vod:jianpian:packageDebugAssets UP-TO-DATE
+> Task :vod:quickjs:mergeDebugShaders UP-TO-DATE
+> Task :vod:quickjs:compileDebugShaders NO-SOURCE
+> Task :vod:quickjs:generateDebugAssets UP-TO-DATE
+> Task :vod:quickjs:packageDebugAssets UP-TO-DATE
+> Task :vod:thunder:mergeDebugShaders UP-TO-DATE
+> Task :vod:thunder:compileDebugShaders NO-SOURCE
+> Task :vod:thunder:generateDebugAssets UP-TO-DATE
+> Task :vod:thunder:packageDebugAssets UP-TO-DATE
+> Task :vod:tvbus:mergeDebugShaders UP-TO-DATE
+> Task :vod:tvbus:compileDebugShaders NO-SOURCE
+> Task :vod:tvbus:generateDebugAssets UP-TO-DATE
+> Task :vod:tvbus:packageDebugAssets UP-TO-DATE
+> Task :tv:mergeDebugAssets UP-TO-DATE
+> Task :tv:compressDebugAssets UP-TO-DATE
+> Task :tv:l8DexDesugarLibDebug UP-TO-DATE
+> Task :tv:processDebugJavaRes UP-TO-DATE
+> Task :vod:processLeanbackJavaArm64_v8aDebugJavaRes UP-TO-DATE
+> Task :core:data:processDebugJavaRes UP-TO-DATE
+> Task :core:designsystem:processDebugJavaRes UP-TO-DATE
+> Task :core:util:processDebugJavaRes UP-TO-DATE
+> Task :vod:catvod:processDebugJavaRes NO-SOURCE
+> Task :vod:chaquo:processDebugJavaRes NO-SOURCE
+> Task :vod:forcetech:processDebugJavaRes NO-SOURCE
+> Task :vod:hook:processDebugJavaRes NO-SOURCE
+> Task :vod:jianpian:processDebugJavaRes NO-SOURCE
+> Task :vod:quickjs:processDebugJavaRes NO-SOURCE
+> Task :vod:thunder:processDebugJavaRes NO-SOURCE
+> Task :vod:tvbus:processDebugJavaRes NO-SOURCE
+> Task :tv:mergeDebugJavaResource UP-TO-DATE
+> Task :tv:checkDebugDuplicateClasses UP-TO-DATE
+> Task :tv:desugarDebugFileDependencies UP-TO-DATE
+> Task :tv:mergeExtDexDebug UP-TO-DATE
+> Task :core:data:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :core:designsystem:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :core:util:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :vod:bundleLibRuntimeToDirLeanbackJavaArm64_v8aDebug UP-TO-DATE
+> Task :vod:chaquo:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :vod:quickjs:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :vod:hook:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :vod:forcetech:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :vod:jianpian:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :vod:thunder:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :vod:tvbus:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :vod:catvod:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :tv:dexBuilderDebug UP-TO-DATE
+> Task :tv:mergeProjectDexDebug UP-TO-DATE
+> Task :tv:mergeLibDexDebug UP-TO-DATE
+> Task :tv:mergeDebugJniLibFolders UP-TO-DATE
+> Task :vod:mergeLeanbackJavaArm64_v8aDebugJniLibFolders UP-TO-DATE
+> Task :vod:mergeLeanbackJavaArm64_v8aDebugNativeLibs NO-SOURCE
+> Task :vod:copyLeanbackJavaArm64_v8aDebugJniLibsProjectOnly UP-TO-DATE
+> Task :core:data:mergeDebugJniLibFolders UP-TO-DATE
+> Task :core:data:mergeDebugNativeLibs NO-SOURCE
+> Task :core:data:copyDebugJniLibsProjectOnly UP-TO-DATE
+> Task :core:designsystem:mergeDebugJniLibFolders UP-TO-DATE
+> Task :core:designsystem:mergeDebugNativeLibs NO-SOURCE
+> Task :core:designsystem:copyDebugJniLibsProjectOnly UP-TO-DATE
+> Task :core:util:mergeDebugJniLibFolders UP-TO-DATE
+> Task :core:util:mergeDebugNativeLibs NO-SOURCE
+> Task :core:util:copyDebugJniLibsProjectOnly UP-TO-DATE
+> Task :vod:catvod:mergeDebugJniLibFolders UP-TO-DATE
+> Task :vod:catvod:mergeDebugNativeLibs NO-SOURCE
+> Task :vod:catvod:copyDebugJniLibsProjectOnly UP-TO-DATE
+> Task :vod:chaquo:generateDebugPythonJniLibs UP-TO-DATE
+> Task :vod:chaquo:mergeDebugJniLibFolders UP-TO-DATE
+> Task :vod:chaquo:mergeDebugNativeLibs UP-TO-DATE
+> Task :vod:chaquo:copyDebugJniLibsProjectOnly UP-TO-DATE
+> Task :vod:forcetech:mergeDebugJniLibFolders UP-TO-DATE
+> Task :vod:forcetech:mergeDebugNativeLibs UP-TO-DATE
+> Task :vod:forcetech:copyDebugJniLibsProjectOnly UP-TO-DATE
+> Task :vod:hook:mergeDebugJniLibFolders UP-TO-DATE
+> Task :vod:hook:mergeDebugNativeLibs NO-SOURCE
+> Task :vod:hook:copyDebugJniLibsProjectOnly UP-TO-DATE
+> Task :vod:jianpian:mergeDebugJniLibFolders UP-TO-DATE
+> Task :vod:jianpian:mergeDebugNativeLibs UP-TO-DATE
+> Task :vod:jianpian:copyDebugJniLibsProjectOnly UP-TO-DATE
+> Task :vod:quickjs:mergeDebugJniLibFolders UP-TO-DATE
+> Task :vod:quickjs:mergeDebugNativeLibs NO-SOURCE
+> Task :vod:quickjs:copyDebugJniLibsProjectOnly UP-TO-DATE
+> Task :vod:thunder:mergeDebugJniLibFolders UP-TO-DATE
+> Task :vod:thunder:mergeDebugNativeLibs UP-TO-DATE
+> Task :vod:thunder:copyDebugJniLibsProjectOnly UP-TO-DATE
+> Task :vod:tvbus:mergeDebugJniLibFolders UP-TO-DATE
+> Task :vod:tvbus:mergeDebugNativeLibs NO-SOURCE
+> Task :vod:tvbus:copyDebugJniLibsProjectOnly UP-TO-DATE
+> Task :tv:mergeDebugNativeLibs UP-TO-DATE
+> Task :tv:stripDebugDebugSymbols UP-TO-DATE
+> Task :tv:validateSigningDebug UP-TO-DATE
+> Task :tv:writeDebugAppMetadata UP-TO-DATE
+> Task :tv:writeDebugSigningConfigVersions UP-TO-DATE
+> Task :tv:packageDebug UP-TO-DATE
+> Task :tv:createDebugApkListingFileRedirect UP-TO-DATE
+> Task :vod:stripLeanbackJavaArm64_v8aDebugDebugSymbols NO-SOURCE
+> Task :vod:copyLeanbackJavaArm64_v8aDebugJniLibsProjectAndLocalJars UP-TO-DATE
+> Task :vod:extractDeepLinksForAarLeanbackJavaArm64_v8aDebug UP-TO-DATE
+> Task :vod:extractLeanbackJavaArm64_v8aDebugAnnotations UP-TO-DATE
+> Task :vod:mergeLeanbackJavaArm64_v8aDebugGeneratedProguardFiles UP-TO-DATE
+> Task :vod:mergeLeanbackJavaArm64_v8aDebugConsumerProguardFiles UP-TO-DATE
+> Task :vod:prepareLeanbackJavaArm64_v8aDebugArtProfile UP-TO-DATE
+> Task :vod:prepareLintJarForPublish UP-TO-DATE
+> Task :vod:mergeLeanbackJavaArm64_v8aDebugJavaResource UP-TO-DATE
+> Task :vod:syncLeanbackJavaArm64_v8aDebugLibJars UP-TO-DATE
+> Task :vod:bundleLeanbackJavaArm64_v8aDebugAar UP-TO-DATE
+> Task :vod:assembleLeanbackJavaArm64_v8aDebug UP-TO-DATE
+> Task :vod:preLeanbackJavaArm64_v8aReleaseBuild UP-TO-DATE
+> Task :vod:mergeLeanbackJavaArm64_v8aReleaseJniLibFolders UP-TO-DATE
+> Task :vod:mergeLeanbackJavaArm64_v8aReleaseNativeLibs NO-SOURCE
+> Task :vod:stripLeanbackJavaArm64_v8aReleaseDebugSymbols NO-SOURCE
+> Task :vod:copyLeanbackJavaArm64_v8aReleaseJniLibsProjectAndLocalJars UP-TO-DATE
+> Task :vod:generateLeanbackJavaArm64_v8aReleaseResValues UP-TO-DATE
+> Task :vod:extractDeepLinksForAarLeanbackJavaArm64_v8aRelease UP-TO-DATE
+> Task :vod:dataBindingMergeDependencyArtifactsLeanbackJavaArm64_v8aRelease UP-TO-DATE
+> Task :vod:generateLeanbackJavaArm64_v8aReleaseResources UP-TO-DATE
+> Task :vod:packageLeanbackJavaArm64_v8aReleaseResources UP-TO-DATE
+> Task :vod:parseLeanbackJavaArm64_v8aReleaseLocalResources UP-TO-DATE
+> Task :vod:catvod:preReleaseBuild UP-TO-DATE
+> Task :vod:catvod:generateReleaseResValues UP-TO-DATE
+> Task :vod:catvod:generateReleaseResources UP-TO-DATE
+> Task :vod:catvod:packageReleaseResources UP-TO-DATE
+> Task :vod:catvod:parseReleaseLocalResources UP-TO-DATE
+> Task :vod:catvod:generateReleaseRFile UP-TO-DATE
+> Task :vod:chaquo:preReleaseBuild UP-TO-DATE
+> Task :vod:chaquo:generateReleaseResValues UP-TO-DATE
+> Task :vod:chaquo:generateReleaseResources UP-TO-DATE
+> Task :vod:chaquo:packageReleaseResources UP-TO-DATE
+> Task :vod:chaquo:parseReleaseLocalResources UP-TO-DATE
+> Task :vod:chaquo:generateReleaseRFile UP-TO-DATE
+> Task :vod:forcetech:preReleaseBuild UP-TO-DATE
+> Task :vod:forcetech:generateReleaseResValues UP-TO-DATE
+> Task :vod:forcetech:generateReleaseResources UP-TO-DATE
+> Task :vod:forcetech:packageReleaseResources UP-TO-DATE
+> Task :vod:forcetech:parseReleaseLocalResources UP-TO-DATE
+> Task :vod:forcetech:generateReleaseRFile UP-TO-DATE
+> Task :vod:hook:preReleaseBuild UP-TO-DATE
+> Task :vod:hook:generateReleaseResValues UP-TO-DATE
+> Task :vod:hook:generateReleaseResources UP-TO-DATE
+> Task :vod:hook:packageReleaseResources UP-TO-DATE
+> Task :vod:hook:parseReleaseLocalResources UP-TO-DATE
+> Task :vod:hook:generateReleaseRFile UP-TO-DATE
+> Task :vod:jianpian:preReleaseBuild UP-TO-DATE
+> Task :vod:jianpian:generateReleaseResValues UP-TO-DATE
+> Task :vod:jianpian:generateReleaseResources UP-TO-DATE
+> Task :vod:jianpian:packageReleaseResources UP-TO-DATE
+> Task :vod:jianpian:parseReleaseLocalResources UP-TO-DATE
+> Task :vod:jianpian:generateReleaseRFile UP-TO-DATE
+> Task :vod:quickjs:preReleaseBuild UP-TO-DATE
+> Task :vod:quickjs:generateReleaseResValues UP-TO-DATE
+> Task :vod:quickjs:generateReleaseResources UP-TO-DATE
+> Task :vod:quickjs:packageReleaseResources UP-TO-DATE
+> Task :vod:quickjs:parseReleaseLocalResources UP-TO-DATE
+> Task :vod:quickjs:generateReleaseRFile UP-TO-DATE
+> Task :vod:thunder:preReleaseBuild UP-TO-DATE
+> Task :vod:thunder:generateReleaseResValues UP-TO-DATE
+> Task :vod:thunder:generateReleaseResources UP-TO-DATE
+> Task :vod:thunder:packageReleaseResources UP-TO-DATE
+> Task :vod:thunder:parseReleaseLocalResources UP-TO-DATE
+> Task :vod:thunder:generateReleaseRFile UP-TO-DATE
+> Task :vod:tvbus:preReleaseBuild UP-TO-DATE
+> Task :vod:tvbus:generateReleaseResValues UP-TO-DATE
+> Task :vod:tvbus:generateReleaseResources UP-TO-DATE
+> Task :vod:tvbus:packageReleaseResources UP-TO-DATE
+> Task :vod:tvbus:parseReleaseLocalResources UP-TO-DATE
+> Task :vod:tvbus:generateReleaseRFile UP-TO-DATE
+> Task :vod:dataBindingGenBaseClassesLeanbackJavaArm64_v8aRelease UP-TO-DATE
+> Task :vod:generateLeanbackJavaArm64_v8aReleaseBuildConfig UP-TO-DATE
+> Task :vod:generateLeanbackJavaArm64_v8aReleaseRFile UP-TO-DATE
+> Task :vod:catvod:generateReleaseBuildConfig UP-TO-DATE
+> Task :vod:catvod:compileReleaseKotlin NO-SOURCE
+> Task :vod:catvod:javaPreCompileRelease UP-TO-DATE
+> Task :vod:catvod:compileReleaseJavaWithJavac UP-TO-DATE
+> Task :vod:catvod:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :vod:chaquo:extractReleasePythonBuildPackages UP-TO-DATE
+> Task :vod:chaquo:generateReleasePythonRequirements UP-TO-DATE
+> Task :vod:chaquo:mergeReleasePythonSources UP-TO-DATE
+> Task :vod:chaquo:generateReleasePythonProxies UP-TO-DATE
+> Task :vod:chaquo:compileReleaseKotlin NO-SOURCE
+> Task :vod:chaquo:javaPreCompileRelease UP-TO-DATE
+> Task :vod:chaquo:compileReleaseJavaWithJavac UP-TO-DATE
+> Task :vod:chaquo:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :vod:forcetech:compileReleaseKotlin NO-SOURCE
+> Task :vod:forcetech:javaPreCompileRelease UP-TO-DATE
+> Task :vod:forcetech:compileReleaseJavaWithJavac UP-TO-DATE
+> Task :vod:forcetech:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :vod:hook:compileReleaseKotlin NO-SOURCE
+> Task :vod:hook:javaPreCompileRelease UP-TO-DATE
+> Task :vod:hook:compileReleaseJavaWithJavac UP-TO-DATE
+> Task :vod:hook:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :vod:jianpian:compileReleaseKotlin NO-SOURCE
+> Task :vod:jianpian:javaPreCompileRelease UP-TO-DATE
+> Task :vod:jianpian:compileReleaseJavaWithJavac UP-TO-DATE
+> Task :vod:jianpian:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :vod:quickjs:generateReleaseBuildConfig UP-TO-DATE
+> Task :vod:quickjs:compileReleaseKotlin NO-SOURCE
+> Task :vod:quickjs:javaPreCompileRelease UP-TO-DATE
+> Task :vod:quickjs:compileReleaseJavaWithJavac UP-TO-DATE
+> Task :vod:quickjs:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :vod:thunder:compileReleaseKotlin NO-SOURCE
+> Task :vod:thunder:javaPreCompileRelease UP-TO-DATE
+> Task :vod:thunder:compileReleaseJavaWithJavac UP-TO-DATE
+> Task :vod:thunder:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :vod:tvbus:compileReleaseKotlin NO-SOURCE
+> Task :vod:tvbus:javaPreCompileRelease UP-TO-DATE
+> Task :vod:tvbus:compileReleaseJavaWithJavac UP-TO-DATE
+> Task :vod:tvbus:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :vod:compileLeanbackJavaArm64_v8aReleaseKotlin NO-SOURCE
+> Task :vod:extractLeanbackJavaArm64_v8aReleaseAnnotations UP-TO-DATE
+> Task :vod:javaPreCompileLeanbackJavaArm64_v8aRelease UP-TO-DATE
+> Task :vod:compileLeanbackJavaArm64_v8aReleaseJavaWithJavac UP-TO-DATE
+> Task :vod:mergeLeanbackJavaArm64_v8aReleaseGeneratedProguardFiles UP-TO-DATE
+> Task :vod:mergeLeanbackJavaArm64_v8aReleaseConsumerProguardFiles UP-TO-DATE
+> Task :vod:mergeLeanbackJavaArm64_v8aReleaseShaders UP-TO-DATE
+> Task :vod:compileLeanbackJavaArm64_v8aReleaseShaders NO-SOURCE
+> Task :vod:generateLeanbackJavaArm64_v8aReleaseAssets UP-TO-DATE
+> Task :vod:packageLeanbackJavaArm64_v8aReleaseAssets UP-TO-DATE
+> Task :vod:prepareLeanbackJavaArm64_v8aReleaseArtProfile UP-TO-DATE
+> Task :vod:processLeanbackJavaArm64_v8aReleaseManifest UP-TO-DATE
+> Task :vod:chaquo:mergeReleaseGeneratedProguardFiles UP-TO-DATE
+> Task :vod:chaquo:exportReleaseConsumerProguardFiles UP-TO-DATE
+> Task :vod:quickjs:mergeReleaseGeneratedProguardFiles UP-TO-DATE
+> Task :vod:quickjs:exportReleaseConsumerProguardFiles UP-TO-DATE
+> Task :vod:hook:mergeReleaseGeneratedProguardFiles UP-TO-DATE
+> Task :vod:hook:exportReleaseConsumerProguardFiles UP-TO-DATE
+> Task :vod:forcetech:mergeReleaseGeneratedProguardFiles UP-TO-DATE
+> Task :vod:forcetech:exportReleaseConsumerProguardFiles UP-TO-DATE
+> Task :vod:jianpian:mergeReleaseGeneratedProguardFiles UP-TO-DATE
+> Task :vod:jianpian:exportReleaseConsumerProguardFiles UP-TO-DATE
+> Task :vod:thunder:mergeReleaseGeneratedProguardFiles UP-TO-DATE
+> Task :vod:thunder:exportReleaseConsumerProguardFiles UP-TO-DATE
+> Task :vod:tvbus:mergeReleaseGeneratedProguardFiles UP-TO-DATE
+> Task :vod:tvbus:exportReleaseConsumerProguardFiles UP-TO-DATE
+> Task :vod:catvod:mergeReleaseGeneratedProguardFiles UP-TO-DATE
+> Task :vod:catvod:exportReleaseConsumerProguardFiles UP-TO-DATE
+> Task :vod:extractProguardFiles UP-TO-DATE
+> Task :vod:generateLeanbackJavaArm64_v8aReleaseLibraryProguardRules UP-TO-DATE
+> Task :vod:processLeanbackJavaArm64_v8aReleaseJavaRes UP-TO-DATE
+> Task :vod:mergeLeanbackJavaArm64_v8aReleaseJavaResource UP-TO-DATE
+> Task :vod:catvod:bundleLibRuntimeToJarRelease UP-TO-DATE
+> Task :vod:catvod:processReleaseJavaRes NO-SOURCE
+> Task :vod:chaquo:bundleLibRuntimeToJarRelease UP-TO-DATE
+> Task :vod:chaquo:processReleaseJavaRes NO-SOURCE
+> Task :vod:forcetech:bundleLibRuntimeToJarRelease UP-TO-DATE
+> Task :vod:forcetech:processReleaseJavaRes NO-SOURCE
+> Task :vod:hook:bundleLibRuntimeToJarRelease UP-TO-DATE
+> Task :vod:hook:processReleaseJavaRes NO-SOURCE
+> Task :vod:jianpian:bundleLibRuntimeToJarRelease UP-TO-DATE
+> Task :vod:jianpian:processReleaseJavaRes NO-SOURCE
+> Task :vod:quickjs:bundleLibRuntimeToJarRelease UP-TO-DATE
+> Task :vod:quickjs:processReleaseJavaRes NO-SOURCE
+> Task :vod:thunder:bundleLibRuntimeToJarRelease UP-TO-DATE
+> Task :vod:thunder:processReleaseJavaRes NO-SOURCE
+> Task :vod:tvbus:bundleLibRuntimeToJarRelease UP-TO-DATE
+> Task :vod:tvbus:processReleaseJavaRes NO-SOURCE
+> Task :vod:minifyLeanbackJavaArm64_v8aReleaseWithR8 UP-TO-DATE
+> Task :vod:syncLeanbackJavaArm64_v8aReleaseLibJars UP-TO-DATE
+> Task :vod:writeLeanbackJavaArm64_v8aReleaseAarMetadata UP-TO-DATE
+> Task :vod:bundleLeanbackJavaArm64_v8aReleaseAar UP-TO-DATE
+> Task :vod:mapLeanbackJavaArm64_v8aReleaseSourceSetPaths UP-TO-DATE
+> Task :vod:mergeLeanbackJavaArm64_v8aReleaseResources UP-TO-DATE
+> Task :vod:catvod:compileReleaseLibraryResources UP-TO-DATE
+> Task :vod:chaquo:compileReleaseLibraryResources UP-TO-DATE
+> Task :vod:forcetech:compileReleaseLibraryResources UP-TO-DATE
+> Task :vod:hook:compileReleaseLibraryResources UP-TO-DATE
+> Task :vod:jianpian:compileReleaseLibraryResources UP-TO-DATE
+> Task :vod:quickjs:compileReleaseLibraryResources UP-TO-DATE
+> Task :vod:thunder:compileReleaseLibraryResources UP-TO-DATE
+> Task :vod:tvbus:compileReleaseLibraryResources UP-TO-DATE
+> Task :vod:verifyLeanbackJavaArm64_v8aReleaseResources UP-TO-DATE
+> Task :vod:assembleLeanbackJavaArm64_v8aRelease UP-TO-DATE
+> Task :vod:assembleArm64_v8a UP-TO-DATE
+> Task :vod:assembleDebug UP-TO-DATE
+> Task :vod:assembleJava UP-TO-DATE
+> Task :vod:assembleLeanback UP-TO-DATE
+> Task :vod:assembleLeanbackJavaArm64_v8a UP-TO-DATE
+> Task :vod:assembleRelease UP-TO-DATE
+> Task :vod:assemble UP-TO-DATE
+> Task :vod:preLeanbackJavaArm64_v8aDebugAndroidTestBuild UP-TO-DATE
+> Task :vod:dataBindingMergeDependencyArtifactsLeanbackJavaArm64_v8aDebugAndroidTest UP-TO-DATE
+> Task :vod:generateLeanbackJavaArm64_v8aDebugAndroidTestResValues UP-TO-DATE
+> Task :vod:generateLeanbackJavaArm64_v8aDebugAndroidTestResources UP-TO-DATE
+> Task :vod:mergeLeanbackJavaArm64_v8aDebugAndroidTestResources UP-TO-DATE
+> Task :vod:dataBindingGenBaseClassesLeanbackJavaArm64_v8aDebugAndroidTest UP-TO-DATE
+> Task :vod:processLeanbackJavaArm64_v8aDebugAndroidTestManifest UP-TO-DATE
+> Task :vod:generateLeanbackJavaArm64_v8aDebugAndroidTestBuildConfig UP-TO-DATE
+> Task :vod:checkLeanbackJavaArm64_v8aDebugAndroidTestAarMetadata UP-TO-DATE
+> Task :vod:mapLeanbackJavaArm64_v8aDebugAndroidTestSourceSetPaths UP-TO-DATE
+> Task :vod:processLeanbackJavaArm64_v8aDebugAndroidTestResources UP-TO-DATE
+> Task :vod:compileLeanbackJavaArm64_v8aDebugAndroidTestKotlin NO-SOURCE
+> Task :vod:javaPreCompileLeanbackJavaArm64_v8aDebugAndroidTest UP-TO-DATE
+> Task :vod:compileLeanbackJavaArm64_v8aDebugAndroidTestJavaWithJavac UP-TO-DATE
+> Task :vod:mergeLeanbackJavaArm64_v8aDebugAndroidTestShaders UP-TO-DATE
+> Task :vod:compileLeanbackJavaArm64_v8aDebugAndroidTestShaders NO-SOURCE
+> Task :vod:generateLeanbackJavaArm64_v8aDebugAndroidTestAssets UP-TO-DATE
+> Task :vod:mergeLeanbackJavaArm64_v8aDebugAndroidTestAssets UP-TO-DATE
+> Task :vod:compressLeanbackJavaArm64_v8aDebugAndroidTestAssets UP-TO-DATE
+> Task :vod:l8DexDesugarLibLeanbackJavaArm64_v8aDebugAndroidTest UP-TO-DATE
+> Task :vod:checkLeanbackJavaArm64_v8aDebugAndroidTestDuplicateClasses UP-TO-DATE
+> Task :vod:desugarLeanbackJavaArm64_v8aDebugAndroidTestFileDependencies UP-TO-DATE
+> Task :vod:mergeExtDexLeanbackJavaArm64_v8aDebugAndroidTest UP-TO-DATE
+> Task :vod:bundleLibRuntimeToJarLeanbackJavaArm64_v8aDebug UP-TO-DATE
+> Task :vod:chaquo:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :vod:quickjs:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :vod:hook:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :vod:forcetech:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :vod:jianpian:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :vod:thunder:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :vod:tvbus:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :vod:catvod:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :vod:dexBuilderLeanbackJavaArm64_v8aDebugAndroidTest UP-TO-DATE
+> Task :vod:mergeLeanbackJavaArm64_v8aDebugAndroidTestGlobalSynthetics UP-TO-DATE
+> Task :vod:processLeanbackJavaArm64_v8aDebugAndroidTestJavaRes NO-SOURCE
+> Task :vod:mergeLeanbackJavaArm64_v8aDebugAndroidTestJavaResource UP-TO-DATE
+> Task :vod:mergeLibDexLeanbackJavaArm64_v8aDebugAndroidTest UP-TO-DATE
+> Task :vod:mergeProjectDexLeanbackJavaArm64_v8aDebugAndroidTest UP-TO-DATE
+> Task :vod:mergeLeanbackJavaArm64_v8aDebugAndroidTestJniLibFolders UP-TO-DATE
+> Task :vod:mergeLeanbackJavaArm64_v8aDebugAndroidTestNativeLibs UP-TO-DATE
+> Task :vod:stripLeanbackJavaArm64_v8aDebugAndroidTestDebugSymbols UP-TO-DATE
+> Task :vod:validateSigningLeanbackJavaArm64_v8aDebugAndroidTest UP-TO-DATE
+> Task :vod:writeLeanbackJavaArm64_v8aDebugAndroidTestSigningConfigVersions UP-TO-DATE
+> Task :vod:packageLeanbackJavaArm64_v8aDebugAndroidTest UP-TO-DATE
+> Task :vod:createLeanbackJavaArm64_v8aDebugAndroidTestApkListingFileRedirect UP-TO-DATE
+> Task :vod:assembleLeanbackJavaArm64_v8aDebugAndroidTest UP-TO-DATE
+> Task :vod:assembleAndroidTest UP-TO-DATE
+> Task :vod:preLeanbackJavaArm64_v8aDebugUnitTestBuild UP-TO-DATE
+> Task :vod:generateLeanbackJavaArm64_v8aDebugUnitTestStubRFile UP-TO-DATE
+> Task :vod:compileLeanbackJavaArm64_v8aDebugUnitTestKotlin NO-SOURCE
+> Task :vod:javaPreCompileLeanbackJavaArm64_v8aDebugUnitTest UP-TO-DATE
+> Task :vod:compileLeanbackJavaArm64_v8aDebugUnitTestJavaWithJavac NO-SOURCE
+> Task :vod:assembleLeanbackJavaArm64_v8aDebugUnitTest UP-TO-DATE
+> Task :vod:bundleLibCompileToJarLeanbackJavaArm64_v8aRelease UP-TO-DATE
+> Task :vod:preLeanbackJavaArm64_v8aReleaseUnitTestBuild UP-TO-DATE
+> Task :vod:generateLeanbackJavaArm64_v8aReleaseUnitTestStubRFile UP-TO-DATE
+> Task :vod:compileLeanbackJavaArm64_v8aReleaseUnitTestKotlin NO-SOURCE
+> Task :vod:javaPreCompileLeanbackJavaArm64_v8aReleaseUnitTest UP-TO-DATE
+> Task :vod:compileLeanbackJavaArm64_v8aReleaseUnitTestJavaWithJavac NO-SOURCE
+> Task :vod:assembleLeanbackJavaArm64_v8aReleaseUnitTest UP-TO-DATE
+> Task :vod:assembleUnitTest UP-TO-DATE
+> Task :tv:assembleDebug UP-TO-DATE
 
 Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
 
 You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
 
 For more on this, please refer to https://docs.gradle.org/8.7/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
-Ask Gemini
+
+BUILD SUCCESSFUL in 12s
+451 actionable tasks: 451 up-to-date
+
+Build Analyzer results available

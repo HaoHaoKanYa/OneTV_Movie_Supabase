@@ -17,12 +17,17 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
+    <!-- 库模块：移除应用级配置，所有Activity将在主应用TV的AndroidManifest.xml中声明 -->
+    <!-- 库模块：注释application标签，所有组件将在主应用TV模块中声明 -->
+    <!--
     <application>
+        库模块：注释HomeActivity的exported和intent-filter，避免被识别为主应用入口
         <activity
             android:name="top.cywin.onetv.vod.ui.activity.HomeActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
-            android:exported="true"
             android:screenOrientation="sensorLandscape">
+            android:exported="true" 注释掉避免被识别为主应用
+            注释intent-filter，避免VOD被识别为主应用
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -60,17 +65,21 @@
                 <data android:scheme="thunder" />
                 <data android:scheme="jianpian" />
             </intent-filter>
+            注释结束
         </activity>
+
         <activity
             android:name="top.cywin.onetv.vod.ui.activity.CastActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
-            android:exported="true"
             android:launchMode="singleTop"
             android:screenOrientation="sensorLandscape">
+            android:exported="true" 注释掉避免冲突
+            注释intent-filter，避免冲突
             <intent-filter>
                 <action android:name="top.cywin.onetv.tv.cast" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+            注释结束
         </activity>
         <activity
             android:name="top.cywin.onetv.vod.ui.activity.VodActivity"
@@ -79,10 +88,10 @@
         <activity
             android:name="top.cywin.onetv.vod.ui.activity.LiveActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
-            android:exported="true"
             android:launchMode="singleTop"
             android:screenOrientation="sensorLandscape"
             android:theme="@style/AppTheme.Live" />
+            android:exported="true" 注释掉避免冲突
         <activity
             android:name="top.cywin.onetv.vod.ui.activity.VideoActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboard|keyboardHidden|navigation"
@@ -119,15 +128,17 @@
             android:name="top.cywin.onetv.vod.ui.activity.SettingPlayerActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="sensorLandscape" />
-        <!-- DLNA服务将在主应用中声明 -->
         <receiver
             android:name="top.cywin.onetv.vod.receiver.BootReceiver"
-            android:exported="true"
             android:priority="999">
+            android:exported="true" 注释掉避免冲突
+            注释intent-filter，避免冲突
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
             </intent-filter>
+            注释结束
         </receiver>
-    </application>
+    </application> -->
+    <!-- 库模块：所有Activity和组件将在主应用TV模块的AndroidManifest.xml中声明 -->
 </manifest>

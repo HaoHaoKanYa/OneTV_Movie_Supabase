@@ -212,7 +212,7 @@ public class HomeActivity extends BaseActivity implements CustomTitleView.Listen
         mResult = Result.empty();
         int index = getRecommendIndex();
         String title = getHome().getName();
-        mBinding.title.setText(title.isEmpty() ? ResUtil.getString(R.string.app_name) : title);
+        mBinding.title.setText(title.isEmpty() ? "影视点播" : title);
         if (mAdapter.size() > index) mAdapter.removeItems(index, mAdapter.size() - index);
         if (getHome().getKey().isEmpty()) return;
         mViewModel.homeContent();

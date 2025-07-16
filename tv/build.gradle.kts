@@ -11,6 +11,13 @@ plugins {
     // alias(libs.plugins.ksp)
 }
 
+// 添加构建日志
+println("[OneTV-Build] TV模块构建开始")
+println("[OneTV-Build] TV模块类型: android.application")
+println("[OneTV-Build] TV模块名称: ${project.name}")
+println("[OneTV-Build] TV模块路径: ${project.path}")
+println("[OneTV-Build] TV是否为根项目: ${project == rootProject}")
+
 android {
     @Suppress("UNCHECKED_CAST")
     apply(extra["appConfig"] as BaseAppModuleExtension.() -> Unit)
@@ -18,8 +25,19 @@ android {
     namespace = "top.cywin.onetv.tv"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
+    // 添加Android配置日志
+    println("[OneTV-Build] TV Android配置:")
+    println("[OneTV-Build]   namespace: top.cywin.onetv.tv")
+    println("[OneTV-Build]   compileSdk: ${libs.versions.compileSdk.get()}")
+    println("[OneTV-Build]   插件类型: com.android.application")
+
     defaultConfig {
         applicationId = project.property("APP_APPLICATION_ID") as String
+
+        // 添加defaultConfig日志
+        println("[OneTV-Build] TV defaultConfig:")
+        println("[OneTV-Build]   applicationId: ${project.property("APP_APPLICATION_ID")}")
+        println("[OneTV-Build]   这是主应用配置!")
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
         versionCode = (project.property("APP_VERSION_CODE") as String).toInt()

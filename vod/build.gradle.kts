@@ -6,10 +6,23 @@ plugins {
     // Python插件只在chaquo子模块中使用，避免冲突
 }
 
+// 添加构建日志
+println("[OneTV-Build] VOD模块构建开始")
+println("[OneTV-Build] VOD模块类型: android.library")
+println("[OneTV-Build] VOD模块名称: ${project.name}")
+println("[OneTV-Build] VOD模块路径: ${project.path}")
+println("[OneTV-Build] VOD是否为根项目: ${project == rootProject}")
+
 android {
     namespace ="top.cywin.onetv.vod"
     //namespace = project.property("APP_APPLICATION_ID") as String
     compileSdk = libs.versions.compileSdk.get().toInt()
+
+    // 添加Android配置日志
+    println("[OneTV-Build] VOD Android配置:")
+    println("[OneTV-Build]   namespace: top.cywin.onetv.vod")
+    println("[OneTV-Build]   compileSdk: ${libs.versions.compileSdk.get()}")
+    println("[OneTV-Build]   插件类型: com.android.library")
 
     flavorDimensions += listOf("mode", "api", "abi")
     productFlavors {
@@ -61,9 +74,10 @@ android {
             }
         }
 
-        // 库模块：移除应用级BuildConfig字段，使用库模块专用配置
-        // 库模块不需要APPLICATION_ID、VERSION_NAME、VERSION_CODE
-        // 这些信息将由主应用(TV模块)提供
+        // 库模块：使用TV主应用的BuildConfig字段，确保一致性
+        buildConfigField("String", "APPLICATION_ID", "\"${project.property("APP_APPLICATION_ID")}\"")
+        buildConfigField("String", "VERSION_NAME", "\"${project.property("APP_VERSION_NAME")}\"")
+        buildConfigField("int", "VERSION_CODE", project.property("APP_VERSION_CODE").toString())
     }
     
     buildFeatures {
