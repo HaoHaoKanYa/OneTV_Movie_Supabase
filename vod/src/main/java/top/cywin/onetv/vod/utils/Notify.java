@@ -14,7 +14,7 @@ import androidx.core.app.NotificationChannelCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import top.cywin.onetv.vod.App;
-import top.cywin.onetv.vod.databinding.ViewProgressBinding;
+import top.cywin.onetv.vod.databinding.VodViewProgressBinding;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class Notify {
@@ -68,7 +68,7 @@ public class Notify {
     }
 
     private void create(Context context) {
-        ViewProgressBinding binding = ViewProgressBinding.inflate(LayoutInflater.from(context));
+        VodViewProgressBinding binding = VodViewProgressBinding.inflate(LayoutInflater.from(context));
         mDialog = new MaterialAlertDialogBuilder(context).setView(binding.getRoot()).create();
         mDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         mDialog.show();

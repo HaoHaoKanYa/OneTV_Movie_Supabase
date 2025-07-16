@@ -33,7 +33,7 @@ public class CustomTitleView extends AppCompatTextView {
 
     public CustomTitleView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        flicker = ResUtil.getAnim(R.anim.flicker);
+        flicker = ResUtil.getAnim(R.anim.vod_flicker);
     }
 
     public void setListener(Listener listener) {

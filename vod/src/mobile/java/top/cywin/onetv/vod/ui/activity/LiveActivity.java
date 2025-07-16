@@ -670,7 +670,7 @@ public class LiveActivity extends BaseActivity implements CustomKeyDownLive.List
     }
 
     private void checkLockImg() {
-        mBinding.control.right.lock.setImageResource(isLock() ? R.drawable.ic_control_lock_on : R.drawable.ic_control_lock_off);
+        mBinding.control.right.lock.setImageResource(isLock() ? R.drawable.vod_ic_control_lock_on : R.drawable.vod_ic_control_lock_off);
     }
 
     private void resetAdapter() {
@@ -950,9 +950,9 @@ public class LiveActivity extends BaseActivity implements CustomKeyDownLive.List
     public void onBright(int progress) {
         mBinding.widget.bright.setVisibility(View.VISIBLE);
         mBinding.widget.brightProgress.setProgress(progress);
-        if (progress < 35) mBinding.widget.brightIcon.setImageResource(R.drawable.ic_widget_bright_low);
-        else if (progress < 70) mBinding.widget.brightIcon.setImageResource(R.drawable.ic_widget_bright_medium);
-        else mBinding.widget.brightIcon.setImageResource(R.drawable.ic_widget_bright_high);
+        if (progress < 35) mBinding.widget.brightIcon.setImageResource(R.drawable.vod_ic_widget_bright_low);
+        else if (progress < 70) mBinding.widget.brightIcon.setImageResource(R.drawable.vod_ic_widget_bright_medium);
+        else mBinding.widget.brightIcon.setImageResource(R.drawable.vod_ic_widget_bright_high);
     }
 
     @Override
@@ -964,9 +964,9 @@ public class LiveActivity extends BaseActivity implements CustomKeyDownLive.List
     public void onVolume(int progress) {
         mBinding.widget.volume.setVisibility(View.VISIBLE);
         mBinding.widget.volumeProgress.setProgress(progress);
-        if (progress < 35) mBinding.widget.volumeIcon.setImageResource(R.drawable.ic_widget_volume_low);
-        else if (progress < 70) mBinding.widget.volumeIcon.setImageResource(R.drawable.ic_widget_volume_medium);
-        else mBinding.widget.volumeIcon.setImageResource(R.drawable.ic_widget_volume_high);
+        if (progress < 35) mBinding.widget.volumeIcon.setImageResource(R.drawable.vod_ic_widget_volume_low);
+        else if (progress < 70) mBinding.widget.volumeIcon.setImageResource(R.drawable.vod_ic_widget_volume_medium);
+        else mBinding.widget.volumeIcon.setImageResource(R.drawable.vod_ic_widget_volume_high);
     }
 
     @Override

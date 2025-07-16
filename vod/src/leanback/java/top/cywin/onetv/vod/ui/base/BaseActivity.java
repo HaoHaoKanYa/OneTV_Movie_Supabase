@@ -99,7 +99,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             if (file.exists() && file.length() > 0) getWindow().setBackgroundDrawable(Drawable.createFromPath(file.getAbsolutePath()));
             else getWindow().setBackgroundDrawableResource(ResUtil.getDrawable(file.getName()));
         } catch (Exception e) {
-            getWindow().setBackgroundDrawableResource(R.drawable.wallpaper_1);
+            getWindow().setBackgroundDrawableResource(R.drawable.vod_wallpaper_1);
         }
     }
 

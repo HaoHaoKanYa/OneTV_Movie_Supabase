@@ -78,7 +78,7 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder
     }
 
     private int getIcon(Device item) {
-        return item.isMobile() ? R.drawable.ic_cast_mobile : R.drawable.ic_cast_tv;
+        return item.isMobile() ? R.drawable.vod_ic_cast_mobile : R.drawable.vod_ic_cast_tv;
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

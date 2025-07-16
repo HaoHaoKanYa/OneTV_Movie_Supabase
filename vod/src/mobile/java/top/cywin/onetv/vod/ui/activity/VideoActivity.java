@@ -1059,15 +1059,15 @@ public class VideoActivity extends BaseActivity implements Clock.Callback, Custo
     }
 
     private void checkKeepImg() {
-        mBinding.control.keep.setImageResource(Keep.find(getHistoryKey()) == null ? R.drawable.ic_control_keep_off : R.drawable.ic_control_keep_on);
+        mBinding.control.keep.setImageResource(Keep.find(getHistoryKey()) == null ? R.drawable.vod_ic_control_keep_off : R.drawable.vod_ic_control_keep_on);
     }
 
     private void checkLockImg() {
-        mBinding.control.right.lock.setImageResource(isLock() ? R.drawable.ic_control_lock_on : R.drawable.ic_control_lock_off);
+        mBinding.control.right.lock.setImageResource(isLock() ? R.drawable.vod_ic_control_lock_on : R.drawable.vod_ic_control_lock_off);
     }
 
     private void checkDanmakuImg() {
-        mBinding.control.danmaku.setImageResource(Setting.isDanmakuShow() ? R.drawable.ic_control_danmaku_on : R.drawable.ic_control_danmaku_off);
+        mBinding.control.danmaku.setImageResource(Setting.isDanmakuShow() ? R.drawable.vod_ic_control_danmaku_on : R.drawable.vod_ic_control_danmaku_off);
     }
 
     private void createKeep() {
@@ -1446,9 +1446,9 @@ public class VideoActivity extends BaseActivity implements Clock.Callback, Custo
     public void onBright(int progress) {
         mBinding.widget.bright.setVisibility(View.VISIBLE);
         mBinding.widget.brightProgress.setProgress(progress);
-        if (progress < 35) mBinding.widget.brightIcon.setImageResource(R.drawable.ic_widget_bright_low);
-        else if (progress < 70) mBinding.widget.brightIcon.setImageResource(R.drawable.ic_widget_bright_medium);
-        else mBinding.widget.brightIcon.setImageResource(R.drawable.ic_widget_bright_high);
+        if (progress < 35) mBinding.widget.brightIcon.setImageResource(R.drawable.vod_ic_widget_bright_low);
+        else if (progress < 70) mBinding.widget.brightIcon.setImageResource(R.drawable.vod_ic_widget_bright_medium);
+        else mBinding.widget.brightIcon.setImageResource(R.drawable.vod_ic_widget_bright_high);
     }
 
     @Override
@@ -1460,9 +1460,9 @@ public class VideoActivity extends BaseActivity implements Clock.Callback, Custo
     public void onVolume(int progress) {
         mBinding.widget.volume.setVisibility(View.VISIBLE);
         mBinding.widget.volumeProgress.setProgress(progress);
-        if (progress < 35) mBinding.widget.volumeIcon.setImageResource(R.drawable.ic_widget_volume_low);
-        else if (progress < 70) mBinding.widget.volumeIcon.setImageResource(R.drawable.ic_widget_volume_medium);
-        else mBinding.widget.volumeIcon.setImageResource(R.drawable.ic_widget_volume_high);
+        if (progress < 35) mBinding.widget.volumeIcon.setImageResource(R.drawable.vod_ic_widget_volume_low);
+        else if (progress < 70) mBinding.widget.volumeIcon.setImageResource(R.drawable.vod_ic_widget_volume_medium);
+        else mBinding.widget.volumeIcon.setImageResource(R.drawable.vod_ic_widget_volume_high);
     }
 
     @Override

@@ -45,27 +45,27 @@ public class CustomKeyboard implements KeyboardAdapter.OnClickListener {
         int cursor = binding.keyword.getSelectionStart();
         if (resId == R.drawable.ic_setting_home) {
             callback.showDialog();
-        } else if (resId == R.drawable.ic_keyboard_remote) {
+        } else if (resId == R.drawable.vod_ic_keyboard_remote) {
             callback.onRemote();
-        } else if (resId == R.drawable.ic_keyboard_search) {
+        } else if (resId == R.drawable.vod_ic_keyboard_search) {
             callback.onSearch();
-        } else if (resId == R.drawable.ic_keyboard_left) {
+        } else if (resId == R.drawable.vod_ic_keyboard_left) {
             binding.keyword.setSelection(--cursor < 0 ? 0 : cursor);
-        } else if (resId == R.drawable.ic_keyboard_right) {
+        } else if (resId == R.drawable.vod_ic_keyboard_right) {
             binding.keyword.setSelection(++cursor > binding.keyword.length() ? binding.keyword.length() : cursor);
-        } else if (resId == R.drawable.ic_keyboard_back) {
+        } else if (resId == R.drawable.vod_ic_keyboard_back) {
             if (cursor == 0) return;
             sb.deleteCharAt(cursor - 1);
             binding.keyword.setText(sb.toString());
             binding.keyword.setSelection(cursor - 1);
-        } else if (resId == R.drawable.ic_keyboard) {
+        } else if (resId == R.drawable.vod_ic_keyboard) {
             adapter.toggle();
         }
     }
 
     @Override
     public boolean onLongClick(int resId) {
-        if (resId != R.drawable.ic_keyboard_back) return false;
+        if (resId != R.drawable.vod_ic_keyboard_back) return false;
         binding.keyword.setText("");
         return true;
     }

@@ -1,0 +1,243 @@
+
+VOD模块资源前缀处理报告
+========================
+
+处理时间: 2025-07-16 19:02:02
+前缀: vod_
+
+处理统计:
+- 重命名文件: 160 个
+- 更新引用: 68 个文件
+- 跳过文件: 0 个
+
+重命名详情:
+  activity_collect -> vod_activity_collect
+  activity_file -> vod_activity_file
+  activity_folder -> vod_activity_folder
+  activity_history -> vod_activity_history
+  activity_home -> vod_activity_home
+  activity_keep -> vod_activity_keep
+  activity_live -> vod_activity_live
+  activity_scan -> vod_activity_scan
+  activity_video -> vod_activity_video
+  adapter_channel -> vod_adapter_channel
+  adapter_collect -> vod_adapter_collect
+  adapter_collect_record -> vod_adapter_collect_record
+  adapter_collect_word -> vod_adapter_collect_word
+  adapter_config -> vod_adapter_config
+  adapter_danmaku -> vod_adapter_danmaku
+  adapter_device -> vod_adapter_device
+  adapter_epg_data -> vod_adapter_epg_data
+  adapter_episode_grid -> vod_adapter_episode_grid
+  adapter_episode_hori -> vod_adapter_episode_hori
+  adapter_episode_vert -> vod_adapter_episode_vert
+  adapter_file -> vod_adapter_file
+  adapter_filter -> vod_adapter_filter
+  adapter_flag -> vod_adapter_flag
+  adapter_group -> vod_adapter_group
+  adapter_live -> vod_adapter_live
+  adapter_parse_dark -> vod_adapter_parse_dark
+  adapter_parse_light -> vod_adapter_parse_light
+  adapter_quality -> vod_adapter_quality
+  adapter_quick -> vod_adapter_quick
+  adapter_restore -> vod_adapter_restore
+  adapter_site -> vod_adapter_site
+  adapter_track -> vod_adapter_track
+  adapter_type -> vod_adapter_type
+  adapter_value -> vod_adapter_value
+  adapter_vod -> vod_adapter_vod
+  adapter_vod_list -> vod_adapter_vod_list
+  adapter_vod_one -> vod_adapter_vod_one
+  adapter_vod_oval -> vod_adapter_vod_oval
+  adapter_vod_rect -> vod_adapter_vod_rect
+  channel -> vod_channel
+  control -> vod_control
+  dialog_buffer -> vod_dialog_buffer
+  dialog_config -> vod_dialog_config
+  dialog_control -> vod_dialog_control
+  dialog_danmaku -> vod_dialog_danmaku
+  dialog_device -> vod_dialog_device
+  dialog_episode_grid -> vod_dialog_episode_grid
+  dialog_episode_list -> vod_dialog_episode_list
+  dialog_filter -> vod_dialog_filter
+  dialog_history -> vod_dialog_history
+  dialog_info -> vod_dialog_info
+  dialog_link -> vod_dialog_link
+  dialog_live -> vod_dialog_live
+  dialog_pass -> vod_dialog_pass
+  dialog_proxy -> vod_dialog_proxy
+  dialog_receive -> vod_dialog_receive
+  dialog_restore -> vod_dialog_restore
+  dialog_site -> vod_dialog_site
+  dialog_speed -> vod_dialog_speed
+  dialog_subtitle -> vod_dialog_subtitle
+  dialog_timer -> vod_dialog_timer
+  dialog_track -> vod_dialog_track
+  dialog_ua -> vod_dialog_ua
+  dialog_update -> vod_dialog_update
+  epg -> vod_epg
+  fragment_episode -> vod_fragment_episode
+  fragment_setting -> vod_fragment_setting
+  fragment_setting_player -> vod_fragment_setting_player
+  fragment_type -> vod_fragment_type
+  fragment_vod -> vod_fragment_vod
+  group -> vod_group
+  ic_action_choose -> vod_ic_action_choose
+  ic_action_delete -> vod_ic_action_delete
+  ic_action_grid -> vod_ic_action_grid
+  ic_action_history -> vod_ic_action_history
+  ic_action_keep -> vod_ic_action_keep
+  ic_action_list -> vod_ic_action_list
+  ic_action_refresh -> vod_ic_action_refresh
+  ic_action_retry -> vod_ic_action_retry
+  ic_action_scan -> vod_ic_action_scan
+  ic_action_search -> vod_ic_action_search
+  ic_action_site -> vod_ic_action_site
+  ic_action_subtitle -> vod_ic_action_subtitle
+  ic_action_sync -> vod_ic_action_sync
+  ic_cast_mobile -> vod_ic_cast_mobile
+  ic_cast_tv -> vod_ic_cast_tv
+  ic_control_back -> vod_ic_control_back
+  ic_control_cast -> vod_ic_control_cast
+  ic_control_danmaku_off -> vod_ic_control_danmaku_off
+  ic_control_danmaku_on -> vod_ic_control_danmaku_on
+  ic_control_full -> vod_ic_control_full
+  ic_control_info -> vod_ic_control_info
+  ic_control_keep_off -> vod_ic_control_keep_off
+  ic_control_keep_on -> vod_ic_control_keep_on
+  ic_control_lock_off -> vod_ic_control_lock_off
+  ic_control_lock_on -> vod_ic_control_lock_on
+  ic_control_rotate -> vod_ic_control_rotate
+  ic_control_setting -> vod_ic_control_setting
+  ic_detail_more -> vod_ic_detail_more
+  ic_detail_reverse -> vod_ic_detail_reverse
+  ic_fab_filter -> vod_ic_fab_filter
+  ic_fab_link -> vod_ic_fab_link
+  ic_fab_top -> vod_ic_fab_top
+  ic_live_block -> vod_ic_live_block
+  ic_live_boot -> vod_ic_live_boot
+  ic_live_pass -> vod_ic_live_pass
+  ic_nav_live -> vod_ic_nav_live
+  ic_nav_setting -> vod_ic_nav_setting
+  ic_nav_vod -> vod_ic_nav_vod
+  ic_setting_delete -> vod_ic_setting_delete
+  ic_site_block -> vod_ic_site_block
+  ic_site_change -> vod_ic_site_change
+  ic_site_search -> vod_ic_site_search
+  ic_subtitle_down -> vod_ic_subtitle_down
+  ic_subtitle_large -> vod_ic_subtitle_large
+  ic_subtitle_reset -> vod_ic_subtitle_reset
+  ic_subtitle_small -> vod_ic_subtitle_small
+  ic_subtitle_up -> vod_ic_subtitle_up
+  ic_sync_download -> vod_ic_sync_download
+  ic_sync_two -> vod_ic_sync_two
+  ic_sync_upload -> vod_ic_sync_upload
+  ic_widget_bright_high -> vod_ic_widget_bright_high
+  ic_widget_bright_low -> vod_ic_widget_bright_low
+  ic_widget_bright_medium -> vod_ic_widget_bright_medium
+  ic_widget_volume_high -> vod_ic_widget_volume_high
+  ic_widget_volume_low -> vod_ic_widget_volume_low
+  ic_widget_volume_medium -> vod_ic_widget_volume_medium
+  menu_nav -> vod_menu_nav
+  nav -> vod_nav
+  selector_item_round -> vod_selector_item_round
+  shadow -> vod_shadow
+  shape_accent -> vod_shape_accent
+  shape_channel -> vod_shape_channel
+  shape_control -> vod_shape_control
+  shape_group -> vod_shape_group
+  shape_item -> vod_shape_item
+  shape_item_round_activated -> vod_shape_item_round_activated
+  shape_item_round_normal -> vod_shape_item_round_normal
+  shape_live_info -> vod_shape_live_info
+  shape_live_list -> vod_shape_live_list
+  shape_vod -> vod_shape_vod
+  shape_vod_list -> vod_shape_vod_list
+  shape_vod_name -> vod_shape_vod_name
+  shape_vod_oval -> vod_shape_vod_oval
+  shape_widget -> vod_shape_widget
+  shape_widget_error -> vod_shape_widget_error
+  view_control_live -> vod_view_control_live
+  view_control_live_action -> vod_view_control_live_action
+  view_control_right -> vod_view_control_right
+  view_control_seek -> vod_view_control_seek
+  view_control_vod -> vod_view_control_vod
+  view_control_vod_action -> vod_view_control_vod_action
+  view_scanner -> vod_view_scanner
+  view_shadow -> vod_view_shadow
+  view_widget_live -> vod_view_widget_live
+  view_widget_vod -> vod_view_widget_vod
+  wallpaper_1 -> vod_wallpaper_1
+  wallpaper_2 -> vod_wallpaper_2
+  wallpaper_3 -> vod_wallpaper_3
+  wallpaper_4 -> vod_wallpaper_4
+
+更新引用文件:
+  vod\src\mobile\java\top\cywin\onetv\vod\ui\activity\CollectActivity.java
+  vod\src\mobile\java\top\cywin\onetv\vod\ui\activity\LiveActivity.java
+  vod\src\mobile\java\top\cywin\onetv\vod\ui\activity\VideoActivity.java
+  vod\src\mobile\java\top\cywin\onetv\vod\ui\adapter\DeviceAdapter.java
+  vod\src\mobile\java\top\cywin\onetv\vod\ui\adapter\SiteAdapter.java
+  vod\src\mobile\java\top\cywin\onetv\vod\ui\base\BaseActivity.java
+  vod\src\mobile\res\drawable\vod_selector_item_round.xml
+  vod\src\mobile\res\layout-sw600dp\vod_activity_video.xml
+  vod\src\mobile\res\layout-sw600dp\vod_view_control_right.xml
+  vod\src\mobile\res\layout\vod_activity_collect.xml
+  vod\src\mobile\res\layout\vod_activity_file.xml
+  vod\src\mobile\res\layout\vod_activity_folder.xml
+  vod\src\mobile\res\layout\vod_activity_history.xml
+  vod\src\mobile\res\layout\vod_activity_home.xml
+  vod\src\mobile\res\layout\vod_activity_keep.xml
+  vod\src\mobile\res\layout\vod_activity_live.xml
+  vod\src\mobile\res\layout\vod_activity_scan.xml
+  vod\src\mobile\res\layout\vod_activity_video.xml
+  vod\src\mobile\res\layout\vod_adapter_channel.xml
+  vod\src\mobile\res\layout\vod_adapter_collect.xml
+  vod\src\mobile\res\layout\vod_adapter_collect_record.xml
+  vod\src\mobile\res\layout\vod_adapter_collect_word.xml
+  vod\src\mobile\res\layout\vod_adapter_config.xml
+  vod\src\mobile\res\layout\vod_adapter_danmaku.xml
+  vod\src\mobile\res\layout\vod_adapter_device.xml
+  vod\src\mobile\res\layout\vod_adapter_epg_data.xml
+  vod\src\mobile\res\layout\vod_adapter_episode_grid.xml
+  vod\src\mobile\res\layout\vod_adapter_episode_hori.xml
+  vod\src\mobile\res\layout\vod_adapter_episode_vert.xml
+  vod\src\mobile\res\layout\vod_adapter_file.xml
+  vod\src\mobile\res\layout\vod_adapter_flag.xml
+  vod\src\mobile\res\layout\vod_adapter_group.xml
+  vod\src\mobile\res\layout\vod_adapter_live.xml
+  vod\src\mobile\res\layout\vod_adapter_parse_light.xml
+  vod\src\mobile\res\layout\vod_adapter_quality.xml
+  vod\src\mobile\res\layout\vod_adapter_quick.xml
+  vod\src\mobile\res\layout\vod_adapter_restore.xml
+  vod\src\mobile\res\layout\vod_adapter_site.xml
+  vod\src\mobile\res\layout\vod_adapter_track.xml
+  vod\src\mobile\res\layout\vod_adapter_type.xml
+  vod\src\mobile\res\layout\vod_adapter_value.xml
+  vod\src\mobile\res\layout\vod_adapter_vod.xml
+  vod\src\mobile\res\layout\vod_adapter_vod_list.xml
+  vod\src\mobile\res\layout\vod_adapter_vod_one.xml
+  vod\src\mobile\res\layout\vod_adapter_vod_oval.xml
+  vod\src\mobile\res\layout\vod_adapter_vod_rect.xml
+  vod\src\mobile\res\layout\vod_dialog_config.xml
+  vod\src\mobile\res\layout\vod_dialog_control.xml
+  vod\src\mobile\res\layout\vod_dialog_danmaku.xml
+  vod\src\mobile\res\layout\vod_dialog_device.xml
+  vod\src\mobile\res\layout\vod_dialog_episode_list.xml
+  vod\src\mobile\res\layout\vod_dialog_link.xml
+  vod\src\mobile\res\layout\vod_dialog_receive.xml
+  vod\src\mobile\res\layout\vod_dialog_restore.xml
+  vod\src\mobile\res\layout\vod_dialog_subtitle.xml
+  vod\src\mobile\res\layout\vod_dialog_timer.xml
+  vod\src\mobile\res\layout\vod_dialog_track.xml
+  vod\src\mobile\res\layout\vod_fragment_setting.xml
+  vod\src\mobile\res\layout\vod_fragment_setting_player.xml
+  vod\src\mobile\res\layout\vod_fragment_vod.xml
+  vod\src\mobile\res\layout\vod_view_control_live.xml
+  vod\src\mobile\res\layout\vod_view_control_right.xml
+  vod\src\mobile\res\layout\vod_view_control_vod.xml
+  vod\src\mobile\res\layout\vod_view_shadow.xml
+  vod\src\mobile\res\layout\vod_view_widget_live.xml
+  vod\src\mobile\res\layout\vod_view_widget_vod.xml
+  vod\src\mobile\res\menu\vod_menu_nav.xml
+  vod\src\mobile\res\values\arrays.xml

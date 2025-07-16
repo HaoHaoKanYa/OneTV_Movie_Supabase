@@ -1,0 +1,250 @@
+
+VOD模块资源前缀处理报告
+========================
+
+处理时间: 2025-07-16 19:00:48
+前缀: vod_
+
+处理统计:
+- 重命名文件: 155 个
+- 更新引用: 80 个文件
+- 跳过文件: 0 个
+
+重命名详情:
+  activity_cast -> vod_activity_cast
+  activity_collect -> vod_activity_collect
+  activity_file -> vod_activity_file
+  activity_home -> vod_activity_home
+  activity_keep -> vod_activity_keep
+  activity_live -> vod_activity_live
+  activity_push -> vod_activity_push
+  activity_search -> vod_activity_search
+  activity_setting -> vod_activity_setting
+  activity_setting_player -> vod_activity_setting_player
+  activity_video -> vod_activity_video
+  activity_vod -> vod_activity_vod
+  adapter_array -> vod_adapter_array
+  adapter_channel -> vod_adapter_channel
+  adapter_config -> vod_adapter_config
+  adapter_danmaku -> vod_adapter_danmaku
+  adapter_doh -> vod_adapter_doh
+  adapter_epg_data -> vod_adapter_epg_data
+  adapter_episode -> vod_adapter_episode
+  adapter_file -> vod_adapter_file
+  adapter_filter -> vod_adapter_filter
+  adapter_flag -> vod_adapter_flag
+  adapter_func -> vod_adapter_func
+  adapter_group -> vod_adapter_group
+  adapter_header -> vod_adapter_header
+  adapter_keyboard_icon -> vod_adapter_keyboard_icon
+  adapter_keyboard_text -> vod_adapter_keyboard_text
+  adapter_live -> vod_adapter_live
+  adapter_parse -> vod_adapter_parse
+  adapter_part -> vod_adapter_part
+  adapter_progress -> vod_adapter_progress
+  adapter_quality -> vod_adapter_quality
+  adapter_quick -> vod_adapter_quick
+  adapter_restore -> vod_adapter_restore
+  adapter_search_record -> vod_adapter_search_record
+  adapter_search_word -> vod_adapter_search_word
+  adapter_site -> vod_adapter_site
+  adapter_track -> vod_adapter_track
+  adapter_type -> vod_adapter_type
+  adapter_vod -> vod_adapter_vod
+  adapter_vod_list -> vod_adapter_vod_list
+  adapter_vod_oval -> vod_adapter_vod_oval
+  adapter_vod_rect -> vod_adapter_vod_rect
+  channel -> vod_channel
+  cycles -> vod_cycles
+  dialog_buffer -> vod_dialog_buffer
+  dialog_config -> vod_dialog_config
+  dialog_danmaku -> vod_dialog_danmaku
+  dialog_desc -> vod_dialog_desc
+  dialog_doh -> vod_dialog_doh
+  dialog_history -> vod_dialog_history
+  dialog_live -> vod_dialog_live
+  dialog_pass -> vod_dialog_pass
+  dialog_proxy -> vod_dialog_proxy
+  dialog_restore -> vod_dialog_restore
+  dialog_site -> vod_dialog_site
+  dialog_speed -> vod_dialog_speed
+  dialog_subtitle -> vod_dialog_subtitle
+  dialog_track -> vod_dialog_track
+  dialog_ua -> vod_dialog_ua
+  dialog_update -> vod_dialog_update
+  epg -> vod_epg
+  flicker -> vod_flicker
+  fragment_vod -> vod_fragment_vod
+  group -> vod_group
+  ic_action_choose -> vod_ic_action_choose
+  ic_action_subtitle -> vod_ic_action_subtitle
+  ic_banner -> vod_ic_banner
+  ic_detail_change -> vod_ic_detail_change
+  ic_detail_desc -> vod_ic_detail_desc
+  ic_detail_keep_off -> vod_ic_detail_keep_off
+  ic_detail_keep_on -> vod_ic_detail_keep_on
+  ic_home_cast -> vod_ic_home_cast
+  ic_home_keep -> vod_ic_home_keep
+  ic_home_live -> vod_ic_home_live
+  ic_home_push -> vod_ic_home_push
+  ic_home_search -> vod_ic_home_search
+  ic_home_setting -> vod_ic_home_setting
+  ic_home_vod -> vod_ic_home_vod
+  ic_keyboard -> vod_ic_keyboard
+  ic_keyboard_back -> vod_ic_keyboard_back
+  ic_keyboard_left -> vod_ic_keyboard_left
+  ic_keyboard_remote -> vod_ic_keyboard_remote
+  ic_keyboard_right -> vod_ic_keyboard_right
+  ic_keyboard_search -> vod_ic_keyboard_search
+  ic_live_block -> vod_ic_live_block
+  ic_live_boot -> vod_ic_live_boot
+  ic_live_pass -> vod_ic_live_pass
+  ic_search_mic -> vod_ic_search_mic
+  ic_setting_delete -> vod_ic_setting_delete
+  ic_site_cancel -> vod_ic_site_cancel
+  ic_site_change -> vod_ic_site_change
+  ic_site_grid -> vod_ic_site_grid
+  ic_site_list -> vod_ic_site_list
+  ic_site_search -> vod_ic_site_search
+  ic_site_select -> vod_ic_site_select
+  ic_subtitle_down -> vod_ic_subtitle_down
+  ic_subtitle_large -> vod_ic_subtitle_large
+  ic_subtitle_reset -> vod_ic_subtitle_reset
+  ic_subtitle_small -> vod_ic_subtitle_small
+  ic_subtitle_up -> vod_ic_subtitle_up
+  ic_vod_delete -> vod_ic_vod_delete
+  ic_vod_filter_off -> vod_ic_vod_filter_off
+  ic_vod_filter_on -> vod_ic_vod_filter_on
+  ic_widget_play -> vod_ic_widget_play
+  selector_channel -> vod_selector_channel
+  selector_epg -> vod_selector_epg
+  selector_group -> vod_selector_group
+  selector_item -> vod_selector_item
+  selector_item_round -> vod_selector_item_round
+  selector_keyboard -> vod_selector_keyboard
+  selector_subtitle -> vod_selector_subtitle
+  selector_text -> vod_selector_text
+  selector_video -> vod_selector_video
+  selector_vod -> vod_selector_vod
+  selector_vod_oval -> vod_selector_vod_oval
+  shake -> vod_shake
+  shape_bottom_sheet -> vod_shape_bottom_sheet
+  shape_channel -> vod_shape_channel
+  shape_controller -> vod_shape_controller
+  shape_epg_focused -> vod_shape_epg_focused
+  shape_group -> vod_shape_group
+  shape_item_activated -> vod_shape_item_activated
+  shape_item_focused -> vod_shape_item_focused
+  shape_item_normal -> vod_shape_item_normal
+  shape_item_round_activated -> vod_shape_item_round_activated
+  shape_item_round_focused -> vod_shape_item_round_focused
+  shape_item_round_normal -> vod_shape_item_round_normal
+  shape_item_selected -> vod_shape_item_selected
+  shape_keyboard_focused -> vod_shape_keyboard_focused
+  shape_keyboard_normal -> vod_shape_keyboard_normal
+  shape_live_info -> vod_shape_live_info
+  shape_live_list -> vod_shape_live_list
+  shape_subtitle_focused -> vod_shape_subtitle_focused
+  shape_subtitle_pressed -> vod_shape_subtitle_pressed
+  shape_text_activated -> vod_shape_text_activated
+  shape_text_focused -> vod_shape_text_focused
+  shape_text_normal -> vod_shape_text_normal
+  shape_video_focused -> vod_shape_video_focused
+  shape_vod_focused -> vod_shape_vod_focused
+  shape_vod_list -> vod_shape_vod_list
+  shape_vod_name -> vod_shape_vod_name
+  shape_vod_oval_focused -> vod_shape_vod_oval_focused
+  shape_widget -> vod_shape_widget
+  view_control_cast -> vod_view_control_cast
+  view_control_live -> vod_view_control_live
+  view_control_seek -> vod_view_control_seek
+  view_control_vod -> vod_view_control_vod
+  view_widget_cast -> vod_view_widget_cast
+  view_widget_live -> vod_view_widget_live
+  view_widget_vod -> vod_view_widget_vod
+  wallpaper_1 -> vod_wallpaper_1
+  wallpaper_2 -> vod_wallpaper_2
+  wallpaper_3 -> vod_wallpaper_3
+  wallpaper_4 -> vod_wallpaper_4
+
+更新引用文件:
+  vod\src\leanback\java\top\cywin\onetv\vod\bean\Func.java
+  vod\src\leanback\java\top\cywin\onetv\vod\ui\activity\CastActivity.java
+  vod\src\leanback\java\top\cywin\onetv\vod\ui\activity\LiveActivity.java
+  vod\src\leanback\java\top\cywin\onetv\vod\ui\activity\VideoActivity.java
+  vod\src\leanback\java\top\cywin\onetv\vod\ui\adapter\KeyboardAdapter.java
+  vod\src\leanback\java\top\cywin\onetv\vod\ui\base\BaseActivity.java
+  vod\src\leanback\java\top\cywin\onetv\vod\ui\custom\CustomHorizontalGridView.java
+  vod\src\leanback\java\top\cywin\onetv\vod\ui\custom\CustomKeyboard.java
+  vod\src\leanback\java\top\cywin\onetv\vod\ui\custom\CustomMic.java
+  vod\src\leanback\java\top\cywin\onetv\vod\ui\custom\CustomSearchView.java
+  vod\src\leanback\java\top\cywin\onetv\vod\ui\custom\CustomTitleView.java
+  vod\src\leanback\java\top\cywin\onetv\vod\ui\custom\CustomViewPager.java
+  vod\src\leanback\java\top\cywin\onetv\vod\ui\dialog\SiteDialog.java
+  vod\src\leanback\java\top\cywin\onetv\vod\ui\presenter\TypePresenter.java
+  vod\src\leanback\res\anim\vod_shake.xml
+  vod\src\leanback\res\drawable\vod_selector_channel.xml
+  vod\src\leanback\res\drawable\vod_selector_epg.xml
+  vod\src\leanback\res\drawable\vod_selector_group.xml
+  vod\src\leanback\res\drawable\vod_selector_item.xml
+  vod\src\leanback\res\drawable\vod_selector_item_round.xml
+  vod\src\leanback\res\drawable\vod_selector_keyboard.xml
+  vod\src\leanback\res\drawable\vod_selector_subtitle.xml
+  vod\src\leanback\res\drawable\vod_selector_text.xml
+  vod\src\leanback\res\drawable\vod_selector_video.xml
+  vod\src\leanback\res\drawable\vod_selector_vod.xml
+  vod\src\leanback\res\drawable\vod_selector_vod_oval.xml
+  vod\src\leanback\res\layout\vod_activity_cast.xml
+  vod\src\leanback\res\layout\vod_activity_live.xml
+  vod\src\leanback\res\layout\vod_activity_push.xml
+  vod\src\leanback\res\layout\vod_activity_search.xml
+  vod\src\leanback\res\layout\vod_activity_setting.xml
+  vod\src\leanback\res\layout\vod_activity_setting_player.xml
+  vod\src\leanback\res\layout\vod_activity_video.xml
+  vod\src\leanback\res\layout\vod_adapter_array.xml
+  vod\src\leanback\res\layout\vod_adapter_channel.xml
+  vod\src\leanback\res\layout\vod_adapter_config.xml
+  vod\src\leanback\res\layout\vod_adapter_danmaku.xml
+  vod\src\leanback\res\layout\vod_adapter_doh.xml
+  vod\src\leanback\res\layout\vod_adapter_epg_data.xml
+  vod\src\leanback\res\layout\vod_adapter_episode.xml
+  vod\src\leanback\res\layout\vod_adapter_file.xml
+  vod\src\leanback\res\layout\vod_adapter_filter.xml
+  vod\src\leanback\res\layout\vod_adapter_flag.xml
+  vod\src\leanback\res\layout\vod_adapter_func.xml
+  vod\src\leanback\res\layout\vod_adapter_group.xml
+  vod\src\leanback\res\layout\vod_adapter_keyboard_icon.xml
+  vod\src\leanback\res\layout\vod_adapter_keyboard_text.xml
+  vod\src\leanback\res\layout\vod_adapter_live.xml
+  vod\src\leanback\res\layout\vod_adapter_parse.xml
+  vod\src\leanback\res\layout\vod_adapter_part.xml
+  vod\src\leanback\res\layout\vod_adapter_quality.xml
+  vod\src\leanback\res\layout\vod_adapter_quick.xml
+  vod\src\leanback\res\layout\vod_adapter_restore.xml
+  vod\src\leanback\res\layout\vod_adapter_search_record.xml
+  vod\src\leanback\res\layout\vod_adapter_search_word.xml
+  vod\src\leanback\res\layout\vod_adapter_site.xml
+  vod\src\leanback\res\layout\vod_adapter_track.xml
+  vod\src\leanback\res\layout\vod_adapter_type.xml
+  vod\src\leanback\res\layout\vod_adapter_vod.xml
+  vod\src\leanback\res\layout\vod_adapter_vod_list.xml
+  vod\src\leanback\res\layout\vod_adapter_vod_oval.xml
+  vod\src\leanback\res\layout\vod_adapter_vod_rect.xml
+  vod\src\leanback\res\layout\vod_dialog_config.xml
+  vod\src\leanback\res\layout\vod_dialog_danmaku.xml
+  vod\src\leanback\res\layout\vod_dialog_doh.xml
+  vod\src\leanback\res\layout\vod_dialog_live.xml
+  vod\src\leanback\res\layout\vod_dialog_pass.xml
+  vod\src\leanback\res\layout\vod_dialog_proxy.xml
+  vod\src\leanback\res\layout\vod_dialog_site.xml
+  vod\src\leanback\res\layout\vod_dialog_subtitle.xml
+  vod\src\leanback\res\layout\vod_dialog_track.xml
+  vod\src\leanback\res\layout\vod_dialog_ua.xml
+  vod\src\leanback\res\layout\vod_dialog_update.xml
+  vod\src\leanback\res\layout\vod_view_control_cast.xml
+  vod\src\leanback\res\layout\vod_view_control_live.xml
+  vod\src\leanback\res\layout\vod_view_control_vod.xml
+  vod\src\leanback\res\layout\vod_view_widget_cast.xml
+  vod\src\leanback\res\layout\vod_view_widget_live.xml
+  vod\src\leanback\res\layout\vod_view_widget_vod.xml
+  vod\src\leanback\res\values\styles.xml

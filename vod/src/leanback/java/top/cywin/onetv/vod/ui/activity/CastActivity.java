@@ -257,7 +257,7 @@ public class CastActivity extends BaseActivity implements CustomKeyDownCast.List
     }
 
     private void hideCenter() {
-        mBinding.widget.action.setImageResource(R.drawable.ic_widget_play);
+        mBinding.widget.action.setImageResource(R.drawable.vod_ic_widget_play);
         hideInfo();
     }
 

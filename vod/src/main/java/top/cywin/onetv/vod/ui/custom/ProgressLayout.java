@@ -7,8 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
-import top.cywin.onetv.vod.databinding.ViewEmptyBinding;
-import top.cywin.onetv.vod.databinding.ViewProgressBinding;
+import top.cywin.onetv.vod.databinding.VodViewEmptyBinding;
+import top.cywin.onetv.vod.databinding.VodViewProgressBinding;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,10 +47,10 @@ public class ProgressLayout extends RelativeLayout {
     }
 
     private void initView() {
-        mEmptyView = ViewEmptyBinding.inflate(LayoutInflater.from(getContext())).getRoot();
+        mEmptyView = VodViewEmptyBinding.inflate(LayoutInflater.from(getContext())).getRoot();
         mEmptyView.setTag(TAG_PROGRESS);
         mEmptyView.setVisibility(GONE);
-        mProgressView = ViewProgressBinding.inflate(LayoutInflater.from(getContext())).getRoot();
+        mProgressView = VodViewProgressBinding.inflate(LayoutInflater.from(getContext())).getRoot();
         mProgressView.setTag(TAG_PROGRESS);
         mProgressView.setVisibility(GONE);
         LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);

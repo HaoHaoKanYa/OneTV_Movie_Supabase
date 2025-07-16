@@ -66,7 +66,7 @@ public class SiteDialog implements SiteAdapter.OnClickListener {
     }
 
     private int getIcon() {
-        return list() ? R.drawable.ic_site_grid : R.drawable.ic_site_list;
+        return list() ? R.drawable.vod_ic_site_grid : R.drawable.vod_ic_site_list;
     }
 
     private float getWidth() {

@@ -91,11 +91,11 @@ public class SiteAdapter extends RecyclerView.Adapter<SiteAdapter.ViewHolder> {
     }
 
     private int getSearchIcon(Site item) {
-        return item.isSearchable() ? R.drawable.ic_site_search : R.drawable.ic_site_block;
+        return item.isSearchable() ? R.drawable.vod_ic_site_search : R.drawable.vod_ic_site_block;
     }
 
     private int getChangeIcon(Site item) {
-        return item.isChangeable() ? R.drawable.ic_site_change : R.drawable.ic_site_block;
+        return item.isChangeable() ? R.drawable.vod_ic_site_change : R.drawable.vod_ic_site_block;
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

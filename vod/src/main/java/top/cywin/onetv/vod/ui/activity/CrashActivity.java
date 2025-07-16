@@ -4,7 +4,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.viewbinding.ViewBinding;
 
 import top.cywin.onetv.vod.R;
-import top.cywin.onetv.vod.databinding.ActivityCrashBinding;
+import top.cywin.onetv.vod.databinding.VodActivityCrashBinding;
 import top.cywin.onetv.vod.ui.base.BaseActivity;
 
 import java.util.Objects;
@@ -13,11 +13,11 @@ import cat.ereza.customactivityoncrash.CustomActivityOnCrash;
 
 public class CrashActivity extends BaseActivity {
 
-    private ActivityCrashBinding mBinding;
+    private VodActivityCrashBinding mBinding;
 
     @Override
     protected ViewBinding getBinding() {
-        return mBinding = ActivityCrashBinding.inflate(getLayoutInflater());
+        return mBinding = VodActivityCrashBinding.inflate(getLayoutInflater());
     }
 
     @Override

@@ -18,6 +18,9 @@ android {
     //namespace = project.property("APP_APPLICATION_ID") as String
     compileSdk = libs.versions.compileSdk.get().toInt()
 
+    // 资源前缀配置 - 避免与主应用资源冲突
+    resourcePrefix = "vod_"
+
     // 添加Android配置日志
     println("[OneTV-Build] VOD Android配置:")
     println("[OneTV-Build]   namespace: top.cywin.onetv.vod")
@@ -117,6 +120,76 @@ android {
     buildFeatures {
         buildConfig = true  // 启用BuildConfig生成
     }
+}
+
+// 资源验证任务
+tasks.register("validateResourcePrefix") {
+    group = "vod"
+    description = "验证所有资源文件都有正确的前缀"
+
+    doLast {
+        val resDir = file("src/main/res")
+        val violations = mutableListOf<String>()
+
+        if (resDir.exists()) {
+            resDir.walkTopDown().forEach { file ->
+                if (file.isFile && file.extension in listOf("xml", "png", "jpg", "webp")) {
+                    // 跳过values目录和特殊文件
+                    val skipFiles = setOf("AndroidManifest.xml", "file_paths.xml", "ic_launcher.xml", "ic_launcher_round.xml")
+                    val isValuesDir = file.parent.contains("values")
+
+                    if (!file.nameWithoutExtension.startsWith("vod_") &&
+                        !isValuesDir &&
+                        !skipFiles.contains(file.name)) {
+                        violations.add(file.relativeTo(resDir).path)
+                    }
+                }
+            }
+        }
+
+        if (violations.isNotEmpty()) {
+            throw GradleException("发现未添加前缀的资源文件:\n${violations.joinToString("\n")}")
+        } else {
+            println("✓ 所有资源文件都有正确的前缀")
+        }
+    }
+}
+
+// 引用检查任务
+tasks.register("checkResourceReferences") {
+    group = "vod"
+    description = "检查资源引用是否正确更新"
+
+    doLast {
+        val srcDir = file("src")
+        val unresolvedRefs = mutableListOf<String>()
+
+        if (srcDir.exists()) {
+            srcDir.walkTopDown().forEach { file ->
+                if (file.isFile && file.extension in listOf("xml", "kt", "java")) {
+                    val content = file.readText()
+                    val oldRefPattern = Regex("""@(drawable|layout|string|style|color|anim|menu|xml|mipmap)/(?!vod_)\w+""")
+                    val oldRefs = oldRefPattern.findAll(content).map { it.value }.toList()
+
+                    if (oldRefs.isNotEmpty()) {
+                        unresolvedRefs.add("${file.path}: ${oldRefs.joinToString(", ")}")
+                    }
+                }
+            }
+        }
+
+        if (unresolvedRefs.isNotEmpty()) {
+            println("⚠️ 发现可能未更新的资源引用:")
+            unresolvedRefs.forEach { println("  $it") }
+        } else {
+            println("✓ 所有资源引用都已正确更新")
+        }
+    }
+}
+
+// 构建前验证
+tasks.named("preBuild") {
+    dependsOn("validateResourcePrefix")
 }
 
 dependencies {

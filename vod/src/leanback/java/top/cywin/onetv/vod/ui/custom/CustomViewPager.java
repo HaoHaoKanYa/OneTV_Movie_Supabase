@@ -35,7 +35,7 @@ public class CustomViewPager extends ViewPager {
 
     private void init() {
         this.rect = new Rect();
-        this.shake = ResUtil.getAnim(R.anim.shake);
+        this.shake = ResUtil.getAnim(R.anim.vod_shake);
     }
 
     @Override

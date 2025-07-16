@@ -142,7 +142,7 @@ public class CollectActivity extends BaseActivity implements CustomScroller.Call
         mSearchAdapter.setViewType(viewType, count);
         mSearchAdapter.setSize(Product.getSpec(this, ResUtil.dp2px(128 + (count) * 16), count));
         ((GridLayoutManager) mBinding.recycler.getLayoutManager()).setSpanCount(mSearchAdapter.isGrid() ? count : 1);
-        mBinding.view.setImageResource(mSearchAdapter.isGrid() ? R.drawable.ic_action_list : R.drawable.ic_action_grid);
+        mBinding.view.setImageResource(mSearchAdapter.isGrid() ? R.drawable.vod_ic_action_list : R.drawable.vod_ic_action_grid);
     }
 
     private void setViewModel() {

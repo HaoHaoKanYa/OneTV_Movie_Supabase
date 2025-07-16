@@ -21,7 +21,7 @@ public class CustomSearchView extends CustomEditText {
 
     public CustomSearchView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        flicker = ResUtil.getAnim(R.anim.flicker);
+        flicker = ResUtil.getAnim(R.anim.vod_flicker);
     }
 
     @Override
