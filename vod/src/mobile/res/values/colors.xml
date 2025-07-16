@@ -1,8 +1,8 @@
 <resources>
 
-    <color name="vod_primary">@color/blue_500</color>
-    <color name="vod_primaryDark">@color/blue_700</color>
-    <color name="vod_accent">@color/blue_500</color>
+    <color name="vod_primary">#2196F3</color>
+    <color name="vod_primaryDark">#1976D2</color>
+    <color name="vod_accent">#FF4081</color>
     <color name="vod_indicator">@color/white_80</color>
 
 </resources>

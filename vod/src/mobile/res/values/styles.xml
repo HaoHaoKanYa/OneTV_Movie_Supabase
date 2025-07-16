@@ -1,26 +1,29 @@
 <resources>
 
-    <style name="vod_AppTheme" parent="BaseTheme">
+    <style name="vod_AppTheme" parent="vod_BaseTheme">
         <item name="android:windowTranslucentStatus">true</item>
+        <item name="colorPrimary">@color/vod_primary</item>
+        <item name="colorPrimaryDark">@color/vod_primaryDark</item>
+        <item name="colorAccent">@color/vod_accent</item>
     </style>
 
-    <style name="vod_AppTheme.Live" parent="AppTheme">
-        <item name="android:windowBackground">@color/black</item>
+    <style name="vod_AppTheme.Live" parent="vod_AppTheme">
+        <item name="android:windowBackground">@color/vod_black</item>
     </style>
 
-    <style name="vod_AppTheme.Detail" parent="AppTheme">
-        <item name="android:statusBarColor">@color/black</item>
+    <style name="vod_AppTheme.Detail" parent="vod_AppTheme">
+        <item name="android:statusBarColor">@color/vod_black</item>
         <item name="android:windowTranslucentStatus">false</item>
     </style>
 
     <style name="vod_BaseTheme" parent="Theme.Material3.DayNight.NoActionBar">
-        <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryDark">@color/primaryDark</item>
-        <item name="colorAccent">@color/accent</item>
+        <item name="colorPrimary">@color/vod_primary</item>
+        <item name="colorPrimaryDark">@color/vod_primaryDark</item>
+        <item name="colorAccent">@color/vod_accent</item>
         <item name="android:windowBackground">@null</item>
         <item name="android:windowDisablePreview">true</item>
-        <item name="android:navigationBarColor">@color/transparent</item>
-        <item name="bottomSheetDialogTheme">@style/BottomSheetDialog</item>
+        <item name="android:navigationBarColor">@color/vod_transparent</item>
+        <item name="bottomSheetDialogTheme">@style/vod_BottomSheetDialog</item>
     </style>
 
     <style name="vod_Control" />
@@ -44,11 +47,11 @@
         <item name="colorAccent">@color/accent</item>
         <item name="android:backgroundDimEnabled">false</item>
         <item name="android:windowIsFloating">false</item>
-        <item name="bottomSheetStyle">@style/ModalBottomSheetDialog</item>
+        <item name="bottomSheetStyle">@style/vod_ModalBottomSheetDialog</item>
     </style>
 
     <style name="vod_ModalBottomSheetDialog" parent="Widget.Material3.BottomSheet.Modal">
-        <item name="shapeAppearance">@style/ShapeAppearance.App.LargeComponent</item>
+        <item name="shapeAppearance">@style/vod_ShapeAppearance.App.LargeComponent</item>
     </style>
 
     <style name="vod_ShapeAppearance.App.LargeComponent" parent="ShapeAppearance.Material3.LargeComponent">

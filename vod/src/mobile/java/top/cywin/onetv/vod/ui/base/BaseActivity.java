@@ -32,6 +32,8 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // 确保VOD模块使用自己的主题，不影响主应用
+        setTheme(R.style.vod_AppTheme);
         super.onCreate(savedInstanceState);
         if (transparent()) setTransparent(this);
         setContentView(getBinding().getRoot());

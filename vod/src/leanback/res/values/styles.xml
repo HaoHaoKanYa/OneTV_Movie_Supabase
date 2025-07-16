@@ -1,35 +1,36 @@
 <resources>
 
-    <style name="AppTheme" parent="BaseTheme" />
+    <!-- VOD模块专用主题，添加vod_前缀避免与主应用冲突 -->
+    <style name="vod_AppTheme" parent="vod_BaseTheme" />
 
-    <style name="AppTheme.Live" parent="AppTheme">
-        <item name="android:windowBackground">@color/black</item>
+    <style name="vod_AppTheme.Live" parent="vod_AppTheme">
+        <item name="android:windowBackground">@color/vod_black</item>
     </style>
 
-    <style name="BaseTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryDark">@color/primaryDark</item>
-        <item name="colorAccent">@color/accent</item>
+    <style name="vod_BaseTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/vod_primary</item>
+        <item name="colorPrimaryDark">@color/vod_primaryDark</item>
+        <item name="colorAccent">@color/vod_accent</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowBackground">@null</item>
         <item name="android:windowDisablePreview">true</item>
         <item name="android:windowAnimationStyle">@null</item>
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
-        <item name="bottomSheetDialogTheme">@style/BottomSheetDialog</item>
+        <item name="bottomSheetDialogTheme">@style/vod_BottomSheetDialog</item>
     </style>
 
-    <style name="ModalBottomSheetDialog" parent="Widget.Design.BottomSheet.Modal">
+    <style name="vod_ModalBottomSheetDialog" parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background">@drawable/vod_shape_bottom_sheet</item>
     </style>
 
-    <style name="BottomSheetDialog" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
-        <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryDark">@color/primaryDark</item>
-        <item name="colorAccent">@color/accent</item>
+    <style name="vod_BottomSheetDialog" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
+        <item name="colorPrimary">@color/vod_primary</item>
+        <item name="colorPrimaryDark">@color/vod_primaryDark</item>
+        <item name="colorAccent">@color/vod_accent</item>
         <item name="android:backgroundDimEnabled">false</item>
         <item name="android:windowIsFloating">false</item>
-        <item name="bottomSheetStyle">@style/ModalBottomSheetDialog</item>
+        <item name="bottomSheetStyle">@style/vod_ModalBottomSheetDialog</item>
     </style>
 
 </resources>
