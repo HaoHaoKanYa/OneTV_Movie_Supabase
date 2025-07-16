@@ -27,23 +27,23 @@ android {
     println("[OneTV-Build]   compileSdk: ${libs.versions.compileSdk.get()}")
     println("[OneTV-Build]   插件类型: com.android.library")
 
-    flavorDimensions += listOf("mode", "api", "abi")
-    productFlavors {
-        create("leanback") {
-            dimension = "mode"
-            buildConfigField("boolean", "FLAVOR_LEANBACK", "true")
-            buildConfigField("boolean", "FLAVOR_MOBILE", "false")
-        }
-        // create("mobile") { dimension = "mode" }
-        create("java") {
-            dimension = "api"
-            buildConfigField("boolean", "FLAVOR_JAVA", "true")
-            buildConfigField("boolean", "FLAVOR_PYTHON", "false")
-        }
-        // create("python") { dimension = "api" }
-        create("arm64_v8a") { dimension = "abi" }
-        // create("armeabi_v7a") { dimension = "abi" }
-    }
+    // flavorDimensions += listOf("mode", "api", "abi")
+    // productFlavors {
+    //     create("leanback") {
+    //         dimension = "mode"
+    //         buildConfigField("boolean", "FLAVOR_LEANBACK", "true")
+    //         buildConfigField("boolean", "FLAVOR_MOBILE", "false")
+    //     }
+    //     // create("mobile") { dimension = "mode" }
+    //     create("java") {
+    //         dimension = "api"
+    //         buildConfigField("boolean", "FLAVOR_JAVA", "true")
+    //         buildConfigField("boolean", "FLAVOR_PYTHON", "false")
+    //     }
+    //     // create("python") { dimension = "api" }
+    //     create("arm64_v8a") { dimension = "abi" }
+    //     // create("armeabi_v7a") { dimension = "abi" }
+    // }
 
     variantFilter {
         val mode = flavors.find { it.dimension == "mode" }?.name
@@ -88,15 +88,15 @@ android {
         viewBinding = true
     }
     
-    buildTypes {
-        release {
-            isMinifyEnabled = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-    }
+    // buildTypes {
+    //     release {
+    //         isMinifyEnabled = true
+    //         proguardFiles(
+    //             getDefaultProguardFile("proguard-android-optimize.txt"),
+    //             "proguard-rules.pro"
+    //         )
+    //     }
+    // }
     
     packaging {
         resources {

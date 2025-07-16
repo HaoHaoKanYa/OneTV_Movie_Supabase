@@ -15,19 +15,17 @@ android {
         }
     }
 
-    /*
-    flavorDimensions += listOf("abi")
-    productFlavors {
-        create("arm64_v8a") {
-            dimension = "abi"
-            ndk { abiFilters += "arm64-v8a" }
-        }
-        create("armeabi_v7a") {
-            dimension = "abi"
-            ndk { abiFilters += "armeabi-v7a" }
-        }
-    }
-    */
+    // flavorDimensions += listOf("abi")
+    // productFlavors {
+    //     create("arm64_v8a") {
+    //         dimension = "abi"
+    //         ndk { abiFilters += "arm64-v8a" }
+    //     }
+    //     create("armeabi_v7a") {
+    //         dimension = "abi"
+    //         ndk { abiFilters += "armeabi-v7a" }
+    //     }
+    // }
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17

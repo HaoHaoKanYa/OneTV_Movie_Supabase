@@ -17,6 +17,8 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+
+    // 如有 flavorDimensions、productFlavors、buildTypes 配置，全部注释
 }
 
 dependencies {

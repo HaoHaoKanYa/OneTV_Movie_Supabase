@@ -21,6 +21,8 @@ android {
     buildFeatures {
         buildConfig = true
     }
+
+    // 如有 flavorDimensions、productFlavors、buildTypes 配置，全部注释
 }
 
 dependencies {

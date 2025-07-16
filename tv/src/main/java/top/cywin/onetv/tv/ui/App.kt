@@ -108,7 +108,10 @@ fun App(
                                 }
                             },
                             viewModel = mainViewModel,
-                            // onNavigateToMovie = { /* 暂时禁用onevod相关代码 */ }
+                            onNavigateToMovie = {
+                                val intent = Intent(context, Class.forName("top.cywin.onetv.vod.ui.activity.HomeActivity"))
+                                context.startActivity(intent)
+                            }
                         )
                     }
 
