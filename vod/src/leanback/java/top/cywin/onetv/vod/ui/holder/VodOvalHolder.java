@@ -3,7 +3,7 @@ package top.cywin.onetv.vod.ui.holder;
 import androidx.annotation.NonNull;
 
 import top.cywin.onetv.vod.bean.Vod;
-import top.cywin.onetv.tv.databinding.AdapterVodOvalBinding;
+import top.cywin.onetv.vod.databinding.AdapterVodOvalBinding;
 import top.cywin.onetv.vod.ui.base.BaseVodHolder;
 import top.cywin.onetv.vod.ui.presenter.VodPresenter;
 import top.cywin.onetv.vod.utils.ImgUtil;

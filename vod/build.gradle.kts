@@ -7,8 +7,8 @@ plugins {
 }
 
 android {
-    //namespace ="top.cywin.onetv.vod"
-    namespace = project.property("APP_APPLICATION_ID") as String
+    namespace ="top.cywin.onetv.vod"
+    //namespace = project.property("APP_APPLICATION_ID") as String
     compileSdk = 35
 
     flavorDimensions += listOf("mode", "api", "abi")
@@ -101,14 +101,14 @@ dependencies {
     compileOnly(fileTree(mapOf("dir" to "libs", "include" to listOf("*.aar"))))
     
     // 子模块依赖
-    implementation(project(":onevod:catvod"))
-    implementation(project(":onevod:chaquo"))
-    implementation(project(":onevod:quickjs"))
-    implementation(project(":onevod:hook"))
-    implementation(project(":onevod:forcetech"))
-    implementation(project(":onevod:jianpian"))
-    implementation(project(":onevod:thunder"))
-    implementation(project(":onevod:tvbus"))
+    implementation(project(":vod:catvod"))
+    implementation(project(":vod:chaquo"))
+    implementation(project(":vod:quickjs"))
+    implementation(project(":vod:hook"))
+    implementation(project(":vod:forcetech"))
+    implementation(project(":vod:jianpian"))
+    implementation(project(":vod:thunder"))
+    implementation(project(":vod:tvbus"))
     
     // 核心Android依赖
     implementation("androidx.appcompat:appcompat:1.7.0")

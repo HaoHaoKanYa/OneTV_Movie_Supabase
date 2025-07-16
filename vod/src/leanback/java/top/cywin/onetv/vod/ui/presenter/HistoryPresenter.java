@@ -10,7 +10,7 @@ import androidx.leanback.widget.Presenter;
 import top.cywin.onetv.vod.Product;
 import top.cywin.onetv.vod.R;
 import top.cywin.onetv.vod.bean.History;
-import top.cywin.onetv.tv.databinding.AdapterVodBinding;
+import top.cywin.onetv.vod.databinding.AdapterVodBinding;
 import top.cywin.onetv.vod.utils.ImgUtil;
 import top.cywin.onetv.vod.utils.ResUtil;
 

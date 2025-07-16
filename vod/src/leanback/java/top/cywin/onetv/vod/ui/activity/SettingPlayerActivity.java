@@ -9,7 +9,7 @@ import androidx.viewbinding.ViewBinding;
 
 import top.cywin.onetv.vod.R;
 import top.cywin.onetv.vod.Setting;
-import top.cywin.onetv.tv.databinding.ActivitySettingPlayerBinding;
+import top.cywin.onetv.vod.databinding.ActivitySettingPlayerBinding;
 import top.cywin.onetv.vod.impl.BufferCallback;
 import top.cywin.onetv.vod.impl.SpeedCallback;
 import top.cywin.onetv.vod.impl.UaCallback;

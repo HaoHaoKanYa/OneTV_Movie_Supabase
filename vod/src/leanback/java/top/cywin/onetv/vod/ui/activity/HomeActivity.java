@@ -35,7 +35,7 @@ import top.cywin.onetv.vod.bean.Result;
 import top.cywin.onetv.vod.bean.Site;
 import top.cywin.onetv.vod.bean.Style;
 import top.cywin.onetv.vod.bean.Vod;
-import top.cywin.onetv.tv.databinding.ActivityHomeBinding;
+import top.cywin.onetv.vod.databinding.ActivityHomeBinding;
 import top.cywin.onetv.vod.db.AppDatabase;
 import top.cywin.onetv.vod.event.CastEvent;
 import top.cywin.onetv.vod.event.RefreshEvent;

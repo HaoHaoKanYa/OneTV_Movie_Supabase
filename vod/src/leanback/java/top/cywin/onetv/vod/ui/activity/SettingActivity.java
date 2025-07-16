@@ -7,7 +7,7 @@ import android.view.View;
 
 import androidx.viewbinding.ViewBinding;
 
-import top.cywin.onetv.tv.BuildConfig;
+import top.cywin.onetv.vod.BuildConfig;
 import top.cywin.onetv.vod.R;
 import top.cywin.onetv.vod.Setting;
 import top.cywin.onetv.vod.Updater;
@@ -17,7 +17,7 @@ import top.cywin.onetv.vod.api.config.WallConfig;
 import top.cywin.onetv.vod.bean.Config;
 import top.cywin.onetv.vod.bean.Live;
 import top.cywin.onetv.vod.bean.Site;
-import top.cywin.onetv.tv.databinding.ActivitySettingBinding;
+import top.cywin.onetv.vod.databinding.ActivitySettingBinding;
 import top.cywin.onetv.vod.db.AppDatabase;
 import top.cywin.onetv.vod.event.RefreshEvent;
 import top.cywin.onetv.vod.impl.Callback;

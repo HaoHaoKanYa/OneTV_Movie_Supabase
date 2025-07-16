@@ -17,7 +17,7 @@ import top.cywin.onetv.vod.Setting;
 import top.cywin.onetv.vod.bean.Hot;
 import top.cywin.onetv.vod.bean.Site;
 import top.cywin.onetv.vod.bean.Suggest;
-import top.cywin.onetv.tv.databinding.ActivitySearchBinding;
+import top.cywin.onetv.vod.databinding.ActivitySearchBinding;
 import top.cywin.onetv.vod.impl.Callback;
 import top.cywin.onetv.vod.impl.SiteCallback;
 import top.cywin.onetv.vod.ui.adapter.RecordAdapter;

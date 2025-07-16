@@ -13,7 +13,7 @@ import androidx.media3.ui.SubtitleView;
 import androidx.viewbinding.ViewBinding;
 
 import top.cywin.onetv.vod.Setting;
-import top.cywin.onetv.tv.databinding.DialogSubtitleBinding;
+import top.cywin.onetv.vod.databinding.DialogSubtitleBinding;
 import top.cywin.onetv.vod.utils.ResUtil;
 import com.github.bassaer.library.MDColor;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;

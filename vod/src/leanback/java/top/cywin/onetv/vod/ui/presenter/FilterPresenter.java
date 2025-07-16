@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.leanback.widget.Presenter;
 
 import top.cywin.onetv.vod.bean.Value;
-import top.cywin.onetv.tv.databinding.AdapterFilterBinding;
+import top.cywin.onetv.vod.databinding.AdapterFilterBinding;
 
 public class FilterPresenter extends Presenter {
 

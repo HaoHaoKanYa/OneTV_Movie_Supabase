@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.leanback.widget.Presenter;
 
 import top.cywin.onetv.vod.bean.Vod;
-import top.cywin.onetv.tv.databinding.AdapterQuickBinding;
+import top.cywin.onetv.vod.databinding.AdapterQuickBinding;
 import top.cywin.onetv.vod.utils.ResUtil;
 
 public class QuickPresenter extends Presenter {

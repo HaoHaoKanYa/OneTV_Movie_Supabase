@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.leanback.widget.Presenter;
 
-import top.cywin.onetv.tv.databinding.AdapterProgressBinding;
+import top.cywin.onetv.vod.databinding.AdapterProgressBinding;
 
 public class ProgressPresenter extends Presenter {
 

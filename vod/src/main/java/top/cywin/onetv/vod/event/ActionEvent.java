@@ -1,6 +1,6 @@
 package top.cywin.onetv.vod.event;
 
-import top.cywin.onetv.tv.BuildConfig;
+import top.cywin.onetv.vod.BuildConfig;
 
 import org.greenrobot.eventbus.EventBus;
 

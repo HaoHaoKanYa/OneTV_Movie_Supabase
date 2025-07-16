@@ -3,7 +3,7 @@ package top.cywin.onetv.vod.ui.custom;
 import android.annotation.SuppressLint;
 
 import top.cywin.onetv.vod.R;
-import top.cywin.onetv.tv.databinding.ActivitySearchBinding;
+import top.cywin.onetv.vod.databinding.ActivitySearchBinding;
 import top.cywin.onetv.vod.ui.adapter.KeyboardAdapter;
 
 public class CustomKeyboard implements KeyboardAdapter.OnClickListener {

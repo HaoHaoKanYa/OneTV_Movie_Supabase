@@ -15,7 +15,7 @@ import top.cywin.onetv.vod.api.config.LiveConfig;
 import top.cywin.onetv.vod.api.config.VodConfig;
 import top.cywin.onetv.vod.api.config.WallConfig;
 import top.cywin.onetv.vod.bean.Config;
-import top.cywin.onetv.tv.databinding.DialogConfigBinding;
+import top.cywin.onetv.vod.databinding.DialogConfigBinding;
 import top.cywin.onetv.vod.event.ServerEvent;
 import top.cywin.onetv.vod.impl.ConfigCallback;
 import top.cywin.onetv.vod.server.Server;

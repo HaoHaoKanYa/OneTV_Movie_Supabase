@@ -52,5 +52,5 @@ chaquopy {
 
 dependencies {
     api("androidx.annotation:annotation:1.6.0")
-    implementation(project(":onevod:catvod"))
+    implementation(project(":vod:catvod"))
 }

@@ -7,7 +7,7 @@ import androidx.annotation.Nullable;
 import top.cywin.onetv.vod.server.Server;
 import top.cywin.onetv.vod.utils.UrlUtil;
 import top.cywin.hook.Hook;
-import com.github.catvod.net.OkHttp;
+import top.github.catvod.net.OkHttp;
 import com.google.gson.annotations.SerializedName;
 
 public class Core {

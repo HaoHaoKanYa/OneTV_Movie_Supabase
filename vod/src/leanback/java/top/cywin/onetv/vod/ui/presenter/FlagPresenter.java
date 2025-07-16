@@ -8,7 +8,7 @@ import androidx.leanback.widget.Presenter;
 
 import top.cywin.onetv.vod.R;
 import top.cywin.onetv.vod.bean.Flag;
-import top.cywin.onetv.tv.databinding.AdapterFlagBinding;
+import top.cywin.onetv.vod.databinding.AdapterFlagBinding;
 
 public class FlagPresenter extends Presenter {
 

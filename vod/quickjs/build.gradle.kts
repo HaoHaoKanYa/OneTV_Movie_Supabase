@@ -31,7 +31,7 @@ android {
 
 dependencies {
     api("androidx.annotation:annotation:1.6.0")
-    implementation(project(":onevod:catvod"))
+    implementation(project(":vod:catvod"))
 
     // FongMi_TV原项目使用的QuickJS依赖 - 使用正确的Android版本
     implementation("wang.harlon.quickjs:wrapper-android:3.2.3")

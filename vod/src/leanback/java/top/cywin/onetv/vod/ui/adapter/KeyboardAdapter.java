@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import top.cywin.onetv.vod.R;
 import top.cywin.onetv.vod.Setting;
-import top.cywin.onetv.tv.databinding.AdapterKeyboardIconBinding;
-import top.cywin.onetv.tv.databinding.AdapterKeyboardTextBinding;
+import top.cywin.onetv.vod.databinding.AdapterKeyboardIconBinding;
+import top.cywin.onetv.vod.databinding.AdapterKeyboardTextBinding;
 
 import java.util.ArrayList;
 import java.util.Arrays;

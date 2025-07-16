@@ -6,7 +6,7 @@ import android.view.View;
 
 import androidx.appcompat.app.AlertDialog;
 
-import top.cywin.onetv.tv.databinding.DialogUpdateBinding;
+import top.cywin.onetv.vod.databinding.DialogUpdateBinding;
 import top.cywin.onetv.vod.utils.Download;
 import top.cywin.onetv.vod.utils.FileUtil;
 import top.cywin.onetv.vod.utils.Notify;

@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import top.cywin.onetv.vod.api.config.LiveConfig;
 import top.cywin.onetv.vod.bean.Live;
-import top.cywin.onetv.tv.databinding.AdapterLiveBinding;
+import top.cywin.onetv.vod.databinding.AdapterLiveBinding;
 
 import java.util.List;
 

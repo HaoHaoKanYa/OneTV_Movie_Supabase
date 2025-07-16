@@ -9,7 +9,7 @@ import android.view.View;
 import androidx.viewbinding.ViewBinding;
 
 import top.cywin.onetv.vod.R;
-import top.cywin.onetv.tv.databinding.ActivityPushBinding;
+import top.cywin.onetv.vod.databinding.ActivityPushBinding;
 import top.cywin.onetv.vod.server.Server;
 import top.cywin.onetv.vod.ui.base.BaseActivity;
 import top.cywin.onetv.vod.utils.QRCode;

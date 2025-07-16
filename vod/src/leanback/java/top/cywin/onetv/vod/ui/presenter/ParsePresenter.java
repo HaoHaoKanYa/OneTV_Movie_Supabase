@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.leanback.widget.Presenter;
 
 import top.cywin.onetv.vod.bean.Parse;
-import top.cywin.onetv.tv.databinding.AdapterParseBinding;
+import top.cywin.onetv.vod.databinding.AdapterParseBinding;
 
 public class ParsePresenter extends Presenter {
 

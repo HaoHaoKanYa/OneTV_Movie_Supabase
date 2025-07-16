@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.leanback.widget.Presenter;
 
 import top.cywin.onetv.vod.R;
-import top.cywin.onetv.tv.databinding.AdapterFileBinding;
+import top.cywin.onetv.vod.databinding.AdapterFileBinding;
 
 import java.io.File;
 

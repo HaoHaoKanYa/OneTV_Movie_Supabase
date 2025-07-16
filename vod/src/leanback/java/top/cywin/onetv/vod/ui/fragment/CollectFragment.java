@@ -18,7 +18,7 @@ import top.cywin.onetv.vod.R;
 import top.cywin.onetv.vod.bean.Collect;
 import top.cywin.onetv.vod.bean.Result;
 import top.cywin.onetv.vod.bean.Vod;
-import top.cywin.onetv.tv.databinding.FragmentVodBinding;
+import top.cywin.onetv.vod.databinding.FragmentVodBinding;
 import top.cywin.onetv.vod.model.SiteViewModel;
 import top.cywin.onetv.vod.ui.activity.VideoActivity;
 import top.cywin.onetv.vod.ui.activity.VodActivity;

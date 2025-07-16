@@ -33,7 +33,7 @@ import top.cywin.onetv.vod.bean.Group;
 import top.cywin.onetv.vod.bean.Keep;
 import top.cywin.onetv.vod.bean.Live;
 import top.cywin.onetv.vod.bean.Track;
-import top.cywin.onetv.tv.databinding.ActivityLiveBinding;
+import top.cywin.onetv.vod.databinding.ActivityLiveBinding;
 import top.cywin.onetv.vod.event.ActionEvent;
 import top.cywin.onetv.vod.event.ErrorEvent;
 import top.cywin.onetv.vod.event.PlayerEvent;

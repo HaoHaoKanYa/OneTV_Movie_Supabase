@@ -8,7 +8,7 @@ import androidx.appcompat.app.AlertDialog;
 
 import top.cywin.onetv.vod.api.config.LiveConfig;
 import top.cywin.onetv.vod.bean.Live;
-import top.cywin.onetv.tv.databinding.DialogLiveBinding;
+import top.cywin.onetv.vod.databinding.DialogLiveBinding;
 import top.cywin.onetv.vod.impl.LiveCallback;
 import top.cywin.onetv.vod.ui.adapter.LiveAdapter;
 import top.cywin.onetv.vod.ui.custom.SpaceItemDecoration;

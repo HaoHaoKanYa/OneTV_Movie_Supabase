@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import top.cywin.onetv.vod.api.config.VodConfig;
-import top.cywin.onetv.tv.databinding.AdapterDohBinding;
+import top.cywin.onetv.vod.databinding.AdapterDohBinding;
 import top.github.catvod.bean.Doh;
 
 import java.util.List;

@@ -21,5 +21,5 @@ android {
 
 dependencies {
     api("androidx.annotation:annotation:1.6.0")
-    api(project(":onevod:catvod"))
+    api(project(":vod:catvod"))
 }

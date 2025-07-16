@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import top.cywin.onetv.tv.databinding.AdapterRestoreBinding;
+import top.cywin.onetv.vod.databinding.AdapterRestoreBinding;
 import top.github.catvod.utils.Path;
 
 import java.io.File;

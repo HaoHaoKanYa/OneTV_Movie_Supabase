@@ -8,7 +8,7 @@ import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.ItemBridgeAdapter;
 import androidx.viewbinding.ViewBinding;
 
-import top.cywin.onetv.tv.databinding.ActivityFileBinding;
+import top.cywin.onetv.vod.databinding.ActivityFileBinding;
 import top.cywin.onetv.vod.ui.base.BaseActivity;
 import top.cywin.onetv.vod.ui.presenter.FilePresenter;
 import top.cywin.onetv.vod.utils.ResUtil;

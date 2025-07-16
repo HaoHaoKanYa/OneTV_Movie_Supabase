@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import top.cywin.onetv.vod.bean.Danmaku;
-import top.cywin.onetv.tv.databinding.AdapterDanmakuBinding;
+import top.cywin.onetv.vod.databinding.AdapterDanmakuBinding;
 
 import java.util.ArrayList;
 import java.util.List;

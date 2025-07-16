@@ -7,8 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
-import top.cywin.onetv.tv.databinding.ViewEmptyBinding;
-import top.cywin.onetv.tv.databinding.ViewProgressBinding;
+import top.cywin.onetv.vod.databinding.ViewEmptyBinding;
+import top.cywin.onetv.vod.databinding.ViewProgressBinding;
 
 import java.util.ArrayList;
 import java.util.List;

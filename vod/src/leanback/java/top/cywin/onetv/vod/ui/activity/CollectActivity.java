@@ -25,7 +25,7 @@ import top.cywin.onetv.vod.Setting;
 import top.cywin.onetv.vod.api.config.VodConfig;
 import top.cywin.onetv.vod.bean.Collect;
 import top.cywin.onetv.vod.bean.Site;
-import top.cywin.onetv.tv.databinding.ActivityCollectBinding;
+import top.cywin.onetv.vod.databinding.ActivityCollectBinding;
 import top.cywin.onetv.vod.model.SiteViewModel;
 import top.cywin.onetv.vod.ui.base.BaseActivity;
 import top.cywin.onetv.vod.ui.fragment.CollectFragment;

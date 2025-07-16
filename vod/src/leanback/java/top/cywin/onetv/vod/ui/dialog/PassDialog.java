@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewbinding.ViewBinding;
 
-import top.cywin.onetv.tv.databinding.DialogPassBinding;
+import top.cywin.onetv.vod.databinding.DialogPassBinding;
 import top.cywin.onetv.vod.impl.PassCallback;
 import top.cywin.onetv.vod.utils.ResUtil;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;

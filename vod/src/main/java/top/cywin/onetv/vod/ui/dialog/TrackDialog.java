@@ -18,7 +18,7 @@ import androidx.viewbinding.ViewBinding;
 import top.cywin.onetv.vod.R;
 import top.cywin.onetv.vod.bean.Sub;
 import top.cywin.onetv.vod.bean.Track;
-import top.cywin.onetv.tv.databinding.DialogTrackBinding;
+import top.cywin.onetv.vod.databinding.DialogTrackBinding;
 import top.cywin.onetv.vod.player.Players;
 import top.cywin.onetv.vod.player.exo.TrackNameProvider;
 import top.cywin.onetv.vod.ui.adapter.TrackAdapter;

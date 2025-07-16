@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.leanback.widget.Presenter;
 
 import top.cywin.onetv.vod.bean.Func;
-import top.cywin.onetv.tv.databinding.AdapterFuncBinding;
+import top.cywin.onetv.vod.databinding.AdapterFuncBinding;
 
 public class FuncPresenter extends Presenter {
 

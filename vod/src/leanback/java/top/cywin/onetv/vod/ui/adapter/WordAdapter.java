@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import top.cywin.onetv.tv.databinding.AdapterSearchWordBinding;
+import top.cywin.onetv.vod.databinding.AdapterSearchWordBinding;
 
 import java.util.ArrayList;
 import java.util.List;

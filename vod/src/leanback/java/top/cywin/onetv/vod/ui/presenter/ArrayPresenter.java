@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.leanback.widget.Presenter;
 
 import top.cywin.onetv.vod.R;
-import top.cywin.onetv.tv.databinding.AdapterArrayBinding;
+import top.cywin.onetv.vod.databinding.AdapterArrayBinding;
 import top.cywin.onetv.vod.utils.ResUtil;
 
 public class ArrayPresenter extends Presenter {

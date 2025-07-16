@@ -50,7 +50,7 @@ import top.cywin.onetv.vod.bean.Site;
 import top.cywin.onetv.vod.bean.Sub;
 import top.cywin.onetv.vod.bean.Track;
 import top.cywin.onetv.vod.bean.Vod;
-import top.cywin.onetv.tv.databinding.ActivityVideoBinding;
+import top.cywin.onetv.vod.databinding.ActivityVideoBinding;
 import top.cywin.onetv.vod.db.AppDatabase;
 import top.cywin.onetv.vod.event.ActionEvent;
 import top.cywin.onetv.vod.event.ErrorEvent;

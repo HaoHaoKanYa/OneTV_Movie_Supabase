@@ -24,7 +24,7 @@ import androidx.media3.ui.CaptionStyleCompat;
 import androidx.media3.ui.PlayerView;
 
 import top.cywin.onetv.vod.App;
-import top.cywin.onetv.tv.BuildConfig;
+import top.cywin.onetv.vod.BuildConfig;
 import top.cywin.onetv.vod.Setting;
 import top.cywin.onetv.vod.bean.Drm;
 import top.cywin.onetv.vod.bean.Sub;

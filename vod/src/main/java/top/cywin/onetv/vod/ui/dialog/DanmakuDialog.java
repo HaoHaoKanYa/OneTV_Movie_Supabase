@@ -14,7 +14,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.viewbinding.ViewBinding;
 
 import top.cywin.onetv.vod.bean.Danmaku;
-import top.cywin.onetv.tv.databinding.DialogDanmakuBinding;
+import top.cywin.onetv.vod.databinding.DialogDanmakuBinding;
 import top.cywin.onetv.vod.player.Players;
 import top.cywin.onetv.vod.ui.adapter.DanmakuAdapter;
 import top.cywin.onetv.vod.ui.custom.SpaceItemDecoration;

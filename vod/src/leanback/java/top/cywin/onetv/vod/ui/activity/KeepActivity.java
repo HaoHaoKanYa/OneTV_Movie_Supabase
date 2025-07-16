@@ -10,7 +10,7 @@ import top.cywin.onetv.vod.Product;
 import top.cywin.onetv.vod.api.config.VodConfig;
 import top.cywin.onetv.vod.bean.Config;
 import top.cywin.onetv.vod.bean.Keep;
-import top.cywin.onetv.tv.databinding.ActivityKeepBinding;
+import top.cywin.onetv.vod.databinding.ActivityKeepBinding;
 import top.cywin.onetv.vod.event.RefreshEvent;
 import top.cywin.onetv.vod.impl.Callback;
 import top.cywin.onetv.vod.ui.adapter.KeepAdapter;

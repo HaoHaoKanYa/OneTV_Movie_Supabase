@@ -6,7 +6,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.FragmentActivity;
 
 import top.cywin.onetv.vod.Setting;
-import top.cywin.onetv.tv.databinding.DialogSpeedBinding;
+import top.cywin.onetv.vod.databinding.DialogSpeedBinding;
 import top.cywin.onetv.vod.impl.SpeedCallback;
 import top.cywin.onetv.vod.utils.KeyUtil;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;

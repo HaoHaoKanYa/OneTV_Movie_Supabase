@@ -12,7 +12,7 @@ import androidx.fragment.app.FragmentActivity;
 
 import top.cywin.onetv.vod.R;
 import top.cywin.onetv.vod.Setting;
-import top.cywin.onetv.tv.databinding.DialogProxyBinding;
+import top.cywin.onetv.vod.databinding.DialogProxyBinding;
 import top.cywin.onetv.vod.event.ServerEvent;
 import top.cywin.onetv.vod.impl.ProxyCallback;
 import top.cywin.onetv.vod.server.Server;

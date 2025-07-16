@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import top.cywin.onetv.vod.bean.Track;
-import top.cywin.onetv.tv.databinding.AdapterTrackBinding;
+import top.cywin.onetv.vod.databinding.AdapterTrackBinding;
 
 import java.util.ArrayList;
 import java.util.List;
