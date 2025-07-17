@@ -126,9 +126,68 @@ public class JavaProxyLoader {
      */
     private void downloadJar(String jar, File file) {
         try {
-            // 这里应该实现JAR包下载逻辑
-            // 可以使用OkHttp下载
-            // 暂时提供基础框架
+            if (jar.startsWith("assets://")) {
+                // 从assets复制JAR包
+                copyJarFromAssets(jar, file);
+            } else if (jar.startsWith("http")) {
+                // 从网络下载JAR包
+                downloadJarFromNetwork(jar, file);
+            } else {
+                // 从本地文件复制
+                copyJarFromLocal(jar, file);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 从assets复制JAR包
+     */
+    private void copyJarFromAssets(String assetPath, File targetFile) {
+        try {
+            // 使用SpiderJarManager来处理assets复制
+            SpiderJarManager jarManager = SpiderJarManager.getInstance();
+            String internalPath = jarManager.copyJarToInternalStorage(assetPath);
+
+            if (internalPath != null) {
+                // 复制到目标位置
+                java.nio.file.Files.copy(
+                    new java.io.File(internalPath).toPath(),
+                    targetFile.toPath(),
+                    java.nio.file.StandardCopyOption.REPLACE_EXISTING
+                );
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 从网络下载JAR包
+     */
+    private void downloadJarFromNetwork(String url, File targetFile) {
+        try {
+            // 使用OkHttp下载
+            // 这里可以集成网络下载逻辑
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 从本地文件复制JAR包
+     */
+    private void copyJarFromLocal(String localPath, File targetFile) {
+        try {
+            java.io.File sourceFile = new java.io.File(localPath);
+            if (sourceFile.exists()) {
+                java.nio.file.Files.copy(
+                    sourceFile.toPath(),
+                    targetFile.toPath(),
+                    java.nio.file.StandardCopyOption.REPLACE_EXISTING
+                );
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
