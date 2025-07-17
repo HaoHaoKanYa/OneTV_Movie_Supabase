@@ -42,3 +42,35 @@
 -keep class kotlinx.serialization.json.JsonPrimitive { *; }
 -keep class kotlinx.serialization.json.JsonObject { *; }
 -keep class kotlinx.serialization.json.JsonArray { *; }
+
+# ===== FongMi_TV架构相关消费者规则 =====
+
+# 保持所有Bean类
+-keep class top.cywin.onetv.movie.bean.** { *; }
+
+# 保持所有API接口
+-keep class top.cywin.onetv.movie.api.** { *; }
+
+# 保持所有ViewModel
+-keep class top.cywin.onetv.movie.model.** { *; }
+
+# 保持所有事件类
+-keep class top.cywin.onetv.movie.event.** { *; }
+
+# 保持所有适配器
+-keep class top.cywin.onetv.movie.adapter.** { *; }
+
+# 保持所有工具类
+-keep class top.cywin.onetv.movie.utils.** { *; }
+
+# Gson规则
+-keep class com.google.gson.** { *; }
+-keepattributes Signature
+
+# EventBus规则
+-keepclassmembers class * {
+    @org.greenrobot.eventbus.Subscribe <methods>;
+}
+
+# Jsoup规则
+-keep class org.jsoup.** { *; }

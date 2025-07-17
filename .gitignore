@@ -194,13 +194,14 @@ GIT_GUIDE.md
 /MD/test_vip_permission_fix.md
 
 # 参考项目 - 不进行版本控制
-/OneMoVie/
+
 /FongMi_TV/
 /filmMD/
 /film/
 /onevodMD/
 /vodMD/
 /scripts/
+/movie_backup_20250717_155153/
 # 点播功能设计文档 - 不进行版本控制
 /movieMD/
 /movieMD/
@@ -210,10 +211,11 @@ supabase/migrations/20250711_rename_supabase_service_to_service_role.sql
 TVBOX_ROUTE_LOGIC_FIX.md
 onevod/README.md
 onevod/LICENSE.md
-/movie/
+
 /film/
 vodMD/00_日志.txt
 vodMD/00_日志.txt
 vodMD/00_日志.txt
 vodMD/00_日志.txt
 MOVIE_NAVIGATION_CHANGE_REPORT.md
+/movie_stage2_backup_20250717_211459/

@@ -72,6 +72,14 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.activity.compose)
 
+    // FongMi_TV架构依赖 - ViewModel支持
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
+
+    // FongMi_TV架构依赖 - Fragment支持
+    implementation("androidx.fragment:fragment-ktx:1.6.2")
+    implementation(libs.androidx.appcompat)
+
     // Compose
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
@@ -90,6 +98,17 @@ dependencies {
     implementation(libs.retrofit.converter.kotlinx.serialization)
     implementation(libs.kotlinx.serialization.json)
 
+    // FongMi_TV架构依赖 - 网络和解析
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+    implementation("com.google.code.gson:gson:2.10.1")
+    implementation("org.jsoup:jsoup:1.17.2")
+
+    // FongMi_TV架构依赖 - 事件总线
+    implementation("org.greenrobot:eventbus:3.3.1")
+
+    // FongMi_TV架构依赖 - 日志系统
+    implementation("com.orhanobut:logger:2.2.0")
+
     // 图片加载
     implementation(libs.coil.compose)
 
@@ -98,6 +117,15 @@ dependencies {
     implementation(libs.androidx.media3.ui)
     implementation(libs.androidx.media3.hls)
     // implementation(libs.androidx.media3.decoder.ffmpeg) // 暂时注释，避免仓库问题
+
+    // FongMi_TV架构依赖 - 媒体和播放器扩展
+    implementation("androidx.media3:media3-session:1.2.1")
+    implementation("androidx.media3:media3-common:1.2.1")
+    implementation("androidx.media3:media3-datasource:1.2.1")
+
+    // FongMi_TV架构依赖 - 通知和服务
+    implementation("androidx.work:work-runtime-ktx:2.9.0")
+    implementation("androidx.localbroadcastmanager:localbroadcastmanager:1.1.0")
 
     // 数据库
     implementation(libs.androidx.room.runtime)
