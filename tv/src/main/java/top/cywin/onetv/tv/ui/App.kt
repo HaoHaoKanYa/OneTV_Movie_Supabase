@@ -54,8 +54,8 @@ import top.cywin.onetv.tv.ui.screens.settings.LocalSettings
 import top.cywin.onetv.tv.ui.screens.settings.LocalSettingsCurrent
 import top.cywin.onetv.tv.ui.screens.settings.SettingsViewModel
 import top.cywin.onetv.tv.ui.tooling.PreviewWithLayoutGrids
-// 暂时禁用film、movie、onevod模块相关代码
-// import top.cywin.onetv.movie.navigation.movieNavigation
+// 启用movie模块相关代码
+import top.cywin.onetv.movie.navigation.movieNavigation
 // import top.cywin.onetv.film.navigation.filmNavigation
 // import top.cywin.onetv.tv.ui.activity.HomeActivity
 
@@ -109,17 +109,16 @@ fun App(
                             },
                             viewModel = mainViewModel,
                             onNavigateToMovie = {
-                                val intent = Intent(context, Class.forName("top.cywin.onetv.vod.ui.activity.HomeActivity"))
-                                context.startActivity(intent)
+                                Log.d("ONETV_MOVIE", "导航到Movie模块主界面")
+                                navController.navigate("movie_home")
                             }
                         )
                     }
 
-                    // 暂时禁用film和movie模块，只启用onevod模块进行测试
-                    // Movie模块导航路由（保留兼容性）
-                    // movieNavigation(navController)
+                    // Movie模块导航路由
+                    movieNavigation(navController)
 
-                    // Film模块导航路由（新的影视解析系统）
+                    // Film模块导航路由（暂时禁用）
                     // filmNavigation(navController)
                 }
             } else {

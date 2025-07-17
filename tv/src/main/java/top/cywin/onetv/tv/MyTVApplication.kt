@@ -35,7 +35,7 @@ class MyTVApplication : Application() {
         Log.i("MyTVApplication", "已初始化 SupabaseClient: URL=${SupabaseClient.getUrl()}")
 
         // 🚀 初始化KotlinPoet专业版Movie模块
-        // initializeMovieModule()
+        initializeMovieModule()
 
         UnsafeTrustManager.enableUnsafeTrustManager()
 
@@ -60,21 +60,21 @@ class MyTVApplication : Application() {
      * 🚀 初始化Movie模块 - KotlinPoet专业版
      * 异步初始化，避免阻塞主线程启动
      */
-    // private fun initializeMovieModule() {
-    //     try {
-    //         Log.i("MyTVApplication", "🚀 开始初始化KotlinPoet专业版Movie模块...")
-    //         kotlinx.coroutines.GlobalScope.launch {
-    //             try {
-    //                 top.cywin.onetv.movie.MovieApp.initialize(applicationContext)
-    //                 Log.i("MyTVApplication", "✅ Movie模块初始化完成")
-    //             } catch (e: Exception) {
-    //                 Log.e("MyTVApplication", "❌ Movie模块初始化失败", e)
-    //             }
-    //         }
-    //     } catch (e: Exception) {
-    //         Log.e("MyTVApplication", "❌ Movie模块初始化启动失败", e)
-    //     }
-    // }
+    private fun initializeMovieModule() {
+        try {
+            Log.i("MyTVApplication", "🚀 开始初始化KotlinPoet专业版Movie模块...")
+            kotlinx.coroutines.GlobalScope.launch {
+                try {
+                    top.cywin.onetv.movie.MovieApp.initialize(applicationContext)
+                    Log.i("MyTVApplication", "✅ Movie模块初始化完成")
+                } catch (e: Exception) {
+                    Log.e("MyTVApplication", "❌ Movie模块初始化失败", e)
+                }
+            }
+        } catch (e: Exception) {
+            Log.e("MyTVApplication", "❌ Movie模块初始化启动失败", e)
+        }
+    }
 
     /**
      * 将错误日志追加写入应用私有存储目录中的 `onetv_error.log`

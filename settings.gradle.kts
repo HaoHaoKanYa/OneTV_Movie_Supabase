@@ -51,7 +51,7 @@ println("[OneTV-Build] 包含TV模块 (主应用)")
 include(":tv")
 println("[OneTV-Build] :tv -> android.application")
 include(":mobile")
-//include(":movie")
+include(":movie")
 // include(":film") // 暂时移除film模块避免配置冲突
 
 // vod影视点播应用模块 - 基于FongMi_TV完整移植

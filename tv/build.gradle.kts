@@ -169,8 +169,8 @@ dependencies {
     implementation(project(":core:data"))
     implementation(project(":core:designsystem"))
     implementation(project(":core:util"))
-    // 暂时禁用movie模块，只启用vod模块进行测试
-    // implementation(project(":movie"))
+    // 启用movie模块，提供影视点播功能
+    implementation(project(":movie"))
     // vod现在是库模块，作为依赖集成到TV应用中，提供影视点播功能
     implementation(project(":vod"))
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.aar"))))
