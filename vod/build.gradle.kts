@@ -45,14 +45,14 @@ android {
     //     // create("armeabi_v7a") { dimension = "abi" }
     // }
 
-    variantFilter {
-        val mode = flavors.find { it.dimension == "mode" }?.name
-        val api = flavors.find { it.dimension == "api" }?.name
-        val abi = flavors.find { it.dimension == "abi" }?.name
-        if (!(mode == "leanback" && api == "java" && abi == "arm64_v8a")) {
-            ignore = true
-        }
-    }
+    // variantFilter {
+    //     val mode = flavors.find { it.dimension == "mode" }?.name
+    //     val api = flavors.find { it.dimension == "api" }?.name
+    //     val abi = flavors.find { it.dimension == "abi" }?.name
+    //     if (!(mode == "leanback" && api == "java" && abi == "arm64_v8a")) {
+    //         ignore = true
+    //     }
+    // }
 
     defaultConfig {
         minSdk = libs.versions.minSdk.get().toInt()
@@ -88,15 +88,15 @@ android {
         viewBinding = true
     }
     
-    // buildTypes {
-    //     release {
-    //         isMinifyEnabled = true
-    //         proguardFiles(
-    //             getDefaultProguardFile("proguard-android-optimize.txt"),
-    //             "proguard-rules.pro"
-    //         )
-    //     }
-    // }
+    buildTypes {
+        debug {
+            // isDebuggable = true // library module 无需此项
+        }
+        release {
+            isMinifyEnabled = false
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+        }
+    }
     
     packaging {
         resources {
@@ -120,6 +120,12 @@ android {
     buildFeatures {
         buildConfig = true  // 启用BuildConfig生成
     }
+
+    // 只用 leanback 目录作为主实现
+    sourceSets["main"].java.srcDirs("src/leanback/java")
+    sourceSets["main"].res.srcDirs("src/leanback/res")
+    sourceSets["main"].assets.srcDirs("src/leanback/assets")
+    sourceSets["main"].jniLibs.srcDirs("src/leanback/jniLibs")
 }
 
 // 资源验证任务

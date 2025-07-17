@@ -34,11 +34,11 @@ public class Updater implements Download.Callback {
     }
 
     private String getJson() {
-        return Github.getJson(dev, BuildConfig.FLAVOR_mode);
+        return Github.getJson(dev, "leanback");
     }
 
     private String getApk() {
-        return Github.getApk(dev, BuildConfig.FLAVOR_mode + "-" + BuildConfig.FLAVOR_abi);
+        return Github.getApk(dev, "leanback" + "-" + "arm64_v8a");
     }
 
     public static Updater create() {
