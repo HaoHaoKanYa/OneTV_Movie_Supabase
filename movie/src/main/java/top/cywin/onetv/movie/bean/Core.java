@@ -1,11 +1,11 @@
-package com.fongmi.onetv.tv.bean;
+package top.cywin.onetv.movie.bean;
 
 import android.text.TextUtils;
 
 import androidx.annotation.Nullable;
 
-import com.fongmi.onetv.tv.server.Server;
-import com.fongmi.onetv.tv.utils.UrlUtil;
+import top.cywin.onetv.movie.server.Server;
+import top.cywin.onetv.movie.utils.UrlUtil;
 import top.cywin.onetv.movie.hook.Hook;
 import top.cywin.onetv.movie.catvod.net.OkHttp;
 import com.google.gson.annotations.SerializedName;

@@ -1,10 +1,10 @@
-package com.fongmi.onetv.tv.bean;
+package top.cywin.onetv.movie.bean;
 
 import android.util.Base64;
 
 import androidx.annotation.NonNull;
 
-import com.fongmi.onetv.tv.App;
+import top.cywin.onetv.movie.App;
 import top.cywin.onetv.movie.catvod.utils.Util;
 import com.google.gson.annotations.SerializedName;
 

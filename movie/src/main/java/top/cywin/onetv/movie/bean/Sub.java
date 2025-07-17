@@ -1,4 +1,4 @@
-package com.fongmi.onetv.tv.bean;
+package top.cywin.onetv.movie.bean;
 
 import android.net.Uri;
 import android.text.TextUtils;
@@ -7,8 +7,8 @@ import androidx.annotation.Nullable;
 import androidx.media3.common.C;
 import androidx.media3.common.MediaItem;
 
-import com.fongmi.onetv.tv.player.exo.ExoUtil;
-import com.fongmi.onetv.tv.utils.UrlUtil;
+import top.cywin.onetv.movie.player.exo.ExoUtil;
+import top.cywin.onetv.movie.utils.UrlUtil;
 import top.cywin.onetv.movie.catvod.utils.Trans;
 import com.google.gson.annotations.SerializedName;
 

@@ -1,4 +1,4 @@
-package com.fongmi.onetv.tv.bean;
+package top.cywin.onetv.movie.bean;
 
 import android.text.TextUtils;
 
@@ -7,7 +7,7 @@ import androidx.room.Entity;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-import com.fongmi.onetv.tv.db.AppDatabase;
+import top.cywin.onetv.movie.db.AppDatabase;
 
 import java.util.Collections;
 import java.util.List;

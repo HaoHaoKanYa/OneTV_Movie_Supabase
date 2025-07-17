@@ -1,9 +1,9 @@
-package com.fongmi.onetv.tv.bean;
+package top.cywin.onetv.movie.bean;
 
 import androidx.annotation.NonNull;
 
-import com.fongmi.onetv.tv.App;
-import com.fongmi.onetv.tv.db.AppDatabase;
+import top.cywin.onetv.movie.App;
+import top.cywin.onetv.movie.db.AppDatabase;
 import top.cywin.onetv.movie.catvod.utils.Prefers;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

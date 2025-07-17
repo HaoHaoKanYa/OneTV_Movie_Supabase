@@ -1,4 +1,4 @@
-package com.fongmi.onetv.tv.bean;
+package top.cywin.onetv.movie.bean;
 
 import android.text.TextUtils;
 

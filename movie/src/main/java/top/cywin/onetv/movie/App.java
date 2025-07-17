@@ -19,6 +19,8 @@ import top.cywin.onetv.movie.hook.Hook;
 import top.cywin.onetv.movie.catvod.Init;
 import top.cywin.onetv.movie.catvod.bean.Doh;
 import top.cywin.onetv.movie.catvod.net.OkHttp;
+import top.cywin.onetv.movie.config.VodConfigDeployer;
+import top.cywin.onetv.movie.impl.Callback;
 import com.google.gson.Gson;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.LogAdapter;
@@ -119,6 +121,9 @@ public class App extends Application {
         OkHttp.get().setDoh(Doh.objectFrom(Setting.getDoh()));
         EventBus.builder().addIndex(new EventIndex()).installDefaultEventBus();
         CaocConfig.Builder.create().backgroundMode(CaocConfig.BACKGROUND_MODE_SILENT).errorActivity(CrashActivity.class).apply();
+
+        // 自动部署OneTV官方影视接口
+        initVodConfig();
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override
             public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
@@ -152,6 +157,36 @@ public class App extends Application {
 
             @Override
             public void onActivitySaveInstanceState(@NonNull Activity activity, @NonNull Bundle outState) {
+            }
+        });
+    }
+
+    /**
+     * 初始化VOD配置
+     * 自动部署OneTV官方影视接口
+     */
+    private void initVodConfig() {
+        execute(() -> {
+            try {
+                Logger.d("开始初始化VOD配置");
+
+                // 部署OneTV官方影视接口
+                VodConfigDeployer.deployOnetvApiConfig(this, new Callback() {
+                    @Override
+                    public void success() {
+                        Logger.d("OneTV官方影视接口部署成功！");
+                        Logger.d(VodConfigDeployer.getConfigStatus());
+                    }
+
+                    @Override
+                    public void error(String msg) {
+                        Logger.e("OneTV官方影视接口部署失败: " + msg);
+                        // 部署失败时可以尝试其他配置或显示错误信息
+                    }
+                });
+
+            } catch (Exception e) {
+                Logger.e("初始化VOD配置时发生异常: " + e.getMessage());
             }
         });
     }

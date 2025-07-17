@@ -1,6 +1,6 @@
-package com.fongmi.onetv.tv.bean;
+package top.cywin.onetv.movie.bean;
 
-import com.fongmi.onetv.tv.App;
+import top.cywin.onetv.movie.App;
 import top.cywin.onetv.movie.catvod.utils.Trans;
 import com.google.gson.annotations.SerializedName;
 

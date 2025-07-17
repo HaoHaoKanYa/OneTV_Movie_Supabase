@@ -1,13 +1,13 @@
-package com.fongmi.onetv.tv.bean;
+package top.cywin.onetv.movie.bean;
 
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.fongmi.onetv.tv.App;
-import com.fongmi.onetv.tv.R;
-import com.fongmi.onetv.tv.utils.ImgUtil;
-import com.fongmi.onetv.tv.utils.ResUtil;
+import top.cywin.onetv.movie.App;
+import top.cywin.onetv.movie.R;
+import top.cywin.onetv.movie.utils.ImgUtil;
+import top.cywin.onetv.movie.utils.ResUtil;
 import top.cywin.onetv.movie.catvod.utils.Json;
 import com.google.common.net.HttpHeaders;
 import com.google.gson.JsonElement;

@@ -1,4 +1,4 @@
-package com.fongmi.onetv.tv.bean;
+package top.cywin.onetv.movie.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -6,8 +6,8 @@ import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 
-import com.fongmi.onetv.tv.App;
-import com.fongmi.onetv.tv.utils.Util;
+import top.cywin.onetv.movie.App;
+import top.cywin.onetv.movie.utils.Util;
 import top.cywin.onetv.movie.catvod.utils.Trans;
 import com.google.gson.annotations.SerializedName;
 

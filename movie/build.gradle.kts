@@ -147,4 +147,8 @@ dependencies {
 
     // Debug工具
     debugImplementation(libs.androidx.compose.ui.tooling)
+
+    // 添加 Cling DLNA/UPnP 依赖，修复Device.java缺失类型问题
+    implementation("org.fourthline.cling:cling-core:2.1.2")
+    implementation("org.fourthline.cling:cling-support:2.1.2")
 }

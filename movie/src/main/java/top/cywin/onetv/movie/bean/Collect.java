@@ -1,10 +1,10 @@
-package com.fongmi.onetv.tv.bean;
+package top.cywin.onetv.movie.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.fongmi.onetv.tv.R;
-import com.fongmi.onetv.tv.utils.ResUtil;
+import top.cywin.onetv.movie.R;
+import top.cywin.onetv.movie.utils.ResUtil;
 
 import java.util.ArrayList;
 import java.util.List;

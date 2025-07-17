@@ -1,4 +1,4 @@
-package com.fongmi.onetv.tv.bean;
+package top.cywin.onetv.movie.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -9,11 +9,11 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-import com.fongmi.onetv.tv.App;
-import com.fongmi.onetv.tv.Constant;
-import com.fongmi.onetv.tv.api.loader.BaseLoader;
-import com.fongmi.onetv.tv.db.AppDatabase;
-import com.fongmi.onetv.tv.gson.ExtAdapter;
+import top.cywin.onetv.movie.App;
+import top.cywin.onetv.movie.Constant;
+import top.cywin.onetv.movie.api.loader.BaseLoader;
+import top.cywin.onetv.movie.db.AppDatabase;
+import top.cywin.onetv.movie.gson.ExtAdapter;
 import top.cywin.onetv.movie.catvod.crawler.Spider;
 import top.cywin.onetv.movie.catvod.net.OkHttp;
 import top.cywin.onetv.movie.catvod.utils.Json;

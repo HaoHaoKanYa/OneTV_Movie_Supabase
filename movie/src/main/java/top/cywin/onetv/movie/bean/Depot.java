@@ -1,8 +1,8 @@
-package com.fongmi.onetv.tv.bean;
+package top.cywin.onetv.movie.bean;
 
 import android.text.TextUtils;
 
-import com.fongmi.onetv.tv.App;
+import top.cywin.onetv.movie.App;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
 

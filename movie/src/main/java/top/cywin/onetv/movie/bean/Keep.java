@@ -1,13 +1,13 @@
-package com.fongmi.onetv.tv.bean;
+package top.cywin.onetv.movie.bean;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import com.fongmi.onetv.tv.App;
-import com.fongmi.onetv.tv.api.config.VodConfig;
-import com.fongmi.onetv.tv.db.AppDatabase;
-import com.fongmi.onetv.tv.event.RefreshEvent;
+import top.cywin.onetv.movie.App;
+import top.cywin.onetv.movie.api.config.VodConfig;
+import top.cywin.onetv.movie.database.AppDatabase;
+import top.cywin.onetv.movie.event.RefreshEvent;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
 

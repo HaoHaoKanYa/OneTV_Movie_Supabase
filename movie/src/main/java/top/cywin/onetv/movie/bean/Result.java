@@ -1,4 +1,4 @@
-package com.fongmi.onetv.tv.bean;
+package top.cywin.onetv.movie.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -6,12 +6,12 @@ import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 
-import com.fongmi.onetv.tv.App;
-import com.fongmi.onetv.tv.Setting;
-import com.fongmi.onetv.tv.gson.DanmakuAdapter;
-import com.fongmi.onetv.tv.gson.FilterAdapter;
-import com.fongmi.onetv.tv.gson.MsgAdapter;
-import com.fongmi.onetv.tv.gson.UrlAdapter;
+import top.cywin.onetv.movie.App;
+import top.cywin.onetv.movie.Setting;
+import top.cywin.onetv.movie.gson.DanmakuAdapter;
+import top.cywin.onetv.movie.gson.FilterAdapter;
+import top.cywin.onetv.movie.gson.MsgAdapter;
+import top.cywin.onetv.movie.gson.UrlAdapter;
 import top.cywin.onetv.movie.catvod.utils.Json;
 import top.cywin.onetv.movie.catvod.utils.Trans;
 import com.google.gson.JsonElement;

@@ -1,4 +1,4 @@
-package com.fongmi.onetv.tv.bean;
+package top.cywin.onetv.movie.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -6,7 +6,7 @@ import android.text.TextUtils;
 
 import androidx.annotation.Nullable;
 
-import com.fongmi.onetv.tv.ui.base.ViewType;
+import top.cywin.onetv.movie.ui.base.ViewType;
 import com.google.gson.annotations.SerializedName;
 
 public class Style implements Parcelable {

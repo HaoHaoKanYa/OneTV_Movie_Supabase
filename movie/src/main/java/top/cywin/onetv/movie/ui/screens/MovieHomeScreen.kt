@@ -44,6 +44,7 @@ import top.cywin.onetv.movie.ui.components.QuickCategoryGrid
 import top.cywin.onetv.movie.ui.components.RouteSelector
 import top.cywin.onetv.movie.ui.components.StoreHouseWelcome
 import top.cywin.onetv.movie.viewmodel.MovieViewModel
+import top.cywin.onetv.movie.test.VodConfigTester
 
 /**
  * 点播首页 (参考OneMoVie主界面)
@@ -68,6 +69,15 @@ fun MovieHomeScreen(
     LaunchedEffect(Unit) {
         try {
             Log.d("ONETV_MOVIE", "LaunchedEffect: 开始初始化检查和配置更新")
+
+            // 运行VOD配置测试
+            Log.d("ONETV_MOVIE", "开始VOD配置测试")
+            // VodConfigTester.runFullTest(context) // 完整测试，可选启用
+
+            // 快速检查配置是否可用
+            val configReady = VodConfigTester.quickTest()
+            Log.d("ONETV_MOVIE", "VOD配置状态: ${if (configReady) "就绪" else "未就绪"}")
+
             // 检查并更新配置 (智能缓存策略)
             viewModel.checkAndUpdateConfig()
         } catch (e: Exception) {

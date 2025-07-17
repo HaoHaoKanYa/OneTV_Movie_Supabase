@@ -1,11 +1,11 @@
-package com.fongmi.onetv.tv.bean;
+package top.cywin.onetv.movie.bean;
 
 import android.text.TextUtils;
 
 import androidx.annotation.Nullable;
 
-import com.fongmi.onetv.tv.R;
-import com.fongmi.onetv.tv.utils.ResUtil;
+import top.cywin.onetv.movie.R;
+import top.cywin.onetv.movie.utils.ResUtil;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Calendar;

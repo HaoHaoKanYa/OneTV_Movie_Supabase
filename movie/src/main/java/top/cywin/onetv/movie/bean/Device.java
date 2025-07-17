@@ -1,4 +1,4 @@
-package com.fongmi.onetv.tv.bean;
+package top.cywin.onetv.movie.bean;
 
 import android.text.TextUtils;
 
@@ -8,12 +8,12 @@ import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-import com.fongmi.onetv.tv.App;
-import com.fongmi.onetv.tv.Product;
-import com.fongmi.onetv.tv.db.AppDatabase;
-import com.fongmi.onetv.tv.server.Server;
-import com.fongmi.onetv.tv.utils.UrlUtil;
-import com.fongmi.onetv.tv.utils.Util;
+import top.cywin.onetv.movie.App;
+import top.cywin.onetv.movie.Product;
+import top.cywin.onetv.movie.db.AppDatabase;
+import top.cywin.onetv.movie.server.Server;
+import top.cywin.onetv.movie.utils.UrlUtil;
+import top.cywin.onetv.movie.utils.Util;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Collections;
