@@ -20,7 +20,7 @@ public class ErrorCode {
             case 111154:
                 return "版權限制";
             case 114101:
-                return "已失�?;
+                return "已失效";
             default:
                 return "ErrorCode=" + code;
         }

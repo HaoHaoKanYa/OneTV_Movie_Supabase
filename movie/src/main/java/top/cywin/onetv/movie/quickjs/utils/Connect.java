@@ -5,6 +5,8 @@ import top.cywin.onetv.movie.catvod.net.OkHttp;
 import top.cywin.onetv.movie.catvod.utils.Json;
 import top.cywin.onetv.movie.catvod.utils.Util;
 import com.google.common.net.HttpHeaders;
+
+// QuickJS相关导入 - 确保正确的包路径
 import com.whl.quickjs.wrapper.JSObject;
 import com.whl.quickjs.wrapper.QuickJSContext;
 
@@ -30,7 +32,7 @@ public class Connect {
     }
 
     public static JSObject success(QuickJSContext ctx, Req req, Response res) {
-        try (res) {
+        try {
             JSObject jsObject = ctx.createNewJSObject();
             JSObject jsHeader = ctx.createNewJSObject();
             setHeader(ctx, res, jsHeader);
@@ -43,6 +45,11 @@ public class Connect {
             return jsObject;
         } catch (Exception e) {
             return error(ctx);
+        } finally {
+            // 确保资源被正确关闭
+            try {
+                res.close();
+            } catch (Exception ignored) {}
         }
     }
 

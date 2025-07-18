@@ -3,10 +3,17 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.ksp) // 保留KSP用于Room
+    id("org.jetbrains.kotlin.kapt")
     // KotlinPoet专业重构 - 移除Hilt插件
     // alias(libs.plugins.hilt)
 }
+
+// 移除 KSP 配置
+// ksp {
+//     arg("room.schemaLocation", "$projectDir/schemas")
+//     arg("room.incremental", "true")
+//     arg("room.expandProjection", "true")
+// }
 
 android {
     namespace = "top.cywin.onetv.movie"
@@ -35,6 +42,11 @@ android {
 
     kotlinOptions {
         jvmTarget = "1.8"
+        freeCompilerArgs += listOf(
+            "-Xjvm-default=all",
+            "-opt-in=kotlin.RequiresOptIn",
+            "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
+        )
     }
 
     buildFeatures {
@@ -118,19 +130,16 @@ dependencies {
     implementation(libs.androidx.media3.hls)
     // implementation(libs.androidx.media3.decoder.ffmpeg) // 暂时注释，避免仓库问题
 
-    // FongMi_TV架构依赖 - 媒体和播放器扩展
-    implementation("androidx.media3:media3-session:1.2.1")
-    implementation("androidx.media3:media3-common:1.2.1")
-    implementation("androidx.media3:media3-datasource:1.2.1")
+    // FongMi_TV架构依赖 - 媒体和播放器扩展 (版本同步到1.6.1)
+    implementation("androidx.media3:media3-session:1.6.1")
+    implementation("androidx.media3:media3-common:1.6.1")
+    implementation("androidx.media3:media3-datasource:1.6.1")
 
     // FongMi_TV架构依赖 - 通知和服务
     implementation("androidx.work:work-runtime-ktx:2.9.0")
     implementation("androidx.localbroadcastmanager:localbroadcastmanager:1.1.0")
 
-    // 数据库
-    implementation(libs.androidx.room.runtime)
-    implementation(libs.androidx.room.ktx)
-    ksp(libs.androidx.room.compiler)
+    // 数据库 - Room依赖已在下方统一配置
 
     // KotlinPoet专业代码生成 - 替代Hilt依赖注入 (仅编译时使用)
     compileOnly(libs.kotlinpoet)
@@ -148,7 +157,91 @@ dependencies {
     // Debug工具
     debugImplementation(libs.androidx.compose.ui.tooling)
 
-    // 添加 Cling DLNA/UPnP 依赖，修复Device.java缺失类型问题
-    implementation("org.fourthline.cling:cling-core:2.1.2")
-    implementation("org.fourthline.cling:cling-support:2.1.2")
+    // Cling DLNA/UPnP 依赖已在下方统一配置
+
+    // QuickJS依赖 - 按照原项目FongMi_TV配置
+    implementation("wang.harlon.quickjs:wrapper-java:3.2.0")
+    implementation("wang.harlon.quickjs:wrapper-android:3.2.0")
+    implementation("net.sourceforge.streamsupport:android-retrofuture:1.7.4")
+
+    // FongMi_TV核心依赖 - 媒体播放器扩展 (版本同步到1.6.1)
+    implementation("androidx.media3:media3-container:1.6.1")
+    implementation("androidx.media3:media3-database:1.6.1")
+    implementation("androidx.media3:media3-datasource-okhttp:1.6.1")
+    implementation("androidx.media3:media3-datasource-rtmp:1.6.1")
+    implementation("androidx.media3:media3-decoder:1.6.1")
+    implementation("androidx.media3:media3-effect:1.6.1")
+    implementation("androidx.media3:media3-exoplayer-dash:1.6.1")
+    implementation("androidx.media3:media3-exoplayer-rtsp:1.6.1")
+    implementation("androidx.media3:media3-exoplayer-smoothstreaming:1.6.1")
+    implementation("androidx.media3:media3-extractor:1.6.1")
+
+    // FongMi_TV核心依赖 - 网络协议支持
+    implementation("com.github.thegrizzlylabs:sardine-android:0.9")
+    implementation("com.github.teamnewpipe:NewPipeExtractor:v0.24.6")
+    implementation("com.hierynomus:smbj:0.14.0")
+    implementation("io.antmedia:rtmp-client:3.2.0")
+
+    // FongMi_TV核心依赖 - 服务器和网络服务
+    implementation("org.nanohttpd:nanohttpd:2.3.1")
+    implementation("org.eclipse.jetty:jetty-client:8.1.21.v20160908")
+    implementation("org.eclipse.jetty:jetty-server:8.1.21.v20160908") {
+        exclude(group = "org.eclipse.jetty.orbit", module = "javax.servlet")
+    }
+    implementation("org.eclipse.jetty:jetty-servlet:8.1.21.v20160908") {
+        exclude(group = "org.eclipse.jetty.orbit", module = "javax.servlet")
+    }
+    implementation("javax.servlet:javax.servlet-api:3.1.0")
+
+    // FongMi_TV核心依赖 - 图像处理
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+    implementation("com.github.bumptech.glide:annotations:4.16.0")
+    implementation("com.github.bumptech.glide:avif-integration:4.16.0") {
+        exclude(group = "org.aomedia.avif.android", module = "avif")
+    }
+    implementation("com.github.bumptech.glide:okhttp3-integration:4.16.0")
+    implementation("org.aomedia.avif.android:avif:1.1.1.14d8e3c4")
+
+    // FongMi_TV核心依赖 - 工具库
+    implementation("com.google.zxing:core:3.5.3")
+    implementation("com.guolindev.permissionx:permissionx:1.8.0")
+    implementation("org.simpleframework:simple-xml:2.7.1") {
+        exclude(group = "stax", module = "stax-api")
+        exclude(group = "xpp3", module = "xpp3")
+    }
+    implementation("cat.ereza:customactivityoncrash:2.4.0")
+
+    // FongMi_TV核心依赖 - 缺少的重要依赖
+    implementation("androidx.media:media:1.7.0")
+    implementation("com.github.anilbeesetti.nextlib:nextlib-media3ext:0.8.4") {
+        exclude(group = "androidx.media3")
+    }
+    implementation("com.github.bassaer:materialdesigncolors:1.0.0")
+    implementation("com.github.jahirfiquitiva:TextDrawable:1.0.3")
+    implementation("com.google.android.material:material:1.12.0")
+
+    // FongMi_TV核心依赖 - Cling版本同步
+    implementation("org.fourthline.cling:cling-core:2.1.1")
+    implementation("org.fourthline.cling:cling-support:2.1.1")
+
+    // FongMi_TV核心依赖 - Room数据库
+    implementation("androidx.room:room-runtime:2.7.1")
+    kapt("androidx.room:room-compiler:2.7.1")
+
+    // FongMi_TV核心依赖 - 通用依赖 (移除构建变体特定依赖)
+    implementation("androidx.leanback:leanback:1.2.0")
+    implementation("com.github.JessYanCoding:AndroidAutoSize:1.2.1")
+    implementation("androidx.biometric:biometric:1.1.0")
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+    implementation("com.google.android.flexbox:flexbox:3.0.0")
+    implementation("com.journeyapps:zxing-android-embedded:4.3.0") {
+        isTransitive = false
+    }
+
+    // FongMi_TV核心依赖 - 注解处理器
+    kapt("com.github.bumptech.glide:compiler:4.16.0")
+    kapt("org.greenrobot:eventbus-annotation-processor:3.3.1")
+
+    // FongMi_TV核心依赖 - 核心库脱糖
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs_nio:2.1.4")
 }

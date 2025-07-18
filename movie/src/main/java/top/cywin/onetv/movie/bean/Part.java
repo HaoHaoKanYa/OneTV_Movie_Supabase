@@ -9,10 +9,10 @@ public class Part {
     public static List<String> get(String source) {
         List<String> items = new ArrayList<>();
         items.add(source.trim());
-        if (source.contains("ï¼?)) {
-            for (String split : source.split("ï¼?)) items.add(split.trim().contains(" ") ? split.split(" ")[0].trim() : split.trim());
-        } else if (source.contains("ç¬?) && source.contains("å­?)) {
-            for (String split : source.split("ç¬?)) if (!split.contains("å­?)) items.add(split.trim().contains(" ") ? split.split(" ")[0].trim() : split.trim());
+        if (source.contains(",")) {
+            for (String split : source.split(",")) items.add(split.trim().contains(" ") ? split.split(" ")[0].trim() : split.trim());
+        } else if (source.contains("(") && source.contains(")")) {
+            for (String split : source.split(",")) if (!split.contains(")")) items.add(split.trim().contains(" ") ? split.split(" ")[0].trim() : split.trim());
         } else if (source.contains("(")) {
             items.add(source.split("\\(")[0].trim());
         } else if (source.contains(" ")) {

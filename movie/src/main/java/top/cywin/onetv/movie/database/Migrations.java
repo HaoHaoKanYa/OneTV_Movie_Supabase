@@ -4,9 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-/**
- * 数据库迁�? * 基于FongMi_TV的Migrations完整移植
- */
 public class Migrations {
 
     public static final Migration MIGRATION_30_31 = new Migration(30, 31) {

@@ -18,9 +18,9 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
-import com.fongmi.onetv.tv.App;
-import com.fongmi.onetv.tv.BuildConfig;
-import com.fongmi.onetv.tv.R;
+import top.cywin.onetv.movie.App;
+import top.cywin.onetv.movie.BuildConfig;
+import top.cywin.onetv.movie.R;
 import top.cywin.onetv.movie.catvod.utils.Shell;
 
 import java.net.NetworkInterface;
@@ -91,7 +91,7 @@ public class Util {
 
     public static int getDigit(String text) {
         try {
-            if (text.startsWith("�?) || text.startsWith("�?)) return -1;
+            if (text.startsWith("上") || text.startsWith("下")) return -1;
             return Integer.parseInt(text.replaceAll("(?i)(mp4|H264|H265|720p|1080p|2160p|4K)", "").replaceAll("\\D+", ""));
         } catch (Exception e) {
             return -1;

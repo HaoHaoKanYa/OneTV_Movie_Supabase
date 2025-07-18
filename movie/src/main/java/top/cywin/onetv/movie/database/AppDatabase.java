@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * 应用数据�? * 基于FongMi_TV的AppDatabase完整移植
+ * 应用数据�? * 基于FongMi_TV的AppDatabase完整移植
  */
 @Database(entities = {Keep.class, Site.class, Live.class, Track.class, Config.class, Device.class, History.class}, version = AppDatabase.VERSION)
 public abstract class AppDatabase extends RoomDatabase {
