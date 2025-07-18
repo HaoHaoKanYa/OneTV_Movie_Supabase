@@ -1,6 +1,6 @@
-package com.fongmi.onetv.tv.player.extractor;
+package top.cywin.onetv.movie.player.extractor;
 
-import com.fongmi.onetv.tv.player.Source;
+import top.cywin.onetv.movie.player.Source;
 
 public class Video implements Source.Extractor {
 

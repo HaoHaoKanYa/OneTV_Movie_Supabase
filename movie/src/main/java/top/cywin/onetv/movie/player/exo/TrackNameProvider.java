@@ -1,4 +1,4 @@
-package com.fongmi.onetv.tv.player.exo;
+package top.cywin.onetv.movie.player.exo;
 
 import android.content.res.Resources;
 import android.text.TextUtils;
@@ -10,7 +10,7 @@ import androidx.media3.common.MimeTypes;
 import androidx.media3.common.util.Util;
 import androidx.media3.ui.R;
 
-import com.fongmi.onetv.tv.App;
+import top.cywin.onetv.movie.App;
 
 import java.util.Locale;
 

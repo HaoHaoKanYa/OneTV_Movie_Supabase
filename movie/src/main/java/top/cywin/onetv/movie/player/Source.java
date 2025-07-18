@@ -1,18 +1,18 @@
-package com.fongmi.onetv.tv.player;
+package top.cywin.onetv.movie.player;
 
-import com.fongmi.onetv.tv.Constant;
-import com.fongmi.onetv.tv.bean.Channel;
-import com.fongmi.onetv.tv.bean.Episode;
-import com.fongmi.onetv.tv.bean.Flag;
-import com.fongmi.onetv.tv.bean.Result;
-import com.fongmi.onetv.tv.player.extractor.Force;
-import com.fongmi.onetv.tv.player.extractor.JianPian;
-import com.fongmi.onetv.tv.player.extractor.Push;
-import com.fongmi.onetv.tv.player.extractor.TVBus;
-import com.fongmi.onetv.tv.player.extractor.Thunder;
-import com.fongmi.onetv.tv.player.extractor.Video;
-import com.fongmi.onetv.tv.player.extractor.Youtube;
-import com.fongmi.onetv.tv.utils.UrlUtil;
+import top.cywin.onetv.movie.Constant;
+import top.cywin.onetv.movie.bean.Channel;
+import top.cywin.onetv.movie.bean.Episode;
+import top.cywin.onetv.movie.bean.Flag;
+import top.cywin.onetv.movie.bean.Result;
+import top.cywin.onetv.movie.player.extractor.Force;
+import top.cywin.onetv.movie.player.extractor.JianPian;
+import top.cywin.onetv.movie.player.extractor.Push;
+import top.cywin.onetv.movie.player.extractor.TVBus;
+import top.cywin.onetv.movie.player.extractor.Thunder;
+import top.cywin.onetv.movie.player.extractor.Video;
+import top.cywin.onetv.movie.player.extractor.Youtube;
+import top.cywin.onetv.movie.utils.UrlUtil;
 
 import java.util.ArrayList;
 import java.util.Iterator;

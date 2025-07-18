@@ -1,6 +1,6 @@
-package com.fongmi.onetv.tv.player.danmaku;
+package top.cywin.onetv.movie.player.danmaku;
 
-import com.fongmi.onetv.tv.bean.DanmakuData;
+import top.cywin.onetv.movie.bean.DanmakuData;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

@@ -1,6 +1,6 @@
-package com.fongmi.onetv.tv.player.danmaku;
+package top.cywin.onetv.movie.player.danmaku;
 
-import com.fongmi.onetv.tv.player.Players;
+import top.cywin.onetv.movie.player.Players;
 
 import master.flame.danmaku.danmaku.model.AbsDanmakuSync;
 

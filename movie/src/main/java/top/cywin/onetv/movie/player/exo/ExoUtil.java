@@ -1,4 +1,4 @@
-package com.fongmi.onetv.tv.player.exo;
+package top.cywin.onetv.movie.player.exo;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -23,11 +23,11 @@ import androidx.media3.exoplayer.trackselection.TrackSelector;
 import androidx.media3.ui.CaptionStyleCompat;
 import androidx.media3.ui.PlayerView;
 
-import com.fongmi.onetv.tv.App;
-import com.fongmi.onetv.tv.BuildConfig;
-import com.fongmi.onetv.tv.Setting;
-import com.fongmi.onetv.tv.bean.Drm;
-import com.fongmi.onetv.tv.bean.Sub;
+import top.cywin.onetv.movie.App;
+import top.cywin.onetv.movie.BuildConfig;
+import top.cywin.onetv.movie.Setting;
+import top.cywin.onetv.movie.bean.Drm;
+import top.cywin.onetv.movie.bean.Sub;
 
 import java.util.ArrayList;
 import java.util.List;

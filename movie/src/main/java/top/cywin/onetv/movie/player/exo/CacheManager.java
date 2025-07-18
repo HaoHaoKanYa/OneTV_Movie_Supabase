@@ -1,11 +1,11 @@
-package com.fongmi.onetv.tv.player.exo;
+package top.cywin.onetv.movie.player.exo;
 
 import androidx.media3.database.StandaloneDatabaseProvider;
 import androidx.media3.datasource.cache.Cache;
 import androidx.media3.datasource.cache.NoOpCacheEvictor;
 import androidx.media3.datasource.cache.SimpleCache;
 
-import com.fongmi.onetv.tv.App;
+import top.cywin.onetv.movie.App;
 import top.cywin.onetv.movie.catvod.utils.Path;
 
 public class CacheManager {

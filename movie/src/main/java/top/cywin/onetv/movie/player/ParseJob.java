@@ -1,17 +1,17 @@
-package com.fongmi.onetv.tv.player;
+package top.cywin.onetv.movie.player;
 
 import android.text.TextUtils;
 
-import com.fongmi.onetv.tv.App;
-import com.fongmi.onetv.tv.Constant;
-import com.fongmi.onetv.tv.api.config.VodConfig;
-import com.fongmi.onetv.tv.api.loader.BaseLoader;
-import com.fongmi.onetv.tv.bean.Parse;
-import com.fongmi.onetv.tv.bean.Result;
-import com.fongmi.onetv.tv.impl.ParseCallback;
-import com.fongmi.onetv.tv.server.Server;
-import com.fongmi.onetv.tv.ui.custom.CustomWebView;
-import com.fongmi.onetv.tv.utils.UrlUtil;
+import top.cywin.onetv.movie.App;
+import top.cywin.onetv.movie.Constant;
+import top.cywin.onetv.movie.api.config.VodConfig;
+import top.cywin.onetv.movie.api.loader.BaseLoader;
+import top.cywin.onetv.movie.bean.Parse;
+import top.cywin.onetv.movie.bean.Result;
+import top.cywin.onetv.movie.player.ParseCallback;
+import top.cywin.onetv.movie.server.Server;
+import top.cywin.onetv.movie.ui.custom.CustomWebView;
+import top.cywin.onetv.movie.utils.UrlUtil;
 import top.cywin.onetv.movie.catvod.net.OkHttp;
 import top.cywin.onetv.movie.catvod.utils.Json;
 import top.cywin.onetv.movie.catvod.utils.Util;

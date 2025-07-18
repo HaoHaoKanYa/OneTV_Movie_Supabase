@@ -21,7 +21,7 @@ import androidx.media3.extractor.DefaultExtractorsFactory;
 import androidx.media3.extractor.ExtractorsFactory;
 import androidx.media3.extractor.ts.TsExtractor;
 
-import com.fongmi.onetv.tv.App;
+import top.cywin.onetv.movie.App;
 import top.cywin.onetv.movie.catvod.net.OkHttp;
 
 import java.util.HashMap;

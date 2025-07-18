@@ -1,13 +1,13 @@
-package com.fongmi.onetv.tv.player.extractor;
+package top.cywin.onetv.movie.player.extractor;
 
 import android.net.Uri;
 import android.os.SystemClock;
 
-import com.fongmi.onetv.tv.bean.Episode;
-import com.fongmi.onetv.tv.exception.ExtractException;
-import com.fongmi.onetv.tv.player.Source;
-import com.fongmi.onetv.tv.utils.Download;
-import com.fongmi.onetv.tv.utils.UrlUtil;
+import top.cywin.onetv.movie.bean.Episode;
+import top.cywin.onetv.movie.exception.ExtractException;
+import top.cywin.onetv.movie.player.Source;
+import top.cywin.onetv.movie.utils.Download;
+import top.cywin.onetv.movie.utils.UrlUtil;
 import top.cywin.onetv.movie.catvod.utils.Path;
 import top.cywin.onetv.movie.catvod.utils.Util;
 import top.cywin.onetv.movie.thunder.downloadlib.XLTaskHelper;

@@ -23,6 +23,16 @@ android {
         minSdk = libs.versions.minSdk.get().toInt()
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+
+        // 注解处理器配置 - 按照原项目FongMi_TV配置
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += mapOf(
+                    "room.schemaLocation" to "$projectDir/schemas",
+                    "eventBusIndex" to "top.cywin.onetv.movie.event.EventIndex"
+                )
+            }
+        }
     }
 
     buildTypes {
@@ -210,6 +220,14 @@ dependencies {
         exclude(group = "xpp3", module = "xpp3")
     }
     implementation("cat.ereza:customactivityoncrash:2.4.0")
+
+    // FongMi_TV核心依赖 - 本地AAR文件 (包含弹幕库)
+    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.aar"))))
+
+    // FongMi_TV核心依赖 - 弹幕库NDK支持
+    implementation("com.github.ctiao:ndkbitmap-armv7a:0.9.21")
+    implementation("com.github.ctiao:ndkbitmap-armv5:0.9.21")
+    implementation("com.github.ctiao:ndkbitmap-x86:0.9.21")
 
     // FongMi_TV核心依赖 - 缺少的重要依赖
     implementation("androidx.media:media:1.7.0")

@@ -1,10 +1,10 @@
-package com.fongmi.onetv.tv.player.extractor;
+package top.cywin.onetv.movie.player.extractor;
 
 import android.util.Base64;
 
-import com.fongmi.onetv.tv.bean.Episode;
-import com.fongmi.onetv.tv.impl.NewPipeImpl;
-import com.fongmi.onetv.tv.player.Source;
+import top.cywin.onetv.movie.bean.Episode;
+import top.cywin.onetv.movie.impl.NewPipeImpl;
+import top.cywin.onetv.movie.player.Source;
 
 import org.schabi.newpipe.extractor.ListExtractor;
 import org.schabi.newpipe.extractor.NewPipe;

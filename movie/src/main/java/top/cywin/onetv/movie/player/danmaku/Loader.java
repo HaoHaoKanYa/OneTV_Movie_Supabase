@@ -1,8 +1,8 @@
-package com.fongmi.onetv.tv.player.danmaku;
+package top.cywin.onetv.movie.player.danmaku;
 
-import com.fongmi.onetv.tv.Constant;
-import com.fongmi.onetv.tv.bean.Danmaku;
-import com.fongmi.onetv.tv.utils.UrlUtil;
+import top.cywin.onetv.movie.Constant;
+import top.cywin.onetv.movie.bean.Danmaku;
+import top.cywin.onetv.movie.utils.UrlUtil;
 import top.cywin.onetv.movie.catvod.net.OkHttp;
 
 import java.io.IOException;

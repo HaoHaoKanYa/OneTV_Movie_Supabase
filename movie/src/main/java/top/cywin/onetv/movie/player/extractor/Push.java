@@ -1,10 +1,10 @@
-package com.fongmi.onetv.tv.player.extractor;
+package top.cywin.onetv.movie.player.extractor;
 
 import android.os.SystemClock;
 
-import com.fongmi.onetv.tv.App;
-import com.fongmi.onetv.tv.player.Source;
-import com.fongmi.onetv.tv.ui.activity.VideoActivity;
+import top.cywin.onetv.movie.App;
+import top.cywin.onetv.movie.player.Source;
+import top.cywin.onetv.movie.ui.activity.VideoActivity;
 
 public class Push implements Source.Extractor {
 

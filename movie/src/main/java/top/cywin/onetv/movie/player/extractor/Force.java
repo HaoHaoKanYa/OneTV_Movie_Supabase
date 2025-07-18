@@ -1,4 +1,4 @@
-package com.fongmi.onetv.tv.player.extractor;
+package top.cywin.onetv.movie.player.extractor;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -7,8 +7,8 @@ import android.net.Uri;
 import android.os.IBinder;
 import android.os.SystemClock;
 
-import com.fongmi.onetv.tv.App;
-import com.fongmi.onetv.tv.player.Source;
+import top.cywin.onetv.movie.App;
+import top.cywin.onetv.movie.player.Source;
 import top.cywin.onetv.movie.forcetech.Util;
 import top.cywin.onetv.movie.catvod.net.OkHttp;
 import com.google.common.net.HttpHeaders;

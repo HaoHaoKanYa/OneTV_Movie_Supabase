@@ -1,11 +1,11 @@
-package com.fongmi.onetv.tv.player.extractor;
+package top.cywin.onetv.movie.player.extractor;
 
 import android.net.Uri;
 
-import com.fongmi.onetv.tv.App;
-import com.fongmi.onetv.tv.player.Source;
-import com.fongmi.onetv.tv.utils.Clock;
-import com.fongmi.onetv.tv.utils.FileUtil;
+import top.cywin.onetv.movie.App;
+import top.cywin.onetv.movie.player.Source;
+import top.cywin.onetv.movie.utils.Clock;
+import top.cywin.onetv.movie.utils.FileUtil;
 import top.cywin.onetv.movie.catvod.utils.Path;
 import top.cywin.onetv.movie.jianpian.P2PClass;
 

@@ -1,11 +1,11 @@
-package com.fongmi.onetv.tv.player.danmaku;
+package top.cywin.onetv.movie.player.danmaku;
 
 import androidx.media3.common.Player;
 
-import com.fongmi.onetv.tv.App;
-import com.fongmi.onetv.tv.bean.Danmaku;
-import com.fongmi.onetv.tv.player.Players;
-import com.fongmi.onetv.tv.utils.ResUtil;
+import top.cywin.onetv.movie.App;
+import top.cywin.onetv.movie.bean.Danmaku;
+import top.cywin.onetv.movie.player.Players;
+import top.cywin.onetv.movie.utils.ResUtil;
 import com.orhanobut.logger.Logger;
 
 import java.util.HashMap;
