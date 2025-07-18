@@ -1,5 +1,6 @@
 package top.cywin.onetv.movie
 
+import android.app.Application
 import android.content.Context
 import android.util.Log
 import kotlinx.coroutines.GlobalScope
@@ -26,7 +27,7 @@ import java.io.File
 /**
  * OneTV Movie模块应用单例 - KotlinPoet专业版
  * 集成动态代码生成系统，提供企业级的扩展能力和专业性
- * 
+ *
  * 🚀 核心功能：
  * 1. 传统依赖管理 - 兼容现有架构，保持稳定性
  * 2. KotlinPoet代码生成 - 动态适配和优化，提升专业性
@@ -34,8 +35,18 @@ import java.io.File
  * 4. 性能监控 - 实时性能分析和优化
  * 5. 热更新支持 - 配置变更时动态重新生成代码
  */
-object MovieApp {
-    private const val TAG = "ONETV_MOVIE"
+class MovieApp : Application() {
+
+    companion object {
+        @Volatile
+        private var INSTANCE: MovieApp? = null
+
+        fun getInstance(): MovieApp {
+            return INSTANCE ?: throw IllegalStateException("MovieApp未初始化，请确保Application已启动")
+        }
+
+        private const val TAG = "ONETV_MOVIE"
+    }
     
     private lateinit var applicationContext: Context
     private var isInitialized = false
@@ -175,6 +186,16 @@ object MovieApp {
             }
         } catch (e: Exception) {
             Log.e(TAG, "❌ AppConfigManager初始化异常", e)
+        }
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+        INSTANCE = this
+
+        // 启动初始化
+        GlobalScope.launch {
+            initialize(this@MovieApp)
         }
     }
 

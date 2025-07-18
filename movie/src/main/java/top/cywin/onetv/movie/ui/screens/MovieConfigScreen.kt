@@ -27,7 +27,7 @@ fun MovieConfigScreen(
     navController: NavController,
     viewModel: ConfigSetupViewModel = viewModel {
         ConfigSetupViewModel(
-            appConfigManager = top.cywin.onetv.movie.MovieApp.appConfigManager
+            appConfigManager = top.cywin.onetv.movie.MovieApp.getInstance().appConfigManager
         )
     }
 ) {

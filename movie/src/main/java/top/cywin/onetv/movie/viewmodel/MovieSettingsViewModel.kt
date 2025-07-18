@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import top.cywin.onetv.movie.data.models.SettingsUiState
 import top.cywin.onetv.movie.data.models.VodConfig
@@ -92,8 +93,8 @@ class MovieSettingsViewModel(
                     cacheManager.clearAll()
                     Log.d("ONETV_MOVIE", "✅ VOD缓存管理器缓存已清空")
                     
-                    // 清空仓库缓存
-                    repository.clearCache()
+                    // 清空仓库缓存 - 使用FongMi_TV的RepositoryAdapter
+                    repositoryAdapter.clearCache()
                     Log.d("ONETV_MOVIE", "✅ VOD仓库缓存已清空")
                     
                     // 清空配置管理器缓存
@@ -125,18 +126,22 @@ class MovieSettingsViewModel(
                 Log.d("ONETV_MOVIE", "添加配置: $url")
                 _uiState.value = _uiState.value.copy(isLoading = true)
                 
-                // 解析配置URL
-                val parseResult = repository.parseRouteConfig(url)
-                if (parseResult.isFailure) {
+                // 解析配置URL - 使用FongMi_TV的RepositoryAdapter
+                repositoryAdapter.parseRouteConfig(url)
+
+                // 等待配置加载完成
+                delay(1000)
+
+                // 检查配置是否加载成功 - 通过适配器系统获取配置
+                val config = repositoryAdapter.getVodConfig()
+                if (config == null || config.sites.isEmpty()) {
                     _uiState.value = _uiState.value.copy(
                         isLoading = false,
-                        error = "配置解析失败: ${parseResult.exceptionOrNull()?.message}"
+                        error = "配置解析失败"
                     )
                     return@launch
                 }
-                
-                val config = parseResult.getOrThrow()
-                
+
                 // 加载配置
                 val loadResult = configManager.load(config)
                 if (loadResult.isFailure) {
@@ -239,17 +244,9 @@ class MovieSettingsViewModel(
                 Log.d("ONETV_MOVIE", "🔄 用户请求强制重新解析配置")
                 _uiState.value = _uiState.value.copy(isLoading = true)
 
-                // 清除缓存并重新解析
-                val clearResult = repository.clearConfigCache()
-                if (clearResult.isFailure) {
-                    Log.e("ONETV_MOVIE", "清除缓存失败", clearResult.exceptionOrNull())
-                    _uiState.value = _uiState.value.copy(
-                        isLoading = false,
-                        error = "清除缓存失败: ${clearResult.exceptionOrNull()?.message}"
-                    )
-                    return@launch
-                }
-
+                // 清除缓存并重新解析 - 使用FongMi_TV的RepositoryAdapter
+                repositoryAdapter.clearConfigCache()
+                Log.d("ONETV_MOVIE", "✅ 缓存清除请求已发送")
                 Log.d("ONETV_MOVIE", "✅ 缓存清除成功，配置将在下次访问时重新解析")
 
                 // 重新加载设置

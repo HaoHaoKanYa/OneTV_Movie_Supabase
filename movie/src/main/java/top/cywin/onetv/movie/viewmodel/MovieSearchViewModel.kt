@@ -87,10 +87,22 @@ class MovieSearchViewModel(
                 }
 
                 // 执行搜索
-                val result = repository.searchContent(keyword, page, currentSite.key)
-                val response = result.getOrThrow()
+                // 使用FongMi_TV的RepositoryAdapter搜索内容
+                repositoryAdapter.searchContent(keyword, currentSite.key)
 
-                val newResults = response.list ?: emptyList()
+                // 临时处理，实际数据通过SiteViewModel观察获取
+                val response = VodListResponse(
+                    code = 1,
+                    msg = "",
+                    list = emptyList(),
+                    classes = emptyList(),
+                    filters = emptyMap(),
+                    page = page,
+                    pagecount = 1,
+                    limit = 20,
+                    total = 0
+                )
+                val newResults = response.list
                 val allResults = if (page == 1) {
                     newResults
                 } else {

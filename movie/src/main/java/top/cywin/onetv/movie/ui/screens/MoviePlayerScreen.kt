@@ -34,7 +34,6 @@ import androidx.navigation.NavController
 import top.cywin.onetv.movie.data.models.PlayerUiState
 import top.cywin.onetv.movie.data.models.VodEpisode
 import top.cywin.onetv.movie.data.models.VodFlag
-import top.cywin.onetv.movie.data.parser.LineManager
 import top.cywin.onetv.movie.viewmodel.MoviePlayerViewModel
 
 /**
@@ -44,6 +43,16 @@ data class VideoPlayerState(
     val isPlaying: Boolean = false,
     val currentPosition: Long = 0L,
     val duration: Long = 0L
+)
+
+/**
+ * 线路信息 (替代LineManager.LineInfo)
+ */
+data class LineInfo(
+    val flag: String = "",
+    val quality: String = "",
+    val speed: String = "",
+    val isAvailable: Boolean = true
 )
 
 /**
@@ -131,7 +140,7 @@ private fun EnhancedMoviePlayerControls(
     onEpisodeChange: (VodEpisode) -> Unit,
     onPreviousEpisode: () -> Unit,
     onNextEpisode: () -> Unit,
-    onLineSwitch: (LineManager.LineInfo) -> Unit
+    onLineSwitch: (LineInfo) -> Unit
 ) {
     var showControls by remember { mutableStateOf(true) }
     var showLineSelector by remember { mutableStateOf(false) }
@@ -360,9 +369,9 @@ private fun BottomPlayerControls(
 @Composable
 private fun LineSelector(
     modifier: Modifier = Modifier,
-    availableLines: List<LineManager.LineInfo>,
+    availableLines: List<LineInfo>,
     currentLineIndex: Int,
-    onLineSelected: (LineManager.LineInfo) -> Unit,
+    onLineSelected: (LineInfo) -> Unit,
     onDismiss: () -> Unit
 ) {
     Card(
@@ -420,7 +429,7 @@ private fun LineSelector(
  */
 @Composable
 private fun LineItem(
-    lineInfo: LineManager.LineInfo,
+    lineInfo: LineInfo,
     isSelected: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -448,7 +457,7 @@ private fun LineItem(
                 modifier = Modifier.weight(1f)
             ) {
                 Text(
-                    text = lineInfo.flag.flag,
+                    text = lineInfo.flag,
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
                 )
@@ -458,21 +467,17 @@ private fun LineItem(
                 ) {
                     // 质量标签
                     Text(
-                        text = lineInfo.quality.displayName,
+                        text = lineInfo.quality,
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.primary
                     )
 
                     // 速度标签
-                    if (lineInfo.speed > 0) {
+                    if (lineInfo.speed.isNotEmpty()) {
                         Text(
-                            text = "${lineInfo.speed}分",
+                            text = lineInfo.speed,
                             style = MaterialTheme.typography.bodySmall,
-                            color = when {
-                                lineInfo.speed >= 80 -> Color.Green
-                                lineInfo.speed >= 60 -> Color.Yellow
-                                else -> Color.Red
-                            }
+                            color = MaterialTheme.colorScheme.secondary
                         )
                     }
 

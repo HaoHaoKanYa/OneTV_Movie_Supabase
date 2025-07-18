@@ -3,6 +3,16 @@ package top.cywin.onetv.movie.data.models
 // import top.cywin.onetv.movie.data.parser.LineManager
 
 /**
+ * 线路信息 (替代LineManager.LineInfo)
+ */
+data class LineInfo(
+    val flag: String = "",
+    val quality: String = "",
+    val speed: String = "",
+    val isAvailable: Boolean = true
+)
+
+/**
  * 播放器UI状态 - 支持线路切换和完整播放功能
  */
 data class PlayerUiState(
@@ -23,7 +33,7 @@ data class PlayerUiState(
     val currentEpisodeIndex: Int = 0,
     
     // 线路管理
-    val availableLines: List<LineManager.LineInfo> = emptyList(),
+    val availableLines: List<LineInfo> = emptyList(),
     val currentLineIndex: Int = 0,
     
     // 播放信息
@@ -85,7 +95,7 @@ data class PlayerUiState(
     /**
      * 获取当前线路信息
      */
-    fun getCurrentLine(): LineManager.LineInfo? {
+    fun getCurrentLine(): LineInfo? {
         return availableLines.getOrNull(currentLineIndex)
     }
     

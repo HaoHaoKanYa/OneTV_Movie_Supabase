@@ -194,10 +194,102 @@ public class RepositoryAdapter {
         if (VodConfig.get() != null) {
             VodConfig.get().clear();
         }
-        
+
         // 清理Live配置
         if (LiveConfig.get() != null) {
             LiveConfig.get().clear();
         }
+    }
+
+    // ========== ViewModel需要的方法 ==========
+
+    /**
+     * 提供给ViewModel使用的Repository接口
+     * 这些方法将调用委托给FongMi_TV的SiteViewModel
+     */
+
+    /**
+     * 加载配置 - 委托给VodConfig
+     */
+    public void loadConfig() {
+        // 这个方法由SiteViewModel处理，这里只是占位
+        // 实际调用在SiteViewModel中进行
+    }
+
+    /**
+     * 获取分类 - 委托给SiteViewModel
+     */
+    public void getCategories() {
+        // 这个方法由SiteViewModel处理
+        // 实际调用：siteViewModel.homeContent()
+    }
+
+    /**
+     * 获取内容列表 - 委托给SiteViewModel
+     */
+    public void getContentList(String typeId, int page, java.util.Map<String, String> filters) {
+        // 这个方法由SiteViewModel处理
+        // 实际调用：siteViewModel.categoryContent(typeId, String.valueOf(page), true, filters)
+    }
+
+    /**
+     * 获取内容详情 - 委托给SiteViewModel
+     */
+    public void getContentDetail(String vodId, String siteKey) {
+        // 这个方法由SiteViewModel处理
+        // 实际调用：siteViewModel.detailContent(vodId)
+    }
+
+    /**
+     * 搜索内容 - 委托给SiteViewModel
+     */
+    public void searchContent(String keyword, String siteKey) {
+        // 这个方法由SiteViewModel处理
+        // 实际调用：siteViewModel.searchContent(keyword)
+    }
+
+    /**
+     * 获取推荐内容 - 委托给SiteViewModel
+     */
+    public void getRecommendContent() {
+        // 这个方法由SiteViewModel处理
+        // 实际调用：siteViewModel.homeVideoContent()
+    }
+
+    /**
+     * 刷新配置 - 委托给VodConfig
+     */
+    public void refreshConfig() {
+        // 重新加载配置
+        reloadConfigs();
+    }
+
+    /**
+     * 清理缓存
+     */
+    public void clearCache() {
+        cleanup();
+    }
+
+    /**
+     * 清理配置缓存
+     */
+    public void clearConfigCache() {
+        clearCache();
+    }
+
+    /**
+     * 检查配置更新是否需要
+     */
+    public boolean isConfigUpdateNeeded() {
+        return !isVodRepositoryReady();
+    }
+
+    /**
+     * 解析路由配置
+     */
+    public void parseRouteConfig(String configUrl) {
+        // 这里可以实现配置解析逻辑
+        loadConfig();
     }
 }

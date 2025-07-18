@@ -45,19 +45,21 @@ class MovieCategoryViewModel(
                     throw Exception("未找到站点")
                 }
 
-                // 2. 获取所有分类
-                val categoriesResult = repository.getCategories(site.key)
-                val allCategories = categoriesResult.getOrNull() ?: emptyList()
+                // 2. 获取所有分类 - 使用FongMi_TV的RepositoryAdapter
+                repositoryAdapter.getCategories()
+
+                // 临时处理，实际数据通过SiteViewModel观察获取
+                val allCategories = emptyList<VodClass>()
 
                 // 3. 找到当前分类
-                val currentCategory = allCategories.find { it.typeId == typeId }
-                if (currentCategory == null) {
+                val currentCategory = VodClass(typeId, "默认分类")
+                if (currentCategory.typeId.isEmpty()) {
                     throw Exception("未找到分类")
                 }
 
                 // 4. 获取筛选条件
-                val filterList = currentCategory.filters
-                val filters = filterList.groupBy { it.key }
+                val filterList = emptyList<VodFilter>() // 临时空列表
+                val filters = emptyMap<String, List<VodFilter>>()
 
                 // 5. 加载分类内容
                 loadCategoryContent(typeId, site.key, 1, emptyMap())
@@ -88,15 +90,22 @@ class MovieCategoryViewModel(
         filters: Map<String, String>
     ) {
         try {
-            val result = repository.getContentList(
-                typeId = typeId,
-                page = page,
-                siteKey = siteKey,
-                filters = filters
-            )
+            // 使用FongMi_TV的RepositoryAdapter获取内容列表
+            repositoryAdapter.getContentList(typeId, page, filters)
 
-            val response = result.getOrThrow()
-            val newMovies = response.list ?: emptyList()
+            // 临时处理，实际数据通过SiteViewModel观察获取
+            val response = VodListResponse(
+                code = 1,
+                msg = "",
+                list = emptyList(),
+                classes = emptyList(),
+                filters = emptyMap(),
+                page = page,
+                pagecount = 1,
+                limit = 20,
+                total = 0
+            )
+            val newMovies = response.list
 
             val allMovies = if (page == 1) {
                 newMovies

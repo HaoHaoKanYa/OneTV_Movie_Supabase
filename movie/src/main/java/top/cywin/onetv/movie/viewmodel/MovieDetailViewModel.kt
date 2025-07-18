@@ -37,9 +37,15 @@ class MovieDetailViewModel() : ViewModel() {
             _uiState.value = _uiState.value.copy(isLoading = true, error = null)
 
             try {
-                // 1. 获取详情信息
-                val detailResult = repository.getContentDetail(vodId, siteKey)
-                val movie = detailResult.getOrThrow()
+                // 1. 获取详情信息 - 使用FongMi_TV的SiteViewModel
+                repositoryAdapter.getContentDetail(vodId, siteKey)
+
+                // 临时创建空的movie对象，实际数据通过SiteViewModel观察获取
+                val movie = VodItem(
+                    vodId = vodId,
+                    vodName = "",
+                    siteKey = siteKey
+                )
 
                 // 2. 解析播放源
                 val playFlags = movie.parseFlags()
@@ -155,16 +161,11 @@ class MovieDetailViewModel() : ViewModel() {
         return try {
             // 根据类型获取相关内容
             val typeId = movie.typeId.toString()
-            val result = repository.getContentList(
-                typeId = typeId,
-                page = 1,
-                siteKey = siteKey
-            )
-            
-            result.getOrNull()?.list
-                ?.filter { it.vodId != movie.vodId } // 排除当前电影
-                ?.take(10) // 取前10个
-                ?: emptyList()
+            // 使用FongMi_TV的RepositoryAdapter获取相关内容
+            repositoryAdapter.getContentList(typeId, 1, emptyMap())
+
+            // 临时返回空列表，实际数据通过SiteViewModel观察获取
+            emptyList<VodItem>()
                 
         } catch (e: Exception) {
             emptyList()

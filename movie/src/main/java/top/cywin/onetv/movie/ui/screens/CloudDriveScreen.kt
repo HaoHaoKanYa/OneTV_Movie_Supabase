@@ -39,7 +39,7 @@ fun CloudDriveScreen(
     val viewModel: CloudDriveViewModel = viewModel {
         CloudDriveViewModel(
             context = context,
-            cloudDriveManager = top.cywin.onetv.movie.MovieApp.cloudDriveManager
+            cloudDriveManager = top.cywin.onetv.movie.MovieApp.getInstance().cloudDriveManager
         )
     }
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
