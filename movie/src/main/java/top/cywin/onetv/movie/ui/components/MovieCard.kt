@@ -1,228 +1,113 @@
 package top.cywin.onetv.movie.ui.components
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import top.cywin.onetv.movie.data.models.VodItem
+import top.cywin.onetv.movie.bean.Movie
+import top.cywin.onetv.movie.R
 
 /**
- * 电影卡片组件 (参考OneMoVie卡片设计)
+ * OneTV Movie电影卡片组件 - 按照FongMi_TV整合指南重构
  */
 @Composable
 fun MovieCard(
-    movie: VodItem,
+    movie: Movie,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {}
-) {
-    Card(
-        modifier = modifier
-            .width(120.dp)
-            .height(180.dp),
-        onClick = onClick,
-        shape = RoundedCornerShape(8.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.DarkGray)
-        ) {
-            // 海报图片
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(120.dp)
-                    .clip(RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
-            ) {
-                if (movie.vodPic.isNotEmpty()) {
-                    AsyncImage(
-                        model = movie.vodPic,
-                        contentDescription = movie.vodName,
-                        modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Crop
-                    )
-                } else {
-                    // 占位图
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(Color.Gray),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = "暂无海报",
-                            color = Color.White,
-                            fontSize = 10.sp
-                        )
-                    }
-                }
-                
-                // 备注标签 (右上角)
-                if (movie.vodRemarks.isNotEmpty()) {
-                    Surface(
-                        modifier = Modifier
-                            .align(Alignment.TopEnd)
-                            .padding(4.dp),
-                        color = Color.Red.copy(alpha = 0.8f),
-                        shape = RoundedCornerShape(4.dp)
-                    ) {
-                        Text(
-                            text = movie.vodRemarks,
-                            color = Color.White,
-                            fontSize = 8.sp,
-                            modifier = Modifier.padding(horizontal = 4.dp, vertical = 2.dp)
-                        )
-                    }
-                }
-            }
-            
-            // 标题和信息
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp),
-                verticalArrangement = Arrangement.spacedBy(2.dp)
-            ) {
-                Text(
-                    text = movie.vodName,
-                    color = Color.White,
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Medium,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis
-                )
-                
-                // 年份和地区
-                if (movie.vodYear.isNotEmpty() || movie.vodArea.isNotEmpty()) {
-                    Text(
-                        text = "${movie.vodYear} ${movie.vodArea}".trim(),
-                        color = Color.Gray,
-                        fontSize = 10.sp,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
-            }
-        }
-    }
-}
-
-/**
- * 网格电影卡片 (用于分类页面)
- */
-@Composable
-fun MovieGridCard(
-    movie: VodItem,
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit = {}
+    showProgress: Boolean = false,
+    progress: Float = 0f
 ) {
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .aspectRatio(0.75f),
-        onClick = onClick,
-        shape = RoundedCornerShape(8.dp),
+            .clickable { onClick() },
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.DarkGray)
-        ) {
-            // 海报图片
+        Column {
+            // 电影海报
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(1f)
-                    .clip(RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
+                    .aspectRatio(0.7f)
             ) {
-                if (movie.vodPic.isNotEmpty()) {
-                    AsyncImage(
-                        model = movie.vodPic,
-                        contentDescription = movie.vodName,
-                        modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Crop
-                    )
-                } else {
-                    // 占位图
-                    Box(
+                AsyncImage(
+                    model = movie.vodPic.ifEmpty { null },
+                    contentDescription = movie.vodName,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop,
+                    error = painterResource(R.drawable.ic_movie_placeholder),
+                    placeholder = painterResource(R.drawable.ic_movie_placeholder)
+                )
+
+                // 播放进度条
+                if (showProgress && progress > 0) {
+                    LinearProgressIndicator(
+                        progress = progress,
                         modifier = Modifier
-                            .fillMaxSize()
-                            .background(Color.Gray),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = "暂无海报",
-                            color = Color.White,
-                            fontSize = 12.sp
-                        )
-                    }
+                            .fillMaxWidth()
+                            .align(Alignment.BottomCenter),
+                        color = MaterialTheme.colorScheme.primary
+                    )
                 }
-                
-                // 备注标签
-                if (movie.vodRemarks.isNotEmpty()) {
+
+                // 评分标签
+                if (movie.vodScore > 0) {
                     Surface(
                         modifier = Modifier
                             .align(Alignment.TopEnd)
-                            .padding(6.dp),
-                        color = Color.Red.copy(alpha = 0.8f),
+                            .padding(8.dp),
+                        color = MaterialTheme.colorScheme.primary,
                         shape = RoundedCornerShape(4.dp)
                     ) {
                         Text(
-                            text = movie.vodRemarks,
-                            color = Color.White,
-                            fontSize = 10.sp,
-                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 3.dp)
+                            text = movie.vodScore.toString(),
+                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onPrimary
                         )
                     }
                 }
             }
-            
-            // 标题和信息
+
+            // 电影信息
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp),
-                verticalArrangement = Arrangement.spacedBy(4.dp)
+                modifier = Modifier.padding(12.dp)
             ) {
                 Text(
                     text = movie.vodName,
-                    color = Color.White,
-                    fontSize = 14.sp,
+                    style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Medium,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
-                
-                // 年份和地区
-                if (movie.vodYear.isNotEmpty() || movie.vodArea.isNotEmpty()) {
+
+                if (movie.vodRemarks.isNotEmpty()) {
+                    Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        text = "${movie.vodYear} ${movie.vodArea}".trim(),
-                        color = Color.Gray,
-                        fontSize = 11.sp,
+                        text = movie.vodRemarks,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
                 }
-                
-                // 评分
-                if (movie.vodScore.isNotEmpty()) {
+
+                if (movie.vodYear > 0) {
+                    Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        text = "评分: ${movie.vodScore}",
-                        color = Color.Yellow,
-                        fontSize = 10.sp
+                        text = "${movie.vodYear}年",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
@@ -230,105 +115,100 @@ fun MovieGridCard(
     }
 }
 
-/**
- * 列表电影卡片 (用于搜索和历史页面)
- */
 @Composable
 fun MovieListCard(
-    movie: VodItem,
+    movie: Movie,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    subtitle: String = "",
-    onClick: () -> Unit = {}
+    showProgress: Boolean = false,
+    progress: Float = 0f
 ) {
     Card(
-        modifier = modifier.fillMaxWidth(),
-        onClick = onClick,
-        shape = RoundedCornerShape(8.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable { onClick() }
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color.DarkGray)
-                .padding(12.dp),
+            modifier = Modifier.padding(12.dp),
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            // 海报
+            // 电影海报
             Box(
                 modifier = Modifier
-                    .width(60.dp)
-                    .height(80.dp)
-                    .clip(RoundedCornerShape(6.dp))
+                    .width(80.dp)
+                    .height(120.dp)
             ) {
-                if (movie.vodPic.isNotEmpty()) {
-                    AsyncImage(
-                        model = movie.vodPic,
-                        contentDescription = movie.vodName,
-                        modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Crop
-                    )
-                } else {
-                    Box(
+                AsyncImage(
+                    model = movie.vodPic.ifEmpty { null },
+                    contentDescription = movie.vodName,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop,
+                    error = painterResource(R.drawable.ic_movie_placeholder),
+                    placeholder = painterResource(R.drawable.ic_movie_placeholder)
+                )
+
+                if (showProgress && progress > 0) {
+                    LinearProgressIndicator(
+                        progress = progress,
                         modifier = Modifier
-                            .fillMaxSize()
-                            .background(Color.Gray),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = "海报",
-                            color = Color.White,
-                            fontSize = 10.sp
-                        )
-                    }
+                            .fillMaxWidth()
+                            .align(Alignment.BottomCenter),
+                        color = MaterialTheme.colorScheme.primary
+                    )
                 }
             }
-            
-            // 信息
+
+            // 电影信息
             Column(
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 Text(
                     text = movie.vodName,
-                    color = Color.White,
-                    fontSize = 16.sp,
+                    style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Medium,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
-                
-                if (subtitle.isNotEmpty()) {
-                    Text(
-                        text = subtitle,
-                        color = Color.Gray,
-                        fontSize = 12.sp
-                    )
-                }
-                
+
                 if (movie.vodRemarks.isNotEmpty()) {
                     Text(
                         text = movie.vodRemarks,
-                        color = Color.Gray,
-                        fontSize = 12.sp
-                    )
-                }
-                
-                if (movie.vodYear.isNotEmpty() || movie.vodArea.isNotEmpty()) {
-                    Text(
-                        text = "${movie.vodYear} ${movie.vodArea}".trim(),
-                        color = Color.Gray,
-                        fontSize = 12.sp
-                    )
-                }
-                
-                if (movie.vodActor.isNotEmpty()) {
-                    Text(
-                        text = "主演: ${movie.vodActor}",
-                        color = Color.Gray,
-                        fontSize = 11.sp,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
+                }
+
+                if (movie.vodContent.isNotEmpty()) {
+                    Text(
+                        text = movie.vodContent,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 3,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    if (movie.vodYear > 0) {
+                        Text(
+                            text = "${movie.vodYear}年",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+
+                    if (movie.vodScore > 0) {
+                        Text(
+                            text = "评分: ${movie.vodScore}",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
                 }
             }
         }

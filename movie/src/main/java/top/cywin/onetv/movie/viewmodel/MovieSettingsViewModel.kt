@@ -3,72 +3,71 @@ package top.cywin.onetv.movie.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.withContext
-import top.cywin.onetv.movie.data.models.SettingsUiState
-import top.cywin.onetv.movie.data.models.VodConfig
 import top.cywin.onetv.movie.MovieApp
-import top.cywin.onetv.movie.data.VodConfigManager
-import top.cywin.onetv.movie.data.cache.VodCacheManager
 
 /**
- * VOD设置ViewModel
- * 处理点播系统的设置功能，包括配置管理和缓存清理
+ * 设置页面UI状态数据类
  */
-class MovieSettingsViewModel(
-    private val configManager: VodConfigManager,
-    private val cacheManager: VodCacheManager
-) : ViewModel() {
+data class SettingsUiState(
+    val isLoading: Boolean = false,
+    val error: String? = null,
+    val cacheSize: String = "0 MB",
+    val configUrl: String = "",
+    val autoUpdate: Boolean = true,
+    val enableCache: Boolean = true,
+    val maxCacheSize: Int = 500, // MB
+    val clearCacheProgress: Float = 0f,
+    val isClearingCache: Boolean = false
+)
 
-    // 通过MovieApp访问适配器系统
+/**
+ * OneTV Movie设置页面ViewModel
+ * 通过适配器系统调用FongMi_TV解析功能，不参与线路接口解析
+ */
+class MovieSettingsViewModel : ViewModel() {
+
+    // ✅ 通过MovieApp访问适配器系统 - 不参与解析逻辑
     private val movieApp = MovieApp.getInstance()
     private val repositoryAdapter = movieApp.repositoryAdapter
-    private val siteViewModel = movieApp.siteViewModel
 
     private val _uiState = MutableStateFlow(SettingsUiState())
     val uiState: StateFlow<SettingsUiState> = _uiState.asStateFlow()
 
-    init {
-        Log.d("ONETV_MOVIE", "MovieSettingsViewModel 初始化")
-        loadSettings()
-    }
-
     /**
-     * 加载设置数据
+     * 加载设置数据 - 通过适配器调用FongMi_TV解析系统
      */
-    private fun loadSettings() {
+    fun loadSettings() {
         viewModelScope.launch {
             try {
                 _uiState.value = _uiState.value.copy(isLoading = true)
-                
-                // 获取缓存大小
-                val cacheSize = cacheManager.getCacheSize()
-                
-                // 获取当前配置
-                val currentConfig = configManager.getCurrentConfig()?.let { config ->
-                    VodConfig(
-                        url = "current",
-                        name = "当前配置",
-                        sites = config.sites,
-                        parses = config.parses
+
+                Log.d("ONETV_MOVIE", "⚙️ 加载设置数据")
+
+                // ✅ 通过适配器获取缓存信息 - 缓存管理在FongMi_TV中
+                repositoryAdapter.getCacheInfo { cacheSize ->
+                    _uiState.value = _uiState.value.copy(
+                        cacheSize = formatCacheSize(cacheSize)
                     )
                 }
-                
+
+                // ✅ 通过适配器获取配置信息 - 配置管理在FongMi_TV中
+                repositoryAdapter.getConfigInfo { configUrl ->
+                    _uiState.value = _uiState.value.copy(
+                        configUrl = configUrl
+                    )
+                }
+
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
-                    cacheSize = cacheSize,
-                    currentConfig = currentConfig,
-                    configs = if (currentConfig != null) listOf(currentConfig) else emptyList(),
                     error = null
                 )
-                
-                Log.d("ONETV_MOVIE", "设置数据加载完成，缓存大小: ${cacheSize / 1024 / 1024}MB")
-                
+
+                Log.d("ONETV_MOVIE", "✅ 设置数据加载完成")
+
             } catch (e: Exception) {
                 Log.e("ONETV_MOVIE", "设置数据加载失败", e)
                 _uiState.value = _uiState.value.copy(
@@ -85,135 +84,66 @@ class MovieSettingsViewModel(
     fun clearCache() {
         viewModelScope.launch {
             try {
-                Log.d("ONETV_MOVIE", "🗑️ 开始清空VOD缓存")
-                _uiState.value = _uiState.value.copy(isLoading = true)
-                
-                withContext(Dispatchers.IO) {
-                    // 清空VOD缓存管理器的所有缓存
-                    cacheManager.clearAll()
-                    Log.d("ONETV_MOVIE", "✅ VOD缓存管理器缓存已清空")
-                    
-                    // 清空仓库缓存 - 使用FongMi_TV的RepositoryAdapter
-                    repositoryAdapter.clearCache()
-                    Log.d("ONETV_MOVIE", "✅ VOD仓库缓存已清空")
-                    
-                    // 清空配置管理器缓存
-                    configManager.clear()
-                    Log.d("ONETV_MOVIE", "✅ VOD配置管理器缓存已清空")
+                Log.d("ONETV_MOVIE", "🗑️ 开始清空缓存")
+                _uiState.value = _uiState.value.copy(
+                    isClearingCache = true,
+                    clearCacheProgress = 0f
+                )
+
+                // ✅ 通过适配器清空缓存 - 缓存管理在FongMi_TV中
+                repositoryAdapter.clearAllCache { progress ->
+                    _uiState.value = _uiState.value.copy(
+                        clearCacheProgress = progress
+                    )
                 }
-                
-                // 重新加载设置以更新缓存大小
-                loadSettings()
-                
-                Log.d("ONETV_MOVIE", "🎉 VOD缓存清空完成")
-                
+
+                _uiState.value = _uiState.value.copy(
+                    isClearingCache = false,
+                    clearCacheProgress = 1f,
+                    cacheSize = "0 MB"
+                )
+
+                Log.d("ONETV_MOVIE", "✅ 缓存清空完成")
+
             } catch (e: Exception) {
                 Log.e("ONETV_MOVIE", "缓存清空失败", e)
                 _uiState.value = _uiState.value.copy(
-                    isLoading = false,
+                    isClearingCache = false,
                     error = "缓存清空失败: ${e.message}"
                 )
             }
         }
     }
 
+
     /**
-     * 添加配置
+     * 更新配置URL
      */
-    fun addConfig(url: String) {
+    fun updateConfigUrl(url: String) {
         viewModelScope.launch {
             try {
-                Log.d("ONETV_MOVIE", "添加配置: $url")
+                Log.d("ONETV_MOVIE", "🔗 更新配置URL: $url")
                 _uiState.value = _uiState.value.copy(isLoading = true)
-                
-                // 解析配置URL - 使用FongMi_TV的RepositoryAdapter
-                repositoryAdapter.parseRouteConfig(url)
 
-                // 等待配置加载完成
-                delay(1000)
+                // ✅ 通过适配器更新配置 - 配置管理在FongMi_TV中
+                repositoryAdapter.updateConfigUrl(url)
 
-                // 检查配置是否加载成功 - 通过适配器系统获取配置
-                val config = repositoryAdapter.getVodConfig()
-                if (config == null || config.sites.isEmpty()) {
-                    _uiState.value = _uiState.value.copy(
-                        isLoading = false,
-                        error = "配置解析失败"
-                    )
-                    return@launch
-                }
-
-                // 加载配置
-                val loadResult = configManager.load(config)
-                if (loadResult.isFailure) {
-                    _uiState.value = _uiState.value.copy(
-                        isLoading = false,
-                        error = "配置加载失败: ${loadResult.exceptionOrNull()?.message}"
-                    )
-                    return@launch
-                }
-                
-                Log.d("ONETV_MOVIE", "配置添加成功")
-                loadSettings()
-                
-            } catch (e: Exception) {
-                Log.e("ONETV_MOVIE", "添加配置失败", e)
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
-                    error = "添加配置失败: ${e.message}"
+                    configUrl = url,
+                    error = null
                 )
-            }
-        }
-    }
 
-    /**
-     * 选择配置
-     */
-    fun selectConfig(config: VodConfig) {
-        viewModelScope.launch {
-            try {
-                Log.d("ONETV_MOVIE", "选择配置: ${config.name}")
-                
-                // 这里可以实现配置切换逻辑
-                // 目前只是重新加载设置
-                loadSettings()
-                
+                Log.d("ONETV_MOVIE", "✅ 配置URL更新成功")
+
             } catch (e: Exception) {
-                Log.e("ONETV_MOVIE", "选择配置失败", e)
+                Log.e("ONETV_MOVIE", "配置URL更新失败", e)
                 _uiState.value = _uiState.value.copy(
-                    error = "选择配置失败: ${e.message}"
+                    isLoading = false,
+                    error = "配置更新失败: ${e.message}"
                 )
             }
         }
-    }
-
-    /**
-     * 删除配置
-     */
-    fun deleteConfig(config: VodConfig) {
-        viewModelScope.launch {
-            try {
-                Log.d("ONETV_MOVIE", "删除配置: ${config.name}")
-                
-                // 清空当前配置
-                configManager.clear()
-                
-                // 重新加载设置
-                loadSettings()
-                
-            } catch (e: Exception) {
-                Log.e("ONETV_MOVIE", "删除配置失败", e)
-                _uiState.value = _uiState.value.copy(
-                    error = "删除配置失败: ${e.message}"
-                )
-            }
-        }
-    }
-
-    /**
-     * 刷新设置
-     */
-    fun refresh() {
-        loadSettings()
     }
 
     /**
@@ -226,44 +156,12 @@ class MovieSettingsViewModel(
     /**
      * 格式化缓存大小
      */
-    fun formatCacheSize(bytes: Long): String {
+    private fun formatCacheSize(bytes: Long): String {
         return when {
             bytes < 1024 -> "${bytes}B"
             bytes < 1024 * 1024 -> "${bytes / 1024}KB"
             bytes < 1024 * 1024 * 1024 -> "${bytes / 1024 / 1024}MB"
             else -> "${bytes / 1024 / 1024 / 1024}GB"
-        }
-    }
-
-    /**
-     * 强制重新解析配置（用于TVBOX仓库索引检测）
-     */
-    fun forceReparseConfig() {
-        viewModelScope.launch {
-            try {
-                Log.d("ONETV_MOVIE", "🔄 用户请求强制重新解析配置")
-                _uiState.value = _uiState.value.copy(isLoading = true)
-
-                // 清除缓存并重新解析 - 使用FongMi_TV的RepositoryAdapter
-                repositoryAdapter.clearConfigCache()
-                Log.d("ONETV_MOVIE", "✅ 缓存清除请求已发送")
-                Log.d("ONETV_MOVIE", "✅ 缓存清除成功，配置将在下次访问时重新解析")
-
-                // 重新加载设置
-                loadSettings()
-
-                _uiState.value = _uiState.value.copy(
-                    isLoading = false,
-                    error = null
-                )
-
-            } catch (e: Exception) {
-                Log.e("ONETV_MOVIE", "强制重新解析配置失败", e)
-                _uiState.value = _uiState.value.copy(
-                    isLoading = false,
-                    error = "操作失败: ${e.message}"
-                )
-            }
         }
     }
 }

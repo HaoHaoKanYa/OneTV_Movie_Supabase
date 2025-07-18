@@ -1,34 +1,36 @@
 package top.cywin.onetv.movie.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.FilterList
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import top.cywin.onetv.movie.data.models.CategoryUiState
-import top.cywin.onetv.movie.data.models.VodItem
-import top.cywin.onetv.movie.data.models.VodClass
-import top.cywin.onetv.movie.data.models.VodFilter
-import top.cywin.onetv.movie.navigation.MovieRoutes
-import top.cywin.onetv.movie.ui.components.MovieGridCard
-import top.cywin.onetv.movie.ui.components.FilterDialog
+import top.cywin.onetv.movie.viewmodel.MovieCategoryViewModel
+import top.cywin.onetv.movie.viewmodel.MovieCategoryUiState
+import top.cywin.onetv.movie.bean.Movie
+import top.cywin.onetv.movie.bean.CategoryFilter
+import top.cywin.onetv.movie.MovieApp
+import android.util.Log
 
 /**
- * 分类页面 (参考OneMoVie分类界面)
+ * OneTV Movie分类浏览页面 - 按照FongMi_TV整合指南重构
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -36,166 +38,235 @@ fun MovieCategoryScreen(
     typeId: String,
     siteKey: String = "",
     navController: NavController,
-    uiState: CategoryUiState = CategoryUiState(),
-    onLoadMore: () -> Unit = {},
-    onFilterChange: (Map<String, String>) -> Unit = {},
-    onMovieClick: (VodItem) -> Unit = {}
+    viewModel: MovieCategoryViewModel = viewModel { MovieCategoryViewModel() }
 ) {
-    var showFilterDialog by remember { mutableStateOf(false) }
-    
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    // ✅ 通过MovieApp访问适配器系统
+    val movieApp = MovieApp.getInstance()
+    val siteViewModel = movieApp.siteViewModel
+
+    // ✅ 观察FongMi_TV的数据变化
+    // val categoryResult by siteViewModel.list.observeAsState()
+
+    // ✅ 页面初始化时加载分类数据
+    LaunchedEffect(typeId, siteKey) {
+        Log.d("ONETV_MOVIE", "📂 MovieCategoryScreen 初始化: typeId=$typeId")
+        viewModel.loadCategoryMovies(typeId, siteKey)
+    }
+
+    // ✅ UI状态处理
+    when {
+        uiState.isLoading && uiState.movies.isEmpty() -> {
+            LoadingScreen(message = "正在加载分类内容...")
+        }
+        uiState.error != null && uiState.movies.isEmpty() -> {
+            ErrorScreen(
+                error = uiState.error,
+                onRetry = { viewModel.loadCategoryMovies(typeId, siteKey) },
+                onBack = { navController.popBackStack() }
+            )
+        }
+        else -> {
+            CategoryContent(
+                uiState = uiState,
+                onMovieClick = { movie ->
+                    navController.navigate("detail/${movie.vodId}/$siteKey")
+                },
+                onLoadMore = { viewModel.loadMoreMovies() },
+                onFilterChange = { filter -> viewModel.applyFilter(filter) },
+                onSortChange = { sort -> viewModel.applySorting(sort) },
+                onRefresh = { viewModel.refreshCategory() },
+                onBack = { navController.popBackStack() }
+            )
+        }
+    }
+}
+
+@Composable
+private fun CategoryContent(
+    uiState: MovieCategoryUiState,
+    onMovieClick: (Movie) -> Unit,
+    onLoadMore: () -> Unit,
+    onFilterChange: (CategoryFilter) -> Unit,
+    onSortChange: (String) -> Unit,
+    onRefresh: () -> Unit,
+    onBack: () -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Black)
+            .background(MaterialTheme.colorScheme.background)
     ) {
         // 顶部导航栏
-        CategoryTopBar(
-            title = uiState.currentCategory?.typeName ?: "分类",
-            onBackClick = { navController.popBackStack() },
-            onFilterClick = { showFilterDialog = true },
-            hasFilters = uiState.filters.isNotEmpty()
-        )
-        
-        if (uiState.isLoading && uiState.movies.isEmpty()) {
-            // 初始加载状态
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator(color = Color.White)
+        TopAppBar(
+            title = { Text(uiState.categoryName) },
+            navigationIcon = {
+                IconButton(onClick = onBack) {
+                    Icon(Icons.Default.ArrowBack, contentDescription = "返回")
+                }
+            },
+            actions = {
+                IconButton(onClick = onRefresh) {
+                    Icon(Icons.Default.Refresh, contentDescription = "刷新")
+                }
+                IconButton(onClick = { /* 显示筛选 */ }) {
+                    Icon(Icons.Default.FilterList, contentDescription = "筛选")
+                }
             }
-        } else if (uiState.error != null && uiState.movies.isEmpty()) {
-            // 错误状态
-            ErrorContent(
-                error = uiState.error,
-                onRetry = { /* TODO: 重试逻辑 */ }
-            )
-        } else {
-            // 内容网格
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(3),
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(16.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
+        )
+
+        // 筛选器行
+        if (uiState.availableFilters.isNotEmpty()) {
+            LazyRow(
+                modifier = Modifier.padding(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                items(uiState.movies) { movie ->
-                    MovieGridCard(
-                        movie = movie,
-                        onClick = { onMovieClick(movie) }
+                items(uiState.availableFilters) { filter ->
+                    FilterChip(
+                        onClick = { onFilterChange(filter) },
+                        label = { Text(filter.name) },
+                        selected = uiState.selectedFilters.contains(filter)
                     )
                 }
-                
-                // 加载更多指示器
-                if (uiState.hasMore && !uiState.isLoadingMore) {
-                    item {
-                        LaunchedEffect(Unit) {
-                            onLoadMore()
-                        }
-                        Box(
-                            modifier = Modifier.fillMaxWidth(),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            CircularProgressIndicator(
-                                color = Color.White,
-                                modifier = Modifier.size(24.dp)
-                            )
-                        }
+            }
+        }
+
+        // 电影网格
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(3),
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            items(uiState.movies) { movie ->
+                MovieCard(
+                    movie = movie,
+                    onClick = { onMovieClick(movie) }
+                )
+            }
+
+            // 加载更多指示器
+            if (uiState.hasMore && !uiState.isLoadingMore) {
+                item {
+                    LaunchedEffect(Unit) {
+                        onLoadMore()
+                    }
+                    Box(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(24.dp)
+                        )
                     }
                 }
             }
         }
     }
-    
-    // 筛选对话框
-    if (showFilterDialog) {
-        FilterDialog(
-            filters = uiState.filters,
-            selectedFilters = uiState.selectedFilters,
-            onDismiss = { showFilterDialog = false },
-            onConfirm = { filters ->
-                onFilterChange(filters)
-                showFilterDialog = false
-            }
-        )
-    }
 }
 
-/**
- * 分类页面顶部导航栏
- */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun CategoryTopBar(
-    title: String,
-    onBackClick: () -> Unit,
-    onFilterClick: () -> Unit,
-    hasFilters: Boolean
+private fun MovieCard(
+    movie: Movie,
+    onClick: () -> Unit
 ) {
-    TopAppBar(
-        title = {
-            Text(
-                text = title,
-                color = Color.White,
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
-            )
-        },
-        navigationIcon = {
-            IconButton(onClick = onBackClick) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onClick() }
+    ) {
+        Column {
+            // 电影海报占位符
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .aspectRatio(0.7f)
+                    .background(MaterialTheme.colorScheme.surfaceVariant),
+                contentAlignment = Alignment.Center
+            ) {
                 Icon(
-                    imageVector = Icons.Default.ArrowBack,
-                    contentDescription = "返回",
-                    tint = Color.White
+                    imageVector = Icons.Default.Movie,
+                    contentDescription = null,
+                    modifier = Modifier.size(48.dp),
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
-        },
-        actions = {
-            if (hasFilters) {
-                IconButton(onClick = onFilterClick) {
-                    Icon(
-                        imageVector = Icons.Default.FilterList,
-                        contentDescription = "筛选",
-                        tint = Color.White
+
+            // 电影信息
+            Column(
+                modifier = Modifier.padding(8.dp)
+            ) {
+                Text(
+                    text = movie.vodName,
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.Medium,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
+
+                if (movie.vodRemarks.isNotEmpty()) {
+                    Text(
+                        text = movie.vodRemarks,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
                     )
                 }
             }
-        },
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Color.Black
-        )
-    )
+        }
+    }
 }
 
+// ✅ 按照指南添加必要的辅助Composable函数
 
-
-
-
-
-
-/**
- * 错误内容
- */
 @Composable
-private fun ErrorContent(
-    error: String,
-    onRetry: () -> Unit
-) {
-    Column(
+private fun LoadingScreen(message: String) {
+    Box(
         modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        contentAlignment = Alignment.Center
     ) {
-        Text(
-            text = error,
-            color = Color.White,
-            fontSize = 16.sp
-        )
-        
-        Spacer(modifier = Modifier.height(16.dp))
-        
-        Button(onClick = onRetry) {
-            Text("重试")
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            CircularProgressIndicator()
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(text = message)
+        }
+    }
+}
+
+@Composable
+private fun ErrorScreen(
+    error: String,
+    onRetry: () -> Unit,
+    onBack: () -> Unit
+) {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = error,
+                color = MaterialTheme.colorScheme.error,
+                textAlign = TextAlign.Center
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Button(onClick = onRetry) {
+                    Text("重试")
+                }
+                OutlinedButton(onClick = onBack) {
+                    Text("返回")
+                }
+            }
         }
     }
 }

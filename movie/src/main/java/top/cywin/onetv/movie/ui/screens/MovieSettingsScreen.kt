@@ -1,191 +1,202 @@
 package top.cywin.onetv.movie.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import top.cywin.onetv.movie.data.models.SettingsUiState
-import top.cywin.onetv.movie.data.models.VodConfig
 import top.cywin.onetv.movie.viewmodel.MovieSettingsViewModel
+import top.cywin.onetv.movie.viewmodel.SettingsUiState
+import top.cywin.onetv.movie.MovieApp
+import android.util.Log
 
 /**
- * 设置页面
+ * OneTV Movie设置页面 - 按照FongMi_TV整合指南重构
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MovieSettingsScreen(
     navController: NavController,
-    viewModel: MovieSettingsViewModel = viewModel {
-        MovieSettingsViewModel(
-            configManager = top.cywin.onetv.movie.MovieApp.getInstance().vodConfigManager,
-            cacheManager = top.cywin.onetv.movie.MovieApp.getInstance().vodCacheManager
-        )
-    }
+    viewModel: MovieSettingsViewModel = viewModel { MovieSettingsViewModel() }
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    var showAddDialog by remember { mutableStateOf(false) }
-    
+
+    // ✅ 通过MovieApp访问适配器系统
+    val movieApp = MovieApp.getInstance()
+    val repositoryAdapter = movieApp.repositoryAdapter
+
+    // ✅ 页面初始化时加载设置
+    LaunchedEffect(Unit) {
+        Log.d("ONETV_MOVIE", "⚙️ MovieSettingsScreen 初始化")
+        viewModel.loadSettings()
+    }
+
+    SettingsContent(
+        uiState = uiState,
+        onConfigManagement = {
+            navController.navigate("config_management")
+        },
+        onCacheManagement = {
+            navController.navigate("cache_management")
+        },
+        onHistoryManagement = {
+            navController.navigate("history")
+        },
+        onAbout = {
+            navController.navigate("about")
+        },
+        onClearCache = { viewModel.clearCache() },
+        onResetSettings = { viewModel.resetSettings() },
+        onExportSettings = { viewModel.exportSettings() },
+        onImportSettings = { viewModel.importSettings() },
+        onBack = { navController.popBackStack() }
+    )
+}
+
+@Composable
+private fun SettingsContent(
+    uiState: SettingsUiState,
+    onConfigManagement: () -> Unit,
+    onCacheManagement: () -> Unit,
+    onHistoryManagement: () -> Unit,
+    onAbout: () -> Unit,
+    onClearCache: () -> Unit,
+    onResetSettings: () -> Unit,
+    onExportSettings: () -> Unit,
+    onImportSettings: () -> Unit,
+    onBack: () -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Black)
+            .background(MaterialTheme.colorScheme.background)
     ) {
         // 顶部导航栏
-        SettingsTopBar(
-            onBackClick = { navController.popBackStack() },
-            onAddClick = { showAddDialog = true }
-        )
-        
-        if (uiState.isLoading) {
-            // 加载状态
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator(color = Color.White)
+        TopAppBar(
+            title = { Text("设置") },
+            navigationIcon = {
+                IconButton(onClick = onBack) {
+                    Icon(Icons.Default.ArrowBack, contentDescription = "返回")
+                }
             }
-        } else {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                // 配置管理
-                item {
-                    SettingsSection(title = "配置管理") {
-                        ConfigList(
-                            configs = uiState.configs,
-                            currentConfig = uiState.currentConfig,
-                            onSelectConfig = { config -> viewModel.selectConfig(config) },
-                            onDeleteConfig = { config -> viewModel.deleteConfig(config) }
-                        )
-                    }
+        )
+
+        // 设置列表
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            // 配置管理
+            item {
+                SettingsGroup(title = "配置管理") {
+                    SettingsItem(
+                        title = "配置管理",
+                        subtitle = "管理视频源配置",
+                        icon = Icons.Default.Settings,
+                        onClick = onConfigManagement
+                    )
                 }
-                
-                // 缓存管理
-                item {
-                    SettingsSection(title = "缓存管理") {
-                        CacheManagement(
-                            cacheSize = uiState.cacheSize,
-                            onClearCache = { viewModel.clearCache() },
-                            onForceReparse = { viewModel.forceReparseConfig() }
-                        )
-                    }
+            }
+
+            // 缓存管理
+            item {
+                SettingsGroup(title = "存储管理") {
+                    SettingsItem(
+                        title = "缓存管理",
+                        subtitle = "清理缓存文件",
+                        icon = Icons.Default.Storage,
+                        onClick = onCacheManagement
+                    )
+                    SettingsItem(
+                        title = "观看历史",
+                        subtitle = "管理观看记录",
+                        icon = Icons.Default.History,
+                        onClick = onHistoryManagement
+                    )
                 }
-                
-                // 播放设置
-                item {
-                    SettingsSection(title = "播放设置") {
-                        PlaybackSettings(
-                            settings = uiState.playbackSettings
-                        )
-                    }
+            }
+
+            // 数据管理
+            item {
+                SettingsGroup(title = "数据管理") {
+                    SettingsItem(
+                        title = "清空缓存",
+                        subtitle = "清空所有缓存数据",
+                        icon = Icons.Default.Delete,
+                        onClick = onClearCache
+                    )
+                    SettingsItem(
+                        title = "重置设置",
+                        subtitle = "恢复默认设置",
+                        icon = Icons.Default.RestartAlt,
+                        onClick = onResetSettings
+                    )
                 }
-                
-                // 关于信息
-                item {
-                    SettingsSection(title = "关于") {
-                        AboutInfo()
-                    }
+            }
+
+            // 备份与恢复
+            item {
+                SettingsGroup(title = "备份与恢复") {
+                    SettingsItem(
+                        title = "导出设置",
+                        subtitle = "导出配置和设置",
+                        icon = Icons.Default.Upload,
+                        onClick = onExportSettings
+                    )
+                    SettingsItem(
+                        title = "导入设置",
+                        subtitle = "导入配置和设置",
+                        icon = Icons.Default.Download,
+                        onClick = onImportSettings
+                    )
+                }
+            }
+
+            // 关于
+            item {
+                SettingsGroup(title = "关于") {
+                    SettingsItem(
+                        title = "关于应用",
+                        subtitle = "版本信息和帮助",
+                        icon = Icons.Default.Info,
+                        onClick = onAbout
+                    )
                 }
             }
         }
     }
-    
-    // 添加配置对话框
-    if (showAddDialog) {
-        AddConfigDialog(
-            onDismiss = { showAddDialog = false },
-            onConfirm = { url ->
-                viewModel.addConfig(url)
-                showAddDialog = false
-            }
-        )
-    }
 }
 
-/**
- * 设置页面顶部导航栏
- */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun SettingsTopBar(
-    onBackClick: () -> Unit,
-    onAddClick: () -> Unit
-) {
-    TopAppBar(
-        title = {
-            Text(
-                text = "设置",
-                color = Color.White,
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
-            )
-        },
-        navigationIcon = {
-            IconButton(onClick = onBackClick) {
-                Icon(
-                    imageVector = Icons.Default.ArrowBack,
-                    contentDescription = "返回",
-                    tint = Color.White
-                )
-            }
-        },
-        actions = {
-            IconButton(onClick = onAddClick) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = "添加配置",
-                    tint = Color.White
-                )
-            }
-        },
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Color.Black
-        )
-    )
-}
-
-/**
- * 设置区域
- */
-@Composable
-private fun SettingsSection(
+private fun SettingsGroup(
     title: String,
     content: @Composable () -> Unit
 ) {
     Column {
         Text(
             text = title,
-            color = Color.White,
-            fontSize = 18.sp,
+            style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(bottom = 12.dp)
+            modifier = Modifier.padding(bottom = 8.dp)
         )
-        
         Card(
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color.DarkGray)
-                    .padding(16.dp)
+                modifier = Modifier.padding(16.dp)
             ) {
                 content()
             }
@@ -193,311 +204,53 @@ private fun SettingsSection(
     }
 }
 
-/**
- * 配置列表
- */
 @Composable
-private fun ConfigList(
-    configs: List<VodConfig>,
-    currentConfig: VodConfig?,
-    onSelectConfig: (VodConfig) -> Unit,
-    onDeleteConfig: (VodConfig) -> Unit
-) {
-    if (configs.isEmpty()) {
-        Text(
-            text = "暂无配置，请添加配置源",
-            color = Color.Gray,
-            fontSize = 14.sp
-        )
-    } else {
-        configs.forEach { config ->
-            ConfigItem(
-                config = config,
-                isSelected = currentConfig == config,
-                onSelect = { onSelectConfig(config) },
-                onDelete = { onDeleteConfig(config) }
-            )
-            
-            if (config != configs.last()) {
-                Spacer(modifier = Modifier.height(8.dp))
-            }
-        }
-    }
-}
-
-/**
- * 配置项
- */
-@Composable
-private fun ConfigItem(
-    config: VodConfig,
-    isSelected: Boolean,
-    onSelect: () -> Unit,
-    onDelete: () -> Unit
-) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = config.name.ifEmpty { "未命名配置" },
-                color = if (isSelected) Color.Green else Color.White,
-                fontSize = 16.sp,
-                fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
-            )
-            
-            Text(
-                text = config.getSummary(),
-                color = Color.Gray,
-                fontSize = 12.sp
-            )
-        }
-        
-        Row {
-            if (!isSelected) {
-                TextButton(onClick = onSelect) {
-                    Text("选择")
-                }
-            }
-            
-            IconButton(onClick = onDelete) {
-                Icon(
-                    imageVector = Icons.Default.Delete,
-                    contentDescription = "删除",
-                    tint = Color.Gray
-                )
-            }
-        }
-    }
-}
-
-/**
- * 缓存管理
- */
-@Composable
-private fun CacheManagement(
-    cacheSize: Long,
-    onClearCache: () -> Unit,
-    onForceReparse: () -> Unit
-) {
-    Column(
-        verticalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-        // 缓存大小显示
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Column {
-                Text(
-                    text = "缓存大小",
-                    color = Color.White,
-                    fontSize = 16.sp
-                )
-
-                Text(
-                    text = formatFileSize(cacheSize),
-                    color = Color.Gray,
-                    fontSize = 14.sp
-                )
-            }
-
-            Button(onClick = onClearCache) {
-                Text("清空缓存")
-            }
-        }
-
-        // TVBOX仓库索引重新解析
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Column {
-                Text(
-                    text = "强制重新解析",
-                    color = Color.White,
-                    fontSize = 16.sp
-                )
-
-                Text(
-                    text = "清除缓存并重新检测TVBOX仓库索引",
-                    color = Color.Gray,
-                    fontSize = 14.sp
-                )
-            }
-
-            Button(
-                onClick = onForceReparse,
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.secondary
-                )
-            ) {
-                Text("重新解析")
-            }
-        }
-    }
-}
-
-/**
- * 播放设置
- */
-@Composable
-private fun PlaybackSettings(
-    settings: top.cywin.onetv.movie.data.models.PlaybackSettings
-) {
-    Column(
-        verticalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-        SettingSwitch(
-            title = "自动播放",
-            description = "进入播放页面时自动开始播放",
-            checked = settings.autoPlay,
-            onCheckedChange = { /* TODO */ }
-        )
-        
-        SettingSwitch(
-            title = "自动播放下一集",
-            description = "当前集播放完成后自动播放下一集",
-            checked = settings.autoNext,
-            onCheckedChange = { /* TODO */ }
-        )
-        
-        SettingSwitch(
-            title = "记住播放位置",
-            description = "记住上次播放的位置",
-            checked = settings.rememberPosition,
-            onCheckedChange = { /* TODO */ }
-        )
-        
-        SettingSwitch(
-            title = "硬件解码",
-            description = "使用硬件解码提升播放性能",
-            checked = settings.hardwareDecoding,
-            onCheckedChange = { /* TODO */ }
-        )
-    }
-}
-
-/**
- * 设置开关
- */
-@Composable
-private fun SettingSwitch(
+private fun SettingsItem(
     title: String,
-    description: String,
-    checked: Boolean,
-    onCheckedChange: (Boolean) -> Unit
+    subtitle: String,
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    onClick: () -> Unit
 ) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onClick() }
     ) {
-        Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = title,
-                color = Color.White,
-                fontSize = 16.sp
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                modifier = Modifier.size(24.dp),
+                tint = MaterialTheme.colorScheme.primary
             )
-            
-            Text(
-                text = description,
-                color = Color.Gray,
-                fontSize = 12.sp
-            )
-        }
-        
-        Switch(
-            checked = checked,
-            onCheckedChange = onCheckedChange
-        )
-    }
-}
 
-/**
- * 关于信息
- */
-@Composable
-private fun AboutInfo() {
-    Column(
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        Text(
-            text = "OneTV 点播模块",
-            color = Color.White,
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Bold
-        )
-        
-        Text(
-            text = "版本: 1.0.0",
-            color = Color.Gray,
-            fontSize = 14.sp
-        )
-        
-        Text(
-            text = "基于TVBOX标准实现的点播功能",
-            color = Color.Gray,
-            fontSize = 14.sp
-        )
-    }
-}
-
-/**
- * 添加配置对话框
- */
-@Composable
-private fun AddConfigDialog(
-    onDismiss: () -> Unit,
-    onConfirm: (String) -> Unit
-) {
-    var configUrl by remember { mutableStateOf("") }
-    
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text("添加配置源") },
-        text = {
-            OutlinedTextField(
-                value = configUrl,
-                onValueChange = { configUrl = it },
-                label = { Text("配置地址") },
-                placeholder = { Text("请输入配置源URL") },
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth()
-            )
-        },
-        confirmButton = {
-            TextButton(
-                onClick = { onConfirm(configUrl) },
-                enabled = configUrl.isNotEmpty()
+            Column(
+                modifier = Modifier.weight(1f)
             ) {
-                Text("确定")
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Medium
+                )
+                Text(
+                    text = subtitle,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismiss) {
-                Text("取消")
-            }
-        }
-    )
-}
 
-/**
- * 格式化文件大小
- */
-private fun formatFileSize(bytes: Long): String {
-    val kb = bytes / 1024.0
-    val mb = kb / 1024.0
-    val gb = mb / 1024.0
-    
-    return when {
-        gb >= 1 -> String.format("%.2f GB", gb)
-        mb >= 1 -> String.format("%.2f MB", mb)
-        kb >= 1 -> String.format("%.2f KB", kb)
-        else -> "$bytes B"
+            Icon(
+                imageVector = Icons.Default.ChevronRight,
+                contentDescription = null,
+                modifier = Modifier.size(20.dp),
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
     }
 }

@@ -1,94 +1,94 @@
 package top.cywin.onetv.movie.ui.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import top.cywin.onetv.movie.data.models.VodClass
+import top.cywin.onetv.movie.viewmodel.MovieCategoryUiState
+import top.cywin.onetv.movie.bean.MovieCategory
+import top.cywin.onetv.movie.MovieApp
+import android.util.Log
 
 /**
- * 分类标签组件
+ * OneTV Movie分类标签组件 - 按照FongMi_TV整合指南重构
  */
 @Composable
 fun CategoryTabs(
-    categories: List<VodClass>,
-    selectedCategory: VodClass?,
-    modifier: Modifier = Modifier,
-    onCategorySelected: (VodClass) -> Unit = {}
+    categories: List<MovieCategory>,
+    selectedCategory: MovieCategory?,
+    onCategorySelected: (MovieCategory) -> Unit,
+    modifier: Modifier = Modifier
 ) {
+    // ✅ 通过MovieApp访问适配器系统
+    val movieApp = MovieApp.getInstance()
+    val siteViewModel = movieApp.siteViewModel
+
     LazyRow(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         contentPadding = PaddingValues(horizontal = 16.dp)
     ) {
         items(categories) { category ->
-            CategoryTab(
-                category = category,
-                isSelected = selectedCategory == category,
-                onClick = { onCategorySelected(category) }
+            FilterChip(
+                onClick = { onCategorySelected(category) },
+                label = { Text(category.typeName) },
+                selected = selectedCategory == category,
+                modifier = Modifier.animateItemPlacement()
+            )
+        }
+    }
+}
+
+@Composable
+fun CategoryTabsWithLoading(
+    uiState: MovieCategoryUiState,
+    onCategorySelected: (MovieCategory) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    when {
+        uiState.isLoading && uiState.categories.isEmpty() -> {
+            Row(
+                modifier = modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                CircularProgressIndicator(modifier = Modifier.size(24.dp))
+            }
+        }
+        uiState.categories.isNotEmpty() -> {
+            CategoryTabs(
+                categories = uiState.categories,
+                selectedCategory = uiState.selectedCategory,
+                onCategorySelected = onCategorySelected,
+                modifier = modifier
             )
         }
     }
 }
 
 /**
- * 分类标签项
- */
-@Composable
-private fun CategoryTab(
-    category: VodClass,
-    isSelected: Boolean,
-    onClick: () -> Unit
-) {
-    FilterChip(
-        onClick = onClick,
-        label = {
-            Text(
-                text = category.typeName,
-                fontSize = 14.sp,
-                fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
-            )
-        },
-        selected = isSelected,
-        colors = FilterChipDefaults.filterChipColors(
-            selectedContainerColor = MaterialTheme.colorScheme.primary,
-            selectedLabelColor = Color.White,
-            containerColor = Color.DarkGray,
-            labelColor = Color.Gray
-        )
-    )
-}
-
-/**
- * 快速分类导航 (用于首页)
+ * 快速分类导航 (用于首页) - 重构版本
  */
 @Composable
 fun QuickCategoryGrid(
-    categories: List<VodClass>,
+    categories: List<MovieCategory>,
     modifier: Modifier = Modifier,
-    onCategoryClick: (VodClass) -> Unit = {}
+    onCategoryClick: (MovieCategory) -> Unit = {}
 ) {
     Column(
         modifier = modifier.fillMaxWidth()
     ) {
         Text(
             text = "分类导航",
-            color = Color.White,
-            fontSize = 18.sp,
+            style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
         )
-        
+
         LazyRow(
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             contentPadding = PaddingValues(horizontal = 16.dp)
@@ -104,22 +104,18 @@ fun QuickCategoryGrid(
 }
 
 /**
- * 快速分类项
+ * 快速分类项 - 重构版本
  */
 @Composable
 private fun QuickCategoryItem(
-    category: VodClass,
+    category: MovieCategory,
     onClick: () -> Unit
 ) {
     Card(
         modifier = Modifier
             .width(80.dp)
             .height(80.dp),
-        onClick = onClick,
-        shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = Color.DarkGray
-        )
+        onClick = onClick
     ) {
         Box(
             modifier = Modifier.fillMaxSize(),
@@ -127,8 +123,7 @@ private fun QuickCategoryItem(
         ) {
             Text(
                 text = category.typeName,
-                color = Color.White,
-                fontSize = 14.sp,
+                style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.Medium
             )
         }
@@ -136,14 +131,14 @@ private fun QuickCategoryItem(
 }
 
 /**
- * 垂直分类列表 (用于设置页面等)
+ * 垂直分类列表 (用于设置页面等) - 重构版本
  */
 @Composable
 fun CategoryList(
-    categories: List<VodClass>,
-    selectedCategory: VodClass?,
+    categories: List<MovieCategory>,
+    selectedCategory: MovieCategory?,
     modifier: Modifier = Modifier,
-    onCategorySelected: (VodClass) -> Unit = {}
+    onCategorySelected: (MovieCategory) -> Unit = {}
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),
@@ -160,11 +155,11 @@ fun CategoryList(
 }
 
 /**
- * 分类列表项
+ * 分类列表项 - 重构版本
  */
 @Composable
 private fun CategoryListItem(
-    category: VodClass,
+    category: MovieCategory,
     isSelected: Boolean,
     onClick: () -> Unit
 ) {
@@ -173,9 +168,9 @@ private fun CategoryListItem(
         onClick = onClick,
         colors = CardDefaults.cardColors(
             containerColor = if (isSelected) {
-                MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)
+                MaterialTheme.colorScheme.primaryContainer
             } else {
-                Color.DarkGray
+                MaterialTheme.colorScheme.surface
             }
         )
     ) {
@@ -188,74 +183,28 @@ private fun CategoryListItem(
         ) {
             Text(
                 text = category.typeName,
-                color = if (isSelected) MaterialTheme.colorScheme.primary else Color.White,
-                fontSize = 16.sp,
+                color = if (isSelected) {
+                    MaterialTheme.colorScheme.onPrimaryContainer
+                } else {
+                    MaterialTheme.colorScheme.onSurface
+                },
+                style = MaterialTheme.typography.bodyLarge,
                 fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
             )
-            
+
             if (isSelected) {
                 Surface(
-                    shape = RoundedCornerShape(12.dp),
-                    color = MaterialTheme.colorScheme.primary
+                    color = MaterialTheme.colorScheme.primary,
+                    shape = MaterialTheme.shapes.small
                 ) {
                     Text(
                         text = "已选择",
-                        color = Color.White,
-                        fontSize = 12.sp,
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        style = MaterialTheme.typography.labelSmall,
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
                     )
                 }
             }
-        }
-    }
-}
-
-/**
- * 分类统计信息
- */
-@Composable
-fun CategoryStats(
-    categories: List<VodClass>,
-    modifier: Modifier = Modifier
-) {
-    Card(
-        modifier = modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = Color.DarkGray
-        )
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-        ) {
-            Text(
-                text = "分类统计",
-                color = Color.White,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
-            
-            Text(
-                text = "总分类数: ${categories.size}",
-                color = Color.Gray,
-                fontSize = 14.sp
-            )
-            
-            val enabledCount = categories.count { it.isEnabled() }
-            Text(
-                text = "可用分类: $enabledCount",
-                color = Color.Gray,
-                fontSize = 14.sp
-            )
-            
-            val withFiltersCount = categories.count { it.hasFilters() }
-            Text(
-                text = "支持筛选: $withFiltersCount",
-                color = Color.Gray,
-                fontSize = 14.sp
-            )
         }
     }
 }

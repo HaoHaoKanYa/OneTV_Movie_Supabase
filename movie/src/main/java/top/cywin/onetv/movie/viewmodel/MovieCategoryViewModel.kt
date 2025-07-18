@@ -2,28 +2,38 @@ package top.cywin.onetv.movie.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-// KotlinPoet专业重构 - 移除Hilt import
-// import dagger.hilt.onetv.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import top.cywin.onetv.movie.data.models.*
 import top.cywin.onetv.movie.MovieApp
-import top.cywin.onetv.movie.data.VodConfigManager
-// KotlinPoet专业重构 - 移除Inject import
-// import javax.inject.Inject
+import top.cywin.onetv.movie.bean.Vod
+import top.cywin.onetv.movie.bean.Class
+import android.util.Log
 
 /**
- * 分类页面ViewModel
- * KotlinPoet专业重构 - 使用MovieApp单例管理依赖
+ * 分类页面UI状态数据类
  */
-// @HiltViewModel
-class MovieCategoryViewModel(
-    private val configManager: VodConfigManager
-) : ViewModel() {
+data class CategoryUiState(
+    val isLoading: Boolean = false,
+    val error: String? = null,
+    val typeId: String = "",
+    val typeName: String = "",
+    val movies: List<Vod> = emptyList(),
+    val categories: List<Class> = emptyList(),
+    val currentPage: Int = 1,
+    val hasMore: Boolean = true,
+    val filters: Map<String, List<String>> = emptyMap(),
+    val selectedFilters: Map<String, String> = emptyMap()
+)
 
-    // 通过MovieApp访问适配器系统
+/**
+ * OneTV Movie分类页面ViewModel
+ * 通过适配器系统调用FongMi_TV解析功能，不参与线路接口解析
+ */
+class MovieCategoryViewModel : ViewModel() {
+
+    // ✅ 通过MovieApp访问适配器系统 - 不参与解析逻辑
     private val movieApp = MovieApp.getInstance()
     private val repositoryAdapter = movieApp.repositoryAdapter
     private val siteViewModel = movieApp.siteViewModel
@@ -32,103 +42,42 @@ class MovieCategoryViewModel(
     val uiState: StateFlow<CategoryUiState> = _uiState.asStateFlow()
 
     /**
-     * 初始化分类页面
+     * 初始化分类页面 - 通过适配器调用FongMi_TV解析系统
      */
-    fun initCategory(typeId: String, siteKey: String = "") {
+    fun initCategory(typeId: String, typeName: String = "") {
         viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(isLoading = true, error = null)
-
             try {
-                // 1. 获取站点信息
-                val site = configManager.getSite(siteKey)
-                if (site == null) {
-                    throw Exception("未找到站点")
-                }
+                _uiState.value = _uiState.value.copy(
+                    isLoading = true,
+                    typeId = typeId,
+                    typeName = typeName,
+                    error = null
+                )
 
-                // 2. 获取所有分类 - 使用FongMi_TV的RepositoryAdapter
+                Log.d("ONETV_MOVIE", "📂 初始化分类页面: $typeId - $typeName")
+
+                // ✅ 通过适配器获取分类列表 - 解析逻辑在FongMi_TV中
                 repositoryAdapter.getCategories()
 
-                // 临时处理，实际数据通过SiteViewModel观察获取
-                val allCategories = emptyList<VodClass>()
+                // ✅ 通过适配器获取分类内容 - 解析逻辑在FongMi_TV中
+                repositoryAdapter.getContentList(typeId, 1, emptyMap())
 
-                // 3. 找到当前分类
-                val currentCategory = VodClass(typeId, "默认分类")
-                if (currentCategory.typeId.isEmpty()) {
-                    throw Exception("未找到分类")
-                }
-
-                // 4. 获取筛选条件
-                val filterList = emptyList<VodFilter>() // 临时空列表
-                val filters = emptyMap<String, List<VodFilter>>()
-
-                // 5. 加载分类内容
-                loadCategoryContent(typeId, site.key, 1, emptyMap())
+                // 实际数据通过SiteViewModel观察获取
+                Log.d("ONETV_MOVIE", "✅ 分类内容加载请求已发送")
 
                 _uiState.value = _uiState.value.copy(
-                    currentCategory = currentCategory,
-                    availableCategories = allCategories,
-                    filters = filters,
-                    selectedFilters = emptyMap()
+                    isLoading = false,
+                    currentPage = 1,
+                    error = null
                 )
 
             } catch (e: Exception) {
+                Log.e("ONETV_MOVIE", "分类初始化失败", e)
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
-                    error = e.message ?: "分类初始化失败"
+                    error = "分类初始化失败: ${e.message}"
                 )
             }
-        }
-    }
-
-    /**
-     * 加载分类内容
-     */
-    private suspend fun loadCategoryContent(
-        typeId: String,
-        siteKey: String,
-        page: Int,
-        filters: Map<String, String>
-    ) {
-        try {
-            // 使用FongMi_TV的RepositoryAdapter获取内容列表
-            repositoryAdapter.getContentList(typeId, page, filters)
-
-            // 临时处理，实际数据通过SiteViewModel观察获取
-            val response = VodListResponse(
-                code = 1,
-                msg = "",
-                list = emptyList(),
-                classes = emptyList(),
-                filters = emptyMap(),
-                page = page,
-                pagecount = 1,
-                limit = 20,
-                total = 0
-            )
-            val newMovies = response.list
-
-            val allMovies = if (page == 1) {
-                newMovies
-            } else {
-                _uiState.value.movies + newMovies
-            }
-
-            _uiState.value = _uiState.value.copy(
-                isLoading = false,
-                isLoadingMore = false,
-                movies = allMovies,
-                currentPage = page,
-                totalPages = response.pagecount ?: 1,
-                hasMore = page < (response.pagecount ?: 1),
-                error = null
-            )
-
-        } catch (e: Exception) {
-            _uiState.value = _uiState.value.copy(
-                isLoading = false,
-                isLoadingMore = false,
-                error = e.message ?: "内容加载失败"
-            )
         }
     }
 
@@ -137,101 +86,75 @@ class MovieCategoryViewModel(
      */
     fun loadMore() {
         val currentState = _uiState.value
-        if (currentState.hasMore && !currentState.isLoadingMore && currentState.currentCategory != null) {
+        if (currentState.hasMore && currentState.typeId.isNotEmpty()) {
             viewModelScope.launch {
-                _uiState.value = _uiState.value.copy(isLoadingMore = true)
+                try {
+                    Log.d("ONETV_MOVIE", "📄 加载更多: ${currentState.typeId}, 页码: ${currentState.currentPage + 1}")
 
-                val site = configManager.getCurrentSite()
-                if (site != null) {
-                    loadCategoryContent(
-                        typeId = currentState.currentCategory.typeId,
-                        siteKey = site.key,
-                        page = currentState.currentPage + 1,
-                        filters = currentState.selectedFilters
+                    // ✅ 通过适配器加载更多内容 - 解析逻辑在FongMi_TV中
+                    repositoryAdapter.getContentList(
+                        currentState.typeId,
+                        currentState.currentPage + 1,
+                        currentState.selectedFilters
+                    )
+
+                    _uiState.value = _uiState.value.copy(
+                        currentPage = currentState.currentPage + 1
+                    )
+
+                } catch (e: Exception) {
+                    Log.e("ONETV_MOVIE", "加载更多失败", e)
+                    _uiState.value = _uiState.value.copy(
+                        error = "加载更多失败: ${e.message}"
                     )
                 }
             }
         }
     }
 
+
     /**
      * 应用筛选条件
      */
     fun applyFilters(filters: Map<String, String>) {
-        val currentCategory = _uiState.value.currentCategory ?: return
+        val currentState = _uiState.value
+        if (currentState.typeId.isEmpty()) return
 
         viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(
-                isLoading = true,
-                selectedFilters = filters,
-                movies = emptyList(),
-                currentPage = 1
-            )
+            try {
+                _uiState.value = _uiState.value.copy(
+                    isLoading = true,
+                    selectedFilters = filters,
+                    currentPage = 1
+                )
 
-            val site = configManager.getCurrentSite()
-            if (site != null) {
-                loadCategoryContent(
-                    typeId = currentCategory.typeId,
-                    siteKey = site.key,
-                    page = 1,
-                    filters = filters
+                Log.d("ONETV_MOVIE", "🔍 应用筛选条件: $filters")
+
+                // ✅ 通过适配器应用筛选 - 解析逻辑在FongMi_TV中
+                repositoryAdapter.getContentList(currentState.typeId, 1, filters)
+
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    error = null
+                )
+
+            } catch (e: Exception) {
+                Log.e("ONETV_MOVIE", "筛选失败", e)
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    error = "筛选失败: ${e.message}"
                 )
             }
         }
     }
 
     /**
-     * 清除筛选条件
-     */
-    fun clearFilters() {
-        applyFilters(emptyMap())
-    }
-
-    /**
      * 刷新分类内容
      */
     fun refresh() {
-        val currentCategory = _uiState.value.currentCategory ?: return
-        val site = configManager.getCurrentSite() ?: return
-
-        viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(
-                isLoading = true,
-                movies = emptyList(),
-                currentPage = 1
-            )
-
-            loadCategoryContent(
-                typeId = currentCategory.typeId,
-                siteKey = site.key,
-                page = 1,
-                filters = _uiState.value.selectedFilters
-            )
-        }
-    }
-
-    /**
-     * 切换分类
-     */
-    fun switchCategory(category: VodClass) {
-        val site = configManager.getCurrentSite() ?: return
-
-        viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(
-                isLoading = true,
-                currentCategory = category,
-                movies = emptyList(),
-                currentPage = 1,
-                selectedFilters = emptyMap(),
-                filters = category.filters.groupBy { it.key }
-            )
-
-            loadCategoryContent(
-                typeId = category.typeId,
-                siteKey = site.key,
-                page = 1,
-                filters = emptyMap()
-            )
+        val currentState = _uiState.value
+        if (currentState.typeId.isNotEmpty()) {
+            initCategory(currentState.typeId, currentState.typeName)
         }
     }
 
@@ -240,25 +163,5 @@ class MovieCategoryViewModel(
      */
     fun clearError() {
         _uiState.value = _uiState.value.copy(error = null)
-    }
-
-    /**
-     * 获取当前筛选条件摘要
-     */
-    fun getFilterSummary(): String {
-        val selectedFilters = _uiState.value.selectedFilters
-        val filters = _uiState.value.filters
-
-        if (selectedFilters.isEmpty()) return ""
-
-        return selectedFilters.entries.mapNotNull { (key, value) ->
-            if (value.isNotEmpty()) {
-                val filter = filters[key]?.firstOrNull()
-                val displayName = filter?.getDisplayName(value) ?: value
-                displayName
-            } else {
-                null
-            }
-        }.joinToString(", ")
     }
 }

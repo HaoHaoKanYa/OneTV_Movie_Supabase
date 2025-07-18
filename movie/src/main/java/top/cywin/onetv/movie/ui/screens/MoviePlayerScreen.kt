@@ -26,37 +26,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-// KotlinPoet专业重构 - 移除hiltViewModel import
-// import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import top.cywin.onetv.movie.data.models.PlayerUiState
-import top.cywin.onetv.movie.data.models.VodEpisode
-import top.cywin.onetv.movie.data.models.VodFlag
 import top.cywin.onetv.movie.viewmodel.MoviePlayerViewModel
+import top.cywin.onetv.movie.viewmodel.PlayerUiState
+import top.cywin.onetv.movie.viewmodel.VodEpisode
+import top.cywin.onetv.movie.bean.Flag
+import top.cywin.onetv.movie.MovieApp
+import android.util.Log
 
 /**
- * 简单的视频播放器状态
- */
-data class VideoPlayerState(
-    val isPlaying: Boolean = false,
-    val currentPosition: Long = 0L,
-    val duration: Long = 0L
-)
-
-/**
- * 线路信息 (替代LineManager.LineInfo)
- */
-data class LineInfo(
-    val flag: String = "",
-    val quality: String = "",
-    val speed: String = "",
-    val isAvailable: Boolean = true
-)
-
-/**
- * 点播播放器页面 (集成ExoPlayer)
+ * OneTV Movie播放器页面 - 按照FongMi_TV整合指南重构
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -65,561 +46,285 @@ fun MoviePlayerScreen(
     episodeIndex: Int,
     siteKey: String = "",
     navController: NavController,
-    viewModel: MoviePlayerViewModel = viewModel {
-        MoviePlayerViewModel(
-            historyRepository = top.cywin.onetv.movie.MovieApp.getInstance().watchHistoryRepository
-        )
-    }
+    viewModel: MoviePlayerViewModel = viewModel { MoviePlayerViewModel() }
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val context = LocalContext.current
 
-    // 创建播放器状态
-    val videoPlayerState = remember {
-        mutableStateOf(VideoPlayerState())
-    }
+    // ✅ 通过MovieApp访问适配器系统
+    val movieApp = MovieApp.getInstance()
+    val siteViewModel = movieApp.siteViewModel
+    val playerAdapter = movieApp.playerAdapter
 
-    // 加载播放数据
+    // ✅ 观察FongMi_TV的数据变化 - 数据来源于FongMi_TV解析系统
+    // val playResult by siteViewModel.result.observeAsState()
+
+    // ✅ 页面初始化时加载数据
     LaunchedEffect(vodId, episodeIndex, siteKey) {
+        Log.d("ONETV_MOVIE", "🎬 MoviePlayerScreen 初始化: vodId=$vodId, episode=$episodeIndex")
         viewModel.loadPlayData(vodId, episodeIndex, siteKey)
     }
 
-    // 监听播放URL变化
-    LaunchedEffect(uiState.playUrl) {
-        if (uiState.playUrl.isNotEmpty()) {
-            // 简单的播放器状态更新
-            videoPlayerState.value = videoPlayerState.value.copy(isPlaying = true)
-        }
-    }
+    // ✅ 处理FongMi_TV播放数据变化
+    // LaunchedEffect(playResult) {
+    //     playResult?.let { result ->
+    //         Log.d("ONETV_MOVIE", "🎬 收到FongMi_TV播放数据: ${result.url}")
+    //         // 这里可以进一步处理FongMi_TV返回的播放数据
+    //     }
+    // }
 
-    // 监听播放进度，保存历史
-    LaunchedEffect(videoPlayerState.value.currentPosition, videoPlayerState.value.duration) {
-        if (videoPlayerState.value.currentPosition > 0 && videoPlayerState.value.duration > 0) {
-            viewModel.updatePlayProgress(
-                position = videoPlayerState.value.currentPosition,
-                duration = videoPlayerState.value.duration
+    // ✅ UI状态处理
+    when {
+        uiState.isLoading -> {
+            LoadingScreen(message = "正在解析播放地址...")
+        }
+        uiState.error != null -> {
+            ErrorScreen(
+                error = uiState.error,
+                onRetry = { viewModel.loadPlayData(vodId, episodeIndex, siteKey) },
+                onBack = { navController.popBackStack() }
+            )
+        }
+        else -> {
+            PlayerContent(
+                uiState = uiState,
+                // playResult = playResult,
+                onPlayClick = { viewModel.startPlay() },
+                onPauseClick = { viewModel.pausePlay() },
+                onEpisodeSelect = { episode ->
+                    viewModel.selectEpisode(episode)
+                    navController.navigate("player/$vodId/${episode.index}/$siteKey")
+                },
+                onFlagSelect = { viewModel.selectFlag(it) },
+                onBack = { navController.popBackStack() }
             )
         }
     }
+}
+
+@Composable
+private fun PlayerContent(
+    uiState: PlayerUiState,
+    // playResult: Any?, // FongMi_TV的播放数据
+    onPlayClick: () -> Unit,
+    onPauseClick: () -> Unit,
+    onEpisodeSelect: (VodEpisode) -> Unit,
+    onFlagSelect: (Flag) -> Unit,
+    onBack: () -> Unit
+) {
     Box(modifier = Modifier.fillMaxSize()) {
-        // 简单的播放器占位符
-        Box(
-            modifier = Modifier.fillMaxSize().background(Color.Black),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = "视频播放器\n${uiState.movie?.vodName ?: ""}",
-                color = Color.White,
-                textAlign = TextAlign.Center
-            )
-        }
+        // 播放器区域
+        VideoPlayerView(
+            playUrl = uiState.playUrl,
+            isPlaying = uiState.isPlaying,
+            onPlayClick = onPlayClick,
+            onPauseClick = onPauseClick
+        )
 
-        // 点播特有的控制界面 - 支持线路切换和TV遥控器
-        EnhancedMoviePlayerControls(
+        // 播放器控制界面
+        PlayerControls(
             uiState = uiState,
-            videoPlayerState = videoPlayerState,
-            onBackClick = { navController.popBackStack() },
-            onFlagChange = { viewModel.selectFlag(it) },
-            onEpisodeChange = { viewModel.selectEpisode(it) },
-            onPreviousEpisode = { viewModel.playPreviousEpisode() },
-            onNextEpisode = { viewModel.playNextEpisode() },
-            onLineSwitch = { lineInfo -> viewModel.switchToLine(lineInfo) }
+            onEpisodeSelect = onEpisodeSelect,
+            onFlagSelect = onFlagSelect,
+            onBack = onBack
         )
     }
 }
 
-/**
- * 增强的点播播放器控制界面 - 支持线路切换和TV遥控器
- */
+// ✅ 按照指南添加必要的辅助Composable函数
+
 @Composable
-private fun EnhancedMoviePlayerControls(
+private fun LoadingScreen(message: String) {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            CircularProgressIndicator()
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(text = message)
+        }
+    }
+}
+
+@Composable
+private fun ErrorScreen(
+    error: String,
+    onRetry: () -> Unit,
+    onBack: () -> Unit
+) {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = error,
+                color = MaterialTheme.colorScheme.error,
+                textAlign = TextAlign.Center
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Button(onClick = onRetry) {
+                    Text("重试")
+                }
+                OutlinedButton(onClick = onBack) {
+                    Text("返回")
+                }
+            }
+        }
+    }
+}
+@Composable
+private fun VideoPlayerView(
+    playUrl: String,
+    isPlaying: Boolean,
+    onPlayClick: () -> Unit,
+    onPauseClick: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black),
+        contentAlignment = Alignment.Center
+    ) {
+        if (playUrl.isNotEmpty()) {
+            // 这里应该集成实际的视频播放器组件
+            // 例如 ExoPlayer 或其他播放器
+            Text(
+                text = "视频播放器\n播放地址: $playUrl",
+                color = Color.White,
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.bodyMedium
+            )
+        } else {
+            Text(
+                text = "等待播放地址解析...",
+                color = Color.White,
+                style = MaterialTheme.typography.bodyMedium
+            )
+        }
+
+        // 播放/暂停按钮
+        IconButton(
+            onClick = if (isPlaying) onPauseClick else onPlayClick,
+            modifier = Modifier.size(64.dp)
+        ) {
+            Icon(
+                imageVector = if (isPlaying) Icons.Default.Pause else Icons.Default.PlayArrow,
+                contentDescription = if (isPlaying) "暂停" else "播放",
+                tint = Color.White,
+                modifier = Modifier.size(48.dp)
+            )
+        }
+    }
+}
+
+@Composable
+private fun PlayerControls(
     uiState: PlayerUiState,
-    videoPlayerState: MutableState<VideoPlayerState>,
-    onBackClick: () -> Unit,
-    onFlagChange: (VodFlag) -> Unit,
-    onEpisodeChange: (VodEpisode) -> Unit,
-    onPreviousEpisode: () -> Unit,
-    onNextEpisode: () -> Unit,
-    onLineSwitch: (LineInfo) -> Unit
+    onEpisodeSelect: (VodEpisode) -> Unit,
+    onFlagSelect: (Flag) -> Unit,
+    onBack: () -> Unit
 ) {
     var showControls by remember { mutableStateOf(true) }
-    var showLineSelector by remember { mutableStateOf(false) }
-    var showEpisodeSelector by remember { mutableStateOf(false) }
 
-    val backButtonFocusRequester = remember { FocusRequester() }
-
-    // 点击屏幕显示/隐藏控制界面
     Box(
         modifier = Modifier
             .fillMaxSize()
             .clickable { showControls = !showControls }
-            .background(Color.Transparent)
     ) {
-        // 顶部控制栏
         if (showControls) {
+            // 顶部控制栏
             TopAppBar(
                 title = {
-                    Column {
-                        Text(
-                            text = uiState.movie?.vodName ?: "",
-                            color = Color.White,
-                            fontSize = 18.sp,
-                            fontWeight = FontWeight.Bold,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                        if (uiState.currentEpisode != null) {
-                            Text(
-                                text = uiState.currentEpisode.getDisplayName(),
-                                color = Color.Gray,
-                                fontSize = 14.sp,
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis
-                            )
-                        }
-                    }
+                    Text(
+                        text = uiState.movie?.vodName ?: "播放中",
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
                 },
                 navigationIcon = {
-                    IconButton(
-                        onClick = onBackClick,
-                        modifier = Modifier
-                            .focusRequester(backButtonFocusRequester)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.ArrowBack,
-                            contentDescription = "返回",
-                            tint = Color.White
-                        )
+                    IconButton(onClick = onBack) {
+                        Icon(Icons.Default.ArrowBack, contentDescription = "返回")
                     }
                 },
-                actions = {
-                    // 线路切换按钮
-                    IconButton(
-                        onClick = { showLineSelector = true },
-                        modifier = Modifier
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Tune,
-                            contentDescription = "切换线路",
-                            tint = Color.White
-                        )
-                    }
-
-                    // 剧集选择按钮
-                    IconButton(
-                        onClick = { showEpisodeSelector = true },
-                        modifier = Modifier
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.List,
-                            contentDescription = "选择剧集",
-                            tint = Color.White
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color.Black.copy(alpha = 0.7f)
-                ),
                 modifier = Modifier.align(Alignment.TopCenter)
             )
-        }
 
-        // 底部控制栏
-        if (showControls) {
+            // 底部控制栏
             BottomPlayerControls(
-                modifier = Modifier.align(Alignment.BottomCenter),
                 uiState = uiState,
-                onPreviousEpisode = onPreviousEpisode,
-                onNextEpisode = onNextEpisode
+                onEpisodeSelect = onEpisodeSelect,
+                onFlagSelect = onFlagSelect,
+                modifier = Modifier.align(Alignment.BottomCenter)
             )
         }
-
-        // 线路选择器
-        if (showLineSelector) {
-            LineSelector(
-                modifier = Modifier.align(Alignment.CenterEnd),
-                availableLines = uiState.availableLines,
-                currentLineIndex = uiState.currentLineIndex,
-                onLineSelected = { lineInfo ->
-                    onLineSwitch(lineInfo)
-                    showLineSelector = false
-                },
-                onDismiss = { showLineSelector = false }
-            )
-        }
-
-        // 剧集选择器
-        if (showEpisodeSelector) {
-            EpisodeSelector(
-                modifier = Modifier.align(Alignment.CenterStart),
-                episodes = uiState.episodes,
-                currentEpisodeIndex = uiState.currentEpisodeIndex,
-                onEpisodeSelected = { episode ->
-                    onEpisodeChange(episode)
-                    showEpisodeSelector = false
-                },
-                onDismiss = { showEpisodeSelector = false }
-            )
-        }
-
-        // 自动隐藏控制界面
-        LaunchedEffect(showControls) {
-            if (showControls) {
-                kotlinx.coroutines.delay(5000) // 5秒后自动隐藏
-                showControls = false
-            }
-        }
-    }
-
-    // 错误处理
-    if (uiState.error != null) {
-        AlertDialog(
-            onDismissRequest = { /* 不允许取消 */ },
-            title = { Text("播放错误") },
-            text = { Text(uiState.error) },
-            confirmButton = {
-                TextButton(onClick = onBackClick) {
-                    Text("返回")
-                }
-            }
-        )
-    }
-
-    // 请求初始焦点
-    LaunchedEffect(Unit) {
-        kotlinx.coroutines.delay(100)
-        backButtonFocusRequester.requestFocus()
     }
 }
 
-/**
- * 底部播放控制栏
- */
 @Composable
 private fun BottomPlayerControls(
-    modifier: Modifier = Modifier,
     uiState: PlayerUiState,
-    onPreviousEpisode: () -> Unit,
-    onNextEpisode: () -> Unit
-) {
-    Card(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = Color.Black.copy(alpha = 0.7f)
-        )
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            // 上一集按钮
-            IconButton(
-                onClick = onPreviousEpisode,
-                enabled = uiState.currentEpisodeIndex > 0,
-                modifier = Modifier
-            ) {
-                Icon(
-                    imageVector = Icons.Default.SkipPrevious,
-                    contentDescription = "上一集",
-                    tint = if (uiState.currentEpisodeIndex > 0) Color.White else Color.Gray
-                )
-            }
-
-            // 当前剧集信息
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = "第${uiState.currentEpisodeIndex + 1}集",
-                    color = Color.White,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold
-                )
-                Text(
-                    text = "共${uiState.episodes.size}集",
-                    color = Color.Gray,
-                    fontSize = 12.sp
-                )
-            }
-
-            // 下一集按钮
-            IconButton(
-                onClick = onNextEpisode,
-                enabled = uiState.currentEpisodeIndex < uiState.episodes.size - 1,
-                modifier = Modifier
-            ) {
-                Icon(
-                    imageVector = Icons.Default.SkipNext,
-                    contentDescription = "下一集",
-                    tint = if (uiState.currentEpisodeIndex < uiState.episodes.size - 1) Color.White else Color.Gray
-                )
-            }
-        }
-    }
-}
-
-/**
- * 线路选择器
- */
-@Composable
-private fun LineSelector(
-    modifier: Modifier = Modifier,
-    availableLines: List<LineInfo>,
-    currentLineIndex: Int,
-    onLineSelected: (LineInfo) -> Unit,
-    onDismiss: () -> Unit
-) {
-    Card(
-        modifier = modifier
-            .width(300.dp)
-            .heightIn(max = 400.dp)
-            .padding(16.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.95f)
-        )
-    ) {
-        Column(
-            modifier = Modifier.padding(16.dp)
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "选择线路",
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
-                )
-
-                IconButton(
-                    onClick = onDismiss,
-                    modifier = Modifier
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Close,
-                        contentDescription = "关闭"
-                    )
-                }
-            }
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            LazyColumn {
-                itemsIndexed(availableLines) { index, lineInfo ->
-                    LineItem(
-                        lineInfo = lineInfo,
-                        isSelected = index == currentLineIndex,
-                        onClick = { onLineSelected(lineInfo) },
-                        modifier = Modifier
-                    )
-                }
-            }
-        }
-    }
-}
-
-/**
- * 线路项目
- */
-@Composable
-private fun LineItem(
-    lineInfo: LineInfo,
-    isSelected: Boolean,
-    onClick: () -> Unit,
+    onEpisodeSelect: (VodEpisode) -> Unit,
+    onFlagSelect: (Flag) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 4.dp)
-            .clickable { onClick() },
-        colors = CardDefaults.cardColors(
-            containerColor = if (isSelected)
-                MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)
-            else
-                MaterialTheme.colorScheme.surfaceVariant
-        )
+            .padding(16.dp)
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(12.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+        Column(
+            modifier = Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            Column(
-                modifier = Modifier.weight(1f)
-            ) {
+            // 线路选择
+            if (uiState.flags.isNotEmpty()) {
                 Text(
-                    text = lineInfo.flag,
-                    style = MaterialTheme.typography.bodyMedium,
-                    fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
+                    text = "播放线路",
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.Bold
                 )
-
-                Row(
+                LazyRow(
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    // 质量标签
-                    Text(
-                        text = lineInfo.quality,
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-
-                    // 速度标签
-                    if (lineInfo.speed.isNotEmpty()) {
-                        Text(
-                            text = lineInfo.speed,
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.secondary
-                        )
-                    }
-
-                    // 可用性标签
-                    if (!lineInfo.isAvailable) {
-                        Text(
-                            text = "不可用",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = Color.Red
+                    items(uiState.flags) { flag ->
+                        FilterChip(
+                            onClick = { onFlagSelect(flag) },
+                            label = { Text(flag.flag ?: "未知线路") },
+                            selected = uiState.selectedFlag == flag
                         )
                     }
                 }
             }
 
-            if (isSelected) {
-                Icon(
-                    imageVector = Icons.Default.Check,
-                    contentDescription = "已选择",
-                    tint = MaterialTheme.colorScheme.primary
-                )
-            }
-        }
-    }
-}
-
-/**
- * 剧集选择器
- */
-@Composable
-private fun EpisodeSelector(
-    modifier: Modifier = Modifier,
-    episodes: List<VodEpisode>,
-    currentEpisodeIndex: Int,
-    onEpisodeSelected: (VodEpisode) -> Unit,
-    onDismiss: () -> Unit
-) {
-    Card(
-        modifier = modifier
-            .width(300.dp)
-            .heightIn(max = 500.dp)
-            .padding(16.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.95f)
-        )
-    ) {
-        Column(
-            modifier = Modifier.padding(16.dp)
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+            // 剧集选择
+            if (uiState.episodes.isNotEmpty()) {
                 Text(
-                    text = "选择剧集",
-                    style = MaterialTheme.typography.titleMedium,
+                    text = "选集",
+                    style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold
                 )
-
-                IconButton(
-                    onClick = onDismiss,
-                    modifier = Modifier
+                LazyRow(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.Close,
-                        contentDescription = "关闭"
-                    )
-                }
-            }
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            LazyColumn {
-                itemsIndexed(episodes) { index, episode ->
-                    EpisodeItem(
-                        episode = episode,
-                        episodeIndex = index,
-                        isSelected = index == currentEpisodeIndex,
-                        onClick = { onEpisodeSelected(episode) },
-                        modifier = Modifier
-                    )
+                    items(uiState.episodes) { episode ->
+                        FilterChip(
+                            onClick = { onEpisodeSelect(episode) },
+                            label = { Text(episode.name) },
+                            selected = uiState.selectedEpisode == episode
+                        )
+                    }
                 }
             }
         }
     }
 }
 
-/**
- * 剧集项目
- */
-@Composable
-private fun EpisodeItem(
-    episode: VodEpisode,
-    episodeIndex: Int,
-    isSelected: Boolean,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Card(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(vertical = 2.dp)
-            .clickable { onClick() },
-        colors = CardDefaults.cardColors(
-            containerColor = if (isSelected)
-                MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)
-            else
-                MaterialTheme.colorScheme.surfaceVariant
-        )
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(12.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Column(
-                modifier = Modifier.weight(1f)
-            ) {
-                Text(
-                    text = episode.getDisplayName(),
-                    style = MaterialTheme.typography.bodyMedium,
-                    fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
 
-                Text(
-                    text = "第${episodeIndex + 1}集",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-
-            if (isSelected) {
-                Icon(
-                    imageVector = Icons.Default.PlayArrow,
-                    contentDescription = "正在播放",
-                    tint = MaterialTheme.colorScheme.primary
-                )
-            }
-        }
-    }
-}

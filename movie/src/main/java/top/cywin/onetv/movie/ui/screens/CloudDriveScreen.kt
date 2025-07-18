@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -15,39 +16,76 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-// KotlinPoet专业重构 - 移除hiltViewModel import
-// import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import top.cywin.onetv.movie.data.cloud.CloudDriveManager
-import top.cywin.onetv.movie.ui.focus.tvFocusable
-import top.cywin.onetv.movie.ui.focus.tvListFocusable
+import androidx.navigation.NavController
 import top.cywin.onetv.movie.viewmodel.CloudDriveViewModel
+import top.cywin.onetv.movie.viewmodel.CloudDriveUiState
+import top.cywin.onetv.movie.bean.CloudDrive
+import top.cywin.onetv.movie.bean.CloudFile
+import top.cywin.onetv.movie.MovieApp
+import android.util.Log
 
 /**
- * 网盘浏览界面 - 支持多种网盘服务和TV遥控器操作
+ * OneTV Movie云盘浏览页面 - 按照FongMi_TV整合指南重构
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CloudDriveScreen(
-    onNavigateBack: () -> Unit,
-    onPlayVideo: (String) -> Unit
+    navController: NavController,
+    viewModel: CloudDriveViewModel = viewModel { CloudDriveViewModel() }
 ) {
-    val context = androidx.compose.ui.platform.LocalContext.current
-    val viewModel: CloudDriveViewModel = viewModel {
-        CloudDriveViewModel(
-            context = context,
-            cloudDriveManager = top.cywin.onetv.movie.MovieApp.getInstance().cloudDriveManager
-        )
-    }
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    
+
+    // ✅ 通过MovieApp访问适配器系统
+    val movieApp = MovieApp.getInstance()
+    val repositoryAdapter = movieApp.repositoryAdapter
+
+    // ✅ 页面初始化时加载云盘配置
     LaunchedEffect(Unit) {
+        Log.d("ONETV_MOVIE", "☁️ CloudDriveScreen 初始化")
         viewModel.loadCloudDrives()
     }
-    
+
+    // ✅ UI状态处理
+    when {
+        uiState.isLoading -> {
+            LoadingScreen(message = "正在加载云盘配置...")
+        }
+        uiState.error != null -> {
+            ErrorScreen(
+                error = uiState.error,
+                onRetry = { viewModel.loadCloudDrives() },
+                onBack = { navController.popBackStack() }
+            )
+        }
+        else -> {
+            CloudDriveContent(
+                uiState = uiState,
+                onDriveSelect = { drive -> viewModel.selectDrive(drive) },
+                onFileClick = { file -> viewModel.playFile(file) },
+                onDirectoryEnter = { dir -> viewModel.enterDirectory(dir) },
+                onBackToParent = { viewModel.backToParent() },
+                onRefresh = { viewModel.refreshCurrentDirectory() },
+                onBack = { navController.popBackStack() }
+            )
+        }
+    }
+}
+
+@Composable
+private fun CloudDriveContent(
+    uiState: CloudDriveUiState,
+    onDriveSelect: (CloudDrive) -> Unit,
+    onFileClick: (CloudFile) -> Unit,
+    onDirectoryEnter: (CloudFile) -> Unit,
+    onBackToParent: () -> Unit,
+    onRefresh: () -> Unit,
+    onBack: () -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -55,398 +93,137 @@ fun CloudDriveScreen(
     ) {
         // 顶部导航栏
         TopAppBar(
-            title = {
-                Text(
-                    text = "网盘资源",
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold
-                )
-            },
+            title = { Text("云盘浏览") },
             navigationIcon = {
-                IconButton(
-                    onClick = onNavigateBack,
-                    modifier = Modifier.tvFocusable(
-                        onClick = onNavigateBack
-                    )
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.ArrowBack,
-                        contentDescription = "返回"
-                    )
+                IconButton(onClick = onBack) {
+                    Icon(Icons.Default.ArrowBack, contentDescription = "返回")
                 }
             },
             actions = {
-                // 添加网盘按钮
-                IconButton(
-                    onClick = { viewModel.showAddDriveDialog() },
-                    modifier = Modifier.tvFocusable(
-                        onClick = { viewModel.showAddDriveDialog() }
-                    )
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = "添加网盘"
-                    )
+                IconButton(onClick = onRefresh) {
+                    Icon(Icons.Default.Refresh, contentDescription = "刷新")
                 }
-                
-                // 刷新按钮
-                IconButton(
-                    onClick = { viewModel.refreshCurrentPath() },
-                    modifier = Modifier.tvFocusable(
-                        onClick = { viewModel.refreshCurrentPath() }
-                    )
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Refresh,
-                        contentDescription = "刷新"
-                    )
-                }
-            },
-            colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = MaterialTheme.colorScheme.surface
-            )
-        )
-        
-        when {
-            uiState.isLoading -> {
-                LoadingContent()
-            }
-            
-            uiState.error != null -> {
-                ErrorContent(
-                    error = uiState.error ?: "未知错误",
-                    onRetry = { viewModel.loadCloudDrives() }
-                )
-            }
-            
-            uiState.cloudDrives.isEmpty() -> {
-                EmptyContent(
-                    onAddDrive = { viewModel.showAddDriveDialog() }
-                )
-            }
-            
-            else -> {
-                CloudDriveContent(
-                    uiState = uiState,
-                    onDriveSelected = { drive -> viewModel.selectDrive(drive) },
-                    onFileSelected = { file -> 
-                        if (file.isVideoFile()) {
-                            viewModel.getDownloadUrl(file) { url ->
-                                onPlayVideo(url)
-                            }
-                        } else if (file.isDirectory) {
-                            viewModel.enterDirectory(file)
-                        }
-                    },
-                    onBackToParent = { viewModel.backToParent() }
-                )
-            }
-        }
-    }
-    
-    // 添加网盘对话框
-    if (uiState.showAddDriveDialog) {
-        AddCloudDriveDialog(
-            onDismiss = { viewModel.hideAddDriveDialog() },
-            onConfirm = { config -> 
-                viewModel.addCloudDrive(config)
-                viewModel.hideAddDriveDialog()
             }
         )
-    }
-}
 
-/**
- * 加载中内容
- */
-@Composable
-private fun LoadingContent() {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            CircularProgressIndicator()
-            Text(
-                text = "加载网盘资源中...",
-                style = MaterialTheme.typography.bodyMedium
-            )
-        }
-    }
-}
-
-/**
- * 错误内容
- */
-@Composable
-private fun ErrorContent(
-    error: String,
-    onRetry: () -> Unit
-) {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            Icon(
-                imageVector = Icons.Default.Error,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.error,
-                modifier = Modifier.size(48.dp)
-            )
-            
-            Text(
-                text = "加载失败",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
-            )
-            
-            Text(
-                text = error,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-            
-            Button(
-                onClick = onRetry,
-                modifier = Modifier.tvFocusable(
-                    onClick = onRetry
-                )
+        // 云盘选择器
+        if (uiState.availableDrives.isNotEmpty()) {
+            LazyRow(
+                modifier = Modifier.padding(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Text("重试")
+                items(uiState.availableDrives) { drive ->
+                    FilterChip(
+                        onClick = { onDriveSelect(drive) },
+                        label = { Text(drive.name) },
+                        selected = uiState.selectedDrive == drive
+                    )
+                }
             }
         }
-    }
-}
 
-/**
- * 空内容
- */
-@Composable
-private fun EmptyContent(
-    onAddDrive: () -> Unit
-) {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            Icon(
-                imageVector = Icons.Default.CloudOff,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.size(64.dp)
-            )
-            
-            Text(
-                text = "暂无网盘配置",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
-            )
-            
-            Text(
-                text = "添加您的网盘账号开始浏览资源",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-            
-            Button(
-                onClick = onAddDrive,
-                modifier = Modifier.tvFocusable(
-                    onClick = onAddDrive
-                )
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = null,
-                    modifier = Modifier.size(18.dp)
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text("添加网盘")
-            }
-        }
-    }
-}
-
-/**
- * 网盘内容
- */
-@Composable
-private fun CloudDriveContent(
-    uiState: CloudDriveUiState,
-    onDriveSelected: (CloudDriveManager.CloudDriveConfig) -> Unit,
-    onFileSelected: (CloudDriveManager.CloudFile) -> Unit,
-    onBackToParent: () -> Unit
-) {
-    Column(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        // 网盘选择器
-        if (uiState.cloudDrives.size > 1) {
-            CloudDriveSelector(
-                drives = uiState.cloudDrives,
-                selectedDrive = uiState.selectedDrive,
-                onDriveSelected = onDriveSelected
-            )
-        }
-        
-        // 路径导航
-        if (uiState.currentPath.isNotEmpty()) {
-            PathNavigation(
-                path = uiState.currentPath,
-                onBackToParent = onBackToParent
-            )
-        }
-        
         // 文件列表
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            items(
-                items = uiState.files,
-                key = { it.id }
-            ) { file ->
+            // 返回上级目录按钮
+            if (uiState.canGoBack) {
+                item {
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { onBackToParent() }
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(16.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(Icons.Default.ArrowUpward, contentDescription = "返回上级")
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text("返回上级目录")
+                        }
+                    }
+                }
+            }
+
+            // 文件和目录列表
+            items(uiState.currentFiles) { file ->
                 CloudFileItem(
                     file = file,
-                    onClick = { onFileSelected(file) },
-                    modifier = Modifier.tvListFocusable(
-                        onClick = { onFileSelected(file) }
-                    )
+                    onClick = {
+                        if (file.isDirectory) {
+                            onDirectoryEnter(file)
+                        } else {
+                            onFileClick(file)
+                        }
+                    }
                 )
             }
         }
     }
 }
+// ✅ 按照指南添加必要的辅助Composable函数
 
-/**
- * 网盘选择器
- */
 @Composable
-private fun CloudDriveSelector(
-    drives: List<CloudDriveManager.CloudDriveConfig>,
-    selectedDrive: CloudDriveManager.CloudDriveConfig?,
-    onDriveSelected: (CloudDriveManager.CloudDriveConfig) -> Unit
-) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
-        )
+private fun LoadingScreen(message: String) {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            drives.forEach { drive ->
-                FilterChip(
-                    selected = drive == selectedDrive,
-                    onClick = { onDriveSelected(drive) },
-                    label = {
-                        Text(
-                            text = drive.name,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                    },
-                    leadingIcon = {
-                        Icon(
-                            imageVector = when (drive.type) {
-                                CloudDriveManager.CloudDriveType.ALI_DRIVE -> Icons.Default.Cloud
-                                CloudDriveManager.CloudDriveType.BAIDU_PAN -> Icons.Default.CloudQueue
-                                CloudDriveManager.CloudDriveType.QUARK_PAN -> Icons.Default.CloudDownload
-                                else -> Icons.Default.Storage
-                            },
-                            contentDescription = null,
-                            modifier = Modifier.size(16.dp)
-                        )
-                    },
-                    modifier = Modifier.tvFocusable(
-                        onClick = { onDriveSelected(drive) }
-                    )
-                )
-            }
+            CircularProgressIndicator()
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(text = message)
         }
     }
 }
 
-/**
- * 路径导航
- */
 @Composable
-private fun PathNavigation(
-    path: String,
-    onBackToParent: () -> Unit
+private fun ErrorScreen(
+    error: String,
+    onRetry: () -> Unit,
+    onBack: () -> Unit
 ) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
-        )
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(12.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            IconButton(
-                onClick = onBackToParent,
-                modifier = Modifier.tvFocusable(
-                    onClick = onBackToParent
-                )
-            ) {
-                Icon(
-                    imageVector = Icons.Default.ArrowBack,
-                    contentDescription = "返回上级"
-                )
-            }
-
             Text(
-                text = if (path.isEmpty()) "根目录" else path,
-                style = MaterialTheme.typography.bodyMedium,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.weight(1f)
+                text = error,
+                color = MaterialTheme.colorScheme.error,
+                textAlign = TextAlign.Center
             )
+            Spacer(modifier = Modifier.height(16.dp))
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Button(onClick = onRetry) {
+                    Text("重试")
+                }
+                OutlinedButton(onClick = onBack) {
+                    Text("返回")
+                }
+            }
         }
     }
 }
 
-/**
- * 云文件项目
- */
 @Composable
 private fun CloudFileItem(
-    file: CloudDriveManager.CloudFile,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    file: CloudFile,
+    onClick: () -> Unit
 ) {
     Card(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
-            .clickable { onClick() },
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
-        ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+            .clickable { onClick() }
     ) {
         Row(
             modifier = Modifier
@@ -464,8 +241,8 @@ private fun CloudFileItem(
                 },
                 contentDescription = null,
                 tint = when {
-                    file.isDirectory -> Color(0xFF2196F3)
-                    file.isVideoFile() -> Color(0xFF4CAF50)
+                    file.isDirectory -> MaterialTheme.colorScheme.primary
+                    file.isVideoFile() -> MaterialTheme.colorScheme.secondary
                     else -> MaterialTheme.colorScheme.onSurfaceVariant
                 },
                 modifier = Modifier.size(24.dp)
@@ -483,28 +260,16 @@ private fun CloudFileItem(
                     overflow = TextOverflow.Ellipsis
                 )
 
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    if (!file.isDirectory) {
-                        Text(
-                            text = file.getFormattedSize(),
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
-
-                    if (file.updateTime > 0) {
-                        Text(
-                            text = formatFileTime(file.updateTime),
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
+                if (!file.isDirectory && file.size > 0) {
+                    Text(
+                        text = formatFileSize(file.size),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
                 }
             }
 
-            // 操作按钮
+            // 操作指示器
             if (file.isVideoFile()) {
                 Icon(
                     imageVector = Icons.Default.PlayCircle,
@@ -524,116 +289,15 @@ private fun CloudFileItem(
     }
 }
 
-/**
- * 添加网盘对话框
- */
-@Composable
-private fun AddCloudDriveDialog(
-    onDismiss: () -> Unit,
-    onConfirm: (CloudDriveManager.CloudDriveConfig) -> Unit
-) {
-    var name by remember { mutableStateOf("") }
-    var selectedType by remember { mutableStateOf(CloudDriveManager.CloudDriveType.ALI_DRIVE) }
-    var baseUrl by remember { mutableStateOf("") }
-    var token by remember { mutableStateOf("") }
+private fun formatFileSize(bytes: Long): String {
+    val kb = bytes / 1024.0
+    val mb = kb / 1024.0
+    val gb = mb / 1024.0
 
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = {
-            Text("添加网盘")
-        },
-        text = {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                OutlinedTextField(
-                    value = name,
-                    onValueChange = { name = it },
-                    label = { Text("网盘名称") },
-                    modifier = Modifier.fillMaxWidth()
-                )
-
-                // 网盘类型选择
-                Text(
-                    text = "网盘类型",
-                    style = MaterialTheme.typography.bodyMedium
-                )
-
-                CloudDriveManager.CloudDriveType.values().forEach { type ->
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable { selectedType = type }
-                            .padding(vertical = 4.dp)
-                    ) {
-                        RadioButton(
-                            selected = selectedType == type,
-                            onClick = { selectedType = type }
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(type.displayName)
-                    }
-                }
-
-                OutlinedTextField(
-                    value = baseUrl,
-                    onValueChange = { baseUrl = it },
-                    label = { Text("服务器地址") },
-                    modifier = Modifier.fillMaxWidth()
-                )
-
-                OutlinedTextField(
-                    value = token,
-                    onValueChange = { token = it },
-                    label = { Text("访问令牌") },
-                    modifier = Modifier.fillMaxWidth()
-                )
-            }
-        },
-        confirmButton = {
-            TextButton(
-                onClick = {
-                    val config = CloudDriveManager.CloudDriveConfig(
-                        id = System.currentTimeMillis().toString(),
-                        name = name,
-                        type = selectedType,
-                        baseUrl = baseUrl,
-                        token = token
-                    )
-                    onConfirm(config)
-                },
-                enabled = name.isNotEmpty() && baseUrl.isNotEmpty() && token.isNotEmpty()
-            ) {
-                Text("确定")
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismiss) {
-                Text("取消")
-            }
-        }
-    )
+    return when {
+        gb >= 1 -> String.format("%.1f GB", gb)
+        mb >= 1 -> String.format("%.1f MB", mb)
+        kb >= 1 -> String.format("%.1f KB", kb)
+        else -> "$bytes B"
+    }
 }
-
-/**
- * 格式化文件时间
- */
-private fun formatFileTime(timestamp: Long): String {
-    val date = java.util.Date(timestamp)
-    val format = java.text.SimpleDateFormat("MM-dd HH:mm", java.util.Locale.getDefault())
-    return format.format(date)
-}
-
-/**
- * 网盘UI状态数据类 (需要在ViewModel中定义)
- */
-data class CloudDriveUiState(
-    val isLoading: Boolean = false,
-    val error: String? = null,
-    val cloudDrives: List<CloudDriveManager.CloudDriveConfig> = emptyList(),
-    val selectedDrive: CloudDriveManager.CloudDriveConfig? = null,
-    val files: List<CloudDriveManager.CloudFile> = emptyList(),
-    val currentPath: String = "",
-    val showAddDriveDialog: Boolean = false
-)

@@ -2,15 +2,14 @@ package top.cywin.onetv.movie.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-// KotlinPoet专业重构 - 移除Hilt import
-// import dagger.hilt.onetv.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import top.cywin.onetv.movie.data.models.*
-import top.cywin.onetv.movie.data.repository.WatchHistoryRepository
 import top.cywin.onetv.movie.MovieApp
+import top.cywin.onetv.movie.bean.Vod
+import top.cywin.onetv.movie.bean.Flag
+import android.util.Log
 
 /**
  * 线路信息 (替代LineManager.LineInfo)
@@ -21,165 +20,106 @@ data class LineInfo(
     val speed: String = "",
     val isAvailable: Boolean = true
 )
-// KotlinPoet专业重构 - 移除Inject import
-// import javax.inject.Inject
 
 /**
- * 播放器ViewModel (参考OneMoVie播放器架构)
- * KotlinPoet专业重构 - 移除Hilt注解，使用标准构造函数
+ * 播放器UI状态数据类
  */
-// @HiltViewModel
-class MoviePlayerViewModel(
-    private val historyRepository: WatchHistoryRepository
-) : ViewModel() {
+data class PlayerUiState(
+    val isLoading: Boolean = false,
+    val error: String? = null,
+    val movie: Vod? = null,
+    val playFlags: List<Flag> = emptyList(),
+    val currentFlag: Flag? = null,
+    val episodes: List<VodEpisode> = emptyList(),
+    val currentEpisode: VodEpisode? = null,
+    val currentEpisodeIndex: Int = 0,
+    val availableLines: List<LineInfo> = emptyList(),
+    val currentLineIndex: Int = 0,
+    val playUrl: String = "",
+    val isPlaying: Boolean = false,
+    val currentPosition: Long = 0L,
+    val duration: Long = 0L
+)
 
-    // 通过MovieApp访问适配器系统
+/**
+ * OneTV Movie播放器ViewModel
+ * 通过适配器系统调用FongMi_TV解析功能，不参与线路接口解析
+ */
+class MoviePlayerViewModel : ViewModel() {
+
+    // ✅ 通过MovieApp访问适配器系统 - 不参与解析逻辑
     private val movieApp = MovieApp.getInstance()
     private val repositoryAdapter = movieApp.repositoryAdapter
     private val siteViewModel = movieApp.siteViewModel
-    private val vodConfig = movieApp.vodConfig
-    private val uiAdapter = movieApp.uiAdapter
 
     private val _uiState = MutableStateFlow(PlayerUiState())
     val uiState: StateFlow<PlayerUiState> = _uiState.asStateFlow()
 
     /**
-     * 加载播放数据
+     * 初始化播放器 - 通过适配器调用FongMi_TV解析系统
      */
-    fun loadPlayData(vodId: String, episodeIndex: Int, siteKey: String) {
+    fun initPlayer(vodId: String, siteKey: String, episodeIndex: Int = 0) {
         viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(isLoading = true, error = null)
-
             try {
-                // 1. 获取影片详情 - 使用FongMi_TV的SiteViewModel
+                _uiState.value = _uiState.value.copy(isLoading = true, error = null)
+
+                Log.d("ONETV_MOVIE", "▶️ 初始化播放器: vodId=$vodId, episodeIndex=$episodeIndex")
+
+                // ✅ 通过适配器获取影片详情 - 解析逻辑在FongMi_TV中
                 repositoryAdapter.getContentDetail(vodId, siteKey)
 
-                // 临时创建空的movie对象，实际数据通过SiteViewModel观察获取
-                val movie = VodItem(
-                    vodId = vodId,
-                    vodName = "",
-                    siteKey = siteKey
-                )
+                // 实际数据通过SiteViewModel观察获取
+                Log.d("ONETV_MOVIE", "✅ 详情请求已发送，等待SiteViewModel响应")
 
-                // 2. 解析播放源
-                val playFlags = movie.parseFlags()
-                if (playFlags.isEmpty()) {
-                    throw Exception("没有找到播放源")
-                }
-
-                // 3. 选择默认播放源和剧集
-                val defaultFlag = playFlags.firstOrNull()
-                val episodes = defaultFlag?.createEpisodes() ?: emptyList()
-                
-                if (episodes.isEmpty()) {
-                    throw Exception("没有找到剧集")
-                }
-
-                val targetEpisode = episodes.getOrNull(episodeIndex) ?: episodes.first()
-
-                // 4. 获取可用线路 - 使用FongMi_TV的解析系统
-                // 临时处理，实际解析通过FongMi_TV的ParseJob进行
-                val playUrl = targetEpisode.url
-
-                // 5. 保存播放历史
-                if (defaultFlag != null) {
-                    historyRepository.saveHistory(movie, defaultFlag, targetEpisode)
-                }
-
-                // 6. 更新UI状态
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
-                    movie = movie,
-                    playFlags = playFlags,
-                    currentFlag = defaultFlag,
-                    currentEpisode = targetEpisode,
-                    episodes = episodes,
-                    currentEpisodeIndex = episodeIndex.coerceIn(0, episodes.size - 1),
-                    availableLines = emptyList(), // 临时空列表，实际数据通过FongMi_TV获取
-                    currentLineIndex = 0,
-                    playUrl = playUrl,
+                    currentEpisodeIndex = episodeIndex,
                     error = null
                 )
 
             } catch (e: Exception) {
+                Log.e("ONETV_MOVIE", "播放器初始化失败", e)
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
-                    error = e.message ?: "加载失败"
+                    error = "播放器初始化失败: ${e.message}"
                 )
             }
         }
     }
 
     /**
-     * 选择播放源
+     * 播放指定剧集
      */
-    fun selectFlag(flag: VodFlag) {
-        val currentState = _uiState.value
-        val episodes = flag.createEpisodes()
-        val defaultEpisode = episodes.firstOrNull()
+    fun playEpisode(episode: VodEpisode, episodeIndex: Int) {
+        viewModelScope.launch {
+            try {
+                Log.d("ONETV_MOVIE", "📺 播放剧集: ${episode.name}")
 
-        if (defaultEpisode != null) {
-            viewModelScope.launch {
-                try {
-                    val playUrl = parsePlayUrl(defaultEpisode.url, currentState.movie?.siteKey ?: "", flag.flag)
-                    
-                    _uiState.value = _uiState.value.copy(
-                        currentFlag = flag,
-                        currentEpisode = defaultEpisode,
-                        playUrl = playUrl
-                    )
+                val currentState = _uiState.value
+                val movie = currentState.movie
+                val currentFlag = currentState.currentFlag
 
-                    // 更新播放历史
-                    currentState.movie?.let { movie ->
-                        historyRepository.updateEpisode(
-                            vodId = movie.vodId,
-                            siteKey = movie.siteKey,
-                            episode = defaultEpisode,
-                            flagName = flag.flag
-                        )
-                    }
-
-                } catch (e: Exception) {
-                    _uiState.value = _uiState.value.copy(
-                        error = e.message ?: "播放源切换失败"
-                    )
+                if (movie == null || currentFlag == null) {
+                    _uiState.value = _uiState.value.copy(error = "播放器未初始化")
+                    return@launch
                 }
-            }
-        }
-    }
 
-    /**
-     * 选择剧集
-     */
-    fun selectEpisode(episode: VodEpisode) {
-        val currentState = _uiState.value
-        val currentFlag = currentState.currentFlag
+                // ✅ 通过适配器解析播放地址 - 解析逻辑在FongMi_TV中
+                repositoryAdapter.parsePlayUrl(episode.url, movie.key ?: "", currentFlag.flag)
 
-        if (currentFlag != null) {
-            viewModelScope.launch {
-                try {
-                    val playUrl = parsePlayUrl(episode.url, currentState.movie?.siteKey ?: "", currentFlag.flag)
-                    
-                    _uiState.value = _uiState.value.copy(
-                        currentEpisode = episode,
-                        playUrl = playUrl
-                    )
+                _uiState.value = _uiState.value.copy(
+                    currentEpisode = episode,
+                    currentEpisodeIndex = episodeIndex,
+                    error = null
+                )
 
-                    // 更新播放历史
-                    currentState.movie?.let { movie ->
-                        historyRepository.updateEpisode(
-                            vodId = movie.vodId,
-                            siteKey = movie.siteKey,
-                            episode = episode,
-                            flagName = currentFlag.flag
-                        )
-                    }
+                Log.d("ONETV_MOVIE", "✅ 播放地址解析请求已发送")
 
-                } catch (e: Exception) {
-                    _uiState.value = _uiState.value.copy(
-                        error = e.message ?: "剧集切换失败"
-                    )
-                }
+            } catch (e: Exception) {
+                Log.e("ONETV_MOVIE", "剧集播放失败", e)
+                _uiState.value = _uiState.value.copy(
+                    error = "剧集播放失败: ${e.message}"
+                )
             }
         }
     }
@@ -189,16 +129,15 @@ class MoviePlayerViewModel(
      */
     fun playNextEpisode() {
         val currentState = _uiState.value
-        val currentFlag = currentState.currentFlag
-        val currentEpisode = currentState.currentEpisode
+        val episodes = currentState.episodes
+        val currentIndex = currentState.currentEpisodeIndex
 
-        if (currentFlag != null && currentEpisode != null) {
-            val episodes = currentFlag.createEpisodes()
-            val currentIndex = episodes.indexOf(currentEpisode)
-            
-            if (currentIndex >= 0 && currentIndex < episodes.size - 1) {
-                selectEpisode(episodes[currentIndex + 1])
-            }
+        if (currentIndex < episodes.size - 1) {
+            val nextEpisode = episodes[currentIndex + 1]
+            playEpisode(nextEpisode, currentIndex + 1)
+            Log.d("ONETV_MOVIE", "⏭️ 播放下一集: ${nextEpisode.name}")
+        } else {
+            Log.d("ONETV_MOVIE", "⚠️ 已经是最后一集")
         }
     }
 
@@ -207,16 +146,70 @@ class MoviePlayerViewModel(
      */
     fun playPreviousEpisode() {
         val currentState = _uiState.value
-        val currentFlag = currentState.currentFlag
-        val currentEpisode = currentState.currentEpisode
+        val episodes = currentState.episodes
+        val currentIndex = currentState.currentEpisodeIndex
 
-        if (currentFlag != null && currentEpisode != null) {
-            val episodes = currentFlag.createEpisodes()
-            val currentIndex = episodes.indexOf(currentEpisode)
-            
-            if (currentIndex > 0) {
-                selectEpisode(episodes[currentIndex - 1])
+        if (currentIndex > 0) {
+            val previousEpisode = episodes[currentIndex - 1]
+            playEpisode(previousEpisode, currentIndex - 1)
+            Log.d("ONETV_MOVIE", "⏮️ 播放上一集: ${previousEpisode.name}")
+        } else {
+            Log.d("ONETV_MOVIE", "⚠️ 已经是第一集")
+        }
+    }
+
+    /**
+     * 选择播放源
+     */
+    fun selectFlag(flag: Flag) {
+        Log.d("ONETV_MOVIE", "🎬 选择播放源: ${flag.flag}")
+
+        // 解析剧集列表
+        val episodes = parseEpisodes(flag.urls)
+        val defaultEpisode = episodes.firstOrNull()
+
+        if (defaultEpisode != null) {
+            _uiState.value = _uiState.value.copy(
+                currentFlag = flag,
+                episodes = episodes,
+                currentEpisode = defaultEpisode,
+                currentEpisodeIndex = 0
+            )
+
+            // 播放第一集
+            playEpisode(defaultEpisode, 0)
+        }
+    }
+
+    /**
+     * 解析剧集列表
+     */
+    private fun parseEpisodes(urls: String): List<VodEpisode> {
+        return try {
+            urls.split("#").mapIndexed { index, episodeData ->
+                val parts = episodeData.split("$")
+                VodEpisode(
+                    name = if (parts.size >= 2) parts[0] else "第${index + 1}集",
+                    url = if (parts.size >= 2) parts[1] else episodeData,
+                    index = index
+                )
             }
+        } catch (e: Exception) {
+            Log.e("ONETV_MOVIE", "剧集解析失败", e)
+            emptyList()
+        }
+    }
+
+    /**
+     * 选择剧集
+     */
+    fun selectEpisode(episode: VodEpisode) {
+        val currentState = _uiState.value
+        val episodes = currentState.episodes
+        val episodeIndex = episodes.indexOf(episode)
+
+        if (episodeIndex >= 0) {
+            playEpisode(episode, episodeIndex)
         }
     }
 
@@ -224,152 +217,44 @@ class MoviePlayerViewModel(
      * 更新播放进度
      */
     fun updatePlayProgress(position: Long, duration: Long) {
+        _uiState.value = _uiState.value.copy(
+            currentPosition = position,
+            duration = duration
+        )
+
+        // ✅ 通过适配器保存播放历史 - 历史管理在FongMi_TV中
         val currentState = _uiState.value
         val movie = currentState.movie
+        val episode = currentState.currentEpisode
 
-        if (movie != null) {
-            viewModelScope.launch {
-                historyRepository.updateProgress(
-                    vodId = movie.vodId,
-                    siteKey = movie.siteKey,
-                    position = position,
-                    duration = duration
-                )
-            }
+        if (movie != null && episode != null) {
+            repositoryAdapter.savePlayHistory(
+                vodId = movie.vodId ?: "",
+                episodeIndex = episode.index,
+                position = position,
+                duration = duration
+            )
         }
     }
 
-    /**
-     * 解析播放地址 (使用真实的解析器系统)
-     */
-    private suspend fun parsePlayUrl(url: String, siteKey: String, flag: String): String {
-        return try {
-            // 使用FongMi_TV的解析系统
-            // 临时直接返回URL，实际解析通过FongMi_TV的ParseJob进行
-            url
-        } catch (e: Exception) {
-            throw Exception("播放地址解析失败: ${e.message}")
-        }
-    }
 
     /**
      * 切换到指定线路
      */
     fun switchToLine(lineInfo: LineInfo) {
+        Log.d("ONETV_MOVIE", "🔄 切换线路: ${lineInfo.flag}")
+
         val currentState = _uiState.value
         val currentEpisode = currentState.currentEpisode
 
         if (currentEpisode != null) {
-            viewModelScope.launch {
-                try {
-                    // 使用FongMi_TV的解析系统切换线路
-                    // 临时处理，实际切换通过FongMi_TV的ParseJob进行
-                    val playUrl = currentEpisode.url
+            // ✅ 通过适配器切换线路 - 线路管理在FongMi_TV中
+            repositoryAdapter.switchLine(lineInfo.flag, currentEpisode.url)
 
-                    if (playUrl.isNotEmpty()) {
-                        val lineIndex = currentState.availableLines.indexOf(lineInfo)
-
-                        _uiState.value = _uiState.value.copy(
-                            currentLineIndex = lineIndex.coerceAtLeast(0),
-                            playUrl = playUrl,
-                            error = null
-                        )
-
-                        // 更新播放历史中的线路信息
-                        currentState.movie?.let { movie ->
-                            historyRepository.updateEpisode(
-                                vodId = movie.vodId,
-                                siteKey = movie.siteKey,
-                                episode = currentEpisode,
-                                flagName = lineInfo.flag
-                            )
-                        }
-                    } else {
-                        _uiState.value = _uiState.value.copy(
-                            error = "线路切换失败，该线路暂时不可用"
-                        )
-                    }
-
-                } catch (e: Exception) {
-                    _uiState.value = _uiState.value.copy(
-                        error = "线路切换失败: ${e.message}"
-                    )
-                }
-            }
-        }
-    }
-
-    /**
-     * 切换剧集 (增强版，支持线路管理)
-     */
-    fun switchEpisode(episodeIndex: Int) {
-        val currentState = _uiState.value
-        val episodes = currentState.episodes
-
-        if (episodeIndex in episodes.indices) {
-            val targetEpisode = episodes[episodeIndex]
-            val currentLine = currentState.availableLines.getOrNull(currentState.currentLineIndex)
-
-            viewModelScope.launch {
-                try {
-                    val playUrl = if (currentLine != null) {
-                        lineManager.switchToLine(currentLine, episodeIndex) ?: targetEpisode.url
-                    } else {
-                        targetEpisode.url
-                    }
-
-                    _uiState.value = _uiState.value.copy(
-                        currentEpisode = targetEpisode,
-                        currentEpisodeIndex = episodeIndex,
-                        playUrl = playUrl,
-                        error = null
-                    )
-
-                    // 更新播放历史
-                    currentState.movie?.let { movie ->
-                        historyRepository.updateEpisode(
-                            vodId = movie.vodId,
-                            siteKey = movie.siteKey,
-                            episode = targetEpisode,
-                            flagName = currentLine?.flag?.flag ?: ""
-                        )
-                    }
-
-                } catch (e: Exception) {
-                    _uiState.value = _uiState.value.copy(
-                        error = "剧集切换失败: ${e.message}"
-                    )
-                }
-            }
-        }
-    }
-
-    /**
-     * 测试线路速度
-     */
-    fun testLineSpeed(lineInfo: LineInfo) {
-        viewModelScope.launch {
-            try {
-                // 使用FongMi_TV的线路测试系统
-                // 临时处理，实际测试通过FongMi_TV进行
-                val speed = "测试中"
-
-                // 更新线路信息中的速度
-                val updatedLines = _uiState.value.availableLines.map { line ->
-                    if (line == lineInfo) {
-                        line.copy(speed = speed)
-                    } else {
-                        line
-                    }
-                }
-
-                _uiState.value = _uiState.value.copy(
-                    availableLines = updatedLines
-                )
-
-            } catch (e: Exception) {
-                // 测试失败不影响主流程
-            }
+            val lineIndex = currentState.availableLines.indexOf(lineInfo)
+            _uiState.value = _uiState.value.copy(
+                currentLineIndex = lineIndex.coerceAtLeast(0)
+            )
         }
     }
 
@@ -381,33 +266,9 @@ class MoviePlayerViewModel(
     }
 
     /**
-     * 获取当前播放信息
+     * 设置播放状态
      */
-    fun getCurrentPlayInfo(): PlayInfo? {
-        val currentState = _uiState.value
-        return if (currentState.movie != null && currentState.currentEpisode != null) {
-            PlayInfo(
-                vodId = currentState.movie.vodId,
-                vodName = currentState.movie.vodName,
-                episodeIndex = currentState.currentEpisode.index,
-                episodeName = currentState.currentEpisode.name,
-                siteKey = currentState.movie.siteKey,
-                playUrl = currentState.playUrl
-            )
-        } else {
-            null
-        }
+    fun setPlayingState(isPlaying: Boolean) {
+        _uiState.value = _uiState.value.copy(isPlaying = isPlaying)
     }
 }
-
-/**
- * 播放信息数据类
- */
-data class PlayInfo(
-    val vodId: String,
-    val vodName: String,
-    val episodeIndex: Int,
-    val episodeName: String,
-    val siteKey: String,
-    val playUrl: String
-)

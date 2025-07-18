@@ -25,434 +25,259 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-// KotlinPoet专业重构 - 移除hiltViewModel import
-// import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import kotlinx.coroutines.delay
 import android.util.Log
-import top.cywin.onetv.movie.data.models.MovieUiState
-import top.cywin.onetv.movie.data.models.VodItem
-import top.cywin.onetv.movie.data.models.VodClass
-import top.cywin.onetv.movie.data.models.VodSite
-import top.cywin.onetv.movie.data.models.VodConfigUrl
-import top.cywin.onetv.movie.data.models.HomeCategorySection
+import top.cywin.onetv.movie.viewmodel.MovieViewModel
+import top.cywin.onetv.movie.viewmodel.MovieUiState
+import top.cywin.onetv.movie.viewmodel.VodConfigUrl
+import top.cywin.onetv.movie.viewmodel.HomeCategorySection
+import top.cywin.onetv.movie.bean.Vod
+import top.cywin.onetv.movie.bean.Class
+import top.cywin.onetv.movie.MovieApp
 import top.cywin.onetv.movie.navigation.MovieRoutes
 import top.cywin.onetv.movie.ui.components.MovieCard
 import top.cywin.onetv.movie.ui.components.QuickCategoryGrid
 import top.cywin.onetv.movie.ui.components.RouteSelector
 import top.cywin.onetv.movie.ui.components.StoreHouseWelcome
-import top.cywin.onetv.movie.viewmodel.MovieViewModel
-import top.cywin.onetv.movie.test.VodConfigTester
 
 /**
- * 点播首页 (参考OneMoVie主界面)
+ * OneTV Movie首页 - 按照FongMi_TV整合指南重构
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MovieHomeScreen(
     navController: NavController,
-    viewModel: MovieViewModel = viewModel {
-        MovieViewModel(
-            configManager = top.cywin.onetv.movie.MovieApp.getInstance().vodConfigManager
-        )
-    }
+    viewModel: MovieViewModel = viewModel { MovieViewModel() }
 ) {
-    Log.d("ONETV_MOVIE", "MovieHomeScreen 开始初始化")
-    Log.d("ONETV_MOVIE", "开始获取ViewModel")
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    // 使用LaunchedEffect来捕获初始化错误
-    var initError by remember { mutableStateOf<String?>(null) }
+    // ✅ 通过MovieApp访问适配器系统
+    val movieApp = MovieApp.getInstance()
+    val siteViewModel = movieApp.siteViewModel
+    val uiAdapter = movieApp.uiAdapter
 
+    // ✅ 观察FongMi_TV的数据变化 - 数据来源于FongMi_TV解析系统
+    // 注意：这里需要根据实际的FongMi_TV SiteViewModel API进行调整
+    // val searchResult by siteViewModel.result.observeAsState()
+    // val contentDetail by siteViewModel.detail.observeAsState()
+    // val homeContent by siteViewModel.list.observeAsState()
+
+    // ✅ 页面初始化时加载数据
     LaunchedEffect(Unit) {
-        try {
-            Log.d("ONETV_MOVIE", "LaunchedEffect: 开始初始化检查和配置更新")
-
-            // 运行VOD配置测试
-            Log.d("ONETV_MOVIE", "开始VOD配置测试")
-            // VodConfigTester.runFullTest(context) // 完整测试，可选启用
-
-            // 快速检查配置是否可用
-            val configReady = VodConfigTester.quickTest()
-            Log.d("ONETV_MOVIE", "VOD配置状态: ${if (configReady) "就绪" else "未就绪"}")
-
-            // 检查并更新配置 (智能缓存策略)
-            viewModel.checkAndUpdateConfig()
-        } catch (e: Exception) {
-            Log.e("ONETV_MOVIE", "初始化检查失败", e)
-            initError = e.message
-        }
+        Log.d("ONETV_MOVIE", "🏠 MovieHomeScreen 初始化")
+        viewModel.loadHomeData()
     }
 
-    // 如果有初始化错误，显示错误信息
-    if (initError != null) {
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = "点播功能初始化失败: $initError",
-                color = Color.Red,
-                textAlign = TextAlign.Center
+    // ✅ 处理FongMi_TV数据变化
+    // LaunchedEffect(homeContent) {
+    //     homeContent?.let { content ->
+    //         Log.d("ONETV_MOVIE", "🏠 收到FongMi_TV首页数据: ${content.list.size}条")
+    //         // 这里可以进一步处理FongMi_TV返回的数据
+    //     }
+    // }
+
+    // ✅ UI状态处理
+    when {
+        uiState.isLoading -> {
+            LoadingScreen(message = "正在加载配置...")
+        }
+        uiState.error != null -> {
+            ErrorScreen(
+                error = uiState.error,
+                onRetry = { viewModel.refresh() },
+                onBack = { navController.popBackStack() }
             )
         }
-        return
-    }
-
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    Log.d("ONETV_MOVIE", "ViewModel获取成功，开始收集UI状态")
-
-    Log.d("ONETV_MOVIE", "UI状态: isLoading=${uiState.isLoading}, error=${uiState.error}")
-
-    MovieHomeContent(
-        navController = navController,
-        uiState = uiState,
-        onRefresh = { viewModel.refresh() },
-        onCategoryClick = { category ->
-            navController.navigate(MovieRoutes.category(category.typeId, uiState.currentSite?.key))
-        },
-        onMovieClick = { movie ->
-            navController.navigate(MovieRoutes.detail(movie.vodId, movie.siteKey))
-        },
-        onSiteSwitch = { siteKey ->
-            viewModel.switchSite(siteKey)
-        },
-        onRouteSelected = { route ->
-            viewModel.selectRoute(route)
-        },
-        onShowRouteSelector = {
-            viewModel.showRouteSelector()
-        },
-        onHideRouteSelector = {
-            viewModel.hideRouteSelector()
+        uiState.isStoreHouseIndex -> {
+            // 仓库索引模式
+            StoreHouseScreen(
+                uiState = uiState,
+                onRouteSelect = { route -> viewModel.selectRoute(route) },
+                onShowSelector = { viewModel.showRouteSelector() },
+                onHideSelector = { viewModel.hideRouteSelector() }
+            )
         }
-    )
+        else -> {
+            // 正常首页模式
+            HomeContent(
+                uiState = uiState,
+                // searchResult = searchResult,
+                // homeContent = homeContent,
+                onRefresh = { viewModel.refresh() },
+                onCategoryClick = { category ->
+                    navController.navigate("category/${category.typeId}")
+                },
+                onMovieClick = { movie ->
+                    navController.navigate("detail/${movie.vodId}/${movie.key}")
+                },
+                onSearchClick = {
+                    navController.navigate("search")
+                },
+                onSettingsClick = {
+                    navController.navigate("settings")
+                }
+            )
+        }
+    }
 }
 
 @Composable
-private fun MovieHomeContent(
-    navController: NavController,
+private fun HomeContent(
     uiState: MovieUiState,
+    // searchResult: Any?, // FongMi_TV的搜索结果
+    // homeContent: Any?, // FongMi_TV的首页内容
     onRefresh: () -> Unit,
-    onCategoryClick: (VodClass) -> Unit,
-    onMovieClick: (VodItem) -> Unit,
-    onSiteSwitch: (String) -> Unit,
-    onRouteSelected: (VodConfigUrl) -> Unit,
-    onShowRouteSelector: () -> Unit,
-    onHideRouteSelector: () -> Unit
+    onCategoryClick: (Class) -> Unit,
+    onMovieClick: (Vod) -> Unit,
+    onSearchClick: () -> Unit,
+    onSettingsClick: () -> Unit
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Black)
+            .background(MaterialTheme.colorScheme.background)
     ) {
         // 顶部导航栏
-        MovieTopBar(
-            title = "影视点播",
-            currentSite = uiState.currentSite,
-            availableSites = uiState.availableSites,
-            showSiteSelector = !uiState.isStoreHouseIndex, // TVBOX标准：仓库索引状态下不显示站点选择器
-            // TVBOX仓库线路选择
-            isStoreHouseIndex = uiState.isStoreHouseIndex,
-            availableRoutes = uiState.availableRoutes,
-            storeHouseName = uiState.storeHouseName,
-            onBackToLiveClick = {
-                // 返回直播，回到上一次播放的频道
-                Log.d("ONETV_MOVIE", "用户点击返回直播按钮")
-                try {
-                    navController.navigate("main") {
-                        // 清除点播页面的回退栈，避免循环导航
-                        popUpTo("movie_home") { inclusive = true }
-                        // 确保不会重复添加main页面
-                        launchSingleTop = true
-                    }
-                    Log.d("ONETV_MOVIE", "成功导航回直播页面，将恢复上一次播放的频道")
-                } catch (e: Exception) {
-                    Log.e("ONETV_MOVIE", "返回直播页面失败", e)
+        TopAppBar(
+            title = { Text("OneTV 影视") },
+            actions = {
+                IconButton(onClick = onSearchClick) {
+                    Icon(Icons.Default.Search, contentDescription = "搜索")
                 }
-            },
-            onSearchClick = {
-                navController.navigate(MovieRoutes.SEARCH)
-            },
-            onSettingsClick = {
-                navController.navigate(MovieRoutes.SETTINGS)
-            },
-            onSiteSwitch = onSiteSwitch,
-            onRouteSwitch = onRouteSelected
+                IconButton(onClick = onSettingsClick) {
+                    Icon(Icons.Default.Settings, contentDescription = "设置")
+                }
+            }
         )
-        
-        // 处理错误状态
-        if (uiState.error != null) {
-            // 错误状态
-            ErrorContent(
-                error = uiState.error,
-                onRetry = onRefresh
-            )
-        } else {
-            // 检查是否有任何内容
-            val hasAnyContent = uiState.recommendMovies.isNotEmpty() ||
-                               uiState.quickCategories.isNotEmpty() ||
-                               uiState.homeCategories.isNotEmpty()
 
-            if (hasAnyContent) {
-                // 主要内容
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.spacedBy(16.dp),
-                    contentPadding = PaddingValues(16.dp)
-                ) {
-                    // 推荐内容区域
-                    if (uiState.recommendMovies.isNotEmpty()) {
-                        item {
-                            RecommendSection(
-                                movies = uiState.recommendMovies,
-                                onMovieClick = onMovieClick
-                            )
-                        }
-                    }
+        // 主要内容区域
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            // 推荐内容轮播
+            if (uiState.recommendMovies.isNotEmpty()) {
+                item {
+                    RecommendCarousel(
+                        movies = uiState.recommendMovies,
+                        onMovieClick = onMovieClick
+                    )
+                }
+            }
 
-                    // 快速分类导航
-                    if (uiState.quickCategories.isNotEmpty()) {
-                        item {
-                            QuickCategoryGrid(
-                                categories = uiState.quickCategories,
-                                onCategoryClick = onCategoryClick
-                            )
-                        }
-                    }
+            // 分类网格
+            if (uiState.categories.isNotEmpty()) {
+                item {
+                    CategoryGrid(
+                        categories = uiState.categories,
+                        onCategoryClick = onCategoryClick
+                    )
+                }
+            }
 
-                    // 分类内容区域
-                    items(uiState.homeCategories) { categorySection ->
-                        HomeCategorySection(
-                            section = categorySection,
-                            onMovieClick = onMovieClick,
-                            onMoreClick = {
-                                navController.navigate(
-                                    MovieRoutes.category(categorySection.categoryId, categorySection.siteKey)
-                                )
+            // 各分类内容
+            items(uiState.homeCategories) { categorySection ->
+                CategorySection(
+                    section = categorySection,
+                    onMovieClick = onMovieClick,
+                    onMoreClick = {
+                        onCategoryClick(
+                            Class().apply {
+                                typeId = categorySection.categoryId
+                                typeName = categorySection.categoryName
                             }
                         )
                     }
-                }
-            } else {
-                // 显示空状态或默认内容（包括加载状态）
-                EmptyStateContent(
-                    onRefresh = onRefresh,
-                    navController = navController,
-                    isLoading = uiState.isLoading
                 )
             }
         }
 
-        // 线路选择器
-        if (uiState.showRouteSelector && uiState.isStoreHouseIndex) {
-            RouteSelector(
-                storeHouseName = uiState.storeHouseName,
-                availableRoutes = uiState.availableRoutes,
-                onRouteSelected = onRouteSelected,
-                onDismiss = onHideRouteSelector
-            )
+    }
+}
+
+// ✅ 按照指南添加必要的辅助Composable函数
+
+@Composable
+private fun LoadingScreen(message: String) {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            CircularProgressIndicator()
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(text = message)
         }
     }
 }
 
-/**
- * 顶部导航栏
- */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun MovieTopBar(
-    title: String,
-    currentSite: VodSite?,
-    availableSites: List<VodSite>,
-    showSiteSelector: Boolean = true, // TVBOX标准：控制是否显示站点选择器
-    // TVBOX仓库线路选择参数
-    isStoreHouseIndex: Boolean = false,
-    availableRoutes: List<VodConfigUrl> = emptyList(),
-    storeHouseName: String = "",
-    onBackToLiveClick: () -> Unit,
-    onSearchClick: () -> Unit,
-    onSettingsClick: () -> Unit,
-    onSiteSwitch: (String) -> Unit,
-    onRouteSwitch: (VodConfigUrl) -> Unit = {}
+private fun ErrorScreen(
+    error: String,
+    onRetry: () -> Unit,
+    onBack: () -> Unit
 ) {
-    var showSiteSelectorDialog by remember { mutableStateOf(false) }
-    var showRouteSelectorDialog by remember { mutableStateOf(false) }
-
-    TopAppBar(
-        title = {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             Text(
-                text = title,
-                color = Color.White,
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
+                text = error,
+                color = MaterialTheme.colorScheme.error,
+                textAlign = TextAlign.Center
             )
-        },
-        navigationIcon = {
-            // 返回直播按钮 - 返回上一次播放的频道
-            IconButton(
-                onClick = onBackToLiveClick,
-                modifier = Modifier.padding(horizontal = 4.dp)
+            Spacer(modifier = Modifier.height(16.dp))
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(4.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Tv,
-                        contentDescription = "返回直播",
-                        tint = Color.White
-                    )
-                    Text(
-                        text = "直播",
-                        color = Color.White,
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Medium
-                    )
+                Button(onClick = onRetry) {
+                    Text("重试")
+                }
+                OutlinedButton(onClick = onBack) {
+                    Text("返回")
                 }
             }
-        },
-        actions = {
-            // 线路信息显示 - 移动到右上角选择图标左边
-            if (isStoreHouseIndex && storeHouseName.isNotEmpty()) {
-                // 仓库索引状态：显示仓库名称
-                Text(
-                    text = storeHouseName,
-                    color = Color.Gray,
-                    fontSize = 12.sp,
-                    modifier = Modifier.padding(end = 8.dp)
-                )
-            } else if (currentSite != null) {
-                // 非仓库索引状态：显示当前站点
-                Text(
-                    text = "当前站点: ${currentSite.name}",
-                    color = Color.Gray,
-                    fontSize = 12.sp,
-                    modifier = Modifier.padding(end = 8.dp)
-                )
-            }
-
-            // 仓库选择按钮 - 仅在仓库索引状态下显示
-            if (isStoreHouseIndex && availableRoutes.isNotEmpty()) {
-                IconButton(
-                    onClick = {
-                        Log.d("ONETV_MOVIE", "仓库选择按钮被点击，可用仓库线路数: ${availableRoutes.size}")
-                        availableRoutes.forEach { route ->
-                            Log.d("ONETV_MOVIE", "仓库线路: ${route.name}")
-                        }
-                        showRouteSelectorDialog = true
-                    }
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.AccountTree, // 使用树形图标表示仓库
-                        contentDescription = "选择仓库线路",
-                        tint = Color.White
-                    )
-                }
-            }
-
-            // 站点选择按钮 - 根据状态显示
-            if (isStoreHouseIndex && availableSites.isNotEmpty()) {
-                // 仓库索引状态下：显示站点选择器
-                IconButton(
-                    onClick = {
-                        Log.d("ONETV_MOVIE", "站点选择按钮被点击，可用站点数: ${availableSites.size}")
-                        availableSites.forEach { site ->
-                            Log.d("ONETV_MOVIE", "站点: ${site.name} (${site.key})")
-                        }
-                        showSiteSelectorDialog = true
-                    }
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Tune,
-                        contentDescription = "选择站点",
-                        tint = Color.White
-                    )
-                }
-            } else if (showSiteSelector && availableSites.isNotEmpty()) {
-                // 非仓库索引状态：显示站点选择器
-                IconButton(
-                    onClick = {
-                        Log.d("ONETV_MOVIE", "站点选择按钮被点击，可用站点数: ${availableSites.size}")
-                        availableSites.forEach { site ->
-                            Log.d("ONETV_MOVIE", "站点: ${site.name} (${site.key})")
-                        }
-                        showSiteSelectorDialog = true
-                    }
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Tune,
-                        contentDescription = "选择站点",
-                        tint = Color.White
-                    )
-                }
-            }
-
-            IconButton(onClick = onSearchClick) {
-                Icon(
-                    imageVector = Icons.Default.Search,
-                    contentDescription = "搜索",
-                    tint = Color.White
-                )
-            }
-            IconButton(onClick = onSettingsClick) {
-                Icon(
-                    imageVector = Icons.Default.Settings,
-                    contentDescription = "设置",
-                    tint = Color.White
-                )
-            }
-        },
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Color.Black
-        )
-    )
-
-    // 仓库线路选择器 - 显示24条仓库线路供用户选择
-    if (showRouteSelectorDialog && isStoreHouseIndex) {
-        RouteSelector(
-            availableRoutes = availableRoutes,
-            storeHouseName = storeHouseName,
-            onRouteSelected = { route ->
-                onRouteSwitch(route)
-                showRouteSelectorDialog = false
-            },
-            onDismiss = { showRouteSelectorDialog = false }
-        )
-    }
-
-    // 站点选择器 - 显示当前仓库线路下的具体站点
-    if (showSiteSelectorDialog) {
-        SiteSelector(
-            availableSites = availableSites,
-            currentSite = currentSite,
-            onSiteSelected = { site ->
-                onSiteSwitch(site.key)
-                showSiteSelectorDialog = false
-            },
-            onDismiss = { showSiteSelectorDialog = false }
-        )
+        }
     }
 }
 
-/**
- * 推荐内容区域
- */
 @Composable
-private fun RecommendSection(
-    movies: List<VodItem>,
-    onMovieClick: (VodItem) -> Unit
+private fun StoreHouseScreen(
+    uiState: MovieUiState,
+    onRouteSelect: (VodConfigUrl) -> Unit,
+    onShowSelector: () -> Unit,
+    onHideSelector: () -> Unit
+) {
+    // 仓库索引界面的实现
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Text("仓库索引模式 - 待实现")
+    }
+}
+
+@Composable
+private fun RecommendCarousel(
+    movies: List<Vod>,
+    onMovieClick: (Vod) -> Unit
 ) {
     Column {
         Text(
             text = "推荐内容",
-            color = Color.White,
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Bold,
+            style = MaterialTheme.typography.titleLarge,
             modifier = Modifier.padding(bottom = 12.dp)
         )
-        
+
         LazyRow(
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
@@ -466,15 +291,39 @@ private fun RecommendSection(
     }
 }
 
-
-
-/**
- * 首页分类区域
- */
 @Composable
-private fun HomeCategorySection(
+private fun CategoryGrid(
+    categories: List<Class>,
+    onCategoryClick: (Class) -> Unit
+) {
+    Column {
+        Text(
+            text = "分类",
+            style = MaterialTheme.typography.titleLarge,
+            modifier = Modifier.padding(bottom = 12.dp)
+        )
+
+        LazyRow(
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            items(categories) { category ->
+                Card(
+                    modifier = Modifier.clickable { onCategoryClick(category) }
+                ) {
+                    Text(
+                        text = category.typeName ?: "未知分类",
+                        modifier = Modifier.padding(12.dp)
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun CategorySection(
     section: HomeCategorySection,
-    onMovieClick: (VodItem) -> Unit,
+    onMovieClick: (Vod) -> Unit,
     onMoreClick: () -> Unit
 ) {
     Column {
@@ -485,19 +334,14 @@ private fun HomeCategorySection(
         ) {
             Text(
                 text = section.categoryName,
-                color = Color.White,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold
+                style = MaterialTheme.typography.titleLarge
             )
-            
+
             TextButton(onClick = onMoreClick) {
-                Text(
-                    text = "更多",
-                    color = Color.Gray
-                )
+                Text("更多")
             }
         }
-        
+
         LazyRow(
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
@@ -511,305 +355,5 @@ private fun HomeCategorySection(
     }
 }
 
-/**
- * 空状态内容组件
- */
-@Composable
-private fun EmptyStateContent(
-    onRefresh: () -> Unit,
-    navController: NavController,
-    isLoading: Boolean = false
-) {
-    // 动态加载文本效果
-    var loadingText by remember { mutableStateOf("正在加载影视资源") }
-    var dotCount by remember { mutableStateOf(0) }
 
-    // 动态更新加载文本（仅在加载时）
-    LaunchedEffect(isLoading) {
-        if (isLoading) {
-            while (isLoading) {
-                kotlinx.coroutines.delay(500)
-                dotCount = (dotCount + 1) % 4
-                loadingText = "正在加载影视资源" + ".".repeat(dotCount)
-            }
-        } else {
-            loadingText = "暂无影视资源"
-        }
-    }
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(32.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        // 图标
-        Icon(
-            imageVector = Icons.Default.Tv,
-            contentDescription = null,
-            tint = Color.Gray,
-            modifier = Modifier.size(64.dp)
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Text(
-            text = "欢迎使用OneTV点播",
-            color = Color.White,
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        // 加载状态区域
-        Row(
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            // 在加载时显示小的进度指示器
-            if (isLoading) {
-                CircularProgressIndicator(
-                    modifier = Modifier.size(16.dp),
-                    strokeWidth = 2.dp,
-                    color = Color.Gray
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-            }
-
-            // 动态加载文本
-            Text(
-                text = loadingText,
-                color = Color.Gray,
-                fontSize = 14.sp,
-                textAlign = TextAlign.Center
-            )
-        }
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        // 操作按钮
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            Button(
-                onClick = onRefresh,
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.White,
-                    contentColor = Color.Black
-                )
-            ) {
-                Text("刷新")
-            }
-
-            Button(
-                onClick = {
-                    navController.navigate(MovieRoutes.SETTINGS)
-                },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Transparent,
-                    contentColor = Color.White
-                ),
-                border = ButtonDefaults.outlinedButtonBorder(enabled = true)
-            ) {
-                Text("设置")
-            }
-        }
-
-        Spacer(modifier = Modifier.height(32.dp))
-
-        // 功能说明
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = "功能特色",
-                color = Color.White,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Medium
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            val features = listOf(
-                "🎬 海量影视资源",
-                "🔍 智能搜索推荐",
-                "📱 多设备同步",
-                "⚡ 高清流畅播放"
-            )
-
-            features.forEach { feature ->
-                Text(
-                    text = feature,
-                    color = Color.Gray,
-                    fontSize = 14.sp,
-                    modifier = Modifier.padding(vertical = 2.dp)
-                )
-            }
-        }
-    }
-}
-
-/**
- * 错误内容
- */
-@Composable
-private fun ErrorContent(
-    error: String,
-    onRetry: () -> Unit
-) {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text(
-            text = error,
-            color = Color.White,
-            fontSize = 16.sp
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Button(onClick = onRetry) {
-            Text("重试")
-        }
-    }
-}
-
-/**
- * 站点选择器
- */
-@Composable
-private fun SiteSelector(
-    availableSites: List<VodSite>,
-    currentSite: VodSite?,
-    onSiteSelected: (VodSite) -> Unit,
-    onDismiss: () -> Unit
-) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.95f)
-        )
-    ) {
-        Column(
-            modifier = Modifier.padding(16.dp)
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "选择线路",
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
-                )
-
-                IconButton(
-                    onClick = onDismiss
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Close,
-                        contentDescription = "关闭"
-                    )
-                }
-            }
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            if (availableSites.isEmpty()) {
-                // 没有站点时显示调试信息
-                Text(
-                    text = "暂无可用线路\n当前站点: ${currentSite?.name ?: "未知"}\n站点数量: ${availableSites.size}",
-                    color = Color.Gray,
-                    fontSize = 14.sp,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth().padding(16.dp)
-                )
-            } else {
-                LazyColumn {
-                    items(availableSites) { site ->
-                        SiteItem(
-                            site = site,
-                            isSelected = site.key == currentSite?.key,
-                            onClick = { onSiteSelected(site) }
-                        )
-                    }
-                }
-            }
-        }
-    }
-}
-
-/**
- * 站点项目
- */
-@Composable
-private fun SiteItem(
-    site: VodSite,
-    isSelected: Boolean,
-    onClick: () -> Unit
-) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 4.dp)
-            .clickable { onClick() },
-        colors = CardDefaults.cardColors(
-            containerColor = if (isSelected)
-                MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)
-            else
-                MaterialTheme.colorScheme.surfaceVariant
-        )
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Column(
-                modifier = Modifier.weight(1f)
-            ) {
-                Text(
-                    text = site.name,
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 16.sp
-                )
-                Text(
-                    text = "站点类型: ${getSiteTypeText(site.type)}",
-                    color = Color.Gray,
-                    fontSize = 12.sp
-                )
-            }
-
-            if (isSelected) {
-                Icon(
-                    imageVector = Icons.Default.Check,
-                    contentDescription = "已选择",
-                    tint = MaterialTheme.colorScheme.primary
-                )
-            }
-        }
-    }
-}
-
-/**
- * 获取站点类型文本
- */
-private fun getSiteTypeText(type: Int): String {
-    return when (type) {
-        0 -> "爬虫"
-        1 -> "CMS"
-        3 -> "APP"
-        4 -> "Alist"
-        else -> "未知"
-    }
-}
 

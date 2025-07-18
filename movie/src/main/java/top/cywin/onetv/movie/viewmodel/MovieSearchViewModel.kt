@@ -2,28 +2,35 @@ package top.cywin.onetv.movie.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-// KotlinPoet专业重构 - 移除Hilt import
-// import dagger.hilt.onetv.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import top.cywin.onetv.movie.data.models.*
 import top.cywin.onetv.movie.MovieApp
-import top.cywin.onetv.movie.data.VodConfigManager
-// KotlinPoet专业重构 - 移除Inject import
-// import javax.inject.Inject
+import top.cywin.onetv.movie.bean.Vod
+import android.util.Log
 
 /**
- * 搜索页面ViewModel
- * KotlinPoet专业重构 - 使用MovieApp单例管理依赖
+ * 搜索页面UI状态数据类
  */
-// @HiltViewModel
-class MovieSearchViewModel(
-    private val configManager: VodConfigManager
-) : ViewModel() {
+data class SearchUiState(
+    val isLoading: Boolean = false,
+    val error: String? = null,
+    val keyword: String = "",
+    val searchResults: List<Vod> = emptyList(),
+    val searchHistory: List<String> = emptyList(),
+    val hotKeywords: List<String> = emptyList(),
+    val currentPage: Int = 1,
+    val hasMore: Boolean = true
+)
 
-    // 通过MovieApp访问适配器系统
+/**
+ * OneTV Movie搜索页面ViewModel
+ * 通过适配器系统调用FongMi_TV解析功能，不参与线路接口解析
+ */
+class MovieSearchViewModel : ViewModel() {
+
+    // ✅ 通过MovieApp访问适配器系统 - 不参与解析逻辑
     private val movieApp = MovieApp.getInstance()
     private val repositoryAdapter = movieApp.repositoryAdapter
     private val siteViewModel = movieApp.siteViewModel
@@ -31,91 +38,31 @@ class MovieSearchViewModel(
     private val _uiState = MutableStateFlow(SearchUiState())
     val uiState: StateFlow<SearchUiState> = _uiState.asStateFlow()
 
-    init {
-        loadSearchData()
-    }
-
     /**
-     * 加载搜索页面数据
-     */
-    private fun loadSearchData() {
-        viewModelScope.launch {
-            try {
-                // 加载搜索历史
-                val searchHistory = getSearchHistory()
-                
-                // 加载热门关键词
-                val hotKeywords = getHotKeywords()
-
-                _uiState.value = _uiState.value.copy(
-                    searchHistory = searchHistory,
-                    hotKeywords = hotKeywords
-                )
-
-            } catch (e: Exception) {
-                _uiState.value = _uiState.value.copy(
-                    error = e.message ?: "数据加载失败"
-                )
-            }
-        }
-    }
-
-    /**
-     * 执行搜索
+     * 执行搜索 - 通过适配器调用FongMi_TV解析系统
      */
     fun search(keyword: String, page: Int = 1) {
         if (keyword.isBlank()) return
 
         viewModelScope.launch {
             try {
-                if (page == 1) {
-                    _uiState.value = _uiState.value.copy(
-                        isLoading = true,
-                        keyword = keyword,
-                        searchResults = emptyList(),
-                        currentPage = 1,
-                        error = null
-                    )
-                } else {
-                    _uiState.value = _uiState.value.copy(isLoadingMore = true)
-                }
-
-                // 获取当前站点
-                val currentSite = configManager.getCurrentSite()
-                if (currentSite == null) {
-                    throw Exception("未找到可用站点")
-                }
-
-                // 执行搜索
-                // 使用FongMi_TV的RepositoryAdapter搜索内容
-                repositoryAdapter.searchContent(keyword, currentSite.key)
-
-                // 临时处理，实际数据通过SiteViewModel观察获取
-                val response = VodListResponse(
-                    code = 1,
-                    msg = "",
-                    list = emptyList(),
-                    classes = emptyList(),
-                    filters = emptyMap(),
-                    page = page,
-                    pagecount = 1,
-                    limit = 20,
-                    total = 0
+                _uiState.value = _uiState.value.copy(
+                    isLoading = true,
+                    keyword = keyword,
+                    error = null
                 )
-                val newResults = response.list
-                val allResults = if (page == 1) {
-                    newResults
-                } else {
-                    _uiState.value.searchResults + newResults
-                }
+
+                Log.d("ONETV_MOVIE", "🔍 开始搜索: $keyword")
+
+                // ✅ 通过适配器搜索内容 - 解析逻辑在FongMi_TV中
+                repositoryAdapter.searchContent(keyword, "")
+
+                // 实际数据通过SiteViewModel观察获取
+                Log.d("ONETV_MOVIE", "✅ 搜索请求已发送: $keyword")
 
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
-                    isLoadingMore = false,
-                    searchResults = allResults,
                     currentPage = page,
-                    totalPages = response.pagecount ?: 1,
-                    hasMore = page < (response.pagecount ?: 1),
                     error = null
                 )
 
@@ -123,10 +70,10 @@ class MovieSearchViewModel(
                 saveSearchHistory(keyword)
 
             } catch (e: Exception) {
+                Log.e("ONETV_MOVIE", "搜索失败", e)
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
-                    isLoadingMore = false,
-                    error = e.message ?: "搜索失败"
+                    error = "搜索失败: ${e.message}"
                 )
             }
         }
@@ -137,7 +84,7 @@ class MovieSearchViewModel(
      */
     fun loadMore() {
         val currentState = _uiState.value
-        if (currentState.hasMore && !currentState.isLoadingMore && currentState.keyword.isNotEmpty()) {
+        if (currentState.hasMore && currentState.keyword.isNotEmpty()) {
             search(currentState.keyword, currentState.currentPage + 1)
         }
     }
@@ -150,55 +97,24 @@ class MovieSearchViewModel(
             keyword = "",
             searchResults = emptyList(),
             currentPage = 1,
-            totalPages = 1,
             hasMore = false,
             error = null
         )
     }
 
     /**
-     * 获取搜索历史
-     */
-    private suspend fun getSearchHistory(): List<String> {
-        return try {
-            // TODO: 从本地存储获取搜索历史
-            listOf("复仇者联盟", "钢铁侠", "蜘蛛侠", "黑寡妇", "雷神")
-        } catch (e: Exception) {
-            emptyList()
-        }
-    }
-
-    /**
-     * 获取热门关键词
-     */
-    private suspend fun getHotKeywords(): List<String> {
-        return try {
-            val currentSite = configManager.getCurrentSite()
-            if (currentSite != null) {
-                // TODO: 从API获取热门关键词
-                listOf("漫威", "DC", "动作", "科幻", "喜剧", "爱情", "悬疑", "恐怖")
-            } else {
-                emptyList()
-            }
-        } catch (e: Exception) {
-            listOf("热门电影", "最新电视剧", "经典动漫", "纪录片")
-        }
-    }
-
-    /**
      * 保存搜索历史
      */
-    private suspend fun saveSearchHistory(keyword: String) {
+    private fun saveSearchHistory(keyword: String) {
         try {
-            // TODO: 保存搜索历史到本地存储
             val currentHistory = _uiState.value.searchHistory.toMutableList()
-            
+
             // 移除重复项
             currentHistory.remove(keyword)
-            
+
             // 添加到开头
             currentHistory.add(0, keyword)
-            
+
             // 限制历史记录数量
             if (currentHistory.size > 20) {
                 currentHistory.removeAt(currentHistory.size - 1)
@@ -209,33 +125,8 @@ class MovieSearchViewModel(
             )
 
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.e("ONETV_MOVIE", "保存搜索历史失败", e)
         }
-    }
-
-    /**
-     * 删除搜索历史项
-     */
-    fun removeSearchHistory(keyword: String) {
-        val currentHistory = _uiState.value.searchHistory.toMutableList()
-        currentHistory.remove(keyword)
-        
-        _uiState.value = _uiState.value.copy(
-            searchHistory = currentHistory
-        )
-        
-        // TODO: 同步到本地存储
-    }
-
-    /**
-     * 清空搜索历史
-     */
-    fun clearSearchHistory() {
-        _uiState.value = _uiState.value.copy(
-            searchHistory = emptyList()
-        )
-        
-        // TODO: 清空本地存储
     }
 
     /**
@@ -243,20 +134,5 @@ class MovieSearchViewModel(
      */
     fun clearError() {
         _uiState.value = _uiState.value.copy(error = null)
-    }
-
-    /**
-     * 获取搜索建议
-     */
-    fun getSearchSuggestions(query: String): List<String> {
-        if (query.isBlank()) return emptyList()
-        
-        val history = _uiState.value.searchHistory
-        val hotKeywords = _uiState.value.hotKeywords
-        
-        return (history + hotKeywords)
-            .filter { it.contains(query, ignoreCase = true) }
-            .distinct()
-            .take(5)
     }
 }
