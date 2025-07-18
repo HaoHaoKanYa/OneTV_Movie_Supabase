@@ -43,9 +43,7 @@ fun MovieDetailScreen(
     siteKey: String = "",
     navController: NavController,
     viewModel: MovieDetailViewModel = viewModel {
-        MovieDetailViewModel(
-            repository = top.cywin.onetv.movie.MovieApp.vodRepository
-        )
+        MovieDetailViewModel()
     }
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()

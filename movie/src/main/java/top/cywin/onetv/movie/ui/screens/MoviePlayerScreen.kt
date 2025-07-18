@@ -58,10 +58,7 @@ fun MoviePlayerScreen(
     navController: NavController,
     viewModel: MoviePlayerViewModel = viewModel {
         MoviePlayerViewModel(
-            vodRepository = top.cywin.onetv.movie.MovieApp.vodRepository,
-            historyRepository = top.cywin.onetv.movie.MovieApp.watchHistoryRepository,
-            lineManager = top.cywin.onetv.movie.MovieApp.lineManager,
-            parseManager = top.cywin.onetv.movie.MovieApp.parseManager
+            historyRepository = top.cywin.onetv.movie.MovieApp.getInstance().watchHistoryRepository
         )
     }
 ) {

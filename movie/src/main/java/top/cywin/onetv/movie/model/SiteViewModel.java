@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import top.cywin.onetv.movie.App;
-import top.cywin.onetv.movie.Constant;
+import top.cywin.onetv.movie.Constants;
 import top.cywin.onetv.movie.R;
 import top.cywin.onetv.movie.api.config.VodConfig;
 import top.cywin.onetv.movie.bean.Episode;
@@ -274,7 +274,7 @@ public class SiteViewModel extends ViewModel {
         executor.execute(() -> {
             try {
                 if (Thread.interrupted()) return;
-                result.postValue(executor.submit(callable).get(Constant.TIMEOUT_VOD, TimeUnit.MILLISECONDS));
+                result.postValue(executor.submit(callable).get(Constants.TIMEOUT_VOD, TimeUnit.MILLISECONDS));
             } catch (Throwable e) {
                 if (e instanceof InterruptedException || Thread.interrupted()) return;
                 if (e.getCause() instanceof ExtractException) result.postValue(Result.error(e.getCause().getMessage()));

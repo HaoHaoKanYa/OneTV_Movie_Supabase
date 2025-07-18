@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import top.cywin.onetv.movie.data.models.*
-import top.cywin.onetv.movie.data.repository.VodRepository
+import top.cywin.onetv.movie.MovieApp
 // KotlinPoet专业重构 - 移除Inject import
 // import javax.inject.Inject
 
@@ -18,9 +18,13 @@ import top.cywin.onetv.movie.data.repository.VodRepository
  * KotlinPoet专业重构 - 使用MovieApp单例管理依赖
  */
 // @HiltViewModel
-class MovieDetailViewModel(
-    private val repository: VodRepository
-) : ViewModel() {
+class MovieDetailViewModel() : ViewModel() {
+
+    // 通过MovieApp访问适配器系统
+    private val movieApp = MovieApp.getInstance()
+    private val repositoryAdapter = movieApp.repositoryAdapter
+    private val siteViewModel = movieApp.siteViewModel
+    private val vodConfig = movieApp.vodConfig
 
     private val _uiState = MutableStateFlow(DetailUiState())
     val uiState: StateFlow<DetailUiState> = _uiState.asStateFlow()

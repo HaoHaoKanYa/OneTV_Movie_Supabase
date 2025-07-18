@@ -32,9 +32,8 @@ fun MovieSettingsScreen(
     navController: NavController,
     viewModel: MovieSettingsViewModel = viewModel {
         MovieSettingsViewModel(
-            repository = top.cywin.onetv.movie.MovieApp.vodRepository,
-            configManager = top.cywin.onetv.movie.MovieApp.vodConfigManager,
-            cacheManager = top.cywin.onetv.movie.MovieApp.vodCacheManager
+            configManager = top.cywin.onetv.movie.MovieApp.getInstance().vodConfigManager,
+            cacheManager = top.cywin.onetv.movie.MovieApp.getInstance().vodCacheManager
         )
     }
 ) {

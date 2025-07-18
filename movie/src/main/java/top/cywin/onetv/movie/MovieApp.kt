@@ -6,18 +6,21 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import top.cywin.onetv.movie.codegen.MovieCodeGenerator
 import top.cywin.onetv.movie.data.VodConfigManager
-import top.cywin.onetv.movie.data.api.VodApiService
 import top.cywin.onetv.movie.data.cache.MovieCacheManager
 import top.cywin.onetv.movie.data.cache.VodCacheManager
 import top.cywin.onetv.movie.data.config.AppConfigManager
 import top.cywin.onetv.movie.data.database.MovieDatabase
 import top.cywin.onetv.movie.data.models.VodConfigResponse
-import top.cywin.onetv.movie.data.parser.LineManager
-import top.cywin.onetv.movie.data.parser.ParseManager
-import top.cywin.onetv.movie.data.repository.VodRepository
 import top.cywin.onetv.movie.data.repository.WatchHistoryRepository
 import top.cywin.onetv.movie.data.repository.FavoriteRepository
 import top.cywin.onetv.movie.data.cloud.CloudDriveManager
+import top.cywin.onetv.movie.adapter.IntegrationManager
+import top.cywin.onetv.movie.adapter.RepositoryAdapter
+import top.cywin.onetv.movie.adapter.UIAdapter
+import top.cywin.onetv.movie.adapter.ViewModelAdapter
+import top.cywin.onetv.movie.api.config.VodConfig
+import top.cywin.onetv.movie.model.SiteViewModel
+import top.cywin.onetv.movie.model.LiveViewModel
 import java.io.File
 
 /**
@@ -65,14 +68,41 @@ object MovieApp {
         VodConfigManager(cacheManager)
     }
 
-    val parseManager by lazy {
-        Log.d(TAG, "🏗️ 创建ParseManager")
-        ParseManager()
+    // ========== 适配器系统 ==========
+    val integrationManager by lazy {
+        Log.d(TAG, "🏗️ 创建IntegrationManager")
+        IntegrationManager.getInstance()
     }
 
-    val lineManager by lazy {
-        Log.d(TAG, "🏗️ 创建LineManager")
-        LineManager(parseManager)
+    val repositoryAdapter by lazy {
+        Log.d(TAG, "🏗️ 创建RepositoryAdapter")
+        RepositoryAdapter()
+    }
+
+    val uiAdapter by lazy {
+        Log.d(TAG, "🏗️ 创建UIAdapter")
+        UIAdapter(applicationContext)
+    }
+
+    val viewModelAdapter by lazy {
+        Log.d(TAG, "🏗️ 创建ViewModelAdapter")
+        ViewModelAdapter(null) // 生命周期在使用时绑定
+    }
+
+    // ========== FongMi_TV核心组件 ==========
+    val vodConfig by lazy {
+        Log.d(TAG, "🏗️ 获取VodConfig")
+        VodConfig.get()
+    }
+
+    val siteViewModel by lazy {
+        Log.d(TAG, "🏗️ 获取SiteViewModel")
+        viewModelAdapter.siteViewModel
+    }
+
+    val liveViewModel by lazy {
+        Log.d(TAG, "🏗️ 获取LiveViewModel")
+        viewModelAdapter.liveViewModel
     }
 
     val cloudDriveManager by lazy {
@@ -86,17 +116,23 @@ object MovieApp {
         MovieDatabase.getDatabase(applicationContext)
     }
 
-    // ========== API服务 ==========
-    val configApiService by lazy {
-        Log.d(TAG, "🏗️ 创建配置API服务")
-        // 确保AppConfigManager已初始化
-        ensureAppConfigInitialized()
-        VodApiService.createConfigService(appConfigManager)
-    }
+    // ========== 初始化适配器系统 ==========
+    private fun initializeAdapters() {
+        Log.d(TAG, "🏗️ 初始化适配器系统")
 
-    val siteApiService by lazy {
-        Log.d(TAG, "🏗️ 创建站点API服务")
-        VodApiService.createSiteService()
+        // 1. 初始化Repository适配器（连接FongMi_TV数据层）
+        repositoryAdapter.reconnectRepositories()
+
+        // 2. 初始化ViewModel适配器（连接数据观察）
+        viewModelAdapter.reconnectViewModels()
+
+        // 3. 初始化UI适配器（适配现有UI）
+        uiAdapter.adaptExistingUI()
+
+        // 4. 初始化集成管理器（统一管理）
+        // integrationManager.initialize(applicationContext, null)
+
+        Log.d(TAG, "✅ 适配器系统初始化完成")
     }
 
     // ========== 缓存管理器 ==========
@@ -105,20 +141,8 @@ object MovieApp {
         VodCacheManager(applicationContext)
     }
 
-    // ========== 仓库层 ==========
-    val vodRepository by lazy {
-        Log.d(TAG, "🏗️ 创建VodRepository")
-        VodRepository(
-            context = applicationContext,
-            appConfigManager = appConfigManager,
-            cacheManager = cacheManager,
-            vodCacheManager = vodCacheManager,
-            configManager = vodConfigManager,
-            parseManager = parseManager,
-            apiService = configApiService, // 配置API服务
-            siteApiService = siteApiService // 站点API服务
-        )
-    }
+    // ========== 仓库层（通过适配器访问） ==========
+    // 注意：不再直接创建Repository，而是通过RepositoryAdapter访问FongMi_TV功能
 
     val watchHistoryRepository by lazy {
         Log.d(TAG, "🏗️ 创建WatchHistoryRepository")
@@ -193,11 +217,14 @@ object MovieApp {
      */
     private fun initializeBasicComponents() {
         Log.d(TAG, "🏗️ 初始化基础组件...")
-        
+
         // 触发懒加载，确保核心组件可用
         appConfigManager
         vodConfigManager
-        
+
+        // 初始化适配器系统
+        initializeAdapters()
+
         Log.d(TAG, "✅ 基础组件初始化完成")
     }
     

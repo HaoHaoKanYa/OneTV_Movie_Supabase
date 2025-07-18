@@ -55,8 +55,7 @@ fun MovieHomeScreen(
     navController: NavController,
     viewModel: MovieViewModel = viewModel {
         MovieViewModel(
-            repository = top.cywin.onetv.movie.MovieApp.vodRepository,
-            configManager = top.cywin.onetv.movie.MovieApp.vodConfigManager
+            configManager = top.cywin.onetv.movie.MovieApp.getInstance().vodConfigManager
         )
     }
 ) {

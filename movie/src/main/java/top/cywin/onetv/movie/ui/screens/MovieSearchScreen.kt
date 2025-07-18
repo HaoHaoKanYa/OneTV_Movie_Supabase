@@ -42,8 +42,7 @@ fun MovieSearchScreen(
     navController: NavController,
     viewModel: MovieSearchViewModel = viewModel {
         MovieSearchViewModel(
-            repository = top.cywin.onetv.movie.MovieApp.vodRepository,
-            configManager = top.cywin.onetv.movie.MovieApp.vodConfigManager
+            configManager = top.cywin.onetv.movie.MovieApp.getInstance().vodConfigManager
         )
     }
 ) {

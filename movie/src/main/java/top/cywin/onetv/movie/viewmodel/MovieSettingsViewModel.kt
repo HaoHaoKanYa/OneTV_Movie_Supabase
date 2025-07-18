@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import top.cywin.onetv.movie.data.models.SettingsUiState
 import top.cywin.onetv.movie.data.models.VodConfig
-import top.cywin.onetv.movie.data.repository.VodRepository
+import top.cywin.onetv.movie.MovieApp
 import top.cywin.onetv.movie.data.VodConfigManager
 import top.cywin.onetv.movie.data.cache.VodCacheManager
 
@@ -20,10 +20,14 @@ import top.cywin.onetv.movie.data.cache.VodCacheManager
  * 处理点播系统的设置功能，包括配置管理和缓存清理
  */
 class MovieSettingsViewModel(
-    private val repository: VodRepository,
     private val configManager: VodConfigManager,
     private val cacheManager: VodCacheManager
 ) : ViewModel() {
+
+    // 通过MovieApp访问适配器系统
+    private val movieApp = MovieApp.getInstance()
+    private val repositoryAdapter = movieApp.repositoryAdapter
+    private val siteViewModel = movieApp.siteViewModel
 
     private val _uiState = MutableStateFlow(SettingsUiState())
     val uiState: StateFlow<SettingsUiState> = _uiState.asStateFlow()

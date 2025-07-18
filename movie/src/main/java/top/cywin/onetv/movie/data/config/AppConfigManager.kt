@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import top.cywin.onetv.movie.data.api.Constants
+import top.cywin.onetv.movie.Constants
 // KotlinPoet专业重构 - 移除Hilt相关import
 // import javax.inject.Inject
 // import javax.inject.Singleton

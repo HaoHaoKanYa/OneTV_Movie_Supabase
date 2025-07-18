@@ -3,8 +3,8 @@ package top.cywin.onetv.movie.data.cache
 import android.content.Context
 import kotlinx.coroutines.*
 import top.cywin.onetv.movie.data.models.VodItem
-import top.cywin.onetv.movie.data.repository.VodRepository
 import top.cywin.onetv.movie.data.repository.WatchHistoryRepository
+import top.cywin.onetv.movie.MovieApp
 // KotlinPoet专业重构 - 移除Hilt相关import
 // import javax.inject.Inject
 // import javax.inject.Singleton
@@ -17,9 +17,13 @@ import top.cywin.onetv.movie.data.repository.WatchHistoryRepository
 class CacheOptimizationService(
     private val context: Context,
     private val cacheManager: VodCacheManager,
-    private val vodRepository: VodRepository,
     private val historyRepository: WatchHistoryRepository
 ) {
+
+    // 通过MovieApp访问适配器系统
+    private val movieApp = MovieApp.getInstance()
+    private val repositoryAdapter = movieApp.repositoryAdapter
+    private val siteViewModel = movieApp.siteViewModel
     
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private var isOptimizing = false
