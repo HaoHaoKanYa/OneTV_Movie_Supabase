@@ -2,7 +2,7 @@ package top.cywin.onetv.movie.adapter;
 
 import android.content.Context;
 import android.util.Log;
-import com.fongmi.android.tv.ui.SiteViewModel;
+import top.cywin.onetv.movie.model.SiteViewModel;
 
 /**
  * UI适配器 - 按照FongMi_TV整合指南完善
@@ -17,7 +17,7 @@ public class UIAdapter {
 
     public UIAdapter(Context context) {
         this.context = context;
-        this.siteViewModel = SiteViewModel.get();
+        this.siteViewModel = new SiteViewModel();
         this.repositoryAdapter = new RepositoryAdapter();
         Log.d(TAG, "🏗️ UIAdapter 初始化完成");
     }

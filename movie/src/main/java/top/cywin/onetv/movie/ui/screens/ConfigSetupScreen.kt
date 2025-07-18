@@ -43,7 +43,7 @@ fun ConfigSetupScreen(
         }
         uiState.error != null -> {
             ErrorScreen(
-                error = uiState.error,
+                error = uiState.error ?: "未知错误",
                 onRetry = { viewModel.resetConfig() },
                 onBack = { navController.popBackStack() }
             )

@@ -11,17 +11,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
-import top.cywin.onetv.movie.bean.CategoryFilter
+import top.cywin.onetv.movie.bean.Filter
 
 /**
  * OneTV Movie筛选对话框组件 - 按照FongMi_TV整合指南重构
  */
 @Composable
 fun FilterDialog(
-    filters: List<CategoryFilter>,
-    selectedFilters: Set<CategoryFilter>,
+    filters: List<Filter>,
+    selectedFilters: Set<Filter>,
     onDismiss: () -> Unit,
-    onConfirm: (Set<CategoryFilter>) -> Unit,
+    onConfirm: (Set<Filter>) -> Unit,
     onClearAll: () -> Unit
 ) {
     var tempSelectedFilters by remember { mutableStateOf(selectedFilters) }
@@ -66,7 +66,7 @@ fun FilterDialog(
 
 @Composable
 private fun FilterItem(
-    filter: CategoryFilter,
+    filter: Filter,
     isSelected: Boolean,
     onToggle: (Boolean) -> Unit
 ) {
@@ -84,12 +84,12 @@ private fun FilterItem(
         Spacer(modifier = Modifier.width(8.dp))
         Column {
             Text(
-                text = filter.name,
+                text = filter.getName(),
                 style = MaterialTheme.typography.bodyMedium
             )
-            if (filter.description.isNotEmpty()) {
+            if (filter.getKey().isNotEmpty()) {
                 Text(
-                    text = filter.description,
+                    text = filter.getKey(),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -103,8 +103,8 @@ private fun FilterItem(
  */
 @Composable
 fun FilterSummary(
-    selectedFilters: Set<CategoryFilter>,
-    onClearFilter: (CategoryFilter) -> Unit,
+    selectedFilters: Set<Filter>,
+    onClearFilter: (Filter) -> Unit,
     onClearAll: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -146,7 +146,7 @@ fun FilterSummary(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = filter.name,
+                            text = filter.getName(),
                             style = MaterialTheme.typography.bodySmall
                         )
 

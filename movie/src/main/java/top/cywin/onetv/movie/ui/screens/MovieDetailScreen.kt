@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -26,7 +27,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import top.cywin.onetv.movie.viewmodel.MovieDetailViewModel
 import top.cywin.onetv.movie.viewmodel.DetailUiState
-import top.cywin.onetv.movie.viewmodel.VodEpisode
+import top.cywin.onetv.movie.bean.Episode
 import top.cywin.onetv.movie.bean.Vod
 import top.cywin.onetv.movie.bean.Flag
 import top.cywin.onetv.movie.MovieApp
@@ -73,7 +74,7 @@ fun MovieDetailScreen(
         }
         uiState.error != null -> {
             ErrorScreen(
-                error = uiState.error,
+                error = uiState.error ?: "未知错误",
                 onRetry = { viewModel.loadMovieDetail(vodId, siteKey) },
                 onBack = { navController.popBackStack() }
             )
@@ -83,7 +84,7 @@ fun MovieDetailScreen(
                 uiState = uiState,
                 // contentDetail = contentDetail,
                 onPlayClick = { episode ->
-                    navController.navigate("player/$vodId/${episode.index}/$siteKey")
+                    navController.navigate("player/$vodId/${episode.getIndex()}/$siteKey")
                 },
                 onFavoriteClick = { viewModel.toggleFavorite() },
                 onFlagSelect = { viewModel.selectFlag(it) },
@@ -98,10 +99,10 @@ fun MovieDetailScreen(
 private fun DetailContent(
     uiState: DetailUiState,
     // contentDetail: Any?, // FongMi_TV的详情数据
-    onPlayClick: (VodEpisode) -> Unit,
+    onPlayClick: (Episode) -> Unit,
     onFavoriteClick: () -> Unit,
     onFlagSelect: (Flag) -> Unit,
-    onEpisodeSelect: (VodEpisode) -> Unit,
+    onEpisodeSelect: (Episode) -> Unit,
     onBack: () -> Unit
 ) {
     Column(
@@ -338,10 +339,10 @@ private fun PlayFlagSection(
 
 @Composable
 private fun EpisodeSection(
-    episodes: List<VodEpisode>,
-    selectedEpisode: VodEpisode?,
-    onEpisodeSelect: (VodEpisode) -> Unit,
-    onPlayClick: (VodEpisode) -> Unit
+    episodes: List<Episode>,
+    selectedEpisode: Episode?,
+    onEpisodeSelect: (Episode) -> Unit,
+    onPlayClick: (Episode) -> Unit
 ) {
     Column {
         Text(
@@ -370,7 +371,7 @@ private fun EpisodeSection(
 
 @Composable
 private fun EpisodeChip(
-    episode: VodEpisode,
+    episode: Episode,
     isSelected: Boolean,
     onClick: () -> Unit
 ) {

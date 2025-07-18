@@ -20,7 +20,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import top.cywin.onetv.movie.viewmodel.MovieSettingsViewModel
 import top.cywin.onetv.movie.viewmodel.SettingsUiState
-import top.cywin.onetv.movie.bean.VodConfigUrl
+import top.cywin.onetv.movie.viewmodel.VodConfigUrl
 import top.cywin.onetv.movie.MovieApp
 import android.util.Log
 
@@ -52,7 +52,7 @@ fun MovieConfigScreen(
         }
         uiState.error != null -> {
             ErrorScreen(
-                error = uiState.error,
+                error = uiState.error ?: "未知错误",
                 onRetry = { viewModel.loadConfigList() },
                 onBack = { navController.popBackStack() }
             )

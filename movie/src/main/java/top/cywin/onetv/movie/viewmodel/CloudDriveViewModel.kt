@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import top.cywin.onetv.movie.MovieApp
+import top.cywin.onetv.movie.cloudrive.bean.CloudFile
 import android.util.Log
 
 /**
@@ -16,31 +17,24 @@ data class CloudDriveUiState(
     val isLoading: Boolean = false,
     val error: String? = null,
     val cloudDrives: List<CloudDriveConfig> = emptyList(),
+    val availableDrives: List<CloudDriveConfig> = emptyList(),
     val currentDrive: CloudDriveConfig? = null,
+    val selectedDrive: CloudDriveConfig? = null,
     val currentPath: String = "/",
     val files: List<CloudFile> = emptyList(),
+    val currentFiles: List<CloudFile> = emptyList(),
+    val canGoBack: Boolean = false,
     val isConnected: Boolean = false
 )
 
 /**
- * 网盘配置数据类
+ * 网盘配置数据类 - 简化版本
  */
 data class CloudDriveConfig(
     val id: String,
     val name: String,
     val type: String,
     val config: Map<String, String>
-)
-
-/**
- * 网盘文件数据类
- */
-data class CloudFile(
-    val name: String,
-    val path: String,
-    val isDirectory: Boolean,
-    val size: Long = 0L,
-    val modifiedTime: Long = 0L
 )
 
 /**
@@ -140,7 +134,7 @@ class CloudDriveViewModel : ViewModel() {
      * 进入目录
      */
     fun enterDirectory(file: CloudFile) {
-        if (file.isDirectory) {
+        if (file.isFolder()) {
             val currentPath = _uiState.value.currentPath
             pathHistory.add(currentPath)
 
@@ -208,5 +202,20 @@ class CloudDriveViewModel : ViewModel() {
         currentState.currentDrive?.let { drive ->
             loadFiles(drive, currentState.currentPath)
         }
+    }
+
+    /**
+     * 刷新当前目录
+     */
+    fun refreshCurrentDirectory() {
+        refreshCurrentPath()
+    }
+
+    /**
+     * 播放文件
+     */
+    fun playFile(file: CloudFile) {
+        Log.d("ONETV_MOVIE", "▶️ 播放文件: ${file.name}")
+        // 这里应该调用播放器逻辑
     }
 }

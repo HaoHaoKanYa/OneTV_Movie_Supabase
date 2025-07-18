@@ -9,6 +9,7 @@ import kotlinx.coroutines.launch
 import top.cywin.onetv.movie.MovieApp
 import top.cywin.onetv.movie.bean.Vod
 import top.cywin.onetv.movie.bean.Flag
+import top.cywin.onetv.movie.bean.Episode
 import android.util.Log
 
 /**
@@ -30,8 +31,8 @@ data class PlayerUiState(
     val movie: Vod? = null,
     val playFlags: List<Flag> = emptyList(),
     val currentFlag: Flag? = null,
-    val episodes: List<VodEpisode> = emptyList(),
-    val currentEpisode: VodEpisode? = null,
+    val episodes: List<Episode> = emptyList(),
+    val currentEpisode: Episode? = null,
     val currentEpisodeIndex: Int = 0,
     val availableLines: List<LineInfo> = emptyList(),
     val currentLineIndex: Int = 0,
@@ -90,7 +91,7 @@ class MoviePlayerViewModel : ViewModel() {
     /**
      * 播放指定剧集
      */
-    fun playEpisode(episode: VodEpisode, episodeIndex: Int) {
+    fun playEpisode(episode: Episode, episodeIndex: Int) {
         viewModelScope.launch {
             try {
                 Log.d("ONETV_MOVIE", "📺 播放剧集: ${episode.name}")
@@ -105,7 +106,7 @@ class MoviePlayerViewModel : ViewModel() {
                 }
 
                 // ✅ 通过适配器解析播放地址 - 解析逻辑在FongMi_TV中
-                repositoryAdapter.parsePlayUrl(episode.url, movie.key ?: "", currentFlag.flag)
+                repositoryAdapter.parsePlayUrl(episode.url, movie.getSite()?.getKey() ?: "")
 
                 _uiState.value = _uiState.value.copy(
                     currentEpisode = episode,
@@ -184,15 +185,16 @@ class MoviePlayerViewModel : ViewModel() {
     /**
      * 解析剧集列表
      */
-    private fun parseEpisodes(urls: String): List<VodEpisode> {
+    private fun parseEpisodes(urls: String): List<Episode> {
         return try {
             urls.split("#").mapIndexed { index, episodeData ->
                 val parts = episodeData.split("$")
-                VodEpisode(
-                    name = if (parts.size >= 2) parts[0] else "第${index + 1}集",
-                    url = if (parts.size >= 2) parts[1] else episodeData,
-                    index = index
-                )
+                Episode.create(
+                    if (parts.size >= 2) parts[0] else "第${index + 1}集",
+                    if (parts.size >= 2) parts[1] else episodeData
+                ).apply {
+                    setIndex(index)
+                }
             }
         } catch (e: Exception) {
             Log.e("ONETV_MOVIE", "剧集解析失败", e)
@@ -203,7 +205,7 @@ class MoviePlayerViewModel : ViewModel() {
     /**
      * 选择剧集
      */
-    fun selectEpisode(episode: VodEpisode) {
+    fun selectEpisode(episode: Episode) {
         val currentState = _uiState.value
         val episodes = currentState.episodes
         val episodeIndex = episodes.indexOf(episode)
@@ -229,10 +231,10 @@ class MoviePlayerViewModel : ViewModel() {
 
         if (movie != null && episode != null) {
             repositoryAdapter.savePlayHistory(
-                vodId = movie.vodId ?: "",
-                episodeIndex = episode.index,
-                position = position,
-                duration = duration
+                movie.getVodId(),
+                movie.getSite()?.getKey() ?: "",
+                episode.getIndex(),
+                position
             )
         }
     }

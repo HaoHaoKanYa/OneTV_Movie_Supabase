@@ -49,13 +49,15 @@ class ConfigSetupViewModel : ViewModel() {
                 Log.d("ONETV_MOVIE", "🔍 验证配置URL: $configUrl")
 
                 // ✅ 通过适配器验证配置 - 验证逻辑在FongMi_TV中
-                repositoryAdapter.validateConfigUrl(configUrl) { isValid, message ->
-                    _uiState.value = _uiState.value.copy(
-                        isValidating = false,
-                        isConfigValid = isValid,
-                        validationResult = message
-                    )
-                }
+                repositoryAdapter.validateConfigUrl(configUrl, object : top.cywin.onetv.movie.adapter.RepositoryAdapter.ValidationCallback {
+                    override fun onResult(isValid: Boolean, message: String) {
+                        _uiState.value = _uiState.value.copy(
+                            isValidating = false,
+                            isConfigValid = isValid,
+                            validationResult = message
+                        )
+                    }
+                })
 
                 Log.d("ONETV_MOVIE", "✅ 配置验证请求已发送")
 
@@ -81,22 +83,24 @@ class ConfigSetupViewModel : ViewModel() {
                 Log.d("ONETV_MOVIE", "💾 保存配置: $configUrl")
 
                 // ✅ 通过适配器保存配置 - 配置管理在FongMi_TV中
-                repositoryAdapter.saveConfigUrl(configUrl) { success ->
-                    if (success) {
-                        _uiState.value = _uiState.value.copy(
-                            isLoading = false,
-                            configUrl = configUrl,
-                            error = null
-                        )
-                        onSuccess()
-                        Log.d("ONETV_MOVIE", "✅ 配置保存成功")
-                    } else {
-                        _uiState.value = _uiState.value.copy(
-                            isLoading = false,
-                            error = "配置保存失败"
-                        )
+                repositoryAdapter.saveConfigUrl(configUrl, object : top.cywin.onetv.movie.adapter.RepositoryAdapter.SaveCallback {
+                    override fun onResult(success: Boolean) {
+                        if (success) {
+                            _uiState.value = _uiState.value.copy(
+                                isLoading = false,
+                                configUrl = configUrl,
+                                error = null
+                            )
+                            onSuccess()
+                            Log.d("ONETV_MOVIE", "✅ 配置保存成功")
+                        } else {
+                            _uiState.value = _uiState.value.copy(
+                                isLoading = false,
+                                error = "配置保存失败"
+                            )
+                        }
                     }
-                }
+                })
 
             } catch (e: Exception) {
                 Log.e("ONETV_MOVIE", "配置保存失败", e)
@@ -121,3 +125,4 @@ class ConfigSetupViewModel : ViewModel() {
     fun resetConfig() {
         _uiState.value = ConfigSetupUiState()
     }
+}

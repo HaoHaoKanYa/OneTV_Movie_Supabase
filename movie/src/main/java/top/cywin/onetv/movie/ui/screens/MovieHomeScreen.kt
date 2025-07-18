@@ -41,7 +41,6 @@ import top.cywin.onetv.movie.navigation.MovieRoutes
 import top.cywin.onetv.movie.ui.components.MovieCard
 import top.cywin.onetv.movie.ui.components.QuickCategoryGrid
 import top.cywin.onetv.movie.ui.components.RouteSelector
-import top.cywin.onetv.movie.ui.components.StoreHouseWelcome
 
 /**
  * OneTV Movie首页 - 按照FongMi_TV整合指南重构
@@ -86,7 +85,7 @@ fun MovieHomeScreen(
         }
         uiState.error != null -> {
             ErrorScreen(
-                error = uiState.error,
+                error = uiState.error ?: "未知错误",
                 onRetry = { viewModel.refresh() },
                 onBack = { navController.popBackStack() }
             )
@@ -111,7 +110,7 @@ fun MovieHomeScreen(
                     navController.navigate("category/${category.typeId}")
                 },
                 onMovieClick = { movie ->
-                    navController.navigate("detail/${movie.vodId}/${movie.key}")
+                    navController.navigate("detail/${movie.getVodId()}/${movie.getSite()?.getKey() ?: ""}")
                 },
                 onSearchClick = {
                     navController.navigate("search")

@@ -9,8 +9,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import top.cywin.onetv.movie.viewmodel.MovieCategoryUiState
-import top.cywin.onetv.movie.bean.MovieCategory
+import top.cywin.onetv.movie.viewmodel.CategoryUiState
+import top.cywin.onetv.movie.bean.Class
 import top.cywin.onetv.movie.MovieApp
 import android.util.Log
 
@@ -19,9 +19,9 @@ import android.util.Log
  */
 @Composable
 fun CategoryTabs(
-    categories: List<MovieCategory>,
-    selectedCategory: MovieCategory?,
-    onCategorySelected: (MovieCategory) -> Unit,
+    categories: List<Class>,
+    selectedCategory: Class?,
+    onCategorySelected: (Class) -> Unit,
     modifier: Modifier = Modifier
 ) {
     // ✅ 通过MovieApp访问适配器系统
@@ -36,7 +36,7 @@ fun CategoryTabs(
         items(categories) { category ->
             FilterChip(
                 onClick = { onCategorySelected(category) },
-                label = { Text(category.typeName) },
+                label = { Text(category.getTypeName()) },
                 selected = selectedCategory == category,
                 modifier = Modifier.animateItemPlacement()
             )
@@ -46,8 +46,8 @@ fun CategoryTabs(
 
 @Composable
 fun CategoryTabsWithLoading(
-    uiState: MovieCategoryUiState,
-    onCategorySelected: (MovieCategory) -> Unit,
+    uiState: CategoryUiState,
+    onCategorySelected: (Class) -> Unit,
     modifier: Modifier = Modifier
 ) {
     when {
@@ -75,9 +75,9 @@ fun CategoryTabsWithLoading(
  */
 @Composable
 fun QuickCategoryGrid(
-    categories: List<MovieCategory>,
+    categories: List<Class>,
     modifier: Modifier = Modifier,
-    onCategoryClick: (MovieCategory) -> Unit = {}
+    onCategoryClick: (Class) -> Unit = {}
 ) {
     Column(
         modifier = modifier.fillMaxWidth()
@@ -108,7 +108,7 @@ fun QuickCategoryGrid(
  */
 @Composable
 private fun QuickCategoryItem(
-    category: MovieCategory,
+    category: Class,
     onClick: () -> Unit
 ) {
     Card(
@@ -122,7 +122,7 @@ private fun QuickCategoryItem(
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = category.typeName,
+                text = category.getTypeName(),
                 style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.Medium
             )
@@ -135,10 +135,10 @@ private fun QuickCategoryItem(
  */
 @Composable
 fun CategoryList(
-    categories: List<MovieCategory>,
-    selectedCategory: MovieCategory?,
+    categories: List<Class>,
+    selectedCategory: Class?,
     modifier: Modifier = Modifier,
-    onCategorySelected: (MovieCategory) -> Unit = {}
+    onCategorySelected: (Class) -> Unit = {}
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),
@@ -159,7 +159,7 @@ fun CategoryList(
  */
 @Composable
 private fun CategoryListItem(
-    category: MovieCategory,
+    category: Class,
     isSelected: Boolean,
     onClick: () -> Unit
 ) {
@@ -182,7 +182,7 @@ private fun CategoryListItem(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = category.typeName,
+                text = category.getTypeName(),
                 color = if (isSelected) {
                     MaterialTheme.colorScheme.onPrimaryContainer
                 } else {

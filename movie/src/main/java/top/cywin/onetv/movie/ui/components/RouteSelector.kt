@@ -10,7 +10,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import top.cywin.onetv.movie.bean.VodRoute
+import top.cywin.onetv.movie.viewmodel.VodConfigUrl
 import top.cywin.onetv.movie.MovieApp
 
 /**
@@ -18,9 +18,9 @@ import top.cywin.onetv.movie.MovieApp
  */
 @Composable
 fun RouteSelector(
-    routes: List<VodRoute>,
-    selectedRoute: VodRoute?,
-    onRouteSelected: (VodRoute) -> Unit,
+    routes: List<VodConfigUrl>,
+    selectedRoute: VodConfigUrl?,
+    onRouteSelected: (VodConfigUrl) -> Unit,
     modifier: Modifier = Modifier
 ) {
     // ✅ 通过MovieApp访问适配器系统
@@ -44,7 +44,7 @@ fun RouteSelector(
 
 @Composable
 private fun RouteChip(
-    route: VodRoute,
+    route: VodConfigUrl,
     isSelected: Boolean,
     onClick: () -> Unit
 ) {
@@ -72,9 +72,9 @@ private fun RouteChip(
 
 @Composable
 fun RouteDropdown(
-    routes: List<VodRoute>,
-    selectedRoute: VodRoute?,
-    onRouteSelected: (VodRoute) -> Unit,
+    routes: List<VodConfigUrl>,
+    selectedRoute: VodConfigUrl?,
+    onRouteSelected: (VodConfigUrl) -> Unit,
     modifier: Modifier = Modifier
 ) {
     var expanded by remember { mutableStateOf(false) }

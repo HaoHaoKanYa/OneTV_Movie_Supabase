@@ -31,7 +31,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import top.cywin.onetv.movie.viewmodel.MoviePlayerViewModel
 import top.cywin.onetv.movie.viewmodel.PlayerUiState
-import top.cywin.onetv.movie.viewmodel.VodEpisode
+import top.cywin.onetv.movie.bean.Episode
 import top.cywin.onetv.movie.bean.Flag
 import top.cywin.onetv.movie.MovieApp
 import android.util.Log
@@ -79,7 +79,7 @@ fun MoviePlayerScreen(
         }
         uiState.error != null -> {
             ErrorScreen(
-                error = uiState.error,
+                error = uiState.error ?: "未知错误",
                 onRetry = { viewModel.loadPlayData(vodId, episodeIndex, siteKey) },
                 onBack = { navController.popBackStack() }
             )
@@ -107,7 +107,7 @@ private fun PlayerContent(
     // playResult: Any?, // FongMi_TV的播放数据
     onPlayClick: () -> Unit,
     onPauseClick: () -> Unit,
-    onEpisodeSelect: (VodEpisode) -> Unit,
+    onEpisodeSelect: (Episode) -> Unit,
     onFlagSelect: (Flag) -> Unit,
     onBack: () -> Unit
 ) {
@@ -228,7 +228,7 @@ private fun VideoPlayerView(
 @Composable
 private fun PlayerControls(
     uiState: PlayerUiState,
-    onEpisodeSelect: (VodEpisode) -> Unit,
+    onEpisodeSelect: (Episode) -> Unit,
     onFlagSelect: (Flag) -> Unit,
     onBack: () -> Unit
 ) {
@@ -271,7 +271,7 @@ private fun PlayerControls(
 @Composable
 private fun BottomPlayerControls(
     uiState: PlayerUiState,
-    onEpisodeSelect: (VodEpisode) -> Unit,
+    onEpisodeSelect: (Episode) -> Unit,
     onFlagSelect: (Flag) -> Unit,
     modifier: Modifier = Modifier
 ) {

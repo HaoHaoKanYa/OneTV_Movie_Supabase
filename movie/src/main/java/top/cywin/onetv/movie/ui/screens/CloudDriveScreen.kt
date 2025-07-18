@@ -24,8 +24,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import top.cywin.onetv.movie.viewmodel.CloudDriveViewModel
 import top.cywin.onetv.movie.viewmodel.CloudDriveUiState
-import top.cywin.onetv.movie.bean.CloudDrive
-import top.cywin.onetv.movie.bean.CloudFile
+import top.cywin.onetv.movie.viewmodel.CloudDriveConfig
+import top.cywin.onetv.movie.cloudrive.bean.CloudFile
 import top.cywin.onetv.movie.MovieApp
 import android.util.Log
 
@@ -57,7 +57,7 @@ fun CloudDriveScreen(
         }
         uiState.error != null -> {
             ErrorScreen(
-                error = uiState.error,
+                error = uiState.error ?: "未知错误",
                 onRetry = { viewModel.loadCloudDrives() },
                 onBack = { navController.popBackStack() }
             )
@@ -79,7 +79,7 @@ fun CloudDriveScreen(
 @Composable
 private fun CloudDriveContent(
     uiState: CloudDriveUiState,
-    onDriveSelect: (CloudDrive) -> Unit,
+    onDriveSelect: (CloudDriveConfig) -> Unit,
     onFileClick: (CloudFile) -> Unit,
     onDirectoryEnter: (CloudFile) -> Unit,
     onBackToParent: () -> Unit,
@@ -153,7 +153,7 @@ private fun CloudDriveContent(
                 CloudFileItem(
                     file = file,
                     onClick = {
-                        if (file.isDirectory) {
+                        if (file.isFolder()) {
                             onDirectoryEnter(file)
                         } else {
                             onFileClick(file)
@@ -235,13 +235,13 @@ private fun CloudFileItem(
             // 文件图标
             Icon(
                 imageVector = when {
-                    file.isDirectory -> Icons.Default.Folder
+                    file.isFolder() -> Icons.Default.Folder
                     file.isVideoFile() -> Icons.Default.PlayArrow
                     else -> Icons.Default.InsertDriveFile
                 },
                 contentDescription = null,
                 tint = when {
-                    file.isDirectory -> MaterialTheme.colorScheme.primary
+                    file.isFolder() -> MaterialTheme.colorScheme.primary
                     file.isVideoFile() -> MaterialTheme.colorScheme.secondary
                     else -> MaterialTheme.colorScheme.onSurfaceVariant
                 },
@@ -260,7 +260,7 @@ private fun CloudFileItem(
                     overflow = TextOverflow.Ellipsis
                 )
 
-                if (!file.isDirectory && file.size > 0) {
+                if (!file.isFolder() && file.size > 0) {
                     Text(
                         text = formatFileSize(file.size),
                         style = MaterialTheme.typography.bodySmall,
@@ -277,7 +277,7 @@ private fun CloudFileItem(
                     tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(20.dp)
                 )
-            } else if (file.isDirectory) {
+            } else if (file.isFolder()) {
                 Icon(
                     imageVector = Icons.Default.ChevronRight,
                     contentDescription = "进入",

@@ -28,7 +28,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import top.cywin.onetv.movie.viewmodel.MovieSearchViewModel
 import top.cywin.onetv.movie.viewmodel.SearchUiState
-import top.cywin.onetv.movie.bean.Movie
+import top.cywin.onetv.movie.bean.Vod
 import top.cywin.onetv.movie.MovieApp
 import android.util.Log
 
@@ -65,7 +65,7 @@ fun MovieSearchScreen(
         // searchResult = searchResult,
         onSearch = { keyword -> viewModel.search(keyword) },
         onMovieClick = { movie ->
-            navController.navigate("detail/${movie.vodId}/${movie.siteKey}")
+            navController.navigate("detail/${movie.getVodId()}/${movie.getSite()?.getKey() ?: ""}")
         },
         onHistoryClick = { keyword -> viewModel.search(keyword) },
         onClearHistory = { viewModel.clearSearchHistory() },
@@ -79,13 +79,13 @@ private fun SearchContent(
     uiState: SearchUiState,
     // searchResult: Any?, // FongMi_TV的搜索结果
     onSearch: (String) -> Unit,
-    onMovieClick: (Movie) -> Unit,
+    onMovieClick: (Vod) -> Unit,
     onHistoryClick: (String) -> Unit,
     onClearHistory: () -> Unit,
     onLoadMore: () -> Unit,
     onBack: () -> Unit
 ) {
-    var searchText by remember { mutableStateOf(uiState.currentKeyword) }
+    var searchText by remember { mutableStateOf(uiState.keyword) }
     val keyboardController = LocalSoftwareKeyboardController.current
 
     Column(
@@ -147,8 +147,8 @@ private fun SearchContent(
                     onBack = onBack
                 )
             }
-            uiState.searchResults.isEmpty() && uiState.currentKeyword.isNotEmpty() -> {
-                NoResultContent(keyword = uiState.currentKeyword)
+            uiState.searchResults.isEmpty() && uiState.keyword.isNotEmpty() -> {
+                NoResultContent(keyword = uiState.keyword)
             }
             uiState.searchResults.isNotEmpty() -> {
                 SearchResultContent(
@@ -174,10 +174,10 @@ private fun SearchContent(
 
 @Composable
 private fun SearchResultContent(
-    results: List<Movie>,
+    results: List<Vod>,
     hasMore: Boolean,
     isLoadingMore: Boolean,
-    onMovieClick: (Movie) -> Unit,
+    onMovieClick: (Vod) -> Unit,
     onLoadMore: () -> Unit
 ) {
     LazyVerticalGrid(
@@ -219,7 +219,7 @@ private fun SearchResultContent(
 
 @Composable
 private fun MovieCard(
-    movie: Movie,
+    movie: Vod,
     onClick: () -> Unit
 ) {
     Card(
@@ -249,16 +249,16 @@ private fun MovieCard(
                 modifier = Modifier.padding(8.dp)
             ) {
                 Text(
-                    text = movie.vodName,
+                    text = movie.getVodName(),
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.Medium,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
 
-                if (movie.vodRemarks.isNotEmpty()) {
+                if (movie.getVodRemarks().isNotEmpty()) {
                     Text(
-                        text = movie.vodRemarks,
+                        text = movie.getVodRemarks(),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         maxLines = 1,

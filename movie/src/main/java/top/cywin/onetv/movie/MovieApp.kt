@@ -56,7 +56,7 @@ class MovieApp : Application() {
 
     val siteViewModel by lazy {
         Log.d(TAG, "🏗️ 获取SiteViewModel")
-        viewModelAdapter.siteViewModel
+        viewModelAdapter.siteViewModel ?: SiteViewModel()
     }
 
     override fun onCreate() {

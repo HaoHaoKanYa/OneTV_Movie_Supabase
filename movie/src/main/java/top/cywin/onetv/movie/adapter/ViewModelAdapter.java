@@ -2,8 +2,8 @@ package top.cywin.onetv.movie.adapter;
 
 import android.util.Log;
 import androidx.lifecycle.LifecycleOwner;
-import top.cywin.onetv.movie.ui.SiteViewModel;
-import top.cywin.onetv.movie.ui.LiveViewModel;
+import top.cywin.onetv.movie.model.SiteViewModel;
+import top.cywin.onetv.movie.model.LiveViewModel;
 
 /**
  * ViewModel适配器 - 按照FongMi_TV整合指南完善
@@ -29,10 +29,10 @@ public class ViewModelAdapter {
         Log.d(TAG, "🔄 初始化ViewModel");
         try {
             // 获取FongMi_TV的SiteViewModel
-            this.siteViewModel = SiteViewModel.get();
+            this.siteViewModel = new SiteViewModel();
 
             // 获取FongMi_TV的LiveViewModel
-            this.liveViewModel = LiveViewModel.get();
+            this.liveViewModel = new LiveViewModel();
 
             Log.d(TAG, "✅ ViewModel初始化完成");
         } catch (Exception e) {

@@ -13,15 +13,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import top.cywin.onetv.movie.bean.Movie
-import top.cywin.onetv.movie.R
+import top.cywin.onetv.movie.bean.Vod
 
 /**
  * OneTV Movie电影卡片组件 - 按照FongMi_TV整合指南重构
  */
 @Composable
 fun MovieCard(
-    movie: Movie,
+    movie: Vod,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     showProgress: Boolean = false,
@@ -41,12 +40,12 @@ fun MovieCard(
                     .aspectRatio(0.7f)
             ) {
                 AsyncImage(
-                    model = movie.vodPic.ifEmpty { null },
-                    contentDescription = movie.vodName,
+                    model = movie.getVodPic().ifEmpty { null },
+                    contentDescription = movie.getVodName(),
                     modifier = Modifier.fillMaxSize(),
                     contentScale = ContentScale.Crop,
-                    error = painterResource(R.drawable.ic_movie_placeholder),
-                    placeholder = painterResource(R.drawable.ic_movie_placeholder)
+                    error = null,
+                    placeholder = null
                 )
 
                 // 播放进度条
@@ -60,8 +59,8 @@ fun MovieCard(
                     )
                 }
 
-                // 评分标签
-                if (movie.vodScore > 0) {
+                // 备注标签
+                if (movie.getVodRemarks().isNotEmpty()) {
                     Surface(
                         modifier = Modifier
                             .align(Alignment.TopEnd)
@@ -70,7 +69,7 @@ fun MovieCard(
                         shape = RoundedCornerShape(4.dp)
                     ) {
                         Text(
-                            text = movie.vodScore.toString(),
+                            text = movie.getVodRemarks(),
                             modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onPrimary
@@ -84,17 +83,17 @@ fun MovieCard(
                 modifier = Modifier.padding(12.dp)
             ) {
                 Text(
-                    text = movie.vodName,
+                    text = movie.getVodName(),
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Medium,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
 
-                if (movie.vodRemarks.isNotEmpty()) {
+                if (movie.getVodYear().isNotEmpty()) {
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        text = movie.vodRemarks,
+                        text = movie.getVodYear(),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         maxLines = 1,
@@ -102,10 +101,10 @@ fun MovieCard(
                     )
                 }
 
-                if (movie.vodYear > 0) {
+                if (movie.getVodArea().isNotEmpty()) {
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        text = "${movie.vodYear}年",
+                        text = movie.getVodArea(),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -117,7 +116,7 @@ fun MovieCard(
 
 @Composable
 fun MovieListCard(
-    movie: Movie,
+    movie: Vod,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     showProgress: Boolean = false,
@@ -139,12 +138,12 @@ fun MovieListCard(
                     .height(120.dp)
             ) {
                 AsyncImage(
-                    model = movie.vodPic.ifEmpty { null },
-                    contentDescription = movie.vodName,
+                    model = movie.getVodPic().ifEmpty { null },
+                    contentDescription = movie.getVodName(),
                     modifier = Modifier.fillMaxSize(),
                     contentScale = ContentScale.Crop,
-                    error = painterResource(R.drawable.ic_movie_placeholder),
-                    placeholder = painterResource(R.drawable.ic_movie_placeholder)
+                    error = null,
+                    placeholder = null
                 )
 
                 if (showProgress && progress > 0) {
@@ -164,16 +163,16 @@ fun MovieListCard(
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 Text(
-                    text = movie.vodName,
+                    text = movie.getVodName(),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Medium,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
 
-                if (movie.vodRemarks.isNotEmpty()) {
+                if (movie.getVodRemarks().isNotEmpty()) {
                     Text(
-                        text = movie.vodRemarks,
+                        text = movie.getVodRemarks(),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         maxLines = 1,
@@ -181,9 +180,9 @@ fun MovieListCard(
                     )
                 }
 
-                if (movie.vodContent.isNotEmpty()) {
+                if (movie.getVodContent().isNotEmpty()) {
                     Text(
-                        text = movie.vodContent,
+                        text = movie.getVodContent(),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         maxLines = 3,
@@ -194,17 +193,17 @@ fun MovieListCard(
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    if (movie.vodYear > 0) {
+                    if (movie.getVodYear().isNotEmpty()) {
                         Text(
-                            text = "${movie.vodYear}年",
+                            text = "${movie.getVodYear()}年",
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
 
-                    if (movie.vodScore > 0) {
+                    if (movie.getVodArea().isNotEmpty()) {
                         Text(
-                            text = "评分: ${movie.vodScore}",
+                            text = "地区: ${movie.getVodArea()}",
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.primary
                         )

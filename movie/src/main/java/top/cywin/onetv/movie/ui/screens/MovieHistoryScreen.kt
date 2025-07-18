@@ -20,8 +20,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import top.cywin.onetv.movie.viewmodel.MovieSettingsViewModel
 import top.cywin.onetv.movie.viewmodel.SettingsUiState
-import top.cywin.onetv.movie.bean.Movie
-import top.cywin.onetv.movie.bean.WatchHistory
+import top.cywin.onetv.movie.bean.Vod
+import top.cywin.onetv.movie.bean.History
 import top.cywin.onetv.movie.MovieApp
 import android.util.Log
 
@@ -53,7 +53,7 @@ fun MovieHistoryScreen(
         }
         uiState.error != null -> {
             ErrorScreen(
-                error = uiState.error,
+                error = uiState.error ?: "未知错误",
                 onRetry = { viewModel.loadWatchHistory() },
                 onBack = { navController.popBackStack() }
             )
@@ -65,7 +65,7 @@ fun MovieHistoryScreen(
                     navController.navigate("detail/${movie.vodId}/${movie.siteKey}")
                 },
                 onContinuePlay = { history ->
-                    navController.navigate("player/${history.vodId}/${history.episodeIndex}/${history.siteKey}")
+                    navController.navigate("player/${history.getVodId()}/${history.getEpisode().getIndex()}/${history.getSiteKey()}")
                 },
                 onDeleteHistory = { history -> viewModel.deleteWatchHistory(history) },
                 onClearAllHistory = { viewModel.clearAllHistory() },
@@ -78,11 +78,11 @@ fun MovieHistoryScreen(
 @Composable
 private fun HistoryContent(
     uiState: SettingsUiState,
-    onMovieClick: (Movie) -> Unit,
-    onContinuePlay: (WatchHistory) -> Unit,
-    onDeleteHistory: (WatchHistory) -> Unit,
+    onMovieClick: (Vod) -> Unit,
+    onContinuePlay: (History) -> Unit,
+    onDeleteHistory: (History) -> Unit,
     onClearAllHistory: () -> Unit,
-    onToggleFavorite: (Movie) -> Unit,
+    onToggleFavorite: (Vod) -> Unit,
     onBack: () -> Unit
 ) {
     var selectedTab by remember { mutableStateOf(0) }
@@ -169,7 +169,7 @@ private fun HistoryContent(
 
 @Composable
 private fun HistoryItem(
-    history: WatchHistory,
+    history: History,
     onContinuePlay: () -> Unit,
     onDelete: () -> Unit
 ) {
@@ -207,7 +207,7 @@ private fun HistoryItem(
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 Text(
-                    text = history.movieName,
+                    text = history.getVodName(),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     maxLines = 1,
@@ -215,19 +215,19 @@ private fun HistoryItem(
                 )
 
                 Text(
-                    text = "观看到: 第${history.episodeIndex + 1}集",
+                    text = "观看到: ${history.getVodRemarks()}",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
                 Text(
-                    text = "进度: ${formatProgress(history.playPosition, history.duration)}",
+                    text = "进度: ${formatProgress(history.getPosition(), history.getDuration())}",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
                 Text(
-                    text = formatWatchTime(history.lastWatchTime),
+                    text = formatWatchTime(history.getCreateTime()),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -247,7 +247,7 @@ private fun HistoryItem(
 
 @Composable
 private fun FavoriteItem(
-    movie: Movie,
+    movie: Vod,
     onClick: () -> Unit,
     onToggleFavorite: () -> Unit
 ) {
@@ -285,16 +285,16 @@ private fun FavoriteItem(
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 Text(
-                    text = movie.vodName,
+                    text = movie.getVodName(),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
 
-                if (movie.vodRemarks.isNotEmpty()) {
+                if (movie.getVodRemarks().isNotEmpty()) {
                     Text(
-                        text = movie.vodRemarks,
+                        text = movie.getVodRemarks(),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         maxLines = 1,
@@ -302,9 +302,9 @@ private fun FavoriteItem(
                     )
                 }
 
-                if (movie.vodYear > 0) {
+                if (movie.getVodYear().isNotEmpty()) {
                     Text(
-                        text = "${movie.vodYear}年",
+                        text = "${movie.getVodYear()}年",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )

@@ -9,6 +9,7 @@ import kotlinx.coroutines.launch
 import top.cywin.onetv.movie.MovieApp
 import top.cywin.onetv.movie.bean.Vod
 import top.cywin.onetv.movie.bean.Class
+import top.cywin.onetv.movie.bean.Filter
 import android.util.Log
 
 /**
@@ -19,12 +20,16 @@ data class CategoryUiState(
     val error: String? = null,
     val typeId: String = "",
     val typeName: String = "",
+    val categoryName: String = "",
     val movies: List<Vod> = emptyList(),
     val categories: List<Class> = emptyList(),
+    val selectedCategory: Class? = null,
     val currentPage: Int = 1,
     val hasMore: Boolean = true,
+    val isLoadingMore: Boolean = false,
     val filters: Map<String, List<String>> = emptyMap(),
-    val selectedFilters: Map<String, String> = emptyMap()
+    val selectedFilters: Map<String, String> = emptyMap(),
+    val availableFilters: List<Filter> = emptyList()
 )
 
 /**

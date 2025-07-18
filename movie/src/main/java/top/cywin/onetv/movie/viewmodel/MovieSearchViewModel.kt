@@ -21,7 +21,8 @@ data class SearchUiState(
     val searchHistory: List<String> = emptyList(),
     val hotKeywords: List<String> = emptyList(),
     val currentPage: Int = 1,
-    val hasMore: Boolean = true
+    val hasMore: Boolean = true,
+    val isLoadingMore: Boolean = false
 )
 
 /**
@@ -134,5 +135,44 @@ class MovieSearchViewModel : ViewModel() {
      */
     fun clearError() {
         _uiState.value = _uiState.value.copy(error = null)
+    }
+
+    /**
+     * 清除搜索历史
+     */
+    fun clearSearchHistory() {
+        _uiState.value = _uiState.value.copy(searchHistory = emptyList())
+    }
+
+    /**
+     * 加载更多搜索结果
+     */
+    fun loadMoreResults() {
+        val currentState = _uiState.value
+        if (currentState.isLoading || !currentState.hasMore) return
+
+        viewModelScope.launch {
+            try {
+                _uiState.value = _uiState.value.copy(isLoading = true)
+
+                // ✅ 通过适配器加载更多搜索结果
+                repositoryAdapter.searchContent(currentState.keyword, "")
+
+                // 实际数据通过SiteViewModel观察获取
+                Log.d("ONETV_MOVIE", "✅ 加载更多搜索结果请求已发送")
+
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    currentPage = currentState.currentPage + 1
+                )
+
+            } catch (e: Exception) {
+                Log.e("ONETV_MOVIE", "加载更多搜索结果失败", e)
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    error = "加载更多失败: ${e.message}"
+                )
+            }
+        }
     }
 }

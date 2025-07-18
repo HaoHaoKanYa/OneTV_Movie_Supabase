@@ -9,6 +9,7 @@ import kotlinx.coroutines.launch
 import top.cywin.onetv.movie.MovieApp
 import top.cywin.onetv.movie.bean.Vod
 import top.cywin.onetv.movie.bean.Flag
+import top.cywin.onetv.movie.bean.Episode
 import android.util.Log
 
 /**
@@ -20,20 +21,11 @@ data class DetailUiState(
     val movie: Vod? = null,
     val flags: List<Flag> = emptyList(),
     val selectedFlag: Flag? = null,
-    val episodes: List<VodEpisode> = emptyList(),
-    val selectedEpisode: VodEpisode? = null,
+    val episodes: List<Episode> = emptyList(),
+    val selectedEpisode: Episode? = null,
     val isFavorite: Boolean = false,
     val showFlagSelector: Boolean = false,
     val showEpisodeSelector: Boolean = false
-)
-
-/**
- * 剧集数据类
- */
-data class VodEpisode(
-    val name: String,
-    val url: String,
-    val index: Int
 )
 
 /**
@@ -92,7 +84,7 @@ class MovieDetailViewModel : ViewModel() {
         viewModelScope.launch {
             val currentState = _uiState.value
             val vodId = currentState.movie?.vodId ?: return@launch
-            val siteKey = currentState.movie?.key ?: ""
+            val siteKey = currentState.movie?.getSite()?.getKey() ?: ""
 
             try {
                 if (currentState.isFavorite) {
@@ -101,10 +93,8 @@ class MovieDetailViewModel : ViewModel() {
                     Log.d("ONETV_MOVIE", "✅ 移除收藏请求已发送")
                 } else {
                     // ✅ 通过适配器添加收藏 - 收藏逻辑在FongMi_TV中
-                    currentState.movie?.let { movie ->
-                        repositoryAdapter.addToFavorites(movie)
-                        Log.d("ONETV_MOVIE", "✅ 添加收藏请求已发送")
-                    }
+                    repositoryAdapter.addToFavorites(vodId, siteKey)
+                    Log.d("ONETV_MOVIE", "✅ 添加收藏请求已发送")
                 }
 
                 _uiState.value = _uiState.value.copy(
@@ -141,7 +131,7 @@ class MovieDetailViewModel : ViewModel() {
     /**
      * 选择剧集
      */
-    fun selectEpisode(episode: VodEpisode) {
+    fun selectEpisode(episode: Episode) {
         Log.d("ONETV_MOVIE", "📺 选择剧集: ${episode.name}")
         _uiState.value = _uiState.value.copy(
             selectedEpisode = episode,
@@ -152,15 +142,14 @@ class MovieDetailViewModel : ViewModel() {
     /**
      * 解析剧集列表
      */
-    private fun parseEpisodes(urls: String): List<VodEpisode> {
+    private fun parseEpisodes(urls: String): List<Episode> {
         return try {
             urls.split("#").mapIndexed { index, episodeData ->
                 val parts = episodeData.split("$")
-                VodEpisode(
-                    name = if (parts.size >= 2) parts[0] else "第${index + 1}集",
-                    url = if (parts.size >= 2) parts[1] else episodeData,
-                    index = index
-                )
+                Episode().apply {
+                    name = if (parts.size >= 2) parts[0] else "第${index + 1}集"
+                    url = if (parts.size >= 2) parts[1] else episodeData
+                }
             }
         } catch (e: Exception) {
             Log.e("ONETV_MOVIE", "剧集解析失败", e)

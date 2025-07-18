@@ -23,9 +23,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import top.cywin.onetv.movie.viewmodel.MovieCategoryViewModel
-import top.cywin.onetv.movie.viewmodel.MovieCategoryUiState
-import top.cywin.onetv.movie.bean.Movie
-import top.cywin.onetv.movie.bean.CategoryFilter
+import top.cywin.onetv.movie.viewmodel.CategoryUiState
+import top.cywin.onetv.movie.bean.Vod
+import top.cywin.onetv.movie.bean.Filter
 import top.cywin.onetv.movie.MovieApp
 import android.util.Log
 
@@ -52,7 +52,7 @@ fun MovieCategoryScreen(
     // ✅ 页面初始化时加载分类数据
     LaunchedEffect(typeId, siteKey) {
         Log.d("ONETV_MOVIE", "📂 MovieCategoryScreen 初始化: typeId=$typeId")
-        viewModel.loadCategoryMovies(typeId, siteKey)
+        viewModel.initCategory(typeId)
     }
 
     // ✅ UI状态处理
@@ -62,8 +62,8 @@ fun MovieCategoryScreen(
         }
         uiState.error != null && uiState.movies.isEmpty() -> {
             ErrorScreen(
-                error = uiState.error,
-                onRetry = { viewModel.loadCategoryMovies(typeId, siteKey) },
+                error = uiState.error ?: "未知错误",
+                onRetry = { viewModel.initCategory(typeId) },
                 onBack = { navController.popBackStack() }
             )
         }
@@ -73,10 +73,10 @@ fun MovieCategoryScreen(
                 onMovieClick = { movie ->
                     navController.navigate("detail/${movie.vodId}/$siteKey")
                 },
-                onLoadMore = { viewModel.loadMoreMovies() },
-                onFilterChange = { filter -> viewModel.applyFilter(filter) },
-                onSortChange = { sort -> viewModel.applySorting(sort) },
-                onRefresh = { viewModel.refreshCategory() },
+                onLoadMore = { viewModel.loadMore() },
+                onFilterChange = { filter -> viewModel.applyFilters(mapOf()) },
+                onSortChange = { sort -> /* TODO: 实现排序 */ },
+                onRefresh = { viewModel.refresh() },
                 onBack = { navController.popBackStack() }
             )
         }
@@ -85,10 +85,10 @@ fun MovieCategoryScreen(
 
 @Composable
 private fun CategoryContent(
-    uiState: MovieCategoryUiState,
-    onMovieClick: (Movie) -> Unit,
+    uiState: CategoryUiState,
+    onMovieClick: (Vod) -> Unit,
     onLoadMore: () -> Unit,
-    onFilterChange: (CategoryFilter) -> Unit,
+    onFilterChange: (Filter) -> Unit,
     onSortChange: (String) -> Unit,
     onRefresh: () -> Unit,
     onBack: () -> Unit
@@ -169,7 +169,7 @@ private fun CategoryContent(
 
 @Composable
 private fun MovieCard(
-    movie: Movie,
+    movie: Vod,
     onClick: () -> Unit
 ) {
     Card(
