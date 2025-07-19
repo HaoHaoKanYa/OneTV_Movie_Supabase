@@ -17,7 +17,8 @@ import android.provider.MediaStore;
 import androidx.fragment.app.Fragment;
 
 import top.cywin.onetv.movie.App;
-import top.cywin.onetv.movie.ui.activity.FileActivity;
+// ❌ 移除FileActivity引用
+// import top.cywin.onetv.movie.ui.activity.FileActivity;
 import top.cywin.onetv.movie.catvod.utils.Path;
 
 import java.io.File;
@@ -69,8 +70,13 @@ public class FileChooser {
         intent.putExtra("onetv.content.extra.SHOW_ADVANCED", true);
         List<ResolveInfo> resolveInfos = App.get().getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
         if (Util.isLeanback() || resolveInfos.isEmpty() || resolveInfos.get(0).activityInfo.packageName.contains("frameworkpackagestubs")) {
-            if (activity != null) activity.startActivityForResult(new Intent(activity, FileActivity.class), code);
-            if (fragment != null) fragment.startActivityForResult(new Intent(fragment.getActivity(), FileActivity.class), code);
+            // ❌ 不再使用FileActivity
+            // if (activity != null) activity.startActivityForResult(new Intent(activity, FileActivity.class), code);
+            // if (fragment != null) fragment.startActivityForResult(new Intent(fragment.getActivity(), FileActivity.class), code);
+
+            // ✅ 使用系统文件选择器
+            if (activity != null) activity.startActivityForResult(Intent.createChooser(intent, "选择文件"), code);
+            if (fragment != null) fragment.startActivityForResult(Intent.createChooser(intent, "选择文件"), code);
         } else {
             if (activity != null) activity.startActivityForResult(Intent.createChooser(intent, ""), code);
             if (fragment != null) fragment.startActivityForResult(Intent.createChooser(intent, ""), code);

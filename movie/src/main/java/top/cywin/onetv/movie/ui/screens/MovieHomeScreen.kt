@@ -15,6 +15,7 @@ import androidx.compose.material.icons.filled.Tv
 import androidx.compose.material.icons.filled.Tune
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.SwapHoriz
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -30,6 +31,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import kotlinx.coroutines.delay
 import android.util.Log
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import top.cywin.onetv.movie.viewmodel.MovieViewModel
 import top.cywin.onetv.movie.viewmodel.MovieUiState
 import top.cywin.onetv.movie.viewmodel.VodConfigUrl
@@ -38,6 +42,7 @@ import top.cywin.onetv.movie.bean.Vod
 import top.cywin.onetv.movie.bean.Class
 import top.cywin.onetv.movie.MovieApp
 import top.cywin.onetv.movie.navigation.MovieRoutes
+import top.cywin.onetv.movie.event.NavigationEvent
 import top.cywin.onetv.movie.ui.components.MovieCard
 import top.cywin.onetv.movie.ui.components.QuickCategoryGrid
 import top.cywin.onetv.movie.ui.components.RouteSelector
@@ -49,153 +54,155 @@ import top.cywin.onetv.movie.ui.components.RouteSelector
 @Composable
 fun MovieHomeScreen(
     navController: NavController,
-    viewModel: MovieViewModel = viewModel { MovieViewModel() }
+    viewModel: MovieViewModel = viewModel {
+        MovieViewModel(
+            configManager = MovieApp.getInstance().vodConfigManager
+        )
+    }
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    // ✅ 通过MovieApp访问适配器系统
-    val movieApp = MovieApp.getInstance()
-    val siteViewModel = movieApp.siteViewModel
-    val uiAdapter = movieApp.uiAdapter
-
-    // ✅ 观察FongMi_TV的数据变化 - 数据来源于FongMi_TV解析系统
-    // 注意：这里需要根据实际的FongMi_TV SiteViewModel API进行调整
-    // val searchResult by siteViewModel.result.observeAsState()
-    // val contentDetail by siteViewModel.detail.observeAsState()
-    // val homeContent by siteViewModel.list.observeAsState()
-
-    // ✅ 页面初始化时加载数据
+    // ✅ 监听导航事件
     LaunchedEffect(Unit) {
-        Log.d("ONETV_MOVIE", "🏠 MovieHomeScreen 初始化")
-        viewModel.loadHomeData()
-    }
-
-    // ✅ 处理FongMi_TV数据变化
-    // LaunchedEffect(homeContent) {
-    //     homeContent?.let { content ->
-    //         Log.d("ONETV_MOVIE", "🏠 收到FongMi_TV首页数据: ${content.list.size}条")
-    //         // 这里可以进一步处理FongMi_TV返回的数据
-    //     }
-    // }
-
-    // ✅ UI状态处理
-    when {
-        uiState.isLoading -> {
-            LoadingScreen(message = "正在加载配置...")
-        }
-        uiState.error != null -> {
-            ErrorScreen(
-                error = uiState.error ?: "未知错误",
-                onRetry = { viewModel.refresh() },
-                onBack = { navController.popBackStack() }
-            )
-        }
-        uiState.isStoreHouseIndex -> {
-            // 仓库索引模式
-            StoreHouseScreen(
-                uiState = uiState,
-                onRouteSelect = { route -> viewModel.selectRoute(route) },
-                onShowSelector = { viewModel.showRouteSelector() },
-                onHideSelector = { viewModel.hideRouteSelector() }
-            )
-        }
-        else -> {
-            // 正常首页模式
-            HomeContent(
-                uiState = uiState,
-                // searchResult = searchResult,
-                // homeContent = homeContent,
-                onRefresh = { viewModel.refresh() },
-                onCategoryClick = { category ->
-                    navController.navigate("category/${category.typeId}")
-                },
-                onMovieClick = { movie ->
-                    navController.navigate("detail/${movie.getVodId()}/${movie.getSite()?.getKey() ?: ""}")
-                },
-                onSearchClick = {
-                    navController.navigate("search")
-                },
-                onSettingsClick = {
-                    navController.navigate("settings")
+        EventBus.getDefault().register(object {
+            @Subscribe(threadMode = ThreadMode.MAIN)
+            fun onNavigation(event: NavigationEvent) {
+                when (event.action) {
+                    "live_boot" -> {
+                        // 导航到直播页面
+                        navController.navigate("live")
+                    }
+                    "movie_detail" -> {
+                        val vodId = event.params["vodId"] ?: ""
+                        val siteKey = event.params["siteKey"] ?: ""
+                        navController.navigate("detail/$vodId/$siteKey")
+                    }
                 }
-            )
-        }
+            }
+        })
     }
+
+    // ✅ UI内容渲染
+    HomeContent(
+        uiState = uiState,
+        onRefresh = { viewModel.refresh() },
+        onMovieClick = { movie ->
+            navController.navigate("detail/${movie.vodId}/${movie.site?.key ?: ""}")
+        },
+        onCategoryClick = { category ->
+            navController.navigate("category/${category.typeId}")
+        },
+        onSearchClick = {
+            navController.navigate("search")
+        },
+        onSettingsClick = {
+            navController.navigate("settings")
+        },
+        onRouteSelect = { route ->
+            viewModel.selectRoute(route)
+        },
+        onShowRouteSelector = {
+            viewModel.showRouteSelector()
+        },
+        onHideRouteSelector = {
+            viewModel.hideRouteSelector()
+        }
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun HomeContent(
     uiState: MovieUiState,
-    // searchResult: Any?, // FongMi_TV的搜索结果
-    // homeContent: Any?, // FongMi_TV的首页内容
     onRefresh: () -> Unit,
-    onCategoryClick: (Class) -> Unit,
     onMovieClick: (Vod) -> Unit,
+    onCategoryClick: (Class) -> Unit,
     onSearchClick: () -> Unit,
-    onSettingsClick: () -> Unit
+    onSettingsClick: () -> Unit,
+    onRouteSelect: (VodConfigUrl) -> Unit,
+    onShowRouteSelector: () -> Unit,
+    onHideRouteSelector: () -> Unit
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
+        modifier = Modifier.fillMaxSize()
     ) {
-        // 顶部导航栏
+        // 顶部工具栏
         TopAppBar(
-            title = { Text("OneTV 影视") },
+            title = {
+                Text(
+                    text = if (uiState.isStoreHouseIndex) uiState.storeHouseName else "OneTV 影视",
+                    style = MaterialTheme.typography.headlineSmall
+                )
+            },
             actions = {
-                IconButton(onClick = onSearchClick) {
-                    Icon(Icons.Default.Search, contentDescription = "搜索")
+                // 线路选择按钮
+                if (uiState.isStoreHouseIndex && uiState.availableRoutes.isNotEmpty()) {
+                    IconButton(onClick = onShowRouteSelector) {
+                        Icon(
+                            imageVector = Icons.Default.SwapHoriz,
+                            contentDescription = "切换线路"
+                        )
+                    }
                 }
+
+                // 搜索按钮
+                IconButton(onClick = onSearchClick) {
+                    Icon(
+                        imageVector = Icons.Default.Search,
+                        contentDescription = "搜索"
+                    )
+                }
+
+                // 设置按钮
                 IconButton(onClick = onSettingsClick) {
-                    Icon(Icons.Default.Settings, contentDescription = "设置")
+                    Icon(
+                        imageVector = Icons.Default.Settings,
+                        contentDescription = "设置"
+                    )
                 }
             }
         )
 
-        // 主要内容区域
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            // 推荐内容轮播
-            if (uiState.recommendMovies.isNotEmpty()) {
-                item {
-                    RecommendCarousel(
-                        movies = uiState.recommendMovies,
-                        onMovieClick = onMovieClick
-                    )
-                }
+        // 内容区域
+        when {
+            uiState.isLoading -> {
+                LoadingScreen(message = "正在加载配置...")
             }
-
-            // 分类网格
-            if (uiState.categories.isNotEmpty()) {
-                item {
-                    CategoryGrid(
-                        categories = uiState.categories,
-                        onCategoryClick = onCategoryClick
-                    )
-                }
+            uiState.error != null -> {
+                ErrorScreen(
+                    error = uiState.error,
+                    onRetry = onRefresh,
+                    onBack = { /* 首页不需要返回 */ }
+                )
             }
-
-            // 各分类内容
-            items(uiState.homeCategories) { categorySection ->
-                CategorySection(
-                    section = categorySection,
+            uiState.isStoreHouseIndex && uiState.selectedRoute == null -> {
+                RouteSelectionScreen(
+                    routes = uiState.availableRoutes,
+                    onRouteSelect = onRouteSelect
+                )
+            }
+            else -> {
+                HomeContentScreen(
+                    uiState = uiState,
+                    onRefresh = onRefresh,
                     onMovieClick = onMovieClick,
-                    onMoreClick = {
-                        onCategoryClick(
-                            Class().apply {
-                                typeId = categorySection.categoryId
-                                typeName = categorySection.categoryName
-                            }
-                        )
-                    }
+                    onCategoryClick = onCategoryClick
                 )
             }
         }
 
+        // 线路选择对话框
+        if (uiState.showRouteSelector) {
+            RouteSelector(
+                routes = uiState.availableRoutes,
+                selectedRoute = uiState.selectedRoute,
+                onRouteSelect = { route ->
+                    onRouteSelect(route)
+                    onHideRouteSelector()
+                },
+                onDismiss = onHideRouteSelector
+            )
+        }
     }
 }
 
@@ -251,18 +258,91 @@ private fun ErrorScreen(
 }
 
 @Composable
-private fun StoreHouseScreen(
-    uiState: MovieUiState,
-    onRouteSelect: (VodConfigUrl) -> Unit,
-    onShowSelector: () -> Unit,
-    onHideSelector: () -> Unit
+private fun RouteSelectionScreen(
+    routes: List<VodConfigUrl>,
+    onRouteSelect: (VodConfigUrl) -> Unit
 ) {
-    // 仓库索引界面的实现
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        Text("仓库索引模式 - 待实现")
+        LazyColumn(
+            modifier = Modifier.fillMaxWidth(),
+            contentPadding = PaddingValues(16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            item {
+                Text(
+                    text = "选择线路",
+                    style = MaterialTheme.typography.headlineMedium,
+                    modifier = Modifier.padding(bottom = 16.dp)
+                )
+            }
+
+            items(routes) { route ->
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { onRouteSelect(route) }
+                ) {
+                    Text(
+                        text = route.name,
+                        modifier = Modifier.padding(16.dp),
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun HomeContentScreen(
+    uiState: MovieUiState,
+    onRefresh: () -> Unit,
+    onMovieClick: (Vod) -> Unit,
+    onCategoryClick: (Class) -> Unit
+) {
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        // 推荐内容轮播
+        if (uiState.recommendMovies.isNotEmpty()) {
+            item {
+                RecommendCarousel(
+                    movies = uiState.recommendMovies,
+                    onMovieClick = onMovieClick
+                )
+            }
+        }
+
+        // 分类网格
+        if (uiState.categories.isNotEmpty()) {
+            item {
+                CategoryGrid(
+                    categories = uiState.categories,
+                    onCategoryClick = onCategoryClick
+                )
+            }
+        }
+
+        // 各分类内容
+        items(uiState.homeCategories) { categorySection ->
+            CategorySection(
+                section = categorySection,
+                onMovieClick = onMovieClick,
+                onMoreClick = {
+                    onCategoryClick(
+                        Class().apply {
+                            typeId = categorySection.categoryId
+                            typeName = categorySection.categoryName
+                        }
+                    )
+                }
+            )
+        }
     }
 }
 

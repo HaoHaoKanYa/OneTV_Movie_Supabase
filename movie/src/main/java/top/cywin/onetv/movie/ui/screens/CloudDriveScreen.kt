@@ -22,10 +22,16 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import top.cywin.onetv.movie.viewmodel.CloudDriveViewModel
 import top.cywin.onetv.movie.viewmodel.CloudDriveUiState
 import top.cywin.onetv.movie.viewmodel.CloudDriveConfig
 import top.cywin.onetv.movie.cloudrive.bean.CloudFile
+import top.cywin.onetv.movie.event.NavigationEvent
+import top.cywin.onetv.movie.ui.model.FileSortType
+import top.cywin.onetv.movie.ui.model.FileViewType
 import top.cywin.onetv.movie.MovieApp
 import android.util.Log
 
@@ -36,132 +42,203 @@ import android.util.Log
 @Composable
 fun CloudDriveScreen(
     navController: NavController,
-    viewModel: CloudDriveViewModel = viewModel { CloudDriveViewModel() }
+    viewModel: CloudDriveViewModel = viewModel {
+        CloudDriveViewModel()
+    }
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    // ✅ 通过MovieApp访问适配器系统
-    val movieApp = MovieApp.getInstance()
-    val repositoryAdapter = movieApp.repositoryAdapter
-
-    // ✅ 页面初始化时加载云盘配置
+    // ✅ 监听导航事件
     LaunchedEffect(Unit) {
-        Log.d("ONETV_MOVIE", "☁️ CloudDriveScreen 初始化")
-        viewModel.loadCloudDrives()
+        EventBus.getDefault().register(object {
+            @Subscribe(threadMode = ThreadMode.MAIN)
+            fun onNavigation(event: NavigationEvent) {
+                when (event.action) {
+                    "play_cloud_file" -> {
+                        val url = event.params["url"] ?: ""
+                        val name = event.params["name"] ?: ""
+                        navController.navigate("player?url=$url&name=$name")
+                    }
+                }
+            }
+        })
     }
 
-    // ✅ UI状态处理
-    when {
-        uiState.isLoading -> {
-            LoadingScreen(message = "正在加载云盘配置...")
-        }
-        uiState.error != null -> {
-            ErrorScreen(
-                error = uiState.error ?: "未知错误",
-                onRetry = { viewModel.loadCloudDrives() },
-                onBack = { navController.popBackStack() }
-            )
-        }
-        else -> {
-            CloudDriveContent(
-                uiState = uiState,
-                onDriveSelect = { drive -> viewModel.selectDrive(drive) },
-                onFileClick = { file -> viewModel.playFile(file) },
-                onDirectoryEnter = { dir -> viewModel.enterDirectory(dir) },
-                onBackToParent = { viewModel.backToParent() },
-                onRefresh = { viewModel.refreshCurrentDirectory() },
-                onBack = { navController.popBackStack() }
-            )
-        }
-    }
+    // ✅ UI内容渲染
+    CloudDriveContent(
+        uiState = uiState,
+        onBack = { navController.popBackStack() },
+        onDriveSelect = { drive -> viewModel.selectDrive(drive) },
+        onFolderEnter = { folder -> viewModel.enterFolder(folder) },
+        onFilePlay = { file -> viewModel.playFile(file) },
+        onGoBack = { viewModel.goBack() },
+        onRefresh = { viewModel.refresh() },
+        onSortChange = { sortType -> /* 处理排序变更 */ },
+        onViewTypeChange = { viewType -> /* 处理视图类型变更 */ },
+        onError = { viewModel.clearError() }
+    )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun CloudDriveContent(
     uiState: CloudDriveUiState,
+    onBack: () -> Unit,
     onDriveSelect: (CloudDriveConfig) -> Unit,
-    onFileClick: (CloudFile) -> Unit,
-    onDirectoryEnter: (CloudFile) -> Unit,
-    onBackToParent: () -> Unit,
+    onFolderEnter: (CloudFile) -> Unit,
+    onFilePlay: (CloudFile) -> Unit,
+    onGoBack: () -> Unit,
     onRefresh: () -> Unit,
-    onBack: () -> Unit
+    onSortChange: (FileSortType) -> Unit,
+    onViewTypeChange: (FileViewType) -> Unit,
+    onError: () -> Unit
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
+        modifier = Modifier.fillMaxSize()
     ) {
-        // 顶部导航栏
+        // 顶部工具栏
         TopAppBar(
-            title = { Text("云盘浏览") },
+            title = {
+                Text(
+                    text = uiState.selectedDrive?.name ?: "云盘",
+                    style = MaterialTheme.typography.headlineSmall
+                )
+            },
             navigationIcon = {
                 IconButton(onClick = onBack) {
                     Icon(Icons.Default.ArrowBack, contentDescription = "返回")
                 }
             },
             actions = {
+                // 排序按钮
+                IconButton(onClick = { /* 显示排序选项 */ }) {
+                    Icon(Icons.Default.Sort, contentDescription = "排序")
+                }
+
+                // 视图切换按钮
+                IconButton(onClick = { /* 切换视图类型 */ }) {
+                    Icon(Icons.Default.ViewList, contentDescription = "视图")
+                }
+
+                // 刷新按钮
                 IconButton(onClick = onRefresh) {
                     Icon(Icons.Default.Refresh, contentDescription = "刷新")
                 }
             }
         )
 
-        // 云盘选择器
-        if (uiState.availableDrives.isNotEmpty()) {
-            LazyRow(
-                modifier = Modifier.padding(16.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                items(uiState.availableDrives) { drive ->
-                    FilterChip(
-                        onClick = { onDriveSelect(drive) },
-                        label = { Text(drive.name) },
-                        selected = uiState.selectedDrive == drive
+        // 内容区域
+        when {
+            uiState.isLoading -> {
+                LoadingScreen(message = "正在加载云盘配置...")
+            }
+            uiState.error != null -> {
+                ErrorScreen(
+                    error = uiState.error,
+                    onRetry = onRefresh,
+                    onBack = onBack
+                )
+            }
+            uiState.selectedDrive == null -> {
+                DriveSelectionScreen(
+                    drives = uiState.availableDrives,
+                    onDriveSelect = onDriveSelect
+                )
+            }
+            else -> {
+                FileListScreen(
+                    uiState = uiState,
+                    onFolderEnter = onFolderEnter,
+                    onFilePlay = onFilePlay,
+                    onGoBack = onGoBack
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun DriveSelectionScreen(
+    drives: List<CloudDriveConfig>,
+    onDriveSelect: (CloudDriveConfig) -> Unit
+) {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        LazyColumn(
+            modifier = Modifier.fillMaxWidth(),
+            contentPadding = PaddingValues(16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            item {
+                Text(
+                    text = "选择云盘",
+                    style = MaterialTheme.typography.headlineMedium,
+                    modifier = Modifier.padding(bottom = 16.dp)
+                )
+            }
+
+            items(drives) { drive ->
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { onDriveSelect(drive) }
+                ) {
+                    Text(
+                        text = drive.name,
+                        modifier = Modifier.padding(16.dp),
+                        style = MaterialTheme.typography.bodyLarge
                     )
                 }
             }
         }
+    }
+}
 
-        // 文件列表
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            // 返回上级目录按钮
-            if (uiState.canGoBack) {
-                item {
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable { onBackToParent() }
+@Composable
+private fun FileListScreen(
+    uiState: CloudDriveUiState,
+    onFolderEnter: (CloudFile) -> Unit,
+    onFilePlay: (CloudFile) -> Unit,
+    onGoBack: () -> Unit
+) {
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        // 返回上级目录按钮
+        if (uiState.canGoBack) {
+            item {
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { onGoBack() }
+                ) {
+                    Row(
+                        modifier = Modifier.padding(16.dp),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Row(
-                            modifier = Modifier.padding(16.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Icon(Icons.Default.ArrowUpward, contentDescription = "返回上级")
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text("返回上级目录")
-                        }
+                        Icon(Icons.Default.ArrowUpward, contentDescription = "返回上级")
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text("返回上级目录")
                     }
                 }
             }
+        }
 
-            // 文件和目录列表
-            items(uiState.currentFiles) { file ->
-                CloudFileItem(
-                    file = file,
-                    onClick = {
-                        if (file.isFolder()) {
-                            onDirectoryEnter(file)
-                        } else {
-                            onFileClick(file)
-                        }
+        // 文件和目录列表
+        items(uiState.currentFiles) { file ->
+            CloudFileItem(
+                file = file,
+                onClick = {
+                    if (file.isFolder()) {
+                        onFolderEnter(file)
+                    } else {
+                        onFilePlay(file)
                     }
-                )
-            }
+                }
+            )
         }
     }
 }

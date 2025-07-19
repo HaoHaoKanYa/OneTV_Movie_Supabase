@@ -10,7 +10,11 @@ import top.cywin.onetv.movie.bean.Parse;
 import top.cywin.onetv.movie.bean.Result;
 import top.cywin.onetv.movie.impl.ParseCallback;
 import top.cywin.onetv.movie.server.Server;
+// ✅ 保留CustomWebView作为备用，添加EventBus支持
 import top.cywin.onetv.movie.ui.custom.CustomWebView;
+import org.greenrobot.eventbus.EventBus;
+import top.cywin.onetv.movie.event.WebViewParseEvent;
+import top.cywin.onetv.movie.event.WebViewParseRequest;
 import top.cywin.onetv.movie.utils.UrlUtil;
 import top.cywin.onetv.movie.catvod.net.OkHttp;
 import top.cywin.onetv.movie.catvod.utils.Json;
@@ -183,7 +187,15 @@ public class ParseJob implements ParseCallback {
     }
 
     private void startWeb(String key, String from, Map<String, String> headers, String url, String click) {
-        App.post(() -> webViews.add(CustomWebView.create(App.get()).start(key, from, headers, url, click, this, !url.contains("player/?url="))));
+        App.post(() -> {
+            // ✅ 通过事件通知Compose UI显示WebView解析器
+            WebViewParseRequest request = new WebViewParseRequest(key, from, headers, url, click, this, !url.contains("player/?url="));
+            EventBus.getDefault().post(new WebViewParseEvent(request));
+
+            // ✅ 同时保留原有的CustomWebView逻辑作为备用
+            // 如果Compose WebView解析失败，可以回退到原有方式
+            webViews.add(CustomWebView.create(App.get()).start(key, from, headers, url, click, this, !url.contains("player/?url=")));
+        });
     }
 
     private Map<String, String> getHeader(JsonObject object) {

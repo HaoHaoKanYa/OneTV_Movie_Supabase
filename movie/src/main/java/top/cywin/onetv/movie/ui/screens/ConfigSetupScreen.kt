@@ -28,79 +28,114 @@ import android.util.Log
 @Composable
 fun ConfigSetupScreen(
     navController: NavController,
-    viewModel: ConfigSetupViewModel = viewModel { ConfigSetupViewModel() }
+    viewModel: ConfigSetupViewModel = viewModel {
+        ConfigSetupViewModel()
+    }
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    // ✅ 通过MovieApp访问适配器系统
-    val movieApp = MovieApp.getInstance()
-    val repositoryAdapter = movieApp.repositoryAdapter
-
-    // ✅ UI状态处理
-    when {
-        uiState.isLoading -> {
-            LoadingScreen(message = "正在验证配置...")
+    // ✅ UI内容渲染
+    ConfigSetupContent(
+        uiState = uiState,
+        onBack = { navController.popBackStack() },
+        onConfigUrlChange = { url -> viewModel.setConfigUrl(url) },
+        onParseConfig = { viewModel.parseConfig() },
+        onTestUrl = { url -> viewModel.testConfigUrl(url) },
+        onResetConfig = { viewModel.resetConfig() },
+        onShowConfigInput = { viewModel.showConfigInput() },
+        onHideConfigInput = { viewModel.hideConfigInput() },
+        onError = { viewModel.clearError() },
+        onNavigateToHome = {
+            navController.navigate("home") {
+                popUpTo("config_setup") { inclusive = true }
+            }
         }
-        uiState.error != null -> {
-            ErrorScreen(
-                error = uiState.error ?: "未知错误",
-                onRetry = { viewModel.resetConfig() },
-                onBack = { navController.popBackStack() }
-            )
-        }
-        else -> {
-            ConfigSetupContent(
-                uiState = uiState,
-                onConfigUrlChange = { url -> viewModel.validateConfigUrl(url) },
-                onSaveConfig = { url ->
-                    viewModel.saveConfig(url) {
-                        navController.popBackStack()
-                    }
-                },
-                onUseBuiltInConfig = {
-                    // 使用内置配置
-                    navController.popBackStack()
-                },
-                onBack = { navController.popBackStack() }
-            )
-        }
-    }
+    )
 }
 
 @Composable
 private fun ConfigSetupContent(
     uiState: ConfigSetupUiState,
+    onBack: () -> Unit,
     onConfigUrlChange: (String) -> Unit,
-    onSaveConfig: (String) -> Unit,
-    onUseBuiltInConfig: () -> Unit,
-    onBack: () -> Unit
+    onParseConfig: () -> Unit,
+    onTestUrl: (String) -> Unit,
+    onResetConfig: () -> Unit,
+    onShowConfigInput: () -> Unit,
+    onHideConfigInput: () -> Unit,
+    onError: () -> Unit,
+    onNavigateToHome: () -> Unit
+) {
+    Column(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        // 顶部工具栏
+        TopAppBar(
+            title = {
+                Text(
+                    text = "配置设置",
+                    style = MaterialTheme.typography.headlineSmall
+                )
+            },
+            navigationIcon = {
+                IconButton(onClick = onBack) {
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = "返回"
+                    )
+                }
+            }
+        )
+
+        // 内容区域
+        when {
+            uiState.isLoading -> {
+                LoadingScreen(
+                    message = uiState.loadingMessage.ifEmpty { "正在处理..." },
+                    progress = uiState.loadingProgress
+                )
+            }
+            uiState.error != null -> {
+                ErrorScreen(
+                    error = uiState.error,
+                    onRetry = onResetConfig,
+                    onBack = onBack
+                )
+            }
+            !uiState.isConfigured -> {
+                ConfigInputScreen(
+                    uiState = uiState,
+                    onConfigUrlChange = onConfigUrlChange,
+                    onParseConfig = onParseConfig,
+                    onTestUrl = onTestUrl
+                )
+            }
+            else -> {
+                ConfigSuccessScreen(
+                    uiState = uiState,
+                    onNavigateToHome = onNavigateToHome,
+                    onResetConfig = onResetConfig
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun ConfigInputScreen(
+    uiState: ConfigSetupUiState,
+    onConfigUrlChange: (String) -> Unit,
+    onParseConfig: () -> Unit,
+    onTestUrl: (String) -> Unit
 ) {
     var configUrl by remember { mutableStateOf(uiState.configUrl) }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-            .padding(16.dp)
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        // 顶部导航栏
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            IconButton(onClick = onBack) {
-                Icon(Icons.Default.ArrowBack, contentDescription = "返回")
-            }
-            Text(
-                text = "配置设置",
-                style = MaterialTheme.typography.titleLarge
-            )
-            Spacer(modifier = Modifier.width(48.dp))
-        }
-
-        Spacer(modifier = Modifier.height(32.dp))
-
         // 配置URL输入
         OutlinedTextField(
             value = configUrl,
@@ -112,58 +147,67 @@ private fun ConfigSetupContent(
             placeholder = { Text("请输入TVBOX配置地址") },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
-            isError = uiState.validationResult?.contains("失败") == true
-        )
-
-        // 验证结果显示
-        if (uiState.validationResult != null) {
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = uiState.validationResult,
-                color = if (uiState.isConfigValid) {
-                    MaterialTheme.colorScheme.primary
-                } else {
-                    MaterialTheme.colorScheme.error
-                },
-                style = MaterialTheme.typography.bodySmall
-            )
-        }
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        // 操作按钮
-        Column(
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            Button(
-                onClick = { onSaveConfig(configUrl) },
-                enabled = uiState.isConfigValid && !uiState.isValidating,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                if (uiState.isValidating) {
+            trailingIcon = {
+                if (uiState.isTesting) {
                     CircularProgressIndicator(
-                        modifier = Modifier.size(16.dp),
+                        modifier = Modifier.size(20.dp),
                         strokeWidth = 2.dp
                     )
-                    Spacer(modifier = Modifier.width(8.dp))
+                } else {
+                    IconButton(onClick = { onTestUrl(configUrl) }) {
+                        Icon(Icons.Default.NetworkCheck, contentDescription = "测试")
+                    }
                 }
-                Text("保存配置")
             }
+        )
 
-            OutlinedButton(
-                onClick = onUseBuiltInConfig,
-                modifier = Modifier.fillMaxWidth()
+        // 测试结果显示
+        uiState.testResults.forEach { (url, result) ->
+            Card(
+                colors = CardDefaults.cardColors(
+                    containerColor = if (result.isSuccess) {
+                        MaterialTheme.colorScheme.primaryContainer
+                    } else {
+                        MaterialTheme.colorScheme.errorContainer
+                    }
+                )
             ) {
-                Text("使用内置配置")
+                Column(
+                    modifier = Modifier.padding(12.dp)
+                ) {
+                    Text(
+                        text = if (result.isSuccess) "✓ 连接成功" else "✗ 连接失败",
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.Bold
+                    )
+                    if (result.errorMessage != null) {
+                        Text(
+                            text = result.errorMessage,
+                            style = MaterialTheme.typography.bodySmall
+                        )
+                    }
+                }
             }
         }
 
-        Spacer(modifier = Modifier.height(32.dp))
-
-        // 帮助信息
-        Card(
+        // 操作按钮
+        Button(
+            onClick = onParseConfig,
+            enabled = configUrl.isNotEmpty() && !uiState.isLoading,
             modifier = Modifier.fillMaxWidth()
         ) {
+            if (uiState.isLoading) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(16.dp),
+                    strokeWidth = 2.dp
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+            }
+            Text("解析配置")
+        }
+
+        // 帮助信息
+        Card {
             Column(
                 modifier = Modifier.padding(16.dp)
             ) {
@@ -175,9 +219,92 @@ private fun ConfigSetupContent(
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = "• 支持标准TVBOX配置格式\n• 支持JSON和TXT格式配置文件\n• 配置将自动验证有效性",
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun ConfigSuccessScreen(
+    uiState: ConfigSetupUiState,
+    onNavigateToHome: () -> Unit,
+    onResetConfig: () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        // 成功信息
+        Card(
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.primaryContainer
+            )
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp)
+            ) {
+                Text(
+                    text = "✓ 配置解析成功",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = "发现 ${uiState.availableSites.size} 个可用站点",
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
+        }
+
+        // 站点列表
+        if (uiState.availableSites.isNotEmpty()) {
+            Text(
+                text = "可用站点",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold
+            )
+
+            uiState.availableSites.take(5).forEach { site ->
+                Card {
+                    Text(
+                        text = site.name,
+                        modifier = Modifier.padding(12.dp),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+            }
+
+            if (uiState.availableSites.size > 5) {
+                Text(
+                    text = "还有 ${uiState.availableSites.size - 5} 个站点...",
+                    style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
+            }
+        }
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        // 操作按钮
+        Column(
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Button(
+                onClick = onNavigateToHome,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("进入首页")
+            }
+
+            OutlinedButton(
+                onClick = onResetConfig,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("重新配置")
             }
         }
     }
@@ -186,7 +313,10 @@ private fun ConfigSetupContent(
 // ✅ 按照指南添加必要的辅助Composable函数
 
 @Composable
-private fun LoadingScreen(message: String) {
+private fun LoadingScreen(
+    message: String,
+    progress: Float = 0f
+) {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
@@ -194,7 +324,14 @@ private fun LoadingScreen(message: String) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            CircularProgressIndicator()
+            if (progress > 0f) {
+                LinearProgressIndicator(
+                    progress = progress,
+                    modifier = Modifier.fillMaxWidth(0.6f)
+                )
+            } else {
+                CircularProgressIndicator()
+            }
             Spacer(modifier = Modifier.height(16.dp))
             Text(text = message)
         }

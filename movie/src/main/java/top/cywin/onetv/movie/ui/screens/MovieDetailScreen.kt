@@ -42,126 +42,115 @@ fun MovieDetailScreen(
     vodId: String,
     siteKey: String = "",
     navController: NavController,
-    viewModel: MovieDetailViewModel = viewModel { MovieDetailViewModel() }
+    viewModel: MovieDetailViewModel = viewModel {
+        MovieDetailViewModel()
+    }
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    // ✅ 通过MovieApp访问适配器系统
-    val movieApp = MovieApp.getInstance()
-    val siteViewModel = movieApp.siteViewModel
-
-    // ✅ 观察FongMi_TV的数据变化 - 数据来源于FongMi_TV解析系统
-    // val contentDetail by siteViewModel.detail.observeAsState()
-
-    // ✅ 页面初始化时加载数据
     LaunchedEffect(vodId, siteKey) {
-        Log.d("ONETV_MOVIE", "📺 MovieDetailScreen 初始化: vodId=$vodId")
         viewModel.loadMovieDetail(vodId, siteKey)
     }
 
-    // ✅ 处理FongMi_TV数据变化
-    // LaunchedEffect(contentDetail) {
-    //     contentDetail?.let { detail ->
-    //         Log.d("ONETV_MOVIE", "📺 收到FongMi_TV详情数据: ${detail.vod_name}")
-    //         // 这里可以进一步处理FongMi_TV返回的详情数据
-    //     }
-    // }
-
-    // ✅ UI状态处理
-    when {
-        uiState.isLoading -> {
-            LoadingScreen(message = "正在加载详情...")
-        }
-        uiState.error != null -> {
-            ErrorScreen(
-                error = uiState.error ?: "未知错误",
-                onRetry = { viewModel.loadMovieDetail(vodId, siteKey) },
-                onBack = { navController.popBackStack() }
-            )
-        }
-        else -> {
-            DetailContent(
-                uiState = uiState,
-                // contentDetail = contentDetail,
-                onPlayClick = { episode ->
-                    navController.navigate("player/$vodId/${episode.getIndex()}/$siteKey")
-                },
-                onFavoriteClick = { viewModel.toggleFavorite() },
-                onFlagSelect = { viewModel.selectFlag(it) },
-                onEpisodeSelect = { viewModel.selectEpisode(it) },
-                onBack = { navController.popBackStack() }
-            )
-        }
-    }
+    // ✅ UI内容渲染
+    DetailContent(
+        uiState = uiState,
+        onBack = { navController.popBackStack() },
+        onPlay = { episode, episodeIndex ->
+            navController.navigate("player/$vodId/$siteKey/$episodeIndex")
+        },
+        onToggleFavorite = { viewModel.toggleFavorite() },
+        onFlagSelect = { flag -> viewModel.selectFlag(flag) },
+        onEpisodeSelect = { episode -> viewModel.selectEpisode(episode) },
+        onShowFlagSelector = { viewModel.showFlagSelector() },
+        onHideFlagSelector = { viewModel.hideFlagSelector() },
+        onShowEpisodeSelector = { viewModel.showEpisodeSelector() },
+        onHideEpisodeSelector = { viewModel.hideEpisodeSelector() }
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun DetailContent(
     uiState: DetailUiState,
-    // contentDetail: Any?, // FongMi_TV的详情数据
-    onPlayClick: (Episode) -> Unit,
-    onFavoriteClick: () -> Unit,
+    onBack: () -> Unit,
+    onPlay: (Episode, Int) -> Unit,
+    onToggleFavorite: () -> Unit,
     onFlagSelect: (Flag) -> Unit,
     onEpisodeSelect: (Episode) -> Unit,
-    onBack: () -> Unit
+    onShowFlagSelector: () -> Unit,
+    onHideFlagSelector: () -> Unit,
+    onShowEpisodeSelector: () -> Unit,
+    onHideEpisodeSelector: () -> Unit
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-    ) {
-        // 顶部导航栏
-        TopAppBar(
-            title = { Text(uiState.movie?.vodName ?: "详情") },
-            navigationIcon = {
-                IconButton(onClick = onBack) {
-                    Icon(Icons.Default.ArrowBack, contentDescription = "返回")
-                }
-            },
-            actions = {
-                IconButton(onClick = onFavoriteClick) {
-                    Icon(
-                        if (uiState.isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                        contentDescription = if (uiState.isFavorite) "取消收藏" else "收藏"
-                    )
-                }
-            }
-        )
+    when {
+        uiState.isLoading -> {
+            LoadingScreen(message = "正在加载详情...")
+        }
+        uiState.error != null -> {
+            ErrorScreen(
+                error = uiState.error,
+                onRetry = { /* 重试逻辑 */ },
+                onBack = onBack
+            )
+        }
+        else -> {
+            Column(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                // 顶部导航栏
+                TopAppBar(
+                    title = { Text(uiState.movie?.vodName ?: "详情") },
+                    navigationIcon = {
+                        IconButton(onClick = onBack) {
+                            Icon(Icons.Default.ArrowBack, contentDescription = "返回")
+                        }
+                    },
+                    actions = {
+                        IconButton(onClick = onToggleFavorite) {
+                            Icon(
+                                if (uiState.isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                                contentDescription = if (uiState.isFavorite) "取消收藏" else "收藏"
+                            )
+                        }
+                    }
+                )
 
-        // 详情内容
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            // 基本信息
-            uiState.movie?.let { movie ->
-                item {
-                    MovieInfoSection(movie = movie)
-                }
-            }
+                // 详情内容
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    // 基本信息
+                    uiState.movie?.let { movie ->
+                        item {
+                            MovieInfoSection(movie = movie)
+                        }
+                    }
 
-            // 播放线路选择
-            if (uiState.flags.isNotEmpty()) {
-                item {
-                    PlayFlagSection(
-                        flags = uiState.flags,
-                        selectedFlag = uiState.selectedFlag,
-                        onFlagSelect = onFlagSelect
-                    )
-                }
-            }
+                    // 播放线路选择
+                    if (uiState.flags.isNotEmpty()) {
+                        item {
+                            PlayFlagSection(
+                                flags = uiState.flags,
+                                selectedFlag = uiState.selectedFlag,
+                                onFlagSelect = onFlagSelect
+                            )
+                        }
+                    }
 
-            // 剧集列表
-            if (uiState.episodes.isNotEmpty()) {
-                item {
-                    EpisodeSection(
-                        episodes = uiState.episodes,
-                        selectedEpisode = uiState.selectedEpisode,
-                        onEpisodeSelect = onEpisodeSelect,
-                        onPlayClick = onPlayClick
-                    )
+                    // 剧集列表
+                    if (uiState.episodes.isNotEmpty()) {
+                        item {
+                            EpisodeSection(
+                                episodes = uiState.episodes,
+                                selectedEpisode = uiState.selectedEpisode,
+                                onEpisodeSelect = onEpisodeSelect,
+                                onPlay = onPlay
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -343,7 +332,7 @@ private fun EpisodeSection(
     episodes: List<Episode>,
     selectedEpisode: Episode?,
     onEpisodeSelect: (Episode) -> Unit,
-    onPlayClick: (Episode) -> Unit
+    onPlay: (Episode, Int) -> Unit
 ) {
     Column {
         Text(
@@ -356,13 +345,13 @@ private fun EpisodeSection(
         LazyRow(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            items(episodes) { episode ->
+            items(episodes.withIndex().toList()) { (index, episode) ->
                 EpisodeChip(
                     episode = episode,
                     isSelected = selectedEpisode == episode,
                     onClick = {
                         onEpisodeSelect(episode)
-                        onPlayClick(episode)
+                        onPlay(episode, index)
                     }
                 )
             }

@@ -18,7 +18,10 @@ import top.cywin.onetv.movie.bean.Live;
 import top.cywin.onetv.movie.bean.Rule;
 import top.cywin.onetv.movie.database.AppDatabase;
 import top.cywin.onetv.movie.impl.Callback;
-import top.cywin.onetv.movie.ui.activity.LiveActivity;
+// ❌ 移除Activity引用
+// import top.cywin.onetv.movie.ui.activity.LiveActivity;
+import org.greenrobot.eventbus.EventBus;
+import top.cywin.onetv.movie.event.NavigationEvent;
 import top.cywin.onetv.movie.utils.Notify;
 import top.cywin.onetv.movie.utils.UrlUtil;
 import top.cywin.onetv.movie.catvod.net.OkHttp;
@@ -210,7 +213,10 @@ public class LiveConfig {
 
     private void bootLive() {
         Setting.putBootLive(false);
-        LiveActivity.start(App.get());
+        // ❌ LiveActivity.start(App.get());
+
+        // ✅ 通过EventBus通知Compose UI
+        EventBus.getDefault().post(new NavigationEvent("live_boot"));
     }
 
     public void parse(JsonObject object) {
@@ -314,7 +320,10 @@ public class LiveConfig {
         this.home.setActivated(true);
         config.home(home.getName()).update();
         for (Live item : getLives()) item.setActivated(home);
-        if (App.activity() != null && App.activity() instanceof LiveActivity) return;
+
+        // ❌ 移除Activity检查
+        // if (App.activity() != null && App.activity() instanceof LiveActivity) return;
+
         if (check) if (home.isBoot() || Setting.isBootLive()) App.post(this::bootLive);
     }
 }

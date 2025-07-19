@@ -43,89 +43,90 @@ import android.util.Log
 @Composable
 fun MoviePlayerScreen(
     vodId: String,
-    episodeIndex: Int,
     siteKey: String = "",
+    episodeIndex: Int = 0,
     navController: NavController,
-    viewModel: MoviePlayerViewModel = viewModel { MoviePlayerViewModel() }
+    viewModel: MoviePlayerViewModel = viewModel {
+        MoviePlayerViewModel(
+            historyRepository = MovieApp.getInstance().watchHistoryRepository
+        )
+    }
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    // ✅ 通过MovieApp访问适配器系统
-    val movieApp = MovieApp.getInstance()
-    val siteViewModel = movieApp.siteViewModel
-
-    // ✅ 观察FongMi_TV的数据变化 - 数据来源于FongMi_TV解析系统
-    // val playResult by siteViewModel.result.observeAsState()
-
-    // ✅ 页面初始化时加载数据
-    LaunchedEffect(vodId, episodeIndex, siteKey) {
-        Log.d("ONETV_MOVIE", "🎬 MoviePlayerScreen 初始化: vodId=$vodId, episode=$episodeIndex")
+    LaunchedEffect(vodId, siteKey, episodeIndex) {
         viewModel.initPlayer(vodId, siteKey, episodeIndex)
     }
 
-    // ✅ 处理FongMi_TV播放数据变化
-    // LaunchedEffect(playResult) {
-    //     playResult?.let { result ->
-    //         Log.d("ONETV_MOVIE", "🎬 收到FongMi_TV播放数据: ${result.url}")
-    //         // 这里可以进一步处理FongMi_TV返回的播放数据
-    //     }
-    // }
+    // ✅ UI内容渲染
+    PlayerContent(
+        uiState = uiState,
+        onBack = { navController.popBackStack() },
+        onPlayPause = { viewModel.togglePlayPause() },
+        onSeek = { position -> viewModel.seekTo(position) },
+        onNextEpisode = { viewModel.playNextEpisode() },
+        onPreviousEpisode = { viewModel.playPreviousEpisode() },
+        onEpisodeSelect = { episode, index ->
+            viewModel.playEpisode(episode, index)
+        },
+        onLineSwitch = { lineInfo ->
+            viewModel.switchToLine(lineInfo)
+        }
+    )
 
-    // ✅ UI状态处理
-    when {
-        uiState.isLoading -> {
-            LoadingScreen(message = "正在解析播放地址...")
-        }
-        uiState.error != null -> {
-            ErrorScreen(
-                error = uiState.error ?: "未知错误",
-                onRetry = { viewModel.initPlayer(vodId, siteKey, episodeIndex) },
-                onBack = { navController.popBackStack() }
-            )
-        }
-        else -> {
-            PlayerContent(
-                uiState = uiState,
-                // playResult = playResult,
-                onPlayClick = { viewModel.setPlayingState(true) },
-                onPauseClick = { viewModel.setPlayingState(false) },
-                onEpisodeSelect = { episode ->
-                    viewModel.selectEpisode(episode)
-                    navController.navigate("player/$vodId/${episode.index}/$siteKey")
-                },
-                onFlagSelect = { viewModel.selectFlag(it) },
-                onBack = { navController.popBackStack() }
-            )
-        }
+    // ✅ WebView解析器
+    if (uiState.showWebViewParser && uiState.webViewParseRequest != null) {
+        ParseWebView(
+            request = uiState.webViewParseRequest,
+            onParseSuccess = { url -> viewModel.onWebViewParseSuccess(url) },
+            onParseError = { error -> viewModel.onWebViewParseError(error) }
+        )
     }
 }
 
 @Composable
 private fun PlayerContent(
     uiState: PlayerUiState,
-    // playResult: Any?, // FongMi_TV的播放数据
-    onPlayClick: () -> Unit,
-    onPauseClick: () -> Unit,
-    onEpisodeSelect: (Episode) -> Unit,
-    onFlagSelect: (Flag) -> Unit,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    onPlayPause: () -> Unit,
+    onSeek: (Long) -> Unit,
+    onNextEpisode: () -> Unit,
+    onPreviousEpisode: () -> Unit,
+    onEpisodeSelect: (Episode, Int) -> Unit,
+    onLineSwitch: (Any) -> Unit
 ) {
-    Box(modifier = Modifier.fillMaxSize()) {
-        // 播放器区域
-        VideoPlayerView(
-            playUrl = uiState.playUrl,
-            isPlaying = uiState.isPlaying,
-            onPlayClick = onPlayClick,
-            onPauseClick = onPauseClick
-        )
+    when {
+        uiState.isLoading -> {
+            LoadingScreen(message = "正在解析播放地址...")
+        }
+        uiState.error != null -> {
+            ErrorScreen(
+                error = uiState.error,
+                onRetry = { /* 重试逻辑 */ },
+                onBack = onBack
+            )
+        }
+        else -> {
+            Box(modifier = Modifier.fillMaxSize()) {
+                // 播放器区域
+                VideoPlayerView(
+                    playUrl = uiState.playUrl,
+                    isPlaying = uiState.isPlaying,
+                    onPlayPause = onPlayPause
+                )
 
-        // 播放器控制界面
-        PlayerControls(
-            uiState = uiState,
-            onEpisodeSelect = onEpisodeSelect,
-            onFlagSelect = onFlagSelect,
-            onBack = onBack
-        )
+                // 播放器控制界面
+                PlayerControls(
+                    uiState = uiState,
+                    onBack = onBack,
+                    onSeek = onSeek,
+                    onNextEpisode = onNextEpisode,
+                    onPreviousEpisode = onPreviousEpisode,
+                    onEpisodeSelect = onEpisodeSelect,
+                    onLineSwitch = onLineSwitch
+                )
+            }
+        }
     }
 }
 
@@ -183,8 +184,7 @@ private fun ErrorScreen(
 private fun VideoPlayerView(
     playUrl: String,
     isPlaying: Boolean,
-    onPlayClick: () -> Unit,
-    onPauseClick: () -> Unit
+    onPlayPause: () -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -211,7 +211,7 @@ private fun VideoPlayerView(
 
         // 播放/暂停按钮
         IconButton(
-            onClick = if (isPlaying) onPauseClick else onPlayClick,
+            onClick = onPlayPause,
             modifier = Modifier.size(64.dp)
         ) {
             Icon(
@@ -227,9 +227,12 @@ private fun VideoPlayerView(
 @Composable
 private fun PlayerControls(
     uiState: PlayerUiState,
-    onEpisodeSelect: (Episode) -> Unit,
-    onFlagSelect: (Flag) -> Unit,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    onSeek: (Long) -> Unit,
+    onNextEpisode: () -> Unit,
+    onPreviousEpisode: () -> Unit,
+    onEpisodeSelect: (Episode, Int) -> Unit,
+    onLineSwitch: (Any) -> Unit
 ) {
     var showControls by remember { mutableStateOf(true) }
 
@@ -260,7 +263,7 @@ private fun PlayerControls(
             BottomPlayerControls(
                 uiState = uiState,
                 onEpisodeSelect = onEpisodeSelect,
-                onFlagSelect = onFlagSelect,
+                onLineSwitch = onLineSwitch,
                 modifier = Modifier.align(Alignment.BottomCenter)
             )
         }
@@ -270,8 +273,8 @@ private fun PlayerControls(
 @Composable
 private fun BottomPlayerControls(
     uiState: PlayerUiState,
-    onEpisodeSelect: (Episode) -> Unit,
-    onFlagSelect: (Flag) -> Unit,
+    onEpisodeSelect: (Episode, Int) -> Unit,
+    onLineSwitch: (Any) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -295,7 +298,7 @@ private fun BottomPlayerControls(
                 ) {
                     items(uiState.playFlags) { flag ->
                         FilterChip(
-                            onClick = { onFlagSelect(flag) },
+                            onClick = { onLineSwitch(flag) },
                             label = { Text(flag.getFlag() ?: "未知线路") },
                             selected = uiState.currentFlag == flag
                         )
@@ -313,9 +316,9 @@ private fun BottomPlayerControls(
                 LazyRow(
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    items(uiState.episodes) { episode ->
+                    items(uiState.episodes.withIndex().toList()) { (index, episode) ->
                         FilterChip(
-                            onClick = { onEpisodeSelect(episode) },
+                            onClick = { onEpisodeSelect(episode, index) },
                             label = { Text(episode.name) },
                             selected = uiState.currentEpisode == episode
                         )
@@ -326,4 +329,23 @@ private fun BottomPlayerControls(
     }
 }
 
-
+@Composable
+private fun ParseWebView(
+    request: Any?, // WebView解析请求
+    onParseSuccess: (String) -> Unit,
+    onParseError: (String) -> Unit
+) {
+    // WebView解析器实现
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            CircularProgressIndicator()
+            Spacer(modifier = Modifier.height(16.dp))
+            Text("正在解析播放地址...")
+        }
+    }
+}

@@ -18,9 +18,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import top.cywin.onetv.movie.viewmodel.MovieSettingsViewModel
-import top.cywin.onetv.movie.viewmodel.SettingsUiState
-import top.cywin.onetv.movie.viewmodel.VodConfigUrl
+import top.cywin.onetv.movie.viewmodel.ConfigSetupViewModel
+import top.cywin.onetv.movie.viewmodel.ConfigSetupUiState
+import top.cywin.onetv.movie.ui.model.SiteInfo
 import top.cywin.onetv.movie.MovieApp
 import android.util.Log
 
@@ -31,207 +31,231 @@ import android.util.Log
 @Composable
 fun MovieConfigScreen(
     navController: NavController,
-    viewModel: MovieSettingsViewModel = viewModel { MovieSettingsViewModel() }
+    viewModel: ConfigSetupViewModel = viewModel {
+        ConfigSetupViewModel()
+    }
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    // ✅ 通过MovieApp访问适配器系统
-    val movieApp = MovieApp.getInstance()
-    val repositoryAdapter = movieApp.repositoryAdapter
-
-    // ✅ 页面初始化时加载配置列表
-    LaunchedEffect(Unit) {
-        Log.d("ONETV_MOVIE", "📋 MovieConfigScreen 初始化")
-        viewModel.loadConfigList()
-    }
-
-    // ✅ UI状态处理
-    when {
-        uiState.isLoading -> {
-            LoadingScreen(message = "正在加载配置列表...")
-        }
-        uiState.error != null -> {
-            ErrorScreen(
-                error = uiState.error ?: "未知错误",
-                onRetry = { viewModel.loadConfigList() },
-                onBack = { navController.popBackStack() }
-            )
-        }
-        else -> {
-            ConfigManagementContent(
-                uiState = uiState,
-                onConfigSelect = { config -> viewModel.selectConfig(config) },
-                onConfigAdd = { url -> viewModel.addCustomConfig(url) },
-                onConfigDelete = { config -> viewModel.deleteConfig(config) },
-                onConfigTest = { config -> viewModel.testConfig(config) },
-                onRefresh = { viewModel.refreshConfigs() },
-                onBack = { navController.popBackStack() }
-            )
-        }
-    }
+    // ✅ UI内容渲染
+    MovieConfigContent(
+        uiState = uiState,
+        onBack = { navController.popBackStack() },
+        onConfigUrlChange = { url -> viewModel.setConfigUrl(url) },
+        onParseConfig = { viewModel.parseConfig() },
+        onTestUrl = { url -> viewModel.testConfigUrl(url) },
+        onResetConfig = { viewModel.resetConfig() },
+        onError = { viewModel.clearError() }
+    )
 }
 
 @Composable
-private fun ConfigManagementContent(
-    uiState: SettingsUiState,
-    onConfigSelect: (VodConfigUrl) -> Unit,
-    onConfigAdd: (String) -> Unit,
-    onConfigDelete: (VodConfigUrl) -> Unit,
-    onConfigTest: (VodConfigUrl) -> Unit,
-    onRefresh: () -> Unit,
-    onBack: () -> Unit
+private fun MovieConfigContent(
+    uiState: ConfigSetupUiState,
+    onBack: () -> Unit,
+    onConfigUrlChange: (String) -> Unit,
+    onParseConfig: () -> Unit,
+    onTestUrl: (String) -> Unit,
+    onResetConfig: () -> Unit,
+    onError: () -> Unit
 ) {
-    var showAddDialog by remember { mutableStateOf(false) }
-    var newConfigUrl by remember { mutableStateOf("") }
-
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-            .padding(16.dp)
+        modifier = Modifier.fillMaxSize()
     ) {
-        // 顶部导航栏
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            IconButton(onClick = onBack) {
-                Icon(Icons.Default.ArrowBack, contentDescription = "返回")
-            }
-            Text(
-                text = "配置管理",
-                style = MaterialTheme.typography.titleLarge
-            )
-            Row {
-                IconButton(onClick = onRefresh) {
-                    Icon(Icons.Default.Refresh, contentDescription = "刷新")
+        // 顶部工具栏
+        TopAppBar(
+            title = {
+                Text(
+                    text = "影视配置",
+                    style = MaterialTheme.typography.headlineSmall
+                )
+            },
+            navigationIcon = {
+                IconButton(onClick = onBack) {
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = "返回"
+                    )
                 }
-                IconButton(onClick = { showAddDialog = true }) {
-                    Icon(Icons.Default.Add, contentDescription = "添加配置")
+            },
+            actions = {
+                // 重置按钮
+                IconButton(onClick = onResetConfig) {
+                    Icon(
+                        imageVector = Icons.Default.Refresh,
+                        contentDescription = "重置配置"
+                    )
                 }
             }
-        }
+        )
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // 配置列表
+        // 内容区域
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            contentPadding = PaddingValues(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            items(uiState.configList) { config ->
-                ConfigItem(
-                    config = config,
-                    isSelected = config == uiState.selectedConfig,
-                    onSelect = { onConfigSelect(config) },
-                    onTest = { onConfigTest(config) },
-                    onDelete = { onConfigDelete(config) }
+            // 当前配置状态
+            item {
+                ConfigStatusCard(
+                    isConfigured = uiState.isConfigured,
+                    currentConfig = uiState.currentConfig,
+                    availableSites = uiState.availableSites
                 )
+            }
+
+            // 配置输入区域
+            item {
+                ConfigInputCard(
+                    configUrl = uiState.configUrl,
+                    onConfigUrlChange = onConfigUrlChange,
+                    onParseConfig = onParseConfig,
+                    onTestUrl = onTestUrl,
+                    isLoading = uiState.isLoading,
+                    isTesting = uiState.isTesting,
+                    testResults = uiState.testResults
+                )
+            }
+
+            // 错误信息
+            if (uiState.error != null) {
+                item {
+                    Card(
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.errorContainer
+                        )
+                    ) {
+                        Text(
+                            text = uiState.error,
+                            modifier = Modifier.padding(16.dp),
+                            color = MaterialTheme.colorScheme.onErrorContainer
+                        )
+                    }
+                }
             }
         }
-    }
-
-    // 添加配置对话框
-    if (showAddDialog) {
-        AlertDialog(
-            onDismissRequest = { showAddDialog = false },
-            title = { Text("添加配置") },
-            text = {
-                OutlinedTextField(
-                    value = newConfigUrl,
-                    onValueChange = { newConfigUrl = it },
-                    label = { Text("配置地址") },
-                    placeholder = { Text("请输入TVBOX配置地址") },
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true
-                )
-            },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        if (newConfigUrl.isNotBlank()) {
-                            onConfigAdd(newConfigUrl)
-                            newConfigUrl = ""
-                            showAddDialog = false
-                        }
-                    }
-                ) {
-                    Text("添加")
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = { showAddDialog = false }) {
-                    Text("取消")
-                }
-            }
-        )
     }
 }
 
 @Composable
-private fun ConfigItem(
-    config: VodConfigUrl,
-    isSelected: Boolean,
-    onSelect: () -> Unit,
-    onTest: () -> Unit,
-    onDelete: () -> Unit
+private fun ConfigStatusCard(
+    isConfigured: Boolean,
+    currentConfig: Any?, // VodConfig类型
+    availableSites: List<SiteInfo>
 ) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onSelect() },
-        colors = CardDefaults.cardColors(
-            containerColor = if (isSelected) {
-                MaterialTheme.colorScheme.primaryContainer
-            } else {
-                MaterialTheme.colorScheme.surface
-            }
-        )
-    ) {
+    Card {
         Column(
             modifier = Modifier.padding(16.dp)
         ) {
+            Text(
+                text = "配置状态",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+
+            if (isConfigured) {
+                Text(
+                    text = "✓ 配置已加载",
+                    color = MaterialTheme.colorScheme.primary,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+                Text(
+                    text = "可用站点: ${availableSites.size} 个",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            } else {
+                Text(
+                    text = "✗ 未配置",
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+                Text(
+                    text = "请添加配置URL",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun ConfigInputCard(
+    configUrl: String,
+    onConfigUrlChange: (String) -> Unit,
+    onParseConfig: () -> Unit,
+    onTestUrl: (String) -> Unit,
+    isLoading: Boolean,
+    isTesting: Boolean,
+    testResults: Map<String, Any> // ApiTestResult类型
+) {
+    var inputUrl by remember { mutableStateOf(configUrl) }
+
+    Card {
+        Column(
+            modifier = Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Text(
+                text = "配置管理",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold
+            )
+
+            // URL输入
+            OutlinedTextField(
+                value = inputUrl,
+                onValueChange = {
+                    inputUrl = it
+                    onConfigUrlChange(it)
+                },
+                label = { Text("配置地址") },
+                placeholder = { Text("请输入TVBOX配置地址") },
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true,
+                trailingIcon = {
+                    if (isTesting) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(20.dp),
+                            strokeWidth = 2.dp
+                        )
+                    } else {
+                        IconButton(onClick = { onTestUrl(inputUrl) }) {
+                            Icon(Icons.Default.NetworkCheck, contentDescription = "测试")
+                        }
+                    }
+                }
+            )
+
+            // 操作按钮
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Column(
+                Button(
+                    onClick = onParseConfig,
+                    enabled = inputUrl.isNotEmpty() && !isLoading,
                     modifier = Modifier.weight(1f)
                 ) {
-                    Text(
-                        text = config.name,
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                    Text(
-                        text = config.url,
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
-
-                Row {
-                    IconButton(onClick = onTest) {
-                        Icon(Icons.Default.NetworkCheck, contentDescription = "测试")
+                    if (isLoading) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(16.dp),
+                            strokeWidth = 2.dp
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
                     }
-                    IconButton(onClick = onDelete) {
-                        Icon(Icons.Default.Delete, contentDescription = "删除")
-                    }
+                    Text("解析配置")
                 }
             }
 
-            if (isSelected) {
-                Spacer(modifier = Modifier.height(8.dp))
+            // 测试结果
+            testResults.forEach { (url, result) ->
+                // 显示测试结果的UI
                 Text(
-                    text = "当前使用的配置",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.primary
+                    text = "测试结果: $url",
+                    style = MaterialTheme.typography.bodySmall
                 )
             }
         }

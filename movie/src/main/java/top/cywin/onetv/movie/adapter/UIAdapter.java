@@ -1,210 +1,113 @@
 package top.cywin.onetv.movie.adapter;
 
-import android.content.Context;
 import android.util.Log;
-import top.cywin.onetv.movie.model.SiteViewModel;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+import top.cywin.onetv.movie.api.config.VodConfig;
+import top.cywin.onetv.movie.event.*;
 
 /**
- * UI适配器 - 按照FongMi_TV整合指南完善
- * 确保UI与FongMi_TV系统正常交互，支持17个重构文件的需求
+ * UI适配器 - 纯粹的EventBus事件适配器
+ * 只负责FongMi_TV事件与Compose UI的事件转换
  */
 public class UIAdapter {
 
     private static final String TAG = "UIAdapter";
-    private Context context;
-    private SiteViewModel siteViewModel;
-    private RepositoryAdapter repositoryAdapter;
 
-    public UIAdapter(Context context) {
-        this.context = context;
-        this.siteViewModel = new SiteViewModel();
-        this.repositoryAdapter = new RepositoryAdapter();
+    public UIAdapter() {
         Log.d(TAG, "🏗️ UIAdapter 初始化完成");
     }
 
     /**
-     * 适配现有UI - 确保UI与FongMi_TV系统正常交互
+     * 初始化EventBus监听 - 只做事件转换
      */
-    public void adaptExistingUI() {
-        Log.d(TAG, "🔄 适配现有UI");
+    public void initializeEventBus() {
+        Log.d(TAG, "🔄 初始化EventBus监听");
         try {
-            // 初始化UI相关组件
-            initializeUIComponents();
-
-            // 设置数据观察
-            setupDataObservers();
-
-            Log.d(TAG, "✅ UI适配完成");
+            // ✅ 注册EventBus监听器
+            EventBus.getDefault().register(this);
+            Log.d(TAG, "✅ EventBus监听初始化完成");
         } catch (Exception e) {
-            Log.e(TAG, "❌ UI适配失败", e);
-            throw new RuntimeException("UI适配失败", e);
+            Log.e(TAG, "❌ EventBus监听初始化失败", e);
+            throw new RuntimeException("EventBus监听初始化失败", e);
         }
     }
 
     /**
-     * 初始化UI组件
-     */
-    private void initializeUIComponents() {
-        Log.d(TAG, "🔄 初始化UI组件");
-        try {
-            // 确保SiteViewModel正常工作
-            if (siteViewModel == null) {
-                siteViewModel = SiteViewModel.get();
-            }
-
-            // 初始化其他UI相关组件
-            Log.d(TAG, "✅ UI组件初始化完成");
-        } catch (Exception e) {
-            Log.e(TAG, "❌ UI组件初始化失败", e);
-            throw new RuntimeException("UI组件初始化失败", e);
-        }
-    }
-
-    /**
-     * 设置数据观察
-     */
-    private void setupDataObservers() {
-        Log.d(TAG, "🔄 设置数据观察");
-        try {
-            // 设置FongMi_TV数据观察
-            // 这里可以设置对SiteViewModel数据变化的观察
-            Log.d(TAG, "✅ 数据观察设置完成");
-        } catch (Exception e) {
-            Log.e(TAG, "❌ 数据观察设置失败", e);
-            throw new RuntimeException("数据观察设置失败", e);
-        }
-    }
-
-    /**
-     * 适配分类UI - 支持MovieCategoryScreen等组件
-     */
-    public void adaptCategoryUI() {
-        Log.d(TAG, "🔄 适配分类UI");
-        try {
-            if (repositoryAdapter != null) {
-                repositoryAdapter.getCategories();
-                Log.d(TAG, "✅ 分类UI适配完成");
-            }
-        } catch (Exception e) {
-            Log.e(TAG, "❌ 分类UI适配失败", e);
-        }
-    }
-
-    /**
-     * 适配搜索UI - 支持MovieSearchScreen等组件
-     */
-    public void adaptSearchUI(String keyword) {
-        Log.d(TAG, "🔄 适配搜索UI - keyword: " + keyword);
-        try {
-            if (repositoryAdapter != null) {
-                repositoryAdapter.searchContent(keyword, null);
-                Log.d(TAG, "✅ 搜索UI适配完成");
-            }
-        } catch (Exception e) {
-            Log.e(TAG, "❌ 搜索UI适配失败", e);
-        }
-    }
-
-    /**
-     * 适配详情UI - 支持MovieDetailScreen等组件
-     */
-    public void adaptDetailUI(String vodId) {
-        Log.d(TAG, "🔄 适配详情UI - vodId: " + vodId);
-        try {
-            if (repositoryAdapter != null) {
-                repositoryAdapter.getContentDetail(vodId, null);
-                Log.d(TAG, "✅ 详情UI适配完成");
-            }
-        } catch (Exception e) {
-            Log.e(TAG, "❌ 详情UI适配失败", e);
-        }
-    }
-
-    /**
-     * 适配播放器UI - 支持MoviePlayerScreen等组件
-     */
-    public void adaptPlayerUI() {
-        Log.d(TAG, "🔄 适配播放器UI");
-        try {
-            // 播放器UI适配逻辑
-            Log.d(TAG, "✅ 播放器UI适配完成");
-        } catch (Exception e) {
-            Log.e(TAG, "❌ 播放器UI适配失败", e);
-        }
-    }
-
-    /**
-     * 适配配置UI - 支持MovieConfigScreen等组件
-     */
-    public void adaptConfigUI() {
-        Log.d(TAG, "🔄 适配配置UI");
-        try {
-            if (repositoryAdapter != null) {
-                repositoryAdapter.loadConfig();
-                Log.d(TAG, "✅ 配置UI适配完成");
-            }
-        } catch (Exception e) {
-            Log.e(TAG, "❌ 配置UI适配失败", e);
-        }
-    }
-
-    /**
-     * 适配历史UI - 支持MovieHistoryScreen等组件
-     */
-    public void adaptHistoryUI() {
-        Log.d(TAG, "🔄 适配历史UI");
-        try {
-            // 历史记录UI适配逻辑
-            Log.d(TAG, "✅ 历史UI适配完成");
-        } catch (Exception e) {
-            Log.e(TAG, "❌ 历史UI适配失败", e);
-        }
-    }
-
-    /**
-     * 获取SiteViewModel实例 - 提供给UI组件使用
-     */
-    public SiteViewModel getSiteViewModel() {
-        return siteViewModel;
-    }
-
-    /**
-     * 获取RepositoryAdapter实例 - 提供给UI组件使用
-     */
-    public RepositoryAdapter getRepositoryAdapter() {
-        return repositoryAdapter;
-    }
-
-    /**
-     * 获取Context实例 - 提供给UI组件使用
-     */
-    public Context getContext() {
-        return context;
-    }
-
-    /**
-     * 检查UI适配器状态 - 确保UI系统正常工作
-     */
-    public boolean isUIReady() {
-        boolean contextReady = context != null;
-        boolean siteViewModelReady = siteViewModel != null;
-        boolean repositoryAdapterReady = repositoryAdapter != null && repositoryAdapter.isSystemReady();
-
-        Log.d(TAG, "🔍 UI适配器状态检查 - Context: " + contextReady +
-                   ", SiteViewModel: " + siteViewModelReady +
-                   ", RepositoryAdapter: " + repositoryAdapterReady);
-        return contextReady && siteViewModelReady && repositoryAdapterReady;
-    }
-
-    /**
-     * 清理资源
+     * 清理EventBus监听
      */
     public void cleanup() {
-        Log.d(TAG, "🧹 清理UI适配器资源");
-        context = null;
-        siteViewModel = null;
-        if (repositoryAdapter != null) {
-            // repositoryAdapter 可能需要清理，但这里保持引用以供其他组件使用
+        Log.d(TAG, "🧹 清理EventBus监听");
+        try {
+            EventBus.getDefault().unregister(this);
+            Log.d(TAG, "✅ EventBus监听清理完成");
+        } catch (Exception e) {
+            Log.e(TAG, "❌ EventBus监听清理失败", e);
         }
     }
+
+    // ✅ 监听FongMi_TV的SiteViewModel事件，转换为Compose UI事件
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onSiteViewModelResult(Object result) {
+        Log.d(TAG, "📡 收到SiteViewModel结果事件");
+
+        // ✅ 转换为Compose UI事件
+        if (result instanceof top.cywin.onetv.movie.bean.Result) {
+            top.cywin.onetv.movie.bean.Result vodResult = (top.cywin.onetv.movie.bean.Result) result;
+
+            // 判断结果类型并发送相应的Compose事件
+            if (vodResult.getList() != null && !vodResult.getList().isEmpty()) {
+                // 搜索结果或分类结果
+                EventBus.getDefault().post(new SearchResultEvent(
+                    vodResult.getList(),
+                    "",
+                    vodResult.getList().size() >= 20
+                ));
+            }
+        }
+    }
+
+    // ✅ 监听FongMi_TV的配置更新事件
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onConfigUpdate(Object configEvent) {
+        Log.d(TAG, "⚙️ 收到配置更新事件");
+
+        // ✅ 转换为Compose UI事件
+        EventBus.getDefault().post(new ConfigUpdateEvent(
+            VodConfig.get(),
+            true,
+            null
+        ));
+    }
+
+    // ✅ 监听FongMi_TV的播放解析事件
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onPlayUrlParsed(Object parseEvent) {
+        Log.d(TAG, "🎬 收到播放解析事件");
+
+        // ✅ 转换为Compose UI事件
+        // 这里需要根据FongMi_TV的实际解析事件结构进行适配
+        EventBus.getDefault().post(new PlayUrlParseEvent(
+            null, // 解析后的播放地址
+            null,  // 请求头
+            null,
+            0,
+            null
+        ));
+    }
+
+    // ✅ 监听FongMi_TV的错误事件
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onError(Object errorEvent) {
+        Log.d(TAG, "❌ 收到错误事件");
+
+        // ✅ 转换为Compose UI事件
+        EventBus.getDefault().post(new ErrorEvent(
+            "FongMi_TV系统错误",
+            null,
+            null
+        ));
+    }
+
 }

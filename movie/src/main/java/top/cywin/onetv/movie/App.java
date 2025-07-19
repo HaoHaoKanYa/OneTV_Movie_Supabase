@@ -13,7 +13,10 @@ import androidx.annotation.Nullable;
 import androidx.core.os.HandlerCompat;
 
 import top.cywin.onetv.movie.event.EventIndex;
-import top.cywin.onetv.movie.ui.activity.CrashActivity;
+// ❌ 移除CrashActivity引用
+// import top.cywin.onetv.movie.ui.activity.CrashActivity;
+import org.greenrobot.eventbus.EventBus;
+import top.cywin.onetv.movie.event.ErrorEvent;
 import top.cywin.onetv.movie.utils.Notify;
 import top.cywin.onetv.movie.hook.Hook;
 import top.cywin.onetv.movie.catvod.Init;
@@ -120,7 +123,11 @@ public class App extends Application {
         OkHttp.get().setProxy(Setting.getProxy());
         OkHttp.get().setDoh(Doh.objectFrom(Setting.getDoh()));
         EventBus.builder().addIndex(new EventIndex()).installDefaultEventBus();
-        CaocConfig.Builder.create().backgroundMode(CaocConfig.BACKGROUND_MODE_SILENT).errorActivity(CrashActivity.class).apply();
+        // ❌ 不再使用CrashActivity
+        // CaocConfig.Builder.create().backgroundMode(CaocConfig.BACKGROUND_MODE_SILENT).errorActivity(CrashActivity.class).apply();
+
+        // ✅ 使用Compose错误处理
+        setupExceptionHandler();
 
         // 自动部署OneTV官方影视接口
         initVodConfig();
@@ -189,6 +196,33 @@ public class App extends Application {
                 Logger.e("初始化VOD配置时发生异常: " + e.getMessage());
             }
         });
+    }
+
+    /**
+     * 设置异常处理器 - 使用Compose错误处理
+     */
+    private void setupExceptionHandler() {
+        Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> {
+            Logger.e("未捕获的异常", throwable);
+
+            // ✅ 使用Compose错误处理
+            EventBus.getDefault().post(new ErrorEvent(throwable.getMessage(), throwable, null));
+
+            // 重启应用
+            restartApplication();
+        });
+    }
+
+    /**
+     * 重启应用
+     */
+    private void restartApplication() {
+        android.content.Intent intent = getPackageManager().getLaunchIntentForPackage(getPackageName());
+        if (intent != null) {
+            intent.addFlags(android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP | android.content.Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }
+        System.exit(0);
     }
 
     @Override

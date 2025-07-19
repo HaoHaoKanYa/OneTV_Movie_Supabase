@@ -29,229 +29,297 @@ import android.util.Log
 @Composable
 fun MovieSettingsScreen(
     navController: NavController,
-    viewModel: MovieSettingsViewModel = viewModel { MovieSettingsViewModel() }
+    viewModel: MovieSettingsViewModel = viewModel {
+        MovieSettingsViewModel()
+    }
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    // ✅ 通过MovieApp访问适配器系统
-    val movieApp = MovieApp.getInstance()
-    val repositoryAdapter = movieApp.repositoryAdapter
-
-    // ✅ 页面初始化时加载设置
-    LaunchedEffect(Unit) {
-        Log.d("ONETV_MOVIE", "⚙️ MovieSettingsScreen 初始化")
-        viewModel.loadSettings()
-    }
-
+    // ✅ UI内容渲染
     SettingsContent(
         uiState = uiState,
-        onConfigManagement = {
-            navController.navigate("config_management")
-        },
-        onCacheManagement = {
-            navController.navigate("cache_management")
-        },
-        onHistoryManagement = {
-            navController.navigate("history")
-        },
-        onAbout = {
-            navController.navigate("about")
-        },
-        onClearCache = { viewModel.clearCache() },
-        onResetSettings = { viewModel.resetSettings() },
+        onBack = { navController.popBackStack() },
+        onSettingUpdate = { key, value -> viewModel.updateSetting(key, value) },
+        onResetSettings = { viewModel.resetAllSettings() },
         onExportSettings = { viewModel.exportSettings() },
-        onImportSettings = { viewModel.importSettings() },
-        onBack = { navController.popBackStack() }
+        onImportSettings = { json -> viewModel.importSettings(json) },
+        onClearCache = { viewModel.clearCache() },
+        onShowExportDialog = { viewModel.showExportDialog() },
+        onHideExportDialog = { viewModel.hideExportDialog() },
+        onShowImportDialog = { viewModel.showImportDialog() },
+        onHideImportDialog = { viewModel.hideImportDialog() },
+        onError = { viewModel.clearError() }
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SettingsContent(
     uiState: SettingsUiState,
-    onConfigManagement: () -> Unit,
-    onCacheManagement: () -> Unit,
-    onHistoryManagement: () -> Unit,
-    onAbout: () -> Unit,
-    onClearCache: () -> Unit,
+    onBack: () -> Unit,
+    onSettingUpdate: (String, Any) -> Unit,
     onResetSettings: () -> Unit,
     onExportSettings: () -> Unit,
-    onImportSettings: () -> Unit,
-    onBack: () -> Unit
+    onImportSettings: (String) -> Unit,
+    onClearCache: () -> Unit,
+    onShowExportDialog: () -> Unit,
+    onHideExportDialog: () -> Unit,
+    onShowImportDialog: () -> Unit,
+    onHideImportDialog: () -> Unit,
+    onError: () -> Unit
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
+        modifier = Modifier.fillMaxSize()
     ) {
-        // 顶部导航栏
+        // 顶部工具栏
         TopAppBar(
-            title = { Text("设置") },
+            title = {
+                Text(
+                    text = "设置",
+                    style = MaterialTheme.typography.headlineSmall
+                )
+            },
             navigationIcon = {
                 IconButton(onClick = onBack) {
-                    Icon(Icons.Default.ArrowBack, contentDescription = "返回")
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = "返回"
+                    )
+                }
+            },
+            actions = {
+                // 更多操作菜单
+                var showMenu by remember { mutableStateOf(false) }
+
+                IconButton(onClick = { showMenu = true }) {
+                    Icon(
+                        imageVector = Icons.Default.MoreVert,
+                        contentDescription = "更多"
+                    )
+                }
+
+                DropdownMenu(
+                    expanded = showMenu,
+                    onDismissRequest = { showMenu = false }
+                ) {
+                    DropdownMenuItem(
+                        text = { Text("导出设置") },
+                        onClick = {
+                            showMenu = false
+                            onExportSettings()
+                        }
+                    )
+                    DropdownMenuItem(
+                        text = { Text("导入设置") },
+                        onClick = {
+                            showMenu = false
+                            onShowImportDialog()
+                        }
+                    )
+                    DropdownMenuItem(
+                        text = { Text("重置设置") },
+                        onClick = {
+                            showMenu = false
+                            onResetSettings()
+                        }
+                    )
                 }
             }
         )
 
-        // 设置列表
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            // 配置管理
-            item {
-                SettingsGroup(title = "配置管理") {
-                    SettingsItem(
-                        title = "配置管理",
-                        subtitle = "管理视频源配置",
-                        icon = Icons.Default.Settings,
-                        onClick = onConfigManagement
-                    )
-                }
+        // 内容区域
+        when {
+            uiState.isLoading -> {
+                LoadingScreen(message = "正在加载设置...")
             }
+            uiState.error != null -> {
+                ErrorScreen(
+                    error = uiState.error,
+                    onRetry = { /* 重新加载设置 */ },
+                    onBack = onError
+                )
+            }
+            else -> {
+                SettingsListContent(
+                    settingItems = uiState.settingItems,
+                    networkState = uiState.networkState,
+                    expandedSections = uiState.expandedSections,
+                    onSettingUpdate = onSettingUpdate,
+                    onClearCache = onClearCache
+                )
+            }
+        }
 
-            // 缓存管理
-            item {
-                SettingsGroup(title = "存储管理") {
-                    SettingsItem(
-                        title = "缓存管理",
-                        subtitle = "清理缓存文件",
-                        icon = Icons.Default.Storage,
-                        onClick = onCacheManagement
-                    )
-                    SettingsItem(
-                        title = "观看历史",
-                        subtitle = "管理观看记录",
-                        icon = Icons.Default.History,
-                        onClick = onHistoryManagement
-                    )
-                }
-            }
+        // 导出对话框
+        if (uiState.showExportDialog) {
+            ExportDialog(
+                exportData = uiState.exportData,
+                onDismiss = onHideExportDialog
+            )
+        }
 
-            // 数据管理
-            item {
-                SettingsGroup(title = "数据管理") {
-                    SettingsItem(
-                        title = "清空缓存",
-                        subtitle = "清空所有缓存数据",
-                        icon = Icons.Default.Delete,
-                        onClick = onClearCache
-                    )
-                    SettingsItem(
-                        title = "重置设置",
-                        subtitle = "恢复默认设置",
-                        icon = Icons.Default.RestartAlt,
-                        onClick = onResetSettings
-                    )
-                }
-            }
-
-            // 备份与恢复
-            item {
-                SettingsGroup(title = "备份与恢复") {
-                    SettingsItem(
-                        title = "导出设置",
-                        subtitle = "导出配置和设置",
-                        icon = Icons.Default.Upload,
-                        onClick = onExportSettings
-                    )
-                    SettingsItem(
-                        title = "导入设置",
-                        subtitle = "导入配置和设置",
-                        icon = Icons.Default.Download,
-                        onClick = onImportSettings
-                    )
-                }
-            }
-
-            // 关于
-            item {
-                SettingsGroup(title = "关于") {
-                    SettingsItem(
-                        title = "关于应用",
-                        subtitle = "版本信息和帮助",
-                        icon = Icons.Default.Info,
-                        onClick = onAbout
-                    )
-                }
-            }
+        // 导入对话框
+        if (uiState.showImportDialog) {
+            ImportDialog(
+                onImport = onImportSettings,
+                onDismiss = onHideImportDialog
+            )
         }
     }
 }
 
 @Composable
-private fun SettingsGroup(
-    title: String,
-    content: @Composable () -> Unit
+private fun SettingsListContent(
+    settingItems: List<Any>, // SettingItem类型
+    networkState: Any?, // NetworkState类型
+    expandedSections: Set<String>,
+    onSettingUpdate: (String, Any) -> Unit,
+    onClearCache: () -> Unit
 ) {
-    Column {
-        Text(
-            text = title,
-            style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(bottom = 8.dp)
-        )
-        Card(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Column(
-                modifier = Modifier.padding(16.dp)
-            ) {
-                content()
-            }
-        }
-    }
-}
-
-@Composable
-private fun SettingsItem(
-    title: String,
-    subtitle: String,
-    icon: androidx.compose.ui.graphics.vector.ImageVector,
-    onClick: () -> Unit
-) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onClick() }
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                modifier = Modifier.size(24.dp),
-                tint = MaterialTheme.colorScheme.primary
-            )
-
-            Column(
-                modifier = Modifier.weight(1f)
-            ) {
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Medium
-                )
-                Text(
-                    text = subtitle,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+        // 网络状态
+        if (networkState != null) {
+            item {
+                NetworkStatusCard(networkState = networkState)
             }
+        }
 
-            Icon(
-                imageVector = Icons.Default.ChevronRight,
-                contentDescription = null,
-                modifier = Modifier.size(20.dp),
-                tint = MaterialTheme.colorScheme.onSurfaceVariant
+        // 设置项列表
+        items(settingItems) { item ->
+            // 设置项UI实现
+            Text(
+                text = "设置项: ${item.toString()}",
+                modifier = Modifier.padding(8.dp)
             )
+        }
+
+        // 缓存清理按钮
+        item {
+            Button(
+                onClick = onClearCache,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("清理缓存")
+            }
         }
     }
 }
+
+@Composable
+private fun NetworkStatusCard(networkState: Any) {
+    Card {
+        Text(
+            text = "网络状态: ${networkState.toString()}",
+            modifier = Modifier.padding(16.dp)
+        )
+    }
+}
+
+@Composable
+private fun ExportDialog(
+    exportData: String,
+    onDismiss: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("导出设置") },
+        text = {
+            Text("设置已导出: $exportData")
+        },
+        confirmButton = {
+            TextButton(onClick = onDismiss) {
+                Text("确定")
+            }
+        }
+    )
+}
+
+@Composable
+private fun ImportDialog(
+    onImport: (String) -> Unit,
+    onDismiss: () -> Unit
+) {
+    var importText by remember { mutableStateOf("") }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("导入设置") },
+        text = {
+            OutlinedTextField(
+                value = importText,
+                onValueChange = { importText = it },
+                label = { Text("设置JSON") },
+                modifier = Modifier.fillMaxWidth()
+            )
+        },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    onImport(importText)
+                    onDismiss()
+                }
+            ) {
+                Text("导入")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text("取消")
+            }
+        }
+    )
+}
+
+@Composable
+private fun LoadingScreen(message: String) {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            CircularProgressIndicator()
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(text = message)
+        }
+    }
+}
+
+@Composable
+private fun ErrorScreen(
+    error: String,
+    onRetry: () -> Unit,
+    onBack: () -> Unit
+) {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = error,
+                color = MaterialTheme.colorScheme.error,
+                textAlign = TextAlign.Center
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Button(onClick = onRetry) {
+                    Text("重试")
+                }
+                OutlinedButton(onClick = onBack) {
+                    Text("返回")
+                }
+            }
+        }
+    }
+}
+
+// ✅ 按照指南添加必要的辅助Composable函数

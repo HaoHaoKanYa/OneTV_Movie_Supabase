@@ -28,7 +28,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import top.cywin.onetv.movie.viewmodel.MovieSearchViewModel
 import top.cywin.onetv.movie.viewmodel.SearchUiState
-import top.cywin.onetv.movie.bean.Vod
+import top.cywin.onetv.movie.ui.model.MovieItem
 import top.cywin.onetv.movie.MovieApp
 import android.util.Log
 
@@ -38,244 +38,177 @@ import android.util.Log
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MovieSearchScreen(
-    initialKeyword: String = "",
     navController: NavController,
-    viewModel: MovieSearchViewModel = viewModel { MovieSearchViewModel() }
+    viewModel: MovieSearchViewModel = viewModel {
+        MovieSearchViewModel()
+    }
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    // ✅ 通过MovieApp访问适配器系统
-    val movieApp = MovieApp.getInstance()
-    val siteViewModel = movieApp.siteViewModel
-
-    // ✅ 观察FongMi_TV的搜索数据变化
-    // val searchResult by siteViewModel.result.observeAsState()
-
-    // ✅ 页面初始化
-    LaunchedEffect(initialKeyword) {
-        Log.d("ONETV_MOVIE", "🔍 MovieSearchScreen 初始化: keyword=$initialKeyword")
-        if (initialKeyword.isNotEmpty()) {
-            viewModel.search(initialKeyword)
-        }
-    }
-
-    // ✅ UI状态处理
+    // ✅ UI内容渲染
     SearchContent(
         uiState = uiState,
-        // searchResult = searchResult,
+        onBack = { navController.popBackStack() },
+        onKeywordChange = { keyword -> viewModel.updateKeyword(keyword) },
         onSearch = { keyword -> viewModel.search(keyword) },
         onMovieClick = { movie ->
-            navController.navigate("detail/${movie.getVodId()}/${movie.getSite()?.getKey() ?: ""}")
+            navController.navigate("detail/${movie.vodId}/${movie.siteKey}")
         },
-        onHistoryClick = { keyword -> viewModel.search(keyword) },
+        onHistoryClick = { keyword -> viewModel.searchFromHistory(keyword) },
+        onHistoryDelete = { keyword -> viewModel.removeSearchHistory(keyword) },
         onClearHistory = { viewModel.clearSearchHistory() },
-        onLoadMore = { viewModel.loadMoreResults() },
-        onBack = { navController.popBackStack() }
+        onClearSearch = { viewModel.clearSearch() },
+        onShowSuggestions = { viewModel.showSearchSuggestions() },
+        onHideSuggestions = { viewModel.hideSearchSuggestions() },
+        onError = { viewModel.clearError() }
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SearchContent(
     uiState: SearchUiState,
-    // searchResult: Any?, // FongMi_TV的搜索结果
+    onBack: () -> Unit,
+    onKeywordChange: (String) -> Unit,
     onSearch: (String) -> Unit,
-    onMovieClick: (Vod) -> Unit,
+    onMovieClick: (MovieItem) -> Unit,
     onHistoryClick: (String) -> Unit,
+    onHistoryDelete: (String) -> Unit,
     onClearHistory: () -> Unit,
-    onLoadMore: () -> Unit,
-    onBack: () -> Unit
+    onClearSearch: () -> Unit,
+    onShowSuggestions: () -> Unit,
+    onHideSuggestions: () -> Unit,
+    onError: () -> Unit
 ) {
-    var searchText by remember { mutableStateOf(uiState.keyword) }
-    val keyboardController = LocalSoftwareKeyboardController.current
-
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
+        modifier = Modifier.fillMaxSize()
     ) {
         // 搜索栏
-        TopAppBar(
-            title = {
-                OutlinedTextField(
-                    value = searchText,
-                    onValueChange = { searchText = it },
-                    placeholder = { Text("搜索电影、电视剧...") },
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true,
-                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-                    keyboardActions = KeyboardActions(
-                        onSearch = {
-                            keyboardController?.hide()
-                            onSearch(searchText)
-                        }
-                    ),
-                    trailingIcon = {
-                        Row {
-                            if (searchText.isNotEmpty()) {
-                                IconButton(onClick = { searchText = "" }) {
-                                    Icon(Icons.Default.Clear, contentDescription = "清空")
-                                }
-                            }
-                            IconButton(
-                                onClick = {
-                                    keyboardController?.hide()
-                                    onSearch(searchText)
-                                }
-                            ) {
-                                Icon(Icons.Default.Search, contentDescription = "搜索")
-                            }
-                        }
-                    }
-                )
-            },
-            navigationIcon = {
-                IconButton(onClick = onBack) {
-                    Icon(Icons.Default.ArrowBack, contentDescription = "返回")
-                }
+        SearchBar(
+            keyword = uiState.searchKeyword,
+            isSearching = uiState.isSearching,
+            onKeywordChange = onKeywordChange,
+            onSearch = onSearch,
+            onClear = onClearSearch,
+            onBack = onBack,
+            onFocusChange = { focused ->
+                if (focused) onShowSuggestions() else onHideSuggestions()
             }
         )
 
         // 内容区域
         when {
-            uiState.isLoading && uiState.searchResults.isEmpty() -> {
+            uiState.isSearching -> {
                 LoadingScreen(message = "正在搜索...")
             }
             uiState.error != null -> {
                 ErrorScreen(
                     error = uiState.error,
-                    onRetry = { onSearch(searchText) },
-                    onBack = onBack
+                    onRetry = { onSearch(uiState.currentKeyword) },
+                    onBack = onError
                 )
             }
-            uiState.searchResults.isEmpty() && uiState.keyword.isNotEmpty() -> {
-                NoResultContent(keyword = uiState.keyword)
-            }
-            uiState.searchResults.isNotEmpty() -> {
-                SearchResultContent(
-                    results = uiState.searchResults,
-                    hasMore = uiState.hasMore,
-                    isLoadingMore = uiState.isLoadingMore,
-                    onMovieClick = onMovieClick,
-                    onLoadMore = onLoadMore
-                )
-            }
-            else -> {
-                // 默认状态：搜索历史和热门关键词
-                SearchSuggestionsContent(
+            uiState.searchKeyword.isEmpty() -> {
+                SearchHomeContent(
                     searchHistory = uiState.searchHistory,
-                    hotKeywords = uiState.hotKeywords,
-                    onKeywordClick = onHistoryClick,
+                    onHistoryClick = onHistoryClick,
+                    onHistoryDelete = onHistoryDelete,
                     onClearHistory = onClearHistory
                 )
             }
+            uiState.searchResults.isEmpty() && uiState.currentKeyword.isNotEmpty() -> {
+                NoResultContent(keyword = uiState.currentKeyword)
+            }
+            else -> {
+                SearchResultContent(
+                    results = uiState.searchResults,
+                    hasMore = uiState.hasMore,
+                    onMovieClick = onMovieClick
+                )
+            }
         }
-    }
-}
 
-@Composable
-private fun SearchResultContent(
-    results: List<Vod>,
-    hasMore: Boolean,
-    isLoadingMore: Boolean,
-    onMovieClick: (Vod) -> Unit,
-    onLoadMore: () -> Unit
-) {
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(3),
-        modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(16.dp),
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        items(results) { movie ->
-            MovieCard(
-                movie = movie,
-                onClick = { onMovieClick(movie) }
+        // 搜索建议
+        if (uiState.showSuggestions && uiState.searchSuggestions.isNotEmpty()) {
+            SearchSuggestionsOverlay(
+                suggestions = uiState.searchSuggestions,
+                onSuggestionClick = { suggestion ->
+                    onKeywordChange(suggestion)
+                    onSearch(suggestion)
+                    onHideSuggestions()
+                }
             )
         }
-
-        // 加载更多指示器
-        if (hasMore && !isLoadingMore) {
-            item {
-                LaunchedEffect(Unit) {
-                    onLoadMore()
-                }
-                Box(
-                    modifier = Modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(24.dp)
-                    )
-                }
-            }
-        }
     }
 }
-
-
-
-
+}
 
 @Composable
-private fun MovieCard(
-    movie: Vod,
-    onClick: () -> Unit
+private fun SearchBar(
+    keyword: String,
+    isSearching: Boolean,
+    onKeywordChange: (String) -> Unit,
+    onSearch: (String) -> Unit,
+    onClear: () -> Unit,
+    onBack: () -> Unit,
+    onFocusChange: (Boolean) -> Unit
 ) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onClick() }
-    ) {
-        Column {
-            // 电影海报占位符
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .aspectRatio(0.7f)
-                    .background(MaterialTheme.colorScheme.surfaceVariant),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Movie,
-                    contentDescription = null,
-                    modifier = Modifier.size(48.dp),
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
+    val keyboardController = LocalSoftwareKeyboardController.current
 
-            // 电影信息
-            Column(
-                modifier = Modifier.padding(8.dp)
-            ) {
-                Text(
-                    text = movie.getVodName(),
-                    style = MaterialTheme.typography.bodyMedium,
-                    fontWeight = FontWeight.Medium,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis
-                )
-
-                if (movie.getVodRemarks().isNotEmpty()) {
-                    Text(
-                        text = movie.getVodRemarks(),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
+    TopAppBar(
+        title = {
+            OutlinedTextField(
+                value = keyword,
+                onValueChange = onKeywordChange,
+                placeholder = { Text("搜索电影、电视剧...") },
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                keyboardActions = KeyboardActions(
+                    onSearch = {
+                        keyboardController?.hide()
+                        onSearch(keyword)
+                    }
+                ),
+                trailingIcon = {
+                    Row {
+                        if (keyword.isNotEmpty()) {
+                            IconButton(onClick = onClear) {
+                                Icon(Icons.Default.Clear, contentDescription = "清空")
+                            }
+                        }
+                        IconButton(
+                            onClick = {
+                                keyboardController?.hide()
+                                onSearch(keyword)
+                            },
+                            enabled = !isSearching
+                        ) {
+                            if (isSearching) {
+                                CircularProgressIndicator(
+                                    modifier = Modifier.size(20.dp),
+                                    strokeWidth = 2.dp
+                                )
+                            } else {
+                                Icon(Icons.Default.Search, contentDescription = "搜索")
+                            }
+                        }
+                    }
                 }
+            )
+        },
+        navigationIcon = {
+            IconButton(onClick = onBack) {
+                Icon(Icons.Default.ArrowBack, contentDescription = "返回")
             }
         }
-    }
+    )
 }
 
 @Composable
-private fun SearchSuggestionsContent(
+private fun SearchHomeContent(
     searchHistory: List<String>,
-    hotKeywords: List<String>,
-    onKeywordClick: (String) -> Unit,
+    onHistoryClick: (String) -> Unit,
+    onHistoryDelete: (String) -> Unit,
     onClearHistory: () -> Unit
 ) {
     LazyColumn(
@@ -308,35 +241,21 @@ private fun SearchSuggestionsContent(
                     ) {
                         items(searchHistory) { keyword ->
                             FilterChip(
-                                onClick = { onKeywordClick(keyword) },
+                                onClick = { onHistoryClick(keyword) },
                                 label = { Text(keyword) },
-                                selected = false
-                            )
-                        }
-                    }
-                }
-            }
-        }
-
-        // 热门搜索
-        if (hotKeywords.isNotEmpty()) {
-            item {
-                Column {
-                    Text(
-                        text = "热门搜索",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    LazyRow(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        items(hotKeywords) { keyword ->
-                            FilterChip(
-                                onClick = { onKeywordClick(keyword) },
-                                label = { Text(keyword) },
-                                selected = false
+                                selected = false,
+                                trailingIcon = {
+                                    IconButton(
+                                        onClick = { onHistoryDelete(keyword) },
+                                        modifier = Modifier.size(16.dp)
+                                    ) {
+                                        Icon(
+                                            Icons.Default.Close,
+                                            contentDescription = "删除",
+                                            modifier = Modifier.size(12.dp)
+                                        )
+                                    }
+                                }
                             )
                         }
                     }
@@ -345,6 +264,112 @@ private fun SearchSuggestionsContent(
         }
     }
 }
+
+@Composable
+private fun SearchResultContent(
+    results: List<MovieItem>,
+    hasMore: Boolean,
+    onMovieClick: (MovieItem) -> Unit
+) {
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(3),
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        items(results) { movie ->
+            MovieCard(
+                movie = movie,
+                onClick = { onMovieClick(movie) }
+            )
+        }
+    }
+}
+
+@Composable
+private fun SearchSuggestionsOverlay(
+    suggestions: List<String>,
+    onSuggestionClick: (String) -> Unit
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+    ) {
+        LazyColumn {
+            items(suggestions) { suggestion ->
+                Text(
+                    text = suggestion,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { onSuggestionClick(suggestion) }
+                        .padding(16.dp),
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
+        }
+    }
+}
+
+
+
+
+
+@Composable
+private fun MovieCard(
+    movie: MovieItem,
+    onClick: () -> Unit
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onClick() }
+    ) {
+        Column {
+            // 电影海报占位符
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .aspectRatio(0.7f)
+                    .background(MaterialTheme.colorScheme.surfaceVariant),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Movie,
+                    contentDescription = null,
+                    modifier = Modifier.size(48.dp),
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+
+            // 电影信息
+            Column(
+                modifier = Modifier.padding(8.dp)
+            ) {
+                Text(
+                    text = movie.title,
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.Medium,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
+
+                if (movie.subtitle.isNotEmpty()) {
+                    Text(
+                        text = movie.subtitle,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+            }
+        }
+    }
+}
+
+// ✅ 按照指南添加必要的辅助Composable函数
 
 @Composable
 private fun NoResultContent(keyword: String) {

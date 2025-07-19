@@ -6,122 +6,180 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import top.cywin.onetv.movie.MovieApp
-import top.cywin.onetv.movie.cloudrive.bean.CloudFile
 import android.util.Log
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
+import top.cywin.onetv.movie.MovieApp
+import top.cywin.onetv.movie.adapter.ViewModelAdapter
+import top.cywin.onetv.movie.event.CloudDriveConfigEvent
+import top.cywin.onetv.movie.event.CloudDriveEvent
+import top.cywin.onetv.movie.event.ErrorEvent
+import top.cywin.onetv.movie.event.NavigationEvent
+import top.cywin.onetv.movie.ui.model.CloudDriveConfig
+import top.cywin.onetv.movie.ui.model.CloudFile
 
 /**
- * 网盘功能UI状态数据类
- */
-data class CloudDriveUiState(
-    val isLoading: Boolean = false,
-    val error: String? = null,
-    val cloudDrives: List<CloudDriveConfig> = emptyList(),
-    val availableDrives: List<CloudDriveConfig> = emptyList(),
-    val currentDrive: CloudDriveConfig? = null,
-    val selectedDrive: CloudDriveConfig? = null,
-    val currentPath: String = "/",
-    val files: List<CloudFile> = emptyList(),
-    val currentFiles: List<CloudFile> = emptyList(),
-    val canGoBack: Boolean = false,
-    val isConnected: Boolean = false
-)
-
-/**
- * 网盘配置数据类 - 简化版本
- */
-data class CloudDriveConfig(
-    val id: String,
-    val name: String,
-    val type: String,
-    val config: Map<String, String>
-)
-
-/**
- * OneTV Movie网盘功能ViewModel
- * 通过适配器系统调用FongMi_TV解析功能，不参与线路接口解析
+ * OneTV Movie云盘ViewModel - 完整版本
+ * 通过适配器系统调用FongMi_TV云盘功能，完整的事件驱动架构
  */
 class CloudDriveViewModel : ViewModel() {
 
-    // ✅ 通过MovieApp访问适配器系统 - 不参与解析逻辑
+    companion object {
+        private const val TAG = "ONETV_MOVIE_CLOUD_VM"
+    }
+
+    // ✅ 通过MovieApp访问适配器系统
     private val movieApp = MovieApp.getInstance()
     private val repositoryAdapter = movieApp.repositoryAdapter
+    private val viewModelAdapter = movieApp.viewModelAdapter
 
     private val _uiState = MutableStateFlow(CloudDriveUiState())
     val uiState: StateFlow<CloudDriveUiState> = _uiState.asStateFlow()
 
-    private val pathHistory = mutableListOf<String>()
-    
+    init {
+        Log.d(TAG, "🏗️ CloudDriveViewModel 初始化")
+
+        // ✅ 注册EventBus监听FongMi_TV事件
+        EventBus.getDefault().register(this)
+
+        // ✅ 初始化加载云盘配置
+        loadCloudDriveConfigs()
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        Log.d(TAG, "🧹 CloudDriveViewModel 清理")
+
+        // ✅ 取消EventBus注册
+        try {
+            EventBus.getDefault().unregister(this)
+        } catch (e: Exception) {
+            Log.e(TAG, "EventBus取消注册失败", e)
+        }
+    }
+    // ===== EventBus事件监听 =====
+
     /**
-     * 加载网盘配置 - 通过适配器调用FongMi_TV解析系统
+     * 监听云盘配置事件
      */
-    fun loadCloudDrives() {
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onCloudDriveConfig(event: CloudDriveConfigEvent) {
+        Log.d(TAG, "📡 收到云盘配置事件: success=${event.isSuccess}")
+
+        if (event.isSuccess) {
+            val driveConfigs = event.configs.map { config ->
+                ViewModelAdapter.convertToCloudDriveConfig(config)
+            }.filterNotNull()
+
+            _uiState.value = _uiState.value.copy(
+                isLoading = false,
+                driveConfigs = driveConfigs,
+                error = null
+            )
+        } else {
+            _uiState.value = _uiState.value.copy(
+                isLoading = false,
+                error = "云盘配置加载失败"
+            )
+        }
+    }
+
+    /**
+     * 监听云盘文件事件
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onCloudDriveFiles(event: CloudDriveEvent) {
+        Log.d(TAG, "📡 收到云盘文件事件: driveId=${event.driveId}, success=${event.isSuccess}")
+
+        if (event.isSuccess) {
+            val cloudFiles = event.files.map { file ->
+                ViewModelAdapter.convertToCloudFile(file)
+            }.filterNotNull()
+
+            _uiState.value = _uiState.value.copy(
+                isLoading = false,
+                currentFiles = cloudFiles,
+                currentPath = event.path,
+                error = null
+            )
+        } else {
+            _uiState.value = _uiState.value.copy(
+                isLoading = false,
+                error = "文件列表加载失败"
+            )
+        }
+    }
+
+    /**
+     * 监听错误事件
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onError(event: ErrorEvent) {
+        Log.e(TAG, "📡 收到错误事件: ${event.message}")
+
+        _uiState.value = _uiState.value.copy(
+            isLoading = false,
+            error = event.message
+        )
+    }
+
+    // ===== 公共方法 =====
+
+    /**
+     * 加载云盘配置
+     */
+    fun loadCloudDriveConfigs() {
         viewModelScope.launch {
             try {
-                _uiState.value = _uiState.value.copy(isLoading = true, error = null)
-
-                Log.d("ONETV_MOVIE", "☁️ 开始加载网盘配置")
-
-                // ✅ 通过适配器获取网盘配置 - 配置管理在FongMi_TV中
-                repositoryAdapter.loadCloudDriveConfigs()
-
-                // 实际数据通过SiteViewModel观察获取
-                Log.d("ONETV_MOVIE", "✅ 网盘配置加载请求已发送")
-
+                Log.d(TAG, "☁️ 开始加载云盘配置")
                 _uiState.value = _uiState.value.copy(
-                    isLoading = false,
+                    isLoading = true,
                     error = null
                 )
 
+                // ✅ 通过适配器加载云盘配置
+                repositoryAdapter.loadCloudDriveConfigs()
+
             } catch (e: Exception) {
-                Log.e("ONETV_MOVIE", "网盘配置加载失败", e)
+                Log.e(TAG, "💥 云盘配置加载失败", e)
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
-                    error = "网盘配置加载失败: ${e.message}"
+                    error = "云盘配置加载失败: ${e.message}"
                 )
             }
         }
     }
 
     /**
-     * 选择网盘
+     * 选择云盘
      */
-    fun selectDrive(drive: CloudDriveConfig) {
-        Log.d("ONETV_MOVIE", "☁️ 选择网盘: ${drive.name}")
+    fun selectDrive(driveConfig: CloudDriveConfig) {
+        Log.d(TAG, "☁️ 选择云盘: ${driveConfig.name}")
 
         _uiState.value = _uiState.value.copy(
-            currentDrive = drive,
+            selectedDrive = driveConfig,
             currentPath = "/"
         )
 
-        pathHistory.clear()
-        loadFiles(drive, "/")
+        // 加载根目录文件
+        loadFiles(driveConfig, "/")
     }
 
     /**
      * 加载文件列表
      */
-    private fun loadFiles(drive: CloudDriveConfig, path: String) {
+    fun loadFiles(drive: CloudDriveConfig, path: String) {
         viewModelScope.launch {
             try {
+                Log.d(TAG, "📁 加载文件列表: ${drive.name}$path")
                 _uiState.value = _uiState.value.copy(isLoading = true, error = null)
 
-                Log.d("ONETV_MOVIE", "📁 加载文件列表: ${drive.name}$path")
-
-                // ✅ 通过适配器获取文件列表 - 文件管理在FongMi_TV中
+                // ✅ 通过适配器获取文件列表
                 repositoryAdapter.getCloudFiles(drive.id, path)
 
-                // 实际数据通过SiteViewModel观察获取
-                Log.d("ONETV_MOVIE", "✅ 文件列表加载请求已发送")
-
-                _uiState.value = _uiState.value.copy(
-                    isLoading = false,
-                    currentPath = path,
-                    error = null
-                )
-
             } catch (e: Exception) {
-                Log.e("ONETV_MOVIE", "文件列表加载失败", e)
+                Log.e(TAG, "💥 文件列表加载失败", e)
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
                     error = "文件列表加载失败: ${e.message}"
@@ -131,60 +189,54 @@ class CloudDriveViewModel : ViewModel() {
     }
 
     /**
-     * 进入目录
+     * 进入文件夹
      */
-    fun enterDirectory(file: CloudFile) {
-        if (file.isFolder()) {
-            val currentPath = _uiState.value.currentPath
-            pathHistory.add(currentPath)
-
-            val newPath = "${currentPath.trimEnd('/')}/${file.name}"
-
-            _uiState.value.currentDrive?.let { drive ->
-                loadFiles(drive, newPath)
-            }
+    fun enterFolder(folder: CloudFile) {
+        if (folder.isDirectory) {
+            val currentDrive = _uiState.value.selectedDrive ?: return
+            loadFiles(currentDrive, folder.path)
         }
     }
 
     /**
      * 返回上级目录
      */
-    fun backToParent() {
-        if (pathHistory.isNotEmpty()) {
-            val parentPath = pathHistory.removeLastOrNull() ?: "/"
+    fun goBack() {
+        val currentPath = _uiState.value.currentPath
+        if (currentPath != "/" && currentPath.isNotEmpty()) {
+            val parentPath = currentPath.substringBeforeLast("/")
+            val finalPath = if (parentPath.isEmpty()) "/" else parentPath
 
-            _uiState.value.currentDrive?.let { drive ->
-                loadFiles(drive, parentPath)
-            }
+            val currentDrive = _uiState.value.selectedDrive ?: return
+            loadFiles(currentDrive, finalPath)
         }
     }
 
     /**
-     * 获取下载链接
+     * 播放文件
      */
-    fun getDownloadUrl(file: CloudFile, onResult: (String) -> Unit) {
-        viewModelScope.launch {
-            try {
-                _uiState.value.currentDrive?.let { drive ->
-                    // ✅ 通过适配器获取下载链接 - 下载管理在FongMi_TV中
-                    repositoryAdapter.getCloudDownloadUrl(drive.id, file.path) { url ->
-                        if (url.isNotEmpty()) {
-                            onResult(url)
-                        } else {
-                            _uiState.value = _uiState.value.copy(
-                                error = "获取下载链接失败"
-                            )
-                        }
-                    }
-                }
+    fun playFile(file: CloudFile) {
+        if (!file.isDirectory && file.playUrl != null) {
+            Log.d(TAG, "▶️ 播放文件: ${file.name}")
 
-            } catch (e: Exception) {
-                Log.e("ONETV_MOVIE", "获取下载链接失败", e)
-                _uiState.value = _uiState.value.copy(
-                    error = "获取下载链接失败: ${e.message}"
+            // 通过EventBus通知播放
+            EventBus.getDefault().post(NavigationEvent(
+                action = "play_cloud_file",
+                params = mapOf(
+                    "url" to file.playUrl,
+                    "name" to file.name
                 )
-            }
+            ))
         }
+    }
+
+    /**
+     * 刷新当前目录
+     */
+    fun refresh() {
+        val currentDrive = _uiState.value.selectedDrive ?: return
+        val currentPath = _uiState.value.currentPath
+        loadFiles(currentDrive, currentPath)
     }
 
     /**
@@ -193,29 +245,34 @@ class CloudDriveViewModel : ViewModel() {
     fun clearError() {
         _uiState.value = _uiState.value.copy(error = null)
     }
+}
 
-    /**
-     * 刷新当前路径
-     */
-    fun refreshCurrentPath() {
-        val currentState = _uiState.value
-        currentState.currentDrive?.let { drive ->
-            loadFiles(drive, currentState.currentPath)
-        }
-    }
+/**
+ * 云盘UI状态数据类
+ */
+data class CloudDriveUiState(
+    // 基础状态
+    val isLoading: Boolean = false,
+    val error: String? = null,
 
-    /**
-     * 刷新当前目录
-     */
-    fun refreshCurrentDirectory() {
-        refreshCurrentPath()
-    }
+    // 云盘配置
+    val driveConfigs: List<CloudDriveConfig> = emptyList(),
+    val selectedDrive: CloudDriveConfig? = null,
 
-    /**
-     * 播放文件
-     */
-    fun playFile(file: CloudFile) {
-        Log.d("ONETV_MOVIE", "▶️ 播放文件: ${file.name}")
-        // 这里应该调用播放器逻辑
-    }
+    // 文件列表
+    val currentFiles: List<CloudFile> = emptyList(),
+    val currentPath: String = "/",
+
+    // UI控制
+    val showDriveSelector: Boolean = false,
+    val sortType: FileSortType = FileSortType.NAME,
+    val viewType: FileViewType = FileViewType.LIST
+)
+
+enum class FileSortType {
+    NAME, SIZE, DATE
+}
+
+enum class FileViewType {
+    LIST, GRID
 }

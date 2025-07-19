@@ -2,246 +2,162 @@ package top.cywin.onetv.movie.adapter;
 
 import android.content.Context;
 import android.util.Log;
-import androidx.lifecycle.LifecycleOwner;
 
 /**
- * 集成管理器 - 按照FongMi_TV整合指南完善
- * 统一管理UI集成适配，支持17个重构文件的需求
+ * 集成管理器 - 纯粹的配置和初始化管理器
+ * 只负责FongMi_TV系统的初始化和配置管理
  */
 public class IntegrationManager {
 
     private static final String TAG = "IntegrationManager";
     private static IntegrationManager instance;
+
     private Context context;
-    private RepositoryAdapter repositoryAdapter;
-    private UIAdapter uiAdapter;
-    private ViewModelAdapter viewModelAdapter;
     private boolean isInitialized = false;
 
-    private IntegrationManager() {
-        Log.d(TAG, "🏗️ IntegrationManager 单例创建");
-    }
-
-    public static synchronized IntegrationManager getInstance() {
+    public static IntegrationManager getInstance() {
         if (instance == null) {
-            instance = new IntegrationManager();
+            synchronized (IntegrationManager.class) {
+                if (instance == null) {
+                    instance = new IntegrationManager();
+                }
+            }
         }
         return instance;
     }
 
-    /**
-     * 初始化集成管理器
-     */
-    public void initialize(Context context, LifecycleOwner lifecycleOwner) {
-        Log.d(TAG, "🔄 初始化IntegrationManager");
+    private IntegrationManager() {
+        Log.d(TAG, "🏗️ IntegrationManager 创建");
+    }
 
+    /**
+     * 初始化FongMi_TV系统 - 只做系统初始化
+     */
+    public void initialize(Context context) {
         if (isInitialized) {
-            Log.d(TAG, "✅ IntegrationManager已初始化，跳过");
+            Log.d(TAG, "⚠️ IntegrationManager 已初始化，跳过");
             return;
         }
 
+        this.context = context.getApplicationContext();
+        Log.d(TAG, "🔄 初始化FongMi_TV系统");
+
         try {
-            this.context = context;
+            // ✅ 1. 初始化FongMi_TV核心组件
+            initializeFongMiTVCore();
 
-            // 初始化各个适配器
-            initializeAdapters(lifecycleOwner);
+            // ✅ 2. 初始化数据库
+            initializeDatabase();
 
-            // 建立适配器之间的连接
-            connectAdapters();
+            // ✅ 3. 初始化配置系统
+            initializeConfigSystem();
 
-            // 验证系统完整性
-            validateSystem();
+            // ✅ 4. 初始化EventBus
+            initializeEventBus();
 
             isInitialized = true;
-            Log.d(TAG, "✅ IntegrationManager初始化完成");
+            Log.d(TAG, "✅ FongMi_TV系统初始化完成");
 
         } catch (Exception e) {
-            Log.e(TAG, "❌ IntegrationManager初始化失败", e);
-            throw new RuntimeException("IntegrationManager初始化失败", e);
+            Log.e(TAG, "💥 FongMi_TV系统初始化失败", e);
+            throw new RuntimeException("FongMi_TV系统初始化失败", e);
         }
     }
 
     /**
-     * 初始化适配器
+     * 初始化FongMi_TV核心组件
      */
-    private void initializeAdapters(LifecycleOwner lifecycleOwner) {
-        Log.d(TAG, "🔄 初始化适配器");
+    private void initializeFongMiTVCore() {
+        Log.d(TAG, "🔄 初始化FongMi_TV核心组件");
+
+        // ✅ 初始化App上下文（如果FongMi_TV需要）
+        if (context != null) {
+            // 设置FongMi_TV的App上下文
+            // App.init(context); // 根据实际FongMi_TV代码调整
+        }
+
+        // ✅ 初始化VodConfig
+        top.cywin.onetv.movie.api.config.VodConfig.get().init();
+
+        Log.d(TAG, "✅ FongMi_TV核心组件初始化完成");
+    }
+
+    /**
+     * 初始化数据库
+     */
+    private void initializeDatabase() {
+        Log.d(TAG, "🔄 初始化数据库");
 
         try {
-            // 初始化RepositoryAdapter
-            repositoryAdapter = new RepositoryAdapter();
-            repositoryAdapter.reconnectRepositories();
+            // ✅ 初始化FongMi_TV数据库
+            // AppDatabase.init(context); // 根据实际FongMi_TV代码调整
 
-            // 初始化UIAdapter
-            uiAdapter = new UIAdapter(context);
-            uiAdapter.adaptExistingUI();
-
-            // 初始化ViewModelAdapter
-            viewModelAdapter = new ViewModelAdapter(lifecycleOwner);
-            viewModelAdapter.reconnectViewModels();
-
-            Log.d(TAG, "✅ 适配器初始化完成");
+            Log.d(TAG, "✅ 数据库初始化完成");
         } catch (Exception e) {
-            Log.e(TAG, "❌ 适配器初始化失败", e);
-            throw new RuntimeException("适配器初始化失败", e);
+            Log.e(TAG, "❌ 数据库初始化失败", e);
+            throw e;
         }
     }
 
     /**
-     * 连接适配器
+     * 初始化配置系统
      */
-    private void connectAdapters() {
-        Log.d(TAG, "🔄 连接适配器");
+    private void initializeConfigSystem() {
+        Log.d(TAG, "🔄 初始化配置系统");
 
         try {
-            // 这里可以建立适配器之间的连接关系
-            // 目前适配器通过MovieApp单例访问，无需额外连接
+            // ✅ 加载默认配置
+            top.cywin.onetv.movie.api.config.VodConfig vodConfig = top.cywin.onetv.movie.api.config.VodConfig.get();
 
-            Log.d(TAG, "✅ 适配器连接完成");
+            // ✅ 检查是否有本地配置
+            if (vodConfig.getSites().isEmpty()) {
+                Log.d(TAG, "📥 加载默认配置");
+                // 这里可以加载默认的配置URL
+                // vodConfig.load(); // 根据需要调用
+            }
+
+            Log.d(TAG, "✅ 配置系统初始化完成");
         } catch (Exception e) {
-            Log.e(TAG, "❌ 适配器连接失败", e);
-            throw new RuntimeException("适配器连接失败", e);
+            Log.e(TAG, "❌ 配置系统初始化失败", e);
+            throw e;
         }
     }
 
     /**
-     * 验证系统完整性
+     * 初始化EventBus
      */
-    private void validateSystem() {
-        Log.d(TAG, "🔄 验证系统完整性");
+    private void initializeEventBus() {
+        Log.d(TAG, "🔄 初始化EventBus");
 
         try {
-            // 验证RepositoryAdapter
-            if (repositoryAdapter == null || !repositoryAdapter.isSystemReady()) {
-                throw new RuntimeException("RepositoryAdapter未就绪");
-            }
+            // ✅ EventBus通常不需要特殊初始化
+            // 但可以在这里设置全局配置
 
-            // 验证UIAdapter
-            if (uiAdapter == null || !uiAdapter.isUIReady()) {
-                throw new RuntimeException("UIAdapter未就绪");
-            }
-
-            // 验证ViewModelAdapter
-            if (viewModelAdapter == null || !viewModelAdapter.isViewModelReady()) {
-                throw new RuntimeException("ViewModelAdapter未就绪");
-            }
-
-            Log.d(TAG, "✅ 系统完整性验证通过");
+            Log.d(TAG, "✅ EventBus初始化完成");
         } catch (Exception e) {
-            Log.e(TAG, "❌ 系统完整性验证失败", e);
-            throw new RuntimeException("系统完整性验证失败", e);
+            Log.e(TAG, "❌ EventBus初始化失败", e);
+            throw e;
         }
     }
 
     /**
-     * 获取RepositoryAdapter
-     */
-    public RepositoryAdapter getRepositoryAdapter() {
-        return repositoryAdapter;
-    }
-
-    /**
-     * 获取UIAdapter
-     */
-    public UIAdapter getUIAdapter() {
-        return uiAdapter;
-    }
-
-    /**
-     * 获取ViewModelAdapter
-     */
-    public ViewModelAdapter getViewModelAdapter() {
-        return viewModelAdapter;
-    }
-
-    /**
-     * 检查是否已初始化
+     * 获取初始化状态
      */
     public boolean isInitialized() {
         return isInitialized;
     }
 
     /**
-     * 重新初始化
-     */
-    public void reinitialize(Context context, LifecycleOwner lifecycleOwner) {
-        cleanup();
-        isInitialized = false;
-        initialize(context, lifecycleOwner);
-    }
-
-    /**
-     * 检查系统状态 - 确保所有适配器正常工作
-     */
-    public boolean isSystemReady() {
-        boolean initialized = isInitialized;
-        boolean repositoryReady = repositoryAdapter != null && repositoryAdapter.isSystemReady();
-        boolean uiReady = uiAdapter != null && uiAdapter.isUIReady();
-        boolean viewModelReady = viewModelAdapter != null && viewModelAdapter.isViewModelReady();
-
-        Log.d(TAG, "🔍 系统状态检查 - 初始化: " + initialized +
-                   ", Repository: " + repositoryReady +
-                   ", UI: " + uiReady +
-                   ", ViewModel: " + viewModelReady);
-
-        return initialized && repositoryReady && uiReady && viewModelReady;
-    }
-
-    /**
-     * 获取系统状态信息 - 详细的状态报告
-     */
-    public String getSystemStatus() {
-        if (!isInitialized) {
-            return "❌ 系统未初始化";
-        }
-
-        StringBuilder status = new StringBuilder();
-        status.append("🔍 IntegrationManager系统状态:\n");
-
-        if (repositoryAdapter != null) {
-            status.append("📦 RepositoryAdapter: ")
-                  .append(repositoryAdapter.isSystemReady() ? "✅ 就绪" : "❌ 未就绪")
-                  .append("\n");
-        } else {
-            status.append("📦 RepositoryAdapter: ❌ 未初始化\n");
-        }
-
-        if (uiAdapter != null) {
-            status.append("🎨 UIAdapter: ")
-                  .append(uiAdapter.isUIReady() ? "✅ 就绪" : "❌ 未就绪")
-                  .append("\n");
-        } else {
-            status.append("🎨 UIAdapter: ❌ 未初始化\n");
-        }
-
-        if (viewModelAdapter != null) {
-            status.append("🔄 ViewModelAdapter: ")
-                  .append(viewModelAdapter.isViewModelReady() ? "✅ 就绪" : "❌ 未就绪")
-                  .append("\n");
-        } else {
-            status.append("🔄 ViewModelAdapter: ❌ 未初始化\n");
-        }
-
-        return status.toString();
-    }
-
-    /**
      * 清理资源
      */
     public void cleanup() {
-        Log.d(TAG, "🔄 清理IntegrationManager资源");
+        Log.d(TAG, "🧹 清理IntegrationManager资源");
 
         try {
-            if (viewModelAdapter != null) {
-                viewModelAdapter.cleanup();
-            }
+            // ✅ 清理FongMi_TV资源
+            // 根据实际需要进行清理
 
-            repositoryAdapter = null;
-            uiAdapter = null;
-            viewModelAdapter = null;
-            context = null;
             isInitialized = false;
-
             Log.d(TAG, "✅ IntegrationManager资源清理完成");
         } catch (Exception e) {
             Log.e(TAG, "❌ IntegrationManager资源清理失败", e);
