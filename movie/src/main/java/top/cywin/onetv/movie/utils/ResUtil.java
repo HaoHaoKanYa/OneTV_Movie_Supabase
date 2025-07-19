@@ -22,7 +22,7 @@ import androidx.annotation.DrawableRes;
 import androidx.annotation.StringRes;
 import androidx.core.content.ContextCompat;
 
-import com.fongmi.onetv.tv.App;
+import top.cywin.onetv.movie.App;
 
 public class ResUtil {
 

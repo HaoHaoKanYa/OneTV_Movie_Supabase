@@ -9,7 +9,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import top.cywin.onetv.movie.App;
-import top.cywin.onetv.movie.Constant;
+import top.cywin.onetv.movie.Constants;
 import top.cywin.onetv.movie.R;
 import top.cywin.onetv.movie.api.config.VodConfig;
 import top.cywin.onetv.movie.database.AppDatabase;
@@ -245,7 +245,7 @@ public class History {
     }
 
     public static List<History> get(int cid) {
-        return AppDatabase.get().getHistoryDao().find(cid, System.currentTimeMillis() - Constant.HISTORY_TIME);
+        return AppDatabase.get().getHistoryDao().find(cid, System.currentTimeMillis() - Constants.HISTORY_TIME);
     }
 
     public static History find(String key) {

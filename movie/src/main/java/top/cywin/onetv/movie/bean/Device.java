@@ -10,7 +10,7 @@ import androidx.room.PrimaryKey;
 
 import top.cywin.onetv.movie.App;
 import top.cywin.onetv.movie.Product;
-import top.cywin.onetv.movie.db.AppDatabase;
+import top.cywin.onetv.movie.database.AppDatabase;
 import top.cywin.onetv.movie.server.Server;
 import top.cywin.onetv.movie.utils.UrlUtil;
 import top.cywin.onetv.movie.utils.Util;

@@ -10,9 +10,9 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import top.cywin.onetv.movie.App;
-import top.cywin.onetv.movie.Constant;
+import top.cywin.onetv.movie.Constants;
 import top.cywin.onetv.movie.api.loader.BaseLoader;
-import top.cywin.onetv.movie.db.AppDatabase;
+import top.cywin.onetv.movie.database.AppDatabase;
 import top.cywin.onetv.movie.gson.ExtAdapter;
 import top.cywin.onetv.movie.catvod.crawler.Spider;
 import top.cywin.onetv.movie.catvod.net.OkHttp;
@@ -188,7 +188,7 @@ public class Site implements Parcelable {
     }
 
     public long getTimeout() {
-        return timeout == null ? Constant.TIMEOUT_PLAY : TimeUnit.SECONDS.toMillis(Math.max(timeout, 1));
+        return timeout == null ? Constants.TIMEOUT_PLAY : TimeUnit.SECONDS.toMillis(Math.max(timeout, 1));
     }
 
     public Integer getSearchable() {

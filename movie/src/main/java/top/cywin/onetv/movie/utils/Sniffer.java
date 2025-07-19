@@ -3,9 +3,9 @@ package top.cywin.onetv.movie.utils;
 import android.net.Uri;
 import android.text.TextUtils;
 
-import com.fongmi.onetv.tv.api.config.LiveConfig;
-import com.fongmi.onetv.tv.api.config.VodConfig;
-import com.fongmi.onetv.tv.bean.Rule;
+import top.cywin.onetv.movie.api.config.LiveConfig;
+import top.cywin.onetv.movie.api.config.VodConfig;
+import top.cywin.onetv.movie.bean.Rule;
 import top.cywin.onetv.movie.catvod.utils.Json;
 import top.cywin.onetv.movie.catvod.utils.Util;
 

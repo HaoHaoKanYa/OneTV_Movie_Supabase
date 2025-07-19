@@ -5,16 +5,16 @@ import android.text.TextUtils;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.fongmi.onetv.tv.App;
-import com.fongmi.onetv.tv.R;
-import com.fongmi.onetv.tv.Setting;
-import com.fongmi.onetv.tv.bean.Config;
-import com.fongmi.onetv.tv.event.RefreshEvent;
-import com.fongmi.onetv.tv.impl.Callback;
-import com.fongmi.onetv.tv.utils.FileUtil;
-import com.fongmi.onetv.tv.utils.Notify;
-import com.fongmi.onetv.tv.utils.ResUtil;
-import com.fongmi.onetv.tv.utils.UrlUtil;
+import top.cywin.onetv.movie.App;
+import top.cywin.onetv.movie.R;
+import top.cywin.onetv.movie.Setting;
+import top.cywin.onetv.movie.bean.Config;
+import top.cywin.onetv.movie.event.RefreshEvent;
+import top.cywin.onetv.movie.impl.Callback;
+import top.cywin.onetv.movie.utils.FileUtil;
+import top.cywin.onetv.movie.utils.Notify;
+import top.cywin.onetv.movie.utils.ResUtil;
+import top.cywin.onetv.movie.utils.UrlUtil;
 import com.github.catvod.net.OkHttp;
 import com.github.catvod.utils.Path;
 

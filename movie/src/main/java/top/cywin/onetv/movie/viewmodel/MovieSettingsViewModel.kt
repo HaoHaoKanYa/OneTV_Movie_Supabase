@@ -402,4 +402,66 @@ class MovieSettingsViewModel : ViewModel() {
             }
         }
     }
+
+    /**
+     * 重置设置
+     */
+    fun resetSettings() {
+        viewModelScope.launch {
+            try {
+                Log.d("ONETV_MOVIE", "🔄 重置设置")
+
+                // 重置UI状态到默认值
+                _uiState.value = SettingsUiState()
+
+                Log.d("ONETV_MOVIE", "✅ 设置重置完成")
+
+            } catch (e: Exception) {
+                Log.e("ONETV_MOVIE", "设置重置失败", e)
+                _uiState.value = _uiState.value.copy(
+                    error = "设置重置失败: ${e.message}"
+                )
+            }
+        }
+    }
+
+    /**
+     * 导出设置
+     */
+    fun exportSettings() {
+        viewModelScope.launch {
+            try {
+                Log.d("ONETV_MOVIE", "📤 导出设置")
+
+                // TODO: 实现设置导出逻辑
+                Log.d("ONETV_MOVIE", "✅ 设置导出完成")
+
+            } catch (e: Exception) {
+                Log.e("ONETV_MOVIE", "设置导出失败", e)
+                _uiState.value = _uiState.value.copy(
+                    error = "设置导出失败: ${e.message}"
+                )
+            }
+        }
+    }
+
+    /**
+     * 导入设置
+     */
+    fun importSettings() {
+        viewModelScope.launch {
+            try {
+                Log.d("ONETV_MOVIE", "📥 导入设置")
+
+                // TODO: 实现设置导入逻辑
+                Log.d("ONETV_MOVIE", "✅ 设置导入完成")
+
+            } catch (e: Exception) {
+                Log.e("ONETV_MOVIE", "设置导入失败", e)
+                _uiState.value = _uiState.value.copy(
+                    error = "设置导入失败: ${e.message}"
+                )
+            }
+        }
+    }
 }

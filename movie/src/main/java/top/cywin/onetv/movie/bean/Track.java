@@ -7,7 +7,7 @@ import androidx.room.Entity;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-import top.cywin.onetv.movie.db.AppDatabase;
+import top.cywin.onetv.movie.database.AppDatabase;
 
 import java.util.Collections;
 import java.util.List;

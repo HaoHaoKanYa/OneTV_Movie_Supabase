@@ -13,8 +13,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationChannelCompat;
 import androidx.core.app.NotificationManagerCompat;
 
-import com.fongmi.onetv.tv.App;
-import com.fongmi.onetv.tv.databinding.ViewProgressBinding;
+import top.cywin.onetv.movie.App;
+import top.cywin.onetv.movie.databinding.ViewProgressBinding;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class Notify {

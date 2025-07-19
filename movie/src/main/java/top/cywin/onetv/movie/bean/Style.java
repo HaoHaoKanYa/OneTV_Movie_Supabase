@@ -6,7 +6,7 @@ import android.text.TextUtils;
 
 import androidx.annotation.Nullable;
 
-import top.cywin.onetv.movie.ui.base.ViewType;
+// ViewType constants - 直接使用常量值替代ViewType类引用
 import com.google.gson.annotations.SerializedName;
 
 public class Style implements Parcelable {

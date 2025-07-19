@@ -1,6 +1,6 @@
 package top.cywin.onetv.movie.player;
 
-import top.cywin.onetv.movie.Constant;
+import top.cywin.onetv.movie.Constants;
 import top.cywin.onetv.movie.bean.Channel;
 import top.cywin.onetv.movie.bean.Episode;
 import top.cywin.onetv.movie.bean.Flag;
@@ -66,7 +66,7 @@ public class Source {
 
     public void parse(List<Flag> flags) throws Exception {
         for (Flag flag : flags) {
-            ExecutorService executor = Executors.newFixedThreadPool(Constant.THREAD_POOL);
+            ExecutorService executor = Executors.newFixedThreadPool(Constants.THREAD_POOL);
             List<Callable<List<Episode>>> items = new ArrayList<>();
             Iterator<Episode> iterator = flag.getEpisodes().iterator();
             while (iterator.hasNext()) addCallable(iterator, items);

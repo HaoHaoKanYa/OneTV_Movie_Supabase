@@ -2,7 +2,7 @@ package top.cywin.onetv.movie.utils;
 
 import android.net.Uri;
 
-import com.fongmi.onetv.tv.server.Server;
+import top.cywin.onetv.movie.server.Server;
 import top.cywin.onetv.movie.catvod.utils.UriUtil;
 import com.google.common.net.HttpHeaders;
 

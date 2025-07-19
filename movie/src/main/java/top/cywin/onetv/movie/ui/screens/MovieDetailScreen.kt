@@ -95,6 +95,7 @@ fun MovieDetailScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun DetailContent(
     uiState: DetailUiState,

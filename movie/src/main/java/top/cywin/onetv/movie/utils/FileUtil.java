@@ -8,9 +8,9 @@ import android.text.TextUtils;
 
 import androidx.core.content.FileProvider;
 
-import com.fongmi.onetv.tv.App;
-import com.fongmi.onetv.tv.R;
-import com.fongmi.onetv.tv.impl.Callback;
+import top.cywin.onetv.movie.App;
+import top.cywin.onetv.movie.R;
+import top.cywin.onetv.movie.impl.Callback;
 import top.cywin.onetv.movie.catvod.utils.Path;
 
 import java.io.BufferedInputStream;

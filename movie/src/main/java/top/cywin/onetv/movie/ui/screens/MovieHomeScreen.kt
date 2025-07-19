@@ -123,6 +123,7 @@ fun MovieHomeScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun HomeContent(
     uiState: MovieUiState,

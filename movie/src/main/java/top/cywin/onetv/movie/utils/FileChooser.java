@@ -16,8 +16,8 @@ import android.provider.MediaStore;
 
 import androidx.fragment.app.Fragment;
 
-import com.fongmi.onetv.tv.App;
-import com.fongmi.onetv.tv.ui.activity.FileActivity;
+import top.cywin.onetv.movie.App;
+import top.cywin.onetv.movie.ui.activity.FileActivity;
 import top.cywin.onetv.movie.catvod.utils.Path;
 
 import java.io.File;

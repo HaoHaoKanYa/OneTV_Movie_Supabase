@@ -38,7 +38,7 @@ fun CategoryTabs(
                 onClick = { onCategorySelected(category) },
                 label = { Text(category.getTypeName()) },
                 selected = selectedCategory == category,
-                modifier = Modifier.animateItemPlacement()
+                modifier = Modifier
             )
         }
     }

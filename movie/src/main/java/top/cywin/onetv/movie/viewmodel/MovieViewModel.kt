@@ -171,7 +171,7 @@ class MovieViewModel : ViewModel() {
         _uiState.value = _uiState.value.copy(
             isLoading = false,
             currentSite = currentSite,
-            categories = currentSite?.categories ?: emptyList(),
+            categories = emptyList(), // 分类数据通过SiteViewModel观察获取
             error = null
         )
     }
@@ -258,11 +258,106 @@ class MovieViewModel : ViewModel() {
         _uiState.value = _uiState.value.copy(showRouteSelector = false)
     }
 
+    /**
+     * 加载推荐内容
+     */
+    fun loadRecommendContent() {
+        viewModelScope.launch {
+            try {
+                Log.d("ONETV_MOVIE", "🌟 加载推荐内容")
 
+                // ✅ 通过适配器获取推荐内容
+                repositoryAdapter.getRecommendContent()
 
+                Log.d("ONETV_MOVIE", "✅ 推荐内容请求已发送")
 
+            } catch (e: Exception) {
+                Log.e("ONETV_MOVIE", "推荐内容加载失败", e)
+                _uiState.value = _uiState.value.copy(
+                    error = "推荐内容加载失败: ${e.message}"
+                )
+            }
+        }
+    }
 
+    /**
+     * 加载分类列表
+     */
+    fun loadCategories() {
+        viewModelScope.launch {
+            try {
+                Log.d("ONETV_MOVIE", "📂 加载分类列表")
 
+                // ✅ 通过适配器获取分类列表
+                repositoryAdapter.getCategories()
 
+                Log.d("ONETV_MOVIE", "✅ 分类列表请求已发送")
 
+            } catch (e: Exception) {
+                Log.e("ONETV_MOVIE", "分类列表加载失败", e)
+                _uiState.value = _uiState.value.copy(
+                    error = "分类列表加载失败: ${e.message}"
+                )
+            }
+        }
+    }
+
+    /**
+     * 刷新数据
+     */
+    fun refreshData() {
+        viewModelScope.launch {
+            try {
+                Log.d("ONETV_MOVIE", "🔄 刷新数据")
+
+                _uiState.value = _uiState.value.copy(isLoading = true, error = null)
+
+                // ✅ 通过适配器刷新配置
+                repositoryAdapter.refreshConfig()
+
+                // 重新加载首页数据
+                loadHomeData()
+
+                Log.d("ONETV_MOVIE", "✅ 数据刷新完成")
+
+            } catch (e: Exception) {
+                Log.e("ONETV_MOVIE", "数据刷新失败", e)
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    error = "数据刷新失败: ${e.message}"
+                )
+            }
+        }
+    }
+
+    /**
+     * 清空缓存
+     */
+    fun clearCache() {
+        viewModelScope.launch {
+            try {
+                Log.d("ONETV_MOVIE", "🗑️ 清空缓存")
+
+                // ✅ 通过适配器清空缓存
+                repositoryAdapter.clearAllCache { progress ->
+                    Log.d("ONETV_MOVIE", "缓存清理进度: ${(progress * 100).toInt()}%")
+                }
+
+                Log.d("ONETV_MOVIE", "✅ 缓存清空完成")
+
+            } catch (e: Exception) {
+                Log.e("ONETV_MOVIE", "缓存清空失败", e)
+                _uiState.value = _uiState.value.copy(
+                    error = "缓存清空失败: ${e.message}"
+                )
+            }
+        }
+    }
+
+    /**
+     * 清除错误状态
+     */
+    fun clearError() {
+        _uiState.value = _uiState.value.copy(error = null)
+    }
 }

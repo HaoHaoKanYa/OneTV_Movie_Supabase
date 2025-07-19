@@ -74,6 +74,7 @@ fun MovieSearchScreen(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SearchContent(
     uiState: SearchUiState,

@@ -3,7 +3,7 @@ package top.cywin.onetv.movie.player;
 import android.text.TextUtils;
 
 import top.cywin.onetv.movie.App;
-import top.cywin.onetv.movie.Constant;
+import top.cywin.onetv.movie.Constants;
 import top.cywin.onetv.movie.api.config.VodConfig;
 import top.cywin.onetv.movie.api.loader.BaseLoader;
 import top.cywin.onetv.movie.bean.Parse;
@@ -74,7 +74,7 @@ public class ParseJob implements ParseCallback {
     private void execute(Result result) {
         executor.execute(() -> {
             try {
-                executor.submit(getTask(result)).get(Constant.TIMEOUT_PARSE_DEF, TimeUnit.MILLISECONDS);
+                executor.submit(getTask(result)).get(Constants.TIMEOUT_PARSE_DEF, TimeUnit.MILLISECONDS);
             } catch (Throwable e) {
                 onParseError();
             }

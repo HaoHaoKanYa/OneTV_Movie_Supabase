@@ -53,7 +53,6 @@ fun MoviePlayerScreen(
     // ✅ 通过MovieApp访问适配器系统
     val movieApp = MovieApp.getInstance()
     val siteViewModel = movieApp.siteViewModel
-    val playerAdapter = movieApp.playerAdapter
 
     // ✅ 观察FongMi_TV的数据变化 - 数据来源于FongMi_TV解析系统
     // val playResult by siteViewModel.result.observeAsState()
@@ -61,7 +60,7 @@ fun MoviePlayerScreen(
     // ✅ 页面初始化时加载数据
     LaunchedEffect(vodId, episodeIndex, siteKey) {
         Log.d("ONETV_MOVIE", "🎬 MoviePlayerScreen 初始化: vodId=$vodId, episode=$episodeIndex")
-        viewModel.loadPlayData(vodId, episodeIndex, siteKey)
+        viewModel.initPlayer(vodId, siteKey, episodeIndex)
     }
 
     // ✅ 处理FongMi_TV播放数据变化
@@ -80,7 +79,7 @@ fun MoviePlayerScreen(
         uiState.error != null -> {
             ErrorScreen(
                 error = uiState.error ?: "未知错误",
-                onRetry = { viewModel.loadPlayData(vodId, episodeIndex, siteKey) },
+                onRetry = { viewModel.initPlayer(vodId, siteKey, episodeIndex) },
                 onBack = { navController.popBackStack() }
             )
         }
@@ -88,8 +87,8 @@ fun MoviePlayerScreen(
             PlayerContent(
                 uiState = uiState,
                 // playResult = playResult,
-                onPlayClick = { viewModel.startPlay() },
-                onPauseClick = { viewModel.pausePlay() },
+                onPlayClick = { viewModel.setPlayingState(true) },
+                onPauseClick = { viewModel.setPlayingState(false) },
                 onEpisodeSelect = { episode ->
                     viewModel.selectEpisode(episode)
                     navController.navigate("player/$vodId/${episode.index}/$siteKey")
@@ -285,7 +284,7 @@ private fun BottomPlayerControls(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             // 线路选择
-            if (uiState.flags.isNotEmpty()) {
+            if (uiState.playFlags.isNotEmpty()) {
                 Text(
                     text = "播放线路",
                     style = MaterialTheme.typography.titleSmall,
@@ -294,11 +293,11 @@ private fun BottomPlayerControls(
                 LazyRow(
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    items(uiState.flags) { flag ->
+                    items(uiState.playFlags) { flag ->
                         FilterChip(
                             onClick = { onFlagSelect(flag) },
-                            label = { Text(flag.flag ?: "未知线路") },
-                            selected = uiState.selectedFlag == flag
+                            label = { Text(flag.getFlag() ?: "未知线路") },
+                            selected = uiState.currentFlag == flag
                         )
                     }
                 }
@@ -318,7 +317,7 @@ private fun BottomPlayerControls(
                         FilterChip(
                             onClick = { onEpisodeSelect(episode) },
                             label = { Text(episode.name) },
-                            selected = uiState.selectedEpisode == episode
+                            selected = uiState.currentEpisode == episode
                         )
                     }
                 }

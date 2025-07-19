@@ -65,6 +65,7 @@ fun MovieSettingsScreen(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SettingsContent(
     uiState: SettingsUiState,

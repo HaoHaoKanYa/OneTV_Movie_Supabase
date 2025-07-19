@@ -4,7 +4,7 @@ import android.net.TrafficStats;
 import android.view.View;
 import android.widget.TextView;
 
-import com.fongmi.onetv.tv.App;
+import top.cywin.onetv.movie.App;
 
 import java.text.DecimalFormat;
 

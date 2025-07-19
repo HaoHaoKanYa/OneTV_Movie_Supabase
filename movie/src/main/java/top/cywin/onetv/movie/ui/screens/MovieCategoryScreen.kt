@@ -83,6 +83,7 @@ fun MovieCategoryScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun CategoryContent(
     uiState: CategoryUiState,
@@ -125,8 +126,8 @@ private fun CategoryContent(
                 items(uiState.availableFilters) { filter ->
                     FilterChip(
                         onClick = { onFilterChange(filter) },
-                        label = { Text(filter.name) },
-                        selected = uiState.selectedFilters.contains(filter)
+                        label = { Text(filter.getName()) },
+                        selected = uiState.selectedFilters.containsKey(filter.getKey())
                     )
                 }
             }

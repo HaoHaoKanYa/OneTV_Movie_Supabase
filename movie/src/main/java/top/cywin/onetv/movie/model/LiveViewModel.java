@@ -3,7 +3,7 @@ package top.cywin.onetv.movie.model;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import top.cywin.onetv.movie.Constant;
+import top.cywin.onetv.movie.Constants;
 import top.cywin.onetv.movie.R;
 import top.cywin.onetv.movie.api.EpgParser;
 import top.cywin.onetv.movie.api.LiveParser;
@@ -13,9 +13,9 @@ import top.cywin.onetv.movie.bean.Epg;
 import top.cywin.onetv.movie.bean.EpgData;
 import top.cywin.onetv.movie.bean.Group;
 import top.cywin.onetv.movie.bean.Live;
-import com.fongmi.onetv.tv.exception.ExtractException;
-import com.fongmi.onetv.tv.player.Source;
-import com.github.catvod.net.OkHttp;
+import top.cywin.onetv.movie.exception.ExtractException;
+import top.cywin.onetv.movie.player.Source;
+import top.cywin.onetv.movie.catvod.net.OkHttp;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -150,10 +150,10 @@ public class LiveViewModel extends ViewModel {
         return () -> {
             try {
                 if (Thread.interrupted()) return;
-                if (type == EPG) epg.postValue((Epg) executor.submit(callable).get(Constant.TIMEOUT_EPG, TimeUnit.MILLISECONDS));
-                if (type == LIVE) live.postValue((Live) executor.submit(callable).get(Constant.TIMEOUT_LIVE, TimeUnit.MILLISECONDS));
-                if (type == XML) xml.postValue((Boolean) executor.submit(callable).get(Constant.TIMEOUT_XML, TimeUnit.MILLISECONDS));
-                if (type == URL) url.postValue((Channel) executor.submit(callable).get(Constant.TIMEOUT_PARSE_LIVE, TimeUnit.MILLISECONDS));
+                if (type == EPG) epg.postValue((Epg) executor.submit(callable).get(Constants.TIMEOUT_EPG, TimeUnit.MILLISECONDS));
+                if (type == LIVE) live.postValue((Live) executor.submit(callable).get(Constants.TIMEOUT_LIVE, TimeUnit.MILLISECONDS));
+                if (type == XML) xml.postValue((Boolean) executor.submit(callable).get(Constants.TIMEOUT_XML, TimeUnit.MILLISECONDS));
+                if (type == URL) url.postValue((Channel) executor.submit(callable).get(Constants.TIMEOUT_PARSE_LIVE, TimeUnit.MILLISECONDS));
             } catch (Throwable e) {
                 if (e instanceof InterruptedException || Thread.interrupted()) return;
                 if (e.getCause() instanceof ExtractException) url.postValue(Channel.error(e.getCause().getMessage()));

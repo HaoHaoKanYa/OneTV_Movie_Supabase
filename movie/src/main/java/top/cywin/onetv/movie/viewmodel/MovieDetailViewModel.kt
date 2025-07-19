@@ -146,9 +146,11 @@ class MovieDetailViewModel : ViewModel() {
         return try {
             urls.split("#").mapIndexed { index, episodeData ->
                 val parts = episodeData.split("$")
-                Episode().apply {
-                    name = if (parts.size >= 2) parts[0] else "第${index + 1}集"
-                    url = if (parts.size >= 2) parts[1] else episodeData
+                Episode.create(
+                    if (parts.size >= 2) parts[0] else "第${index + 1}集",
+                    if (parts.size >= 2) parts[1] else episodeData
+                ).apply {
+                    setIndex(index)
                 }
             }
         } catch (e: Exception) {
