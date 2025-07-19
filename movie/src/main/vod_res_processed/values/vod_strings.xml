@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Movie模块专用字符串资源 - 使用vod_前缀避免与主应用冲突 -->
+    
+    <!-- 错误消息 -->
+    <string name="vod_error_play_url">播放地址加载失败</string>
+    <string name="vod_error_play_drm_scheme">此设备不支持所需的DRM scheme</string>
+    <string name="vod_error_play_flag">暂无线路数据</string>
+    <string name="vod_error_play_parse">播放地址解析失败</string>
+    <string name="vod_error_play_timeout">连接超时</string>
+    <string name="vod_error_config_parse">配置解析失败</string>
+    <string name="vod_error_config_get">配置获取失败</string>
+    
+    <!-- 默认名称 -->
+    <string name="vod_setting_live">直播设置</string>
+    <string name="vod_parse_god">聚合解析</string>
+    <string name="vod_keep">保留</string>
+
+    <!-- 新增缺少的字符串资源 -->
+    <string name="vod_push_image">推送图片</string>
+    <string name="vod_push">推送</string>
+    <string name="vod_live_line">线路%d</string>
+    <string name="vod_play_now">正在播放：%s</string>
+
+</resources>

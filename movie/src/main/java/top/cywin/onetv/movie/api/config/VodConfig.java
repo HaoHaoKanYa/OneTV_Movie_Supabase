@@ -122,7 +122,7 @@ public class VodConfig {
 
     private void loadCache(Callback callback, Throwable e) {
         if (!TextUtils.isEmpty(config.getJson())) checkJson(Json.parse(config.getJson()).getAsJsonObject(), callback);
-        else App.post(() -> callback.error(Notify.getError(R.string.error_config_get, e)));
+        else App.post(() -> callback.error(Notify.getError(R.string.vod_error_config_get, e)));
     }
 
     private void checkJson(JsonObject object, Callback callback) {
@@ -157,7 +157,7 @@ public class VodConfig {
             App.post(callback::success);
         } catch (Throwable e) {
             e.printStackTrace();
-            App.post(() -> callback.error(Notify.getError(R.string.error_config_parse, e)));
+            App.post(() -> callback.error(Notify.getError(R.string.vod_error_config_parse, e)));
         }
     }
 

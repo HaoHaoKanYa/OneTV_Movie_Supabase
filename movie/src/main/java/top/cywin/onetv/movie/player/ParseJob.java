@@ -8,7 +8,7 @@ import top.cywin.onetv.movie.api.config.VodConfig;
 import top.cywin.onetv.movie.api.loader.BaseLoader;
 import top.cywin.onetv.movie.bean.Parse;
 import top.cywin.onetv.movie.bean.Result;
-import top.cywin.onetv.movie.player.ParseCallback;
+import top.cywin.onetv.movie.impl.ParseCallback;
 import top.cywin.onetv.movie.server.Server;
 import top.cywin.onetv.movie.ui.custom.CustomWebView;
 import top.cywin.onetv.movie.utils.UrlUtil;

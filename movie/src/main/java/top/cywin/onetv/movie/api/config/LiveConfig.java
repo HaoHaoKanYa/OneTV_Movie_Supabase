@@ -21,8 +21,8 @@ import top.cywin.onetv.movie.impl.Callback;
 import top.cywin.onetv.movie.ui.activity.LiveActivity;
 import top.cywin.onetv.movie.utils.Notify;
 import top.cywin.onetv.movie.utils.UrlUtil;
-import com.github.catvod.net.OkHttp;
-import com.github.catvod.utils.Json;
+import top.cywin.onetv.movie.catvod.net.OkHttp;
+import top.cywin.onetv.movie.catvod.utils.Json;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 

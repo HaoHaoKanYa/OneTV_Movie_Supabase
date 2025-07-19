@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Spider extends com.github.catvod.crawler.Spider {
+public class Spider extends top.cywin.onetv.movie.catvod.crawler.Spider {
 
     private final PyObject app;
     private final PyObject obj;

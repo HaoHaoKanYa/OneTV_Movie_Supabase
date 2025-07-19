@@ -2,7 +2,7 @@ package top.cywin.onetv.movie.tvbus.engine;
 
 import android.content.Context;
 
-import com.github.catvod.Init;
+import top.cywin.onetv.movie.catvod.Init;
 
 public class TVCore implements Runnable {
 

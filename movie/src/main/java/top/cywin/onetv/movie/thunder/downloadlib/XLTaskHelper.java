@@ -1,6 +1,6 @@
 package top.cywin.onetv.movie.thunder.downloadlib;
 
-import com.github.catvod.utils.Path;
+import top.cywin.onetv.movie.catvod.utils.Path;
 import top.cywin.onetv.movie.thunder.downloadlib.parameter.BtIndexSet;
 import top.cywin.onetv.movie.thunder.downloadlib.parameter.BtSubTaskDetail;
 import top.cywin.onetv.movie.thunder.downloadlib.parameter.BtTaskParam;

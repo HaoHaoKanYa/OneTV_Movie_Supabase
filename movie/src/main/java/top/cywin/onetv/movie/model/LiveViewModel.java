@@ -117,7 +117,7 @@ public class LiveViewModel extends ViewModel {
         Iterator<Group> iterator = item.getGroups().iterator();
         while (iterator.hasNext()) if (iterator.next().isEmpty()) iterator.remove();
         if (item.getGroups().isEmpty() || item.getGroups().get(0).isKeep()) return;
-        item.getGroups().add(0, Group.create(R.string.keep));
+        item.getGroups().add(0, Group.create(R.string.vod_keep));
         LiveConfig.get().setKeep(item.getGroups());
     }
 

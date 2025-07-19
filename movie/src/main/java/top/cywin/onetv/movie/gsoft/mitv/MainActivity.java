@@ -6,8 +6,8 @@ import android.os.IBinder;
 
 import com.anymediacloud.iptv.standard.ForceTV;
 import com.forcetech.Util;
-import com.github.catvod.utils.Asset;
-import com.github.catvod.utils.Path;
+import top.cywin.onetv.movie.catvod.utils.Asset;
+import top.cywin.onetv.movie.catvod.utils.Path;
 
 import java.io.File;
 

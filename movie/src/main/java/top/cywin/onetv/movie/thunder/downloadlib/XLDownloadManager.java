@@ -3,8 +3,8 @@ package top.cywin.onetv.movie.thunder.downloadlib;
 import android.content.Context;
 import android.os.Build;
 
-import com.github.catvod.Init;
-import com.github.catvod.utils.Prefers;
+import top.cywin.onetv.movie.catvod.Init;
+import top.cywin.onetv.movie.catvod.utils.Prefers;
 import top.cywin.onetv.movie.thunder.downloadlib.android.XLUtil;
 import top.cywin.onetv.movie.thunder.downloadlib.parameter.BtIndexSet;
 import top.cywin.onetv.movie.thunder.downloadlib.parameter.BtSubTaskDetail;

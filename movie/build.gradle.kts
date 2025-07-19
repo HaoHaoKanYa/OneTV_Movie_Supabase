@@ -50,6 +50,11 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 
+    // 启用BuildConfig生成
+    buildFeatures {
+        buildConfig = true
+    }
+
     kotlinOptions {
         jvmTarget = "1.8"
         freeCompilerArgs += listOf(
@@ -57,6 +62,16 @@ android {
             "-opt-in=kotlin.RequiresOptIn",
             "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
         )
+    }
+
+    // 自定义资源目录配置 - 使用vod_前缀的资源结构
+    sourceSets {
+        getByName("main") {
+            // 创建临时的标准资源目录结构
+            res.srcDirs(
+                "src/main/vod_res_processed"
+            )
+        }
     }
 
     buildFeatures {
@@ -80,6 +95,53 @@ android {
             pickFirsts.add("META-INF/com.onetv.tools/r8-from-*.version")
         }
     }
+}
+
+// 自定义资源处理任务 - 将vod_前缀目录转换为标准Android资源结构
+tasks.register("processVodResources") {
+    group = "movie"
+    description = "处理vod_前缀的自定义资源目录结构"
+
+    val sourceDir = file("src/main/vod_res")
+    val targetDir = file("src/main/vod_res_processed")
+
+    inputs.dir(sourceDir)
+    outputs.dir(targetDir)
+
+    doLast {
+        // 清理目标目录
+        if (targetDir.exists()) {
+            targetDir.deleteRecursively()
+        }
+        targetDir.mkdirs()
+
+        // 处理vod_values -> values
+        val vodValuesDir = file("$sourceDir/vod_values")
+        if (vodValuesDir.exists()) {
+            val valuesDir = file("$targetDir/values")
+            valuesDir.mkdirs()
+            vodValuesDir.listFiles()?.forEach { file ->
+                file.copyTo(File(valuesDir, file.name), overwrite = true)
+            }
+        }
+
+        // 处理vod_drawable -> drawable
+        val vodDrawableDir = file("$sourceDir/vod_drawable")
+        if (vodDrawableDir.exists()) {
+            val drawableDir = file("$targetDir/drawable")
+            drawableDir.mkdirs()
+            vodDrawableDir.listFiles()?.forEach { file ->
+                file.copyTo(File(drawableDir, file.name), overwrite = true)
+            }
+        }
+
+        println("✓ VOD资源处理完成: $sourceDir -> $targetDir")
+    }
+}
+
+// 确保在资源合并前处理VOD资源
+tasks.named("preBuild") {
+    dependsOn("processVodResources")
 }
 
 dependencies {

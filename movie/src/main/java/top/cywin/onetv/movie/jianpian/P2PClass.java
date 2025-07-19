@@ -1,6 +1,6 @@
 package top.cywin.onetv.movie.jianpian;
 
-import com.github.catvod.utils.Path;
+import top.cywin.onetv.movie.catvod.utils.Path;
 
 public class P2PClass {
 

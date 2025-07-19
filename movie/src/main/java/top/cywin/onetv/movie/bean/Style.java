@@ -69,12 +69,20 @@ public class Style implements Parcelable {
     public int getViewType() {
         switch (getType()) {
             case "oval":
-                return ViewType.OVAL;
+                return 1; // OVAL
             case "list":
-                return ViewType.LIST;
+                return 2; // LIST
             default:
-                return ViewType.RECT;
+                return 0; // RECT
         }
+    }
+
+    /**
+     * 获取Compose ViewType - 与新的MovieViewType兼容
+     * 这个方法将在Compose UI中使用
+     */
+    public String getComposeViewType() {
+        return getType();
     }
 
     @Override
@@ -101,7 +109,7 @@ public class Style implements Parcelable {
         this.ratio = in.readFloat();
     }
 
-    public static final Creator<Style> CREATOR = new Creator<>() {
+    public static final Creator<Style> CREATOR = new Creator<Style>() {
         @Override
         public Style createFromParcel(Parcel source) {
             return new Style(source);

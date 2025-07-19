@@ -1,6 +1,6 @@
 package top.cywin.onetv.movie.thunder.downloadlib.parameter;
 
-import com.github.catvod.utils.Path;
+import top.cywin.onetv.movie.catvod.utils.Path;
 
 import java.io.File;
 

@@ -3,7 +3,7 @@ package top.cywin.onetv.movie.server.process;
 import android.text.TextUtils;
 
 import top.cywin.onetv.movie.App;
-import top.cywin.onetv.movie.Constant;
+import top.cywin.onetv.movie.Constants;
 import top.cywin.onetv.movie.api.config.VodConfig;
 import top.cywin.onetv.movie.bean.Config;
 import top.cywin.onetv.movie.bean.Device;

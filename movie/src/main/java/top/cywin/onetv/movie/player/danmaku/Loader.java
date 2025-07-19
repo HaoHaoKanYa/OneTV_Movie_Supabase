@@ -1,6 +1,6 @@
 package top.cywin.onetv.movie.player.danmaku;
 
-import top.cywin.onetv.movie.Constant;
+import top.cywin.onetv.movie.Constants;
 import top.cywin.onetv.movie.bean.Danmaku;
 import top.cywin.onetv.movie.utils.UrlUtil;
 import top.cywin.onetv.movie.catvod.net.OkHttp;

@@ -30,7 +30,7 @@ import androidx.media3.exoplayer.util.EventLogger;
 import androidx.media3.ui.PlayerView;
 
 import top.cywin.onetv.movie.App;
-import top.cywin.onetv.movie.Constant;
+import top.cywin.onetv.movie.Constants;
 import top.cywin.onetv.movie.R;
 import top.cywin.onetv.movie.Setting;
 import top.cywin.onetv.movie.bean.Channel;
@@ -42,7 +42,7 @@ import top.cywin.onetv.movie.bean.Track;
 import top.cywin.onetv.movie.event.ActionEvent;
 import top.cywin.onetv.movie.event.ErrorEvent;
 import top.cywin.onetv.movie.event.PlayerEvent;
-import top.cywin.onetv.movie.player.ParseCallback;
+import top.cywin.onetv.movie.impl.ParseCallback;
 import top.cywin.onetv.movie.impl.SessionCallback;
 import top.cywin.onetv.movie.player.danmaku.DanPlayer;
 import top.cywin.onetv.movie.player.exo.ExoUtil;

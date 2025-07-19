@@ -15,8 +15,8 @@ import top.cywin.onetv.movie.utils.FileUtil;
 import top.cywin.onetv.movie.utils.Notify;
 import top.cywin.onetv.movie.utils.ResUtil;
 import top.cywin.onetv.movie.utils.UrlUtil;
-import com.github.catvod.net.OkHttp;
-import com.github.catvod.utils.Path;
+import top.cywin.onetv.movie.catvod.net.OkHttp;
+import top.cywin.onetv.movie.catvod.utils.Path;
 
 import java.io.File;
 import java.io.FileOutputStream;
